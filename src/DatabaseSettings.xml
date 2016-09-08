@@ -1,0 +1,7 @@
+<DatabaseSettings>
+  <Collation>SQL_Latin1_General_CP1_CI_AS</Collation>
+  <ServerVersion>Sql2008</ServerVersion>
+  <ServerName>GAINSHOSTDEVELO</ServerName>
+  <DatabaseName>MedLog</DatabaseName>
+  <DatabaseInformation Version="1" />
+</DatabaseSettings>
