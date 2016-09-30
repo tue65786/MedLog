@@ -1,12 +1,12 @@
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
-SET ANSI_PADDING ON
+SET ANSI_PADDING OFF
 GO
 CREATE TABLE [dbo].[PatientLog] (
 		[PatientLogID]           [int] NOT NULL,
 		[PatientID]              [int] NOT NULL,
 		[PatientLogTypeID]       [int] NOT NULL,
-		[PatientLogDateTime]     [nchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+		[PatientLogDateTime]     [datetime] NOT NULL
 ) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[PatientLog]
@@ -28,7 +28,7 @@ GO
 ALTER TABLE [dbo].[PatientLog]
 	WITH CHECK
 	ADD CONSTRAINT [FK_PatientLog_Patient]
-	FOREIGN KEY ([PatientID]) REFERENCES [dbo].[Patient] ([PatientID])
+	FOREIGN KEY ([PatientID]) REFERENCES [dbo].[PatientUser] ([PatientID])
 ALTER TABLE [dbo].[PatientLog]
 	CHECK CONSTRAINT [FK_PatientLog_Patient]
 
