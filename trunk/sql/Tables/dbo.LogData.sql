@@ -21,13 +21,5 @@ ALTER TABLE [dbo].[LogData]
 	([LogDataID])
 	ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[LogData]
-	WITH CHECK
-	ADD CONSTRAINT [FK_LogData_PatientLog]
-	FOREIGN KEY ([PatientLogID]) REFERENCES [dbo].[PatientLog] ([PatientLogID])
-ALTER TABLE [dbo].[LogData]
-	CHECK CONSTRAINT [FK_LogData_PatientLog]
-
-GO
 ALTER TABLE [dbo].[LogData] SET (LOCK_ESCALATION = TABLE)
 GO
