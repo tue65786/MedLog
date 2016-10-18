@@ -13,5 +13,7 @@ package com.medlog.webservice.vo;
 public interface IEntityBase <VO> {
 
 public String toTableRow();
+
+public String toJSON();
    
 }
