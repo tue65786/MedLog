@@ -8,7 +8,10 @@ package com.medlog.webservice.vo;
 /**
  *
  * @author (c)2016 Guiding Technologies
+ * @param <VO>
  */
-public interface IEntityBase {
+public interface IEntityBase <VO> {
+
+public String toTableRow();
    
 }

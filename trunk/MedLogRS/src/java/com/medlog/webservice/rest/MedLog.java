@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author (c)2016 Guiding Technologies
+/** 
+ * Primary API Servlet 
+ * @author (c)2016
  */
 public class MedLog extends HttpServlet {
 

@@ -11,8 +11,8 @@ import java.sql.*;
 import java.util.logging.*;
 
 /**
- *
- * @author (c)2016 Guiding Technologies
+ * Implementation of {@linkplain IDbConnection}
+ * @author (c)2016
  */
 public class DbConnection implements IDbConnection{
 

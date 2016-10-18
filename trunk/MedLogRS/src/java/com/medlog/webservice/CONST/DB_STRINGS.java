@@ -8,12 +8,12 @@
 package com.medlog.webservice.CONST;
 
 /**
- *
+ * SQL Statements
  * @author (c)2016 Dan Kauffman
  */
 public class DB_STRINGS {
 /**
- * Do not allow instantiation 
+ * Do not allow instantiation.
  * 
  */
 private DB_STRINGS(){

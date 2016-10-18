@@ -10,8 +10,8 @@ package com.medlog.webservice.dao;
 import java.util.logging.*;
 
 /**
- *
- * @author (c)2016 Guiding Technologies
+ * Implementation of {@linkplain IMedLogDAO}
+ * @author (c)2016
  */
 public class MedLogDAO implements IMedLogDAO{
 
