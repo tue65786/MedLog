@@ -7,10 +7,14 @@
 
 package com.medlog.webservice.dao;
 
+import java.util.logging.*;
+
 /**
  *
  * @author (c)2016 Guiding Technologies
  */
 public class MedLogDAO implements IMedLogDAO{
+
+   private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 
 }

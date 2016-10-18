@@ -7,10 +7,14 @@
 
 package com.medlog.webservice.sql;
 
+import java.util.logging.*;
+
 /**
  *
  * @author (c)2016 Guiding Technologies
  */
 public class DbConnection implements IDbConnection{
+
+   private static final Logger LOG = Logger.getLogger( DbConnection.class.getName() );
 
 }
