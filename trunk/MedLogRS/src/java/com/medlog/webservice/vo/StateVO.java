@@ -17,6 +17,16 @@ public class StateVO implements Serializable, IEntityBase<StateVO> {
 
 private static final long serialVersionUID = -7661073258202665741L;
 
+   @Override
+   public boolean isValid() {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public boolean isValid(StateVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public String toJSON() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.

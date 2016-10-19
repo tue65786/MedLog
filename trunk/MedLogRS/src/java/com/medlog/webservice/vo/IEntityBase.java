@@ -15,5 +15,7 @@ public interface IEntityBase <VO> {
 public String toTableRow();
 
 public String toJSON();
-   
+
+public boolean isValid();
+public boolean isValid(VO vo);
 }

@@ -17,6 +17,16 @@ public class DiaryVO implements Serializable, IEntityBase<DiaryVO> {
 
 private static final long serialVersionUID = -2971191299069097176L;
 
+   @Override
+   public boolean isValid() {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public boolean isValid(DiaryVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public String toJSON() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.

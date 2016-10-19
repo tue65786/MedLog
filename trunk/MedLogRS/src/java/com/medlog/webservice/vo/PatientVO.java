@@ -17,6 +17,16 @@ public class PatientVO implements Serializable, IEntityBase<PatientVO> {
 
 private static final long serialVersionUID = 7503965982970314783L;
 
+   @Override
+   public boolean isValid() {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public boolean isValid(PatientVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public String toJSON() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
