@@ -5,18 +5,15 @@ GO
 -- Author:		Dan K.
 -- Project:		MedLog
 -- Create date: 2016-10-10
--- Modify date: 
--- Description:	Deletes patient record
+-- Modify date: 016-10-19
+-- Description:	Delete  Patient record
 -- =============================================
-CREATE PROC [dbo].[spPatientDelete]
-@PatientID int
-AS
-BEGIN
-	SET NOCOUNT OFF
-
+CREATE PROC [dbo].[spPatientDelete] 
+    @PatientID int
+AS 
+	
 	DELETE
 	FROM   [dbo].[Patient]
 	WHERE  [PatientID] = @PatientID
-END
-
+	
 GO

@@ -44,6 +44,14 @@ ALTER TABLE [dbo].[Medication]
 GO
 ALTER TABLE [dbo].[Medication]
 	WITH CHECK
+	ADD CONSTRAINT [FK_Medication_Pharma_RX_OTC]
+	FOREIGN KEY ([PharmID]) REFERENCES [dbo].[Pharma_RX_OTC] ([PharmID])
+ALTER TABLE [dbo].[Medication]
+	CHECK CONSTRAINT [FK_Medication_Pharma_RX_OTC]
+
+GO
+ALTER TABLE [dbo].[Medication]
+	WITH CHECK
 	ADD CONSTRAINT [FK_Medication_Sig]
 	FOREIGN KEY ([Sig]) REFERENCES [dbo].[Sig] ([SigAbbrID])
 ALTER TABLE [dbo].[Medication]
