@@ -14,6 +14,8 @@ public class API_ACTIONS {
 public static final int GET = 1;
 public static final int INSERT = 2;
 public static final int UPDATE = 3;
+public static final String[] PATIENT_API = {"findPatients","updatePatient","addPatient"};
+public static final String[] DIARY_API =  {"findDiary","addDiary","updateDiary"};
 
 private API_ACTIONS() {
    //No instantiation

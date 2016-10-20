@@ -5,15 +5,19 @@
  */
 package com.medlog.webservice.rest;
 
+import com.google.gson.*;
+import com.medlog.webservice.CONST.*;
+import com.medlog.webservice.rest.helpers.*;
+import com.medlog.webservice.util.*;
+import com.medlog.webservice.vo.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
-/** 
- * Primary API Servlet 
+/**
+ * Primary API Servlet
+ *
  * @author (c)2016
  */
 public class MedLog extends HttpServlet {
@@ -28,20 +32,50 @@ public class MedLog extends HttpServlet {
  */
 protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
-   response.setContentType( "text/html;charset=UTF-8" );
+//   response.setContentType( "text/html;charset=UTF-8" );
+   response.setContentType( "application/json" );
+   ServletHelpers sh;
+   HttpSession session = null;
+   String fn = null;
+   PatientVO currentUser = null;
+   Gson gson = null;
+   JsonObject json = null;
    try (PrintWriter out = response.getWriter()) {
-	  /*
-	   * TODO output your page here. You may use following sample code.
-	   */
-	  out.println( "<!DOCTYPE html>" );
-	  out.println( "<html>" );
-	  out.println( "<head>" );
-	  out.println( "<title>Servlet MedLog</title>" );	  
-	  out.println( "</head>" );
-	  out.println( "<body>" );
-	  out.println( "<h1>Servlet MedLog at " + request.getContextPath() + "</h1>" );
-	  out.println( "</body>" );
-	  out.println( "</html>" );
+
+	  sh = new ServletHelpers( request, response );
+	  session = request.getSession();
+
+	  fn = sh.getStrParameter( "fn", "" );
+	  currentUser = getCurrentUser( session );
+
+	  //Valid login functions
+	  if ( currentUser == null && ( fn.equalsIgnoreCase( "login" ) || fn.equalsIgnoreCase( "findPatient" ) ) ) {
+		 //Security Controller
+	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
+
+	  } else {
+//		 currentUser = getCurrentUser( session );
+
+		 //Check for saved user cred.
+		 if ( currentUser == null ) {
+			json = new JsonObject();
+			json.addProperty( "state", "error" );
+			json.addProperty( "message", "Not logged in." );
+			out.print( json.toString() );
+		 } else//User is Logged in
+		 {
+			if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
+
+			} else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
+
+			} else {
+			   json = new JsonObject();
+			   json.addProperty( "state", "error" );
+			   json.addProperty( "message", "Invalid function." );
+			   out.print( json.toString() );
+			}
+		 }
+	  }
    }
 }
 
@@ -72,6 +106,24 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
    processRequest( request, response );
+}
+
+/**
+ * Attempts to retrieve user from session.
+ *
+ * @param session
+ * @return
+ */
+private PatientVO getCurrentUser(HttpSession session) {
+   if ( session != null && session.getAttribute( "user" ) != null ) {
+	  try {
+		 return (PatientVO) session.getAttribute( "user" );
+	  } catch (Exception e) {
+		 return null;
+	  }
+   }
+   return null;
+
 }
 
 /**

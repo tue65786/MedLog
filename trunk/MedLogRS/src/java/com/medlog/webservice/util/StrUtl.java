@@ -110,4 +110,49 @@ private StrUtl(){
 		}
 		return "";
 	}
+	
+/**
+ * Check if x is in the set vals
+ * @param x val to look for
+ * @param vals a csv param
+ * @return  true if found, uot found or error = false
+ */
+     public static boolean matchOR ( int x, int... vals){
+      if ( vals == null ) {
+         return false;
+      }
+      for (int i : vals) {
+         if (x == i){ 
+            return true;
+         }
+      }
+      return false;
+   }/**
+    * 
+    * @param valueToMatch
+    * @param vals
+    * @return 
+    */
+     public static boolean matchOR ( Boolean valueToMatch, boolean... vals){
+      if ( vals == null || valueToMatch == null) {
+         return false;
+      }
+      for (boolean i : vals) {
+        if (valueToMatch == i){
+           return true;
+      }
+      
+   }return false;
+}
+   public static boolean matchOR ( String x, String... vals){
+      if ( vals == null || x == null) {
+         return false;
+      }
+      for (String i : vals) {
+         if ( x.equalsIgnoreCase(StrUtl.toS(i)) ) { 
+            return true;
+         }
+      }
+      return false;
+   }
 }
