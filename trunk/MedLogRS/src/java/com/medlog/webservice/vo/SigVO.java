@@ -13,6 +13,8 @@ import java.io.*;
  *
  * @author (c)2016 Guiding Technologies
  */
-public class TagVO  implements Serializable, IEntityBase<TagVO> {
-
+public class SigVO  implements Serializable, IEntityBase<SigVO> {
+public String sigAbbrID;
+public String definition;
+public String category;
 }

@@ -13,9 +13,7 @@ import java.util.logging.*;
  *
  * @author (c)2016 Guiding Technologies
  */
-public class HealthcareProviderVO implements Serializable, IEntityBase<HealthcareProviderVO> {
-
-   private static final long serialVersionUID = -6426975328081170068L;
+public class MedicationVO  implements Serializable, IEntityBase<MedicationVO> {
 
    @Override
    public boolean isValid() {
@@ -23,7 +21,7 @@ public class HealthcareProviderVO implements Serializable, IEntityBase<Healthcar
    }
 
    @Override
-   public boolean isValid(HealthcareProviderVO _vo) {
+   public boolean isValid(MedicationVO _vo) {
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
 
@@ -41,35 +39,22 @@ public class HealthcareProviderVO implements Serializable, IEntityBase<Healthcar
    public String toTableRow() {
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
+public Integer medicationID;
+public PatientVO patientID;
+public PharmaRxOtcVO pharmID;
+public HealthcareProviderVO physicianID;
+public String instructions;
+public SigVO sig;
+public Date startDate;
+public Date endDate;
+public String dosage;
+public String frequencySig;
+public boolean active;
+public List<TagVO> tagList;
+//public List<PatientMedication> patientMedicationList;
+   private static final Logger LOG = Logger.getLogger( MedicationVO.class.getName() );
 
-public int physicianID;
 
-public String lastName;
 
-public String firstName;
 
-public String specialty;
-
-public String phoneWork;
-
-public String phoneMobile;
-
-public byte[] phonePager;
-
-public String phoneFax;
-
-public String email;
-
-public String pathientLogCommunicationPreference;
-
-public String addressStreet;
-
-public String addressCity;
-
-public String addressZip;
-
-public List<PatientVO> patientList;
-
-public StateVO addressStateID;
-   private static final Logger LOG = Logger.getLogger( HealthcareProviderVO.class.getName() );
 }

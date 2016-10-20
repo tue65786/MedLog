@@ -39,48 +39,30 @@ public String toTableRow() {
 public int patientID;
 
 public String userName;
-
 public String userPassword;
-
 public String userHash;
-
 public String firstName;
-
 public String lastName;
-
 public String phoneHome;
-
 public String phoneMobile;
-
 public String email;
-
 public String status;
-
 public String addressStreet;
-
 public String addressCity;
-
+public StateVO addressState;
 public String addressCountry;
-
 public String addressPostalcode;
-
 public String userPreferences;
-
 public Date pwdLastChanged;
-
 public String lang;
-
 public String timezoneId;
-
 public Boolean dateOfBirth;
-
 public Date dateJoined;
-
 public String picture;
-
 public String metaData;
-
 public int userRole;
+
+public List<DiaryVO> diaryList;
 
 //
 //   public List<HealthcareProvider> healthcareProviderList;
@@ -91,7 +73,7 @@ public int userRole;
 //
 //   public List<PatientMedication> patientMedicationList;
 //
-//   public List<Diary> diaryList;
+
 //
 //   public List<Medication> medicationList;
 //

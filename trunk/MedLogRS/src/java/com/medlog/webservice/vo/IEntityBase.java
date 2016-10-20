@@ -18,4 +18,5 @@ public String toJSON();
 
 public boolean isValid();
 public boolean isValid(VO vo);
+public boolean isValid(int ACTION);
 }

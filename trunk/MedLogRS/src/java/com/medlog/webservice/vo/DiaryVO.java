@@ -27,6 +27,11 @@ private static final long serialVersionUID = -2971191299069097176L;
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
 
+   @Override
+   public boolean isValid(int _ACTION) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public String toJSON() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -37,23 +42,14 @@ public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 public int id;
-
 public String title;
-
 public String notes;
-
 public String notesActivity;
-
 public Date createdDate;
-
 public Date updatedDate;
-
 public String includceMedsCurrent;
-
 public String attachmentPath;
-
 public int mood;
-
 public int productivity;
 
 //   public List<Tag> tagList;

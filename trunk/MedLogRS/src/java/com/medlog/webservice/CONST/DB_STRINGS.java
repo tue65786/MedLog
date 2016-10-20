@@ -24,7 +24,7 @@ public static final String SP_PATIENT_INSERT = "{call spPatientInsert("
 						   + "?,?,?,?,?,"
 						   + "?,?,?,?,?,"
 						   + "?,?,?,?,?,?"
-						   + ",?,?,?,?)}";
+						   + ",?,?,?)}";
 /**
  * UPDATE PATIENT STORED PROCEDURE
  */

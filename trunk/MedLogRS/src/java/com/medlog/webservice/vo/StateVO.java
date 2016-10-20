@@ -36,13 +36,9 @@ public String toJSON() {
 public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
-
 public int stateID;
-
 public String stateName;
-
 public String stateAbbreviation;
-
 public List<PatientVO> patientList;
 
 //   public List<HealthcareProvider> healthcareProviderList;
