@@ -15,6 +15,8 @@ import java.util.logging.*;
  */
 public class MedicationVO  implements Serializable, IEntityBase<MedicationVO> {
 
+   private static final long serialVersionUID = -1124169927037703504L;
+
    @Override
    public boolean isValid() {
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.

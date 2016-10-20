@@ -27,6 +27,11 @@ private static final long serialVersionUID = -7661073258202665741L;
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
 
+   @Override
+   public boolean isValid(int _ACTION) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public String toJSON() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -39,7 +44,8 @@ public String toTableRow() {
 public int stateID;
 public String stateName;
 public String stateAbbreviation;
-public List<PatientVO> patientList;
+public
+List<PatientVO> patientList;
 
 //   public List<HealthcareProvider> healthcareProviderList;
 private static final Logger LOG = Logger.getLogger( StateVO.class.getName() );
