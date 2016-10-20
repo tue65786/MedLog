@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.sql;
 
+import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.util.*;
 import java.sql.*;
@@ -28,11 +29,28 @@ private static Properties dbProps = null;
  * Tracks open connections
  */
 private static int openConnections = 0;
-private final String PROPS_FILE = "database.properties";
+/**
+ * Connection Object
+ */
 private Connection dbconn;
+/**
+ * Connection string loaded from property file.
+ * @see SETTINGS#PROPS_FILE
+ * @see SETTINGS#JDBC_DRIVE_CLASS
+ */
 private String dbConnString;
 private String error;
 private static final Logger LOG = Logger.getLogger( DbConnection.class.getName() );
+public static int getOpenConnections(){
+   return DbConnection.openConnections;
+}
+public DbConnection() {
+   if ( DEBUG ) {
+	  System.out.println( "com.medlog.webservice.sql.DbConnection.<init>()\n" + initConn() + "\n" );
+   } else {
+	  initConn();
+   }
+}
 
 /**
  * Retrieves server connection properties from database.properties file
@@ -60,6 +78,15 @@ public final String getConnectionStringFromProps() {
    return dbConnString;
 }
 
+/**
+ * Prep connection
+ * <ol>
+ * <li>Load JDBC Driver</li>
+ * <li>Instantiate Connection objection</li>
+ * <ol>
+ *
+ * @return Messages
+ */
 private String initConn() {
    StringBuilder ret = new StringBuilder( "" );
    try {

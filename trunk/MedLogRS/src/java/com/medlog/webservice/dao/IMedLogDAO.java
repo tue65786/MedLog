@@ -6,6 +6,7 @@
 
 package com.medlog.webservice.dao;
 
+import com.medlog.webservice.sql.*;
 import com.medlog.webservice.vo.*;
 import java.util.*;
 
@@ -116,4 +117,7 @@ public ArrayList<DiaryVO> findDiaryByPatientAndKeyword(PatientVO _vo,String keyw
  */
 public ArrayList<DiaryVO> findDiaryByPatientAndTag(PatientVO _vo,TagVO _tag);
 
+
+
+public DbConnection getDB();
 }
