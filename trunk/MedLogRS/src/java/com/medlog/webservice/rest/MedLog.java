@@ -39,7 +39,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    String fn = null;
    PatientVO currentUser = null;
    Gson gson = null;
-   JsonObject json = null;
    try (PrintWriter out = response.getWriter()) {
 
 	  sh = new ServletHelpers( request, response );
@@ -53,29 +52,18 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 //Security Controller
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 
-	  } else {
-//		 currentUser = getCurrentUser( session );
+	  } else //		 currentUser = getCurrentUser( session );
+	  //Check for saved user cred.
+	  if ( currentUser == null ) {
+		 out.print( makeJSONErrorMsg( "Not logged in.") );
+	  } else//User is Logged in
+	   if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
 
-		 //Check for saved user cred.
-		 if ( currentUser == null ) {
-			json = new JsonObject();
-			json.addProperty( "state", "error" );
-			json.addProperty( "message", "Not logged in." );
-			out.print( json.toString() );
-		 } else//User is Logged in
-		 {
-			if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
+		 } else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
 
-			} else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
-
-			} else {
-			   json = new JsonObject();
-			   json.addProperty( "state", "error" );
-			   json.addProperty( "message", "Invalid function." );
-			   out.print( json.toString() );
-			}
+		 } else {
+			out.print( makeJSONErrorMsg( "Invalid function.") );
 		 }
-	  }
    }
 }
 
@@ -124,6 +112,19 @@ private PatientVO getCurrentUser(HttpSession session) {
    }
    return null;
 
+}
+
+private String makeJSONErrorMsg(String msg) {
+   return getJSONMsg( "error", msg);
+}
+private String makeJSONInfoMsg(String msg) {
+   return getJSONMsg( "info", msg);
+}
+private String getJSONMsg(String state, String msg) {
+   JsonObject json = new JsonObject();
+   json.addProperty( "state", StrUtl.toS(state));
+   json.addProperty( "message", StrUtl.toS( msg, "Something went wrong!" ) );
+   return json.toString();
 }
 
 /**
