@@ -15,7 +15,7 @@ import java.util.logging.*;
  * Implementation of {@linkplain IMedLogDAO}
  * @author (c)2016
  */
-public class MedLogDAO implements IMedLogDAO{
+public class MedLogDAO implements IMedLogDAO {
 
    private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 
@@ -41,47 +41,52 @@ public class MedLogDAO implements IMedLogDAO{
 
    @Override
    public int findDiaryByID(int _id) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." );
    }
 
    @Override
    public ArrayList<DiaryVO> findDiaryByPatient(PatientVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." ); 
    }
 
    @Override
    public ArrayList<DiaryVO> findDiaryByPatientAndKeyword(PatientVO _vo, String _keyword) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." ); 
    }
 
    @Override
    public ArrayList<DiaryVO> findDiaryByPatientAndTag(PatientVO _vo, TagVO _tag) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." ); 
    }
 
    @Override
    public PatientVO findPatientByID(int _id) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." );
    }
 
    @Override
    public PatientVO findPatientByName(String _username) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." ); 
    }
 
    @Override
    public PatientVO findPatientByPatientNameAndPassword(String _username, String _password) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." );
+   }
+
+   @Override
+   public ArrayList<StateVO> findStatesByKeyword(String _keyword) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); 
    }
 
    @Override
    public ArrayList<PatientVO> getPatients() {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." ); 
    }
 
    @Override
    public int updateDiary(DiaryVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+	  throw new UnsupportedOperationException( "Not supported yet." ); 
    }
 
    @Override

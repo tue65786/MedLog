@@ -3,10 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/**
- * PAC
- * OK
- */
+
 package com.medlog.webservice.dao;
 
 import com.medlog.webservice.vo.*;
@@ -23,6 +20,12 @@ public interface IMedLogDAO {
  * @return 
  */
 public ArrayList<StateVO> findAllStates();
+
+/**
+ * Return states by keyword
+ * @return 
+ */
+public ArrayList<StateVO> findStatesByKeyword(String keyword);
 /**
  *
  * @param _username
@@ -50,7 +53,7 @@ public ArrayList<PatientVO> getPatients();
  * @param _id
  * @return
  */
-public PatientVO findPatientByID(int _id);//USER_SELECT_BY_ID
+public PatientVO findPatientByID(int _id);
 
 /**
  * Add new patient
