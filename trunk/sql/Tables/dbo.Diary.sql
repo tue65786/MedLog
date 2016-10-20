@@ -8,12 +8,14 @@ CREATE TABLE [dbo].[Diary] (
 		[Notes]                     [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 		[NotesActivity]             [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 		[PatientID]                 [int] NOT NULL,
-		[USER_FieldAId]             [int] NOT NULL,
 		[created_date]              [datetime] NOT NULL,
 		[updated_date]              [datetime] NULL,
 		[includce_meds_current]     [nchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 		[attachment_path]           [nvarchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-		[USER_FieldA2Id]            [int] NULL
+		[Mood]                      [int] NULL,
+		[Productivity]              [int] NULL,
+		[USER_FieldA2Id]            [int] NULL,
+		[USER_FieldAId]             [int] NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[Diary]

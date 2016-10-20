@@ -6,45 +6,22 @@ GO
 -- Author:		Dan K.
 -- Project:		MedLog
 -- Create date: 2016-10-10
--- Modify date: 
--- Description:	Selects Patient record(s)
+-- Modify date: 2016-10-19
+-- Description:	Retrieves patient by ID, userName, or userName & password
 -- =============================================
-CREATE PROC [dbo].[spPatientSelect]
-@PatientID int
-AS
-BEGIN
-	SET NOCOUNT ON
 
-	SELECT [PatientID]
-,		   [SSN]
-,		   [user_name]
-,		   [user_password]
-,		   [user_hash]
-,		   [first_name]
-,		   [last_name]
-,		   [phone_home]
-,		   [phone_mobile]
-,		   [primary_email]
-,		   [email2]
-,		   [status]
-,		   [address_street]
-,		   [address_city]
-,		   [address_state]
-,		   [address_country]
-,		   [address_postalcode]
-,		   [user_preferences]
-,		   [pwd_last_changed]
-,		   [fitbit_auth]
-,		   [lang]
-,		   [timezone_id]
-,		   [primary_physsician]
-,		   [date_of_birth]
-,		   [date_joined]
-,		   [picture]
-,		   [meta_data]
-		   FROM [dbo].[Patient]
-		   WHERE ([PatientID] = @PatientID
-			   OR @PatientID IS NULL) 
-END
+CREATE PROC [dbo].[spPatientSelect] 
+    @PatientID int = NULL
+,	@userName nvarchar(512) = NULL
+,	@password nvarchar(512) = NULL
+AS 
+	
 
+	SELECT [PatientID], [userName], [userPassword], [user_hash], [firstName], [lastName], [phoneHome], [phoneMobile], [email], [status], [addressStreet], [addressCity], [addressState], [address_country], [address_postalcode], [user_preferences], [pwd_last_changed], [lang], [timezone_id], [primary_physsician], [date_of_birth], [date_joined], [picture], [meta_data], [userRole] 
+	FROM   [dbo].[Patient] 
+	WHERE  (([PatientID] = @PatientID OR @PatientID IS NULL)
+			AND LOWER(userName) = LOWER(@userName) OR @userName = NULL
+			AND userPassword = @password OR @password IS NULL) 
+
+	
 GO

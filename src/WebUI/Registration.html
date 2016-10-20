@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Registration </title>
+		<link rel="stylesheet" type="text/css" href="rstyle.css"/>
+	</head>
+	
+	<body>
+		<div>
+			<div id="header">
+				<h1> Registration </h1>
+				<p> Welcome to MedLog. </p>
+				<p> An account is required to use MedLog. </p>
+			</div>
+			
+			<div>
+				<form method="post" name="RegistrationForm" id="RegistrationForm" autocomplete="on">
+				
+					<fieldset>
+						<legend>Login Credentials</legend>
+						
+						<!-- Username and Password creation required-->
+						<label for="username">Create Username:<br></label>
+						<input name="uname" type="text" id="username" placeholder="Create a unique username" required><br>
+						<label for="password">Create Password:<br><label>
+						<input name="password" type="text" id="password" placeholder="Create a password" required><br>
+					</fieldset>
+					
+					<fieldset>
+						<legend>User Information</legend>
+						
+						<!-- Name Input required-->
+						<label for="firstname">First name:<br></label>
+						<input name="firstname" type="text" id="firstname" placeholder="Enter your first name" required><br>
+						<label for="lastname">Last name:<br></label>
+						<input name="lastname" type="text" id="lastname" placeholder="Enter your last name" required><br>
+						
+						<!-- Address Input required-->
+						<label for="streetaddress">Street Address:<br></label>
+						<input name="streetaddress" type="text" id="streetaddress" placeholder="ex. 1801 N. Broad St." required><br>
+						<label for="city">City:<br></label>
+						<input name="city" type="text" id="city" placeholder="ex. Philadelphia" required><br>
+						<label for="state">State:<br></label>
+						<input name="state" type="text" id="state" placeholder="ex. Pennsylvania or PA, etc." required><br>
+						
+						<!-- Contact Information optional-->
+						<label for="homephone">Home Phone:<br></label>
+						<input name="homephone" type="text" id="homephone" placeholder="ex. 2152047000"><br>
+						<label for="mobilephone">Mobile Phone:<br></label>
+						<input name="mobilephone" type="text" id="mobilephone" placeholder="ex. 2152047000"><br>
+						<label for="primaryemail">Primary Email:<br></label>
+						<input name="primaryemail" type="text" id="primaryemail" placeholder="ex.youremail@email.com"><br>
+						
+						<!-- Additional Information optional-->
+						<label for="ssn">SSN:<br></label>
+						<input name="ssn" type="text" id="ssn" placeholder="Enter your Social Security number"><br>
+						<label for="dateofbirth">Date of Birth:<br></label>
+						<input name="dateofbirth" type="text" id="dateofbirth" placeholder="Enter your date of birth"><br>
+						<label for="gender">Gender:<br></label>
+						<input name="gender" type="radio" id="gender" value="male">Male<br>
+						<input name="gender" type="radio" id="gender" value="female">Female<br>
+					</fieldset>
+					
+					<!-- Submit & reset buttons-->
+					<br><button type="submit">Start using MedLog!</button>
+					<button type="reset">Clear</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
