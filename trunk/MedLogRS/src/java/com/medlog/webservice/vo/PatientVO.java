@@ -70,6 +70,7 @@ public List<DiaryVO> diaryList;
 public List<MedicationVO> medicationList;
 public HealthcareProviderVO primaryPhyssician;
 public List<HealthcareProviderVO> healthcareProviderList;
+ public List<TagVO> tagList;
 //
 //   public List<PatientDietaryRestriction> patientDietaryRestrictionList;
 //
@@ -88,7 +89,7 @@ public List<HealthcareProviderVO> healthcareProviderList;
 //
 //   public PatientVitals patientVitals;
 //
-//   public List<Tag> tagList;
+//  
 //
 //   public List<DiarySentLog> diarySentLogList;
 private static final Logger LOG = Logger.getLogger( PatientVO.class.getName() );
