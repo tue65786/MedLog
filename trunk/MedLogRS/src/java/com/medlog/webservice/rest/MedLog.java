@@ -54,16 +54,20 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 
 	  } else //		 currentUser = getCurrentUser( session );
 	  //Check for saved user cred.
-	  if ( currentUser == null ) {
-		 out.print( makeJSONErrorMsg( "Not logged in.") );
-	  } else//User is Logged in
-	   if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
+	  {
+		 if ( currentUser == null ) {
+			out.print( makeJSONErrorMsg( "Not logged in." ) );
+		 } else//User is Logged in
+		 {
+			if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
 
-		 } else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
+			} else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
 
-		 } else {
-			out.print( makeJSONErrorMsg( "Invalid function.") );
+			} else {
+			   out.print( makeJSONErrorMsg( "Invalid function." ) );
+			}
 		 }
+	  }
    }
 }
 
@@ -114,16 +118,30 @@ private PatientVO getCurrentUser(HttpSession session) {
 
 }
 
+/**
+ * Creates error-state response
+ *
+ * @param msg message.
+ * @return JSON
+ */
 private String makeJSONErrorMsg(String msg) {
-   return getJSONMsg( "error", msg);
+   return getJSONMsg( "error", msg );
 }
+
+/**
+ * Create info-state response
+ *
+ * @param msg message
+ * @return JSON
+ */
 private String makeJSONInfoMsg(String msg) {
-   return getJSONMsg( "info", msg);
+   return getJSONMsg( "info", msg );
 }
+
 private String getJSONMsg(String state, String msg) {
    JsonObject json = new JsonObject();
-   json.addProperty( "state", StrUtl.toS(state));
-   json.addProperty( "message", StrUtl.toS( msg, "Something went wrong!" ) );
+   json.addProperty( "state", StrUtl.toS( state ) );
+   json.addProperty( "message", StrUtl.toS( msg, state.equals( "error" ) ? "Something went wrong!" : "Unknown" ) );
    return json.toString();
 }
 
