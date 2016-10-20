@@ -8,6 +8,7 @@ package com.medlog.webservice.sql;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.util.*;
+import static com.medlog.webservice.util.StrUtl.*;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.*;
@@ -22,13 +23,18 @@ public class DbConnection implements IDbConnection {
 /**
  * Properties as defined in database.properties file
  *
- * @see PropertyUtils
+ * @see PropUtils
  */
 private static Properties dbProps = null;
 /**
  * Tracks open connections
  */
 private static int openConnections = 0;
+
+   @Override
+   public boolean hasError() {
+	  return !toS(error).isEmpty();
+   }
 /**
  * Connection Object
  */
@@ -79,13 +85,13 @@ public final String getConnectionStringFromProps() {
 }
 
 /**
- * Prep connection
+ * Prep driver and open connection
  * <ol>
  * <li>Load JDBC Driver</li>
  * <li>Instantiate Connection objection</li>
  * <ol>
  *
- * @return Messages
+ * @return messages
  */
 private String initConn() {
    StringBuilder ret = new StringBuilder( "" );
@@ -143,24 +149,18 @@ public void close() {
    }
 }
 
-@Override
-public void close(CallableStatement _cs) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
-
-@Override
-public void close(ResultSet _rs) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
 
 @Override
 public Connection getConnnection() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   if (dbconn == null){
+	  LOG.severe("com.medlog.webservice.sql.DbConnection.getConnnection() -- NULL CONNECTION");
+   }
+   return this.dbconn;
 }
 
 @Override
 public String getError() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return this.error;
 }
 
 }

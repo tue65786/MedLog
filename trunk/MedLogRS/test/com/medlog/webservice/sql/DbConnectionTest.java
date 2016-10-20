@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.sql;
 
+import com.medlog.webservice.util.*;
 import java.sql.*;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -72,7 +73,7 @@ public void tearDown() {
 	  System.out.println( "close" );
 	  CallableStatement _cs = null;
 	  DbConnection instance = new DbConnection();
-	  instance.close( _cs );
+	  DbUtl.close( _cs );
 	  // TODO review the generated test code and remove the default call to fail.
 	  fail( "The test case is a prototype." );
    }
@@ -85,7 +86,7 @@ public void tearDown() {
 	  System.out.println( "close" );
 	  ResultSet _rs = null;
 	  DbConnection instance = new DbConnection();
-	  instance.close( _rs );
+	  DbUtl.close( _rs );
 	  // TODO review the generated test code and remove the default call to fail.
 	  fail( "The test case is a prototype." );
    }

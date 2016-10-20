@@ -66,11 +66,10 @@ public Date dateJoined;
 public String picture;
 public String metaData;
 public int userRole;
-
 public List<DiaryVO> diaryList;
-
-//
-//   public List<HealthcareProvider> healthcareProviderList;
+public List<MedicationVO> medicationList;
+public HealthcareProviderVO primaryPhyssician;
+public List<HealthcareProviderVO> healthcareProviderList;
 //
 //   public List<PatientDietaryRestriction> patientDietaryRestrictionList;
 //
@@ -80,13 +79,10 @@ public List<DiaryVO> diaryList;
 //
 
 //
-//   public List<Medication> medicationList;
+   
 //
+
 //
-//   public HealthcareProvider primaryPhyssician;
-//
-//
-//   public State addressState;
 //
 //   public List<USERFieldA> uSERFieldAList;
 //

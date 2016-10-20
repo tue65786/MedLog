@@ -44,8 +44,7 @@ public String toTableRow() {
 public int stateID;
 public String stateName;
 public String stateAbbreviation;
-public
-List<PatientVO> patientList;
+public List<PatientVO> patientList;
 
 //   public List<HealthcareProvider> healthcareProviderList;
 private static final Logger LOG = Logger.getLogger( StateVO.class.getName() );

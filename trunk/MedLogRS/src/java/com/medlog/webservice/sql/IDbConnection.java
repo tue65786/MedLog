@@ -8,8 +8,8 @@ package com.medlog.webservice.sql;
 import java.sql.*;
 
 /**
- *
- * @author (c)2016 Guiding Technologies
+ * Defines connection wrapper requirements.
+ * @author
  */
 public interface IDbConnection {
 
@@ -21,24 +21,29 @@ public Connection getConnnection();
  * @return Connection error message
  */
 public String getError();
+/**
+ * Is error message is empty?
+ * @return true if not empty.
+ */
+public boolean hasError();
 
 /**
  * Close connection wrapper
  */
 public void close();
-
-/**
- * (Overloaded) Close Statement
- *
- * @param cs CallableStatement
- */
-public void close(CallableStatement cs);
-
-/**
- * (Overloaded) Close ResultSet
- *
- * @param rs
- */
-public void close(ResultSet rs);
+//
+///**
+// * (Overloaded) Close Statement
+// *
+// * @param cs CallableStatement
+// */
+//public void close(CallableStatement cs);
+//
+///**
+// * (Overloaded) Close ResultSet
+// *
+// * @param rs
+// */
+//public void close(ResultSet rs);
 
 }
