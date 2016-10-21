@@ -7,6 +7,8 @@ package com.medlog.webservice.rest;
 
 import com.google.gson.*;
 import com.medlog.webservice.CONST.*;
+import static com.medlog.webservice.CONST.API_ACTIONS.*;
+import static com.medlog.webservice.rest.RES_ENUM.*;
 import com.medlog.webservice.rest.helpers.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
@@ -37,6 +39,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    ServletHelpers sh;
    HttpSession session = null;
    String fn = null;
+   String res = null;
    PatientVO currentUser = null;
    Gson gson = null;
    try (PrintWriter out = response.getWriter()) {
@@ -44,7 +47,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  sh = new ServletHelpers( request, response );
 	  session = request.getSession();
 
-	  fn = sh.getStrParameter( "fn", "" );
+	  //Get Request Function
+	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
+	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
 	  currentUser = getCurrentUser( session );
 
 	  //Valid login functions
@@ -52,16 +57,28 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 //Security Controller
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 
-	  } else //		 currentUser = getCurrentUser( session );
-	  //Check for saved user cred.
-	  {
+	  } else { //Check for saved user cred.
 		 if ( currentUser == null ) {
 			out.print( makeJSONErrorMsg( "Not logged in." ) );
-		 } else//User is Logged in
-		 {
+		 } else { //User is Logged in
+			switch(res){
+//			   case API_RESOURCE_DIARY:
+//				  break;
+//			   case API_RESOURCE_HEALTHCARE_PROVIDER.getCode():
+//				  break;
+//			   case API_RESOURCE_MEDICATION.getCode():
+//				  break;
+//			   case API_RESOURCE_PATIENT.getCode():
+//				  break;
+//			   case API_RESOURCE_DIATARY_RESTRICTION.getCode():
+//				  break;
+			   default: 
+				  break;
+			}
 			if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
 
 			} else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
+			   
 
 			} else {
 			   out.print( makeJSONErrorMsg( "Invalid function." ) );
@@ -152,7 +169,7 @@ private String getJSONMsg(String state, String msg) {
  */
 @Override
 public String getServletInfo() {
-   return "Short description";
+   return "MedLog API";
 }// </editor-fold>
 
 }

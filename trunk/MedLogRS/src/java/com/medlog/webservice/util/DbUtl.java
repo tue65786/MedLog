@@ -23,12 +23,14 @@ private DbUtl() {
 /**
  * Safe Close Procedure
  *
- * @param st
+ * @param st Stored Procedure Object
  */
 public static void close(CallableStatement st) {
    try {
 	  st.close();
    } catch (Exception e) {
+	  //quiet
+	  
    }
 
 }
@@ -70,11 +72,12 @@ public static void close(CallableStatement st, ResultSet rs) {
 	  try {
 		 rs.close();
 	  } catch (Exception ee) {
+		 //quiet
 
 	  }
 	  st.close();
    } catch (Exception e) {
+	  //quiet
    }
-
 }
 }
