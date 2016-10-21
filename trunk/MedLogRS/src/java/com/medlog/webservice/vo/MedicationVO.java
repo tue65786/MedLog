@@ -53,6 +53,7 @@ public String dosage;
 public String frequencySig;
 public boolean active;
 public List<TagVO> tagList;
+
 //public List<PatientMedication> patientMedicationList;
    private static final Logger LOG = Logger.getLogger( MedicationVO.class.getName() );
 

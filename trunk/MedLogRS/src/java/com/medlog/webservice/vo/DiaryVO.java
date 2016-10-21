@@ -41,10 +41,10 @@ public String toJSON() {
 public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
-public int id;
-public String title;
+public int id;//1
+public String title; //2
 public String notes;
-public String notesActivity;
+public String notesActivity;//4
 public Date createdDate;
 public Date updatedDate;
 public String includceMedsCurrent;

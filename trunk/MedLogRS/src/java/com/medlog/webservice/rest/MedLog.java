@@ -8,8 +8,10 @@ package com.medlog.webservice.rest;
 import com.google.gson.*;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
+import com.medlog.webservice.dao.*;
 import static com.medlog.webservice.rest.RES_ENUM.*;
 import com.medlog.webservice.rest.helpers.*;
+import com.medlog.webservice.sql.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
 import java.io.IOException;
@@ -54,14 +56,27 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 
 	  //Valid login functions
 	  if ( currentUser == null && ( fn.equalsIgnoreCase( "login" ) || fn.equalsIgnoreCase( "findPatient" ) ) ) {
-		 //Security Controller
+		 String username = sh.getStrParameter( "username", "" );
+		 String password = sh.getStrParameter( "password", "" );
+		 MedLogDAO dao = new MedLogDAO( new DbConnection() );
+		 PatientVO vo = dao.findPatientByPatientNameAndPassword( username, password );
+		 if ( vo != null ) {
+			currentUser = vo;
+			gson = new Gson();
+			gson.toJson( vo );
+			out.print( vo );
+		 } else {
+			out.print( makeJSONErrorMsg( "Invalid Login" ) );
+		 }
+
+//Security Controller
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 
-	  } else { //Check for saved user cred.
-		 if ( currentUser == null ) {
-			out.print( makeJSONErrorMsg( "Not logged in." ) );
-		 } else { //User is Logged in
-			switch(res){
+	  } else //Check for saved user cred.
+	  if ( currentUser == null ) {
+		 out.print( makeJSONErrorMsg( "Not logged in." ) );
+	  } else { //User is Logged in
+		 switch ( res ) {
 //			   case API_RESOURCE_DIARY:
 //				  break;
 //			   case API_RESOURCE_HEALTHCARE_PROVIDER.getCode():
@@ -72,17 +87,15 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 //				  break;
 //			   case API_RESOURCE_DIATARY_RESTRICTION.getCode():
 //				  break;
-			   default: 
-				  break;
-			}
-			if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
+			default:
+			   break;
+		 }
+		 if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
 
-			} else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
-			   
+		 } else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
 
-			} else {
-			   out.print( makeJSONErrorMsg( "Invalid function." ) );
-			}
+		 } else {
+			out.print( makeJSONErrorMsg( "Invalid function." ) );
 		 }
 	  }
    }

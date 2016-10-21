@@ -33,6 +33,7 @@ public static final String SP_PATIENT_UPDATE = "{call spPatientUpdate(}";
  * SELECT PATIENT STORED PROCEDURE
  */
 public static final String SP_PATIENT_SELECT = "{call spPatientSelect(?,?,?)}";
+public static final String SP_DIARY_INSERT = "{call spDiaryInsert(?,?,?,?,?,?,?,?,?,?,?}";
 private DB_STRINGS(){
    
 }

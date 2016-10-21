@@ -5,8 +5,11 @@
  */
 package com.medlog.webservice.dao;
 
+import static com.medlog.webservice.CONST.DB_STRINGS.*;
+import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.vo.*;
+import java.sql.*;
 import java.util.*;
 import java.util.logging.*;
 
@@ -29,8 +32,8 @@ public DbConnection getDB() {
    }
    return db;
 }
-private final DbConnection db;
-
+private  DbConnection db = null;
+private final PatientVO user = null;
 public MedLogDAO(DbConnection db) {
    this.db = db;
 }
@@ -38,7 +41,35 @@ private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 
 @Override
 public int createDiary(DiaryVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   CallableStatement cs = null;
+   try {
+	  cs = db.getConnnection().prepareCall( SP_DIARY_INSERT);
+	  if (_vo.title != null){
+	  cs.setString(1,_vo.title);
+	  }else{
+		 cs.setNull( 1, java.sql.Types.NVARCHAR);
+	  }
+	  if (_vo.notes != null){
+	  cs.setString(2,_vo.notes);
+	  }else{
+		 cs.setNull( 2, java.sql.Types.NVARCHAR);
+	  }
+	  
+	  cs.setNull(3,java.sql.Types.NVARCHAR);
+	 
+	  
+	  //3..10
+	  cs.registerOutParameter( 11, java.sql.Types.INTEGER);
+	  cs.executeUpdate();
+	  int returnVal = cs.getInt( 11);
+	  
+	  return returnVal;
+	  
+   } catch (SQLException ex) {
+	  Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
+	  return DB_ERROR_CODE;
+   }
+   
 }
 
 @Override
@@ -84,6 +115,7 @@ public PatientVO findPatientByID(int _id) {
 @Override
 public PatientVO findPatientByName(String _username) {
    throw new UnsupportedOperationException( "Not supported yet." );
+   
 }
 
 @Override
