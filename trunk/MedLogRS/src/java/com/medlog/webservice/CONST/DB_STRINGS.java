@@ -16,6 +16,12 @@ public class DB_STRINGS {
  * Do not allow instantiation.
  * 
  */
+
+/**
+ * Assign/Unassign patient med.
+ * Params:<ol> <li> PatientID int,</li><li>PharmID int,</li><li>PhysicanID int=NULL,</li><li>Instructions nvarchar(max) = NULL,</li><li>Sig varchar(50),</li><li>StartDate date = getdate,</li><li>endDate date = NULL,@active bit = 1</li></ol>
+ */
+public static final String SP_PATIENT_MEDICATION = "{call spMedicationPatientChangeBinding(?,?,?,?,?,?,?,?)}";
 /**
  * INSERT PATIENT STORED PROCEDURE
  */
