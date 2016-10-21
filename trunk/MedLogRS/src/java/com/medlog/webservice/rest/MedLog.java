@@ -51,8 +51,10 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 
 	  //Get Request Function
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
-	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
+	  res = sh.getStrParameter( API_PARAM_RESOURCE, "DEFAULT" );
 	  currentUser = getCurrentUser( session );
+	  //www.john.com/home.jsp?name=JOHN
+	  
 
 	  //Valid login functions
 	  if ( currentUser == null && ( fn.equalsIgnoreCase( "login" ) || fn.equalsIgnoreCase( "findPatient" ) ) ) {

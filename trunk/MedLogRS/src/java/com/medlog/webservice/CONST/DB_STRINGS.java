@@ -19,7 +19,7 @@ public class DB_STRINGS {
 /**
  * INSERT PATIENT STORED PROCEDURE
  */
-public static final String SP_PATIENT_INSERT = "{call spPatientInsert("
+public static final String SP_PATIENT_INSERT = "{call [spPatientInsert]("
 						   + "?,?,?,?,?,"
 						   + "?,?,?,?,?,"
 						   + "?,?,?,?,?,"
@@ -28,12 +28,12 @@ public static final String SP_PATIENT_INSERT = "{call spPatientInsert("
 /**
  * UPDATE PATIENT STORED PROCEDURE
  */
-public static final String SP_PATIENT_UPDATE = "{call spPatientUpdate(}";
+public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate](}";
 /**
  * SELECT PATIENT STORED PROCEDURE
  */
-public static final String SP_PATIENT_SELECT = "{call spPatientSelect(?,?,?)}";
-public static final String SP_DIARY_INSERT = "{call spDiaryInsert(?,?,?,?,?,?,?,?,?,?,?}";
+public static final String SP_PATIENT_SELECT = "{call [spPatientSelect](?,?,?)}";
+public static final String SP_DIARY_INSERT = "{call [spDiaryInsert](?,?,?,?,?,?,?,?,?,?,?}";
 private DB_STRINGS(){
    
 }
