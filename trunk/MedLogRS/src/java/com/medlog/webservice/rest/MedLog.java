@@ -41,7 +41,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    ServletHelpers sh;
    HttpSession session = null;
    String fn = null;
-   String res = null;
+   String res = null;// 
    PatientVO currentUser = null;
    Gson gson = null;
    try (PrintWriter out = response.getWriter()) {

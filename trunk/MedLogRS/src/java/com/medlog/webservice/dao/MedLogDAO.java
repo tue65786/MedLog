@@ -120,7 +120,8 @@ public PatientVO findPatientByName(String _username) {
 
 @Override
 public PatientVO findPatientByPatientNameAndPassword(String _username, String _password) {
-   throw new UnsupportedOperationException( "Not supported yet." );
+   throw new UnsupportedOperationException( "Not supported yet." );  
+   
 }
 
 @Override
