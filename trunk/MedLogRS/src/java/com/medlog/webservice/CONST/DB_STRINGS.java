@@ -14,10 +14,7 @@ import com.medlog.webservice.vo.*;
  */
 public class DB_STRINGS {
 
-/**
- * Do not allow instantiation.
- *
- */
+
 /**
  * Assign/Unassign patient med.
  * Params:<ol> <li> PatientID int,</li><li>PharmID int,</li><li>PhysicanID
@@ -97,6 +94,10 @@ public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
  * Returns in order:  ID, Name, Abbr.
  */
 public static final String SP_STATE_SELECT = "{call spGetAllStates()}";
+/**
+ * Do not allow instantiation.
+ *
+ */
 private DB_STRINGS() {
 
 }

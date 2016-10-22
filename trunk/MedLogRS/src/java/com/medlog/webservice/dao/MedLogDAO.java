@@ -64,10 +64,14 @@ public DbConnection getDB() {
 private final DbConnection db;
 private final PatientVO user;
 private boolean loggedIn;
+private boolean stateOK;
+private String errorMessage;
 
 public MedLogDAO(DbConnection db, PatientVO u) {
    this.db = db;
    this.user = u;
+   stateOK = true;
+   errorMessage = "";
 }
 private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 
@@ -105,6 +109,7 @@ public int createDiary(DiaryVO _vo) {
 
 @Override
 public int createPatient(PatientVO _vo) {
+   //REMOVE INVALID HTML
    CallableStatement cs = null;
    int newID = DB_ERROR_CODE;
    if ( _vo.isValid( INSERT ) ) {
@@ -119,11 +124,11 @@ public int createPatient(PatientVO _vo) {
 		 cs.setString( 6, _vo.phoneHome );
 		 cs.setString( 7, _vo.phoneMobile );
 		 cs.setString( 8, _vo.email );
-		 cs.setString( PROPS_FILE, PROPS_FILE );
+//		 cs.setString( PROPS_FILE, PROPS_FILE );
 		 cs.setNull( 9, java.sql.Types.NVARCHAR ); //status
 		 cs.setString( 10, _vo.addressStreet );
 		 cs.setString( 11, _vo.addressCity );
-		 cs.setInt(12, _vo.addressState.getStateID());//CHECK FOR VALID STATE
+		 cs.setInt( 12, _vo.addressState.getStateID() );//CHECK FOR VALID STATE
 		 cs.setString( 13, _vo.addressCountry );
 		 cs.setString( 14, _vo.addressPostalcode );
 		 cs.setString( 15, _vo.userPreferences );
@@ -145,12 +150,11 @@ public int createPatient(PatientVO _vo) {
 		 int rows = cs.executeUpdate();
 		 newID = cs.getInt( 25 );
 	  } catch (SQLException ex) {
-		 if (DEBUG){
-			System.err.println( "com.medlog.webservice.dao.MedLogDAO.createPatient()\n"+DbUtl.printJDBCExceptionMsg( ex ));
+		 if ( DEBUG ) {
+			System.err.println( "com.medlog.webservice.dao.MedLogDAO.createPatient()\n" + DbUtl.printJDBCExceptionMsg( ex ) );
 		 }
 		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createPatient()", "SQLEx", ex );
-	  }
-	  catch (NullPointerException npe){
+	  } catch (NullPointerException npe) {
 		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createPatient()", "Null Pointer", npe );
 	  }
    }
@@ -170,6 +174,63 @@ public ArrayList<StateVO> findAllStates() {
 @Override
 public int findDiaryByID(int _id) {
    throw new UnsupportedOperationException( "Not supported yet." );
+}
+/**
+ * Handle patient lookup for login etal
+ * @param _id
+ * @param _username
+ * @param _password
+ * @return 
+ */
+private  ArrayList<PatientVO>  findPatient(int _id, String _username, String _password) {
+   _username = StrUtl.toS( _username );
+   _password = StrUtl.toS( _password );
+   ArrayList<PatientVO> voList = new ArrayList<PatientVO>();
+   CallableStatement cs = null;
+   ResultSet rs = null;
+   boolean valid = false;
+   try {
+	  cs = db.getConnnection().prepareCall( SP_PATIENT_SELECT );
+	  if ( _id > 0 ) {
+		 cs.setInt( 1, _id );
+		 valid = true;
+	  } else {
+		 cs.setNull( 1, java.sql.Types.INTEGER );
+	  }
+	  if ( _username.isEmpty() ) {
+		 cs.setNull( 2, java.sql.Types.NVARCHAR );
+	  } else {
+		 valid = true;
+		 cs.setString( 2, _username );
+		 if ( _password.isEmpty() ) {
+			cs.setNull( 3, java.sql.Types.NVARCHAR );
+		 } else {
+			cs.setString( 3, _password );
+		 }
+	  }
+	  if ( valid ) {
+		 rs = cs.executeQuery();
+		 while ( rs.next() ) {
+			voList.add( PatientVO.builder()
+					.patientID( rs.getInt( 1 ) )
+					.userName( rs.getString( 2 ) )
+					.userPassword( rs.getString( 3 ) )
+					.firstName( rs.getString( 4 ) )
+					.lastName( rs.getString( 5 ) )
+					.phoneHome( rs.getString( 6 ) )
+					.phoneMobile( rs.getString( 7 ) )
+					.build() );
+
+		 }
+	  }
+   } catch (SQLException ex) {
+	  LOG.log( Level.SEVERE, null, ex );
+   }
+   finally{
+	  DbUtl.close( rs );
+	  DbUtl.close( cs );
+   }
+return voList;
 }
 
 @Override
