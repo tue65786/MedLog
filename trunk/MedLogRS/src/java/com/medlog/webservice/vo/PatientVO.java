@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.vo;
 
+import com.medlog.webservice.CONST.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -27,8 +28,14 @@ private static final long serialVersionUID = 7503965982970314783L;
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
 
+   /**
+    * Validates:<ul><li> {@linkplain StateVO#stateID}</li></ul>
+    * @param _ACTION {@linkplain API_ACTIONS#INSERT} does not validate ID.
+    * @return
+    */
    @Override
    public boolean isValid(int _ACTION) {
+	  //Validate stateID!
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
 
@@ -61,7 +68,7 @@ public String userPreferences;
 public Date pwdLastChanged;
 public String lang;
 public String timezoneId;
-public Boolean dateOfBirth;
+public Date dateOfBirth;
 public Date dateJoined;
 public String picture;
 public String metaData;

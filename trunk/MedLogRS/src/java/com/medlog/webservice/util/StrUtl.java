@@ -7,6 +7,8 @@
 
 package com.medlog.webservice.util;
 
+import java.io.*;
+import java.util.logging.*;
 import java.util.regex.*;
 
 /**
@@ -157,4 +159,54 @@ private StrUtl(){
    }
 
 
+	/**
+	 * Stores stack track as String
+	 *
+	 * @param exception Thrown
+	 * @return String containing stack trace.
+	 */
+	public static final String throwableStackTraceToString(final Throwable exception) {
+		if (exception != null) {
+
+			final StringWriter stringWriter = new StringWriter();
+			exception.printStackTrace(new PrintWriter(stringWriter));
+			return stringWriter.toString();
+		} else {
+			LOG.warning("Exception null printing stack track");
+			return "";
+		}
+	}
+
+	/**
+	 *
+	 * @param e
+	 * @return
+	 */
+	public static final String stackStraceAsStringDetails(final Throwable e) {
+		StringBuilder sb = new StringBuilder("");
+		if (e != null) {
+			final StringWriter stringWriter = new StringWriter();
+			try {
+				e.printStackTrace(new PrintWriter(stringWriter));
+				sb.append(stringWriter.toString());
+				sb.append("\nCause:");
+				sb.append(e);
+				Throwable t = e.getCause();
+				while (t != null) {
+					sb.append(t);
+					sb.append("\n");
+					t = t.getCause();
+				}
+			} catch (Exception exc) {
+				sb.append(e.getMessage());
+			} finally {
+				return StrUtl.toS(sb.toString(), "Sorry.. full stack trace not available");
+			}
+
+		} else {
+			LOG.warning("Exception null printing stack track");
+			return "Null exception";
+		}
+	}
+   private static final Logger LOG = Logger.getLogger( StrUtl.class.getName() );
 }

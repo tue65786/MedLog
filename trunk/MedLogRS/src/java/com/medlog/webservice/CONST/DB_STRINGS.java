@@ -5,6 +5,8 @@
  */
 package com.medlog.webservice.CONST;
 
+import com.medlog.webservice.vo.*;
+
 /**
  * SQL Statements
  *
@@ -90,7 +92,11 @@ public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
 											 + "?,?,?,?,?,"
 											 + "?,?,?,?,?,"
 											 + "?}";
-
+/**
+ * Retrieves all {@linkplain StateVO} objects.
+ * Returns in order:  ID, Name, Abbr.
+ */
+public static final String SP_STATE_SELECT = "{call spGetAllStates()}";
 private DB_STRINGS() {
 
 }

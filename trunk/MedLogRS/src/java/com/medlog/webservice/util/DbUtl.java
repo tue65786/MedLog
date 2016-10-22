@@ -80,4 +80,67 @@ public static void close(CallableStatement st, ResultSet rs) {
 	  //quiet
    }
 }
+
+   public static String printBatchUpdateException(BatchUpdateException b) {
+
+	  String err = "";
+	  err += "\n----BatchUpdateException----";
+	  err += "\nSQLState:  " + b.getSQLState();
+	  err += "\nMessage:  " + b.getMessage();
+	  err += "\nVendor:  " + b.getErrorCode();
+	  err += "\nUpdate counts:  ";
+	  int[] updateCounts = b.getUpdateCounts();
+	  for (int i = 0; i < updateCounts.length; i++) {
+		 err += updateCounts[i] + ", ";
+	  }
+	  return err;
+   }
+
+   /** 
+	* Prints detailed SQL Exception for debugging.
+    * @param ex Exception
+    * @return Stacktrace plus!
+    */
+   public static String printJDBCExceptionMsg(SQLException ex) {
+	  String stackTracedAsString = "";
+	  StringBuilder err = new StringBuilder("");
+	  for (Throwable e : ex) {
+		 stackTracedAsString += StrUtl.throwableStackTraceToString(ex);
+		 if (e instanceof SQLException) {
+			String state = ((SQLException) e).getSQLState();
+			if (state != null && !state.isEmpty()) {
+			   stackTracedAsString += "\nState: " + state + "\nMessage: " + e.getMessage();
+			}
+			e.printStackTrace(System.err);
+			err.append( "\nSQLState: " ).append(((SQLException) e).getSQLState());
+			err.append( "\nError Code: " ).append(((SQLException) e).getErrorCode());
+			err.append( "\nMessage: " ).append(e.getMessage());
+			Throwable t = ex.getCause();
+			while (t != null) {
+			   err.append( "\nCause: " ).append(t);
+			   t = t.getCause();
+			}
+			if (state != null) {
+			   if (((SQLException) e).getSQLState()
+					   .equalsIgnoreCase("S1000")) {
+				  err.append("\nDetails: Cannot insert a record with that ID already exists.");
+			   } else if (((SQLException) e).getMessage()
+					   .toLowerCase()
+					   .contains("foreign key")) {
+				  err.append("\nDetails: Invalid foreign key reference.");
+			   } else if (((SQLException) e).getMessage()
+					   .toLowerCase()
+					   .contains("duplicate entry")) {
+				  err.append("\nDetails: Duplicate entry (PK).");
+			   } else if (((SQLException) e).getMessage()
+					   .toLowerCase()
+					   .contains("incorrect syntax")) {
+				  err.append("\nDetails: Syntax Error.");
+			   }
+			}
+
+		 }
+	  }
+	  return StrUtl.coalesce(err.toString(),stackTracedAsString,ex.toString(),"UNKNOWN");
+   }
 }

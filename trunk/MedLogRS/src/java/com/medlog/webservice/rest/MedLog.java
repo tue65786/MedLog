@@ -16,6 +16,7 @@ import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
@@ -77,8 +78,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 
 	  } else //Check for saved user cred.
-	  {
-		 if ( currentUser == null ) {
+	   if ( currentUser == null ) {
 			out.print( makeJSONErrorMsg( "Not logged in." ) );
 		 } else { //User is Logged in
 			switch ( res ) {
@@ -103,7 +103,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			   out.print( makeJSONErrorMsg( "Invalid function." ) );
 			}
 		 }
-	  }
    }
 }
 
@@ -137,6 +136,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 }
 
 /**
+ * Returns a short description of the servlet.
+ *
+ * @return a String containing servlet description
+ */
+@Override
+public String getServletInfo() {
+   return "MedLog API";
+}// </editor-fold>
+
+/**
  * Attempts to retrieve user from session.
  *
  * @param session
@@ -152,6 +161,27 @@ private PatientVO getCurrentUser(HttpSession session) {
    }
    return null;
 
+}
+
+/**
+ * Set states list
+ *
+ * @param request
+ */
+private ArrayList<StateVO> getStatesList(HttpServletRequest request) {
+   boolean setStates = true;
+   ArrayList<StateVO> states = null;
+   try {
+	  states = (ArrayList<StateVO>) request.getServletContext().getAttribute( "states" );
+	  setStates = states.isEmpty();
+
+   } catch (Exception e) {
+	  setStates = true;
+   }
+   if ( setStates ) {
+	  //POPULATE STATES
+   }
+   return states;
 }
 
 /**
@@ -180,15 +210,5 @@ private String getJSONMsg(String state, String msg) {
    json.addProperty( "message", StrUtl.toS( msg, state.equals( "error" ) ? "Something went wrong!" : "Unknown" ) );
    return json.toString();
 }
-
-/**
- * Returns a short description of the servlet.
- *
- * @return a String containing servlet description
- */
-@Override
-public String getServletInfo() {
-   return "MedLog API";
-}// </editor-fold>
 
 }
