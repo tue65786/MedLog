@@ -175,14 +175,16 @@ public ArrayList<StateVO> findAllStates() {
 public int findDiaryByID(int _id) {
    throw new UnsupportedOperationException( "Not supported yet." );
 }
+
 /**
  * Handle patient lookup for login etal
+ *
  * @param _id
  * @param _username
  * @param _password
- * @return 
+ * @return
  */
-private  ArrayList<PatientVO>  findPatient(int _id, String _username, String _password) {
+private ArrayList<PatientVO> findPatient(int _id, String _username, String _password) {
    _username = StrUtl.toS( _username );
    _password = StrUtl.toS( _password );
    ArrayList<PatientVO> voList = new ArrayList<PatientVO>();
@@ -222,32 +224,61 @@ private  ArrayList<PatientVO>  findPatient(int _id, String _username, String _pa
 					.build() );
 
 		 }
+	  } else {
+		 this.stateOK = false;
+		 this.errorMessage = "com.medlog.webservice.dao.MedLogDAO.findPatient() - Invalid Params: Username is required";
+		 if ( DEBUG ) {
+			LOG.severe( this.errorMessage );
+		 }
 	  }
    } catch (SQLException ex) {
 	  LOG.log( Level.SEVERE, null, ex );
-   }
-   finally{
+   } finally {
 	  DbUtl.close( rs );
 	  DbUtl.close( cs );
    }
-return voList;
+   return voList;
 }
 
 @Override
 public PatientVO findPatientByID(int _id) {
-   throw new UnsupportedOperationException( "Not supported yet." );
+   ArrayList<PatientVO> voList = findPatient( _id, null, null );
+   if ( voList != null && !voList.isEmpty() ) {
+	  if ( DEBUG && voList.size() > 1 ) {
+		 
+		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByID()\n--Find by ID Returned Multiple VALUES -- something is wrong!" );
+	  }
+	  return voList.get( 0 );
+   } else {
+	  return null;
+   }
 }
 
 @Override
 public PatientVO findPatientByName(String _username) {
-   throw new UnsupportedOperationException( "Not supported yet." );
-
+ ArrayList<PatientVO> voList = findPatient( 0, _username, null );
+  if ( voList != null && !voList.isEmpty() ) {
+	  if ( DEBUG && voList.size() > 1 ) {
+		 
+		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByName()\n--- Returned Multiple VALUES -- something is wrong!" );
+	  }
+	  return voList.get( 0 );
+   } else {
+	  return null;
+   }
 }
 
 @Override
 public PatientVO findPatientByPatientNameAndPassword(String _username, String _password) {
-   throw new UnsupportedOperationException( "Not supported yet." );
-
+   ArrayList<PatientVO> voList = findPatient( 0, _username, _password );
+ if ( voList != null && !voList.isEmpty() ) {
+	  if ( DEBUG && voList.size() > 1 ) {	 
+		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()\n---Returned Multiple VALUES -- something is wrong!" );
+	  }
+	  return voList.get( 0 );
+   } else {
+	  return null;
+   }
 }
 
 @Override
