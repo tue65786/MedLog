@@ -138,18 +138,19 @@ public void tearDown() {
    }
 
    /**
-    * Test of findPatientByID method, of class MedLogDAO.
+    * (VALID)Test of findPatientByID method, of class MedLogDAO.
     */
    @Test
    public void testFindPatientByID() {
 	  System.out.println( "findPatientByID" );
-	  int _id = 0;
-	  MedLogDAO instance = null;
+	  int _id = 2;
+	  MedLogDAO instance = new MedLogDAO(db, PatientVO.builder().patientID( 2).userName( "dan").userPassword( "asdf").build() );
 	  PatientVO expResult = null;
 	  PatientVO result = instance.findPatientByID( _id );
-	  assertEquals( expResult, result );
+	  System.out.println( "com.medlog.webservice.dao.MedLogDAOTest.testFindPatientByID()\n" + result.toJSON() );
+	  assertEquals( 2, result.getPatientID() );
 	  // TODO review the generated test code and remove the default call to fail.
-	  fail( "The test case is a prototype." );
+	 // fail( "The test case is a prototype." );
    }
 
    /**
@@ -168,19 +169,22 @@ public void tearDown() {
    }
 
    /**
-    * Test of findPatientByPatientNameAndPassword method, of class MedLogDAO.
+    * (VALID) Test of findPatientByPatientNameAndPassword method, of class MedLogDAO.
     */
    @Test
    public void testFindPatientByPatientNameAndPassword() {
+	
 	  System.out.println( "findPatientByPatientNameAndPassword" );
-	  String _username = "";
-	  String _password = "";
-	  MedLogDAO instance = null;
-	  PatientVO expResult = null;
+	  String _username = "dan";
+	  String _password = "asdf";
+	  MedLogDAO instance = new MedLogDAO(db, PatientVO.builder().patientID( 2).userName( "dan").userPassword( "asdf").build() );
+	  String expResStr = "{\"patientID\":2,\"userName\":\"dan\",\"userPassword\":\"asdf\",\"userHash\":null,\"firstName\":\"dan\",\"lastName\":\"kauffman\",\"phoneHome\":null,\"phoneMobile\":null,\"email\":null,\"status\":null,\"addressStreet\":\"158 Edge\",\"addressCity\":\"BC\",\"addressState\":{\"stateID\":2,\"stateName\":\"Pennsylvania\",\"stateAbbreviation\":\"PA\",\"patientList\":null},\"addressCountry\":null,\"addressPostalcode\":null,\"userPreferences\":null,\"pwdLastChanged\":null,\"lang\":null,\"timezoneId\":null,\"dateOfBirth\":null,\"dateJoined\":\"Oct 22, 2016\",\"picture\":null,\"metaData\":null,\"userRole\":1,\"diaryList\":null,\"medicationList\":null,\"primaryPhyssician\":null,\"healthcareProviderList\":null,\"tagList\":null}";
 	  PatientVO result = instance.findPatientByPatientNameAndPassword( _username, _password );
-	  assertEquals( expResult, result );
+	  assertEquals( 2, result.getPatientID() );
+	  System.out.println( "com.medlog.webservice.dao.MedLogDAOTest.testFindPatientByPatientNameAndPassword()" + result.toJSON());
+	  assertEquals( expResStr, result.toJSON());
 	  // TODO review the generated test code and remove the default call to fail.
-	  fail( "The test case is a prototype." );
+	//  fail( "The test case is a prototype." );
    }
 
    /**

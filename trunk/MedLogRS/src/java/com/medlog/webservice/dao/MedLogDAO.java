@@ -21,11 +21,13 @@ import java.util.logging.*;
  * @author (c)2016
  */
 public class MedLogDAO implements IMedLogDAO {
+
 /**
  * Diary selection base
+ *
  * @param _id
  * @param _keyword
- * @return 
+ * @return
  */
 private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
    ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
@@ -128,6 +130,7 @@ public MedLogDAO(DbConnection db, PatientVO u) {
    this.user = u;
    stateOK = true;
    errorMessage = "";
+   findAllStates();
 }
 private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 
@@ -271,7 +274,31 @@ public boolean deletePatient(PatientVO _vo) {
 
 @Override
 public ArrayList<StateVO> findAllStates() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   if ( MedLogDAO.statesList == null ) {
+	  Map<Integer, StateVO> tmpVO = new HashMap<Integer, StateVO>();
+	  CallableStatement cs = null;
+	  ResultSet rs = null;
+	  try {
+		 cs = db.getConnnection().prepareCall( SP_STATE_SELECT );
+		 rs = cs.executeQuery();
+		 while ( rs.next() ) {
+			tmpVO.put( rs.getInt( 1 ), StateVO.builder().stateID( rs.getInt( 1 ) ).stateName( rs.getString( 2 ) ).stateAbbreviation( rs.getString( 3 ) ).build() );
+		 }
+		 MedLogDAO.statesList = new HashMap<Integer, StateVO>();
+		 MedLogDAO.statesList.putAll( tmpVO );
+	  } catch (SQLException ex) {
+		 Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
+	  } finally {
+		 DbUtl.close( rs );
+		 DbUtl.close( cs );
+	  }
+   }
+
+   ArrayList<StateVO> vos = new ArrayList<StateVO>();
+   vos.addAll( MedLogDAO.statesList.values() );
+
+   return vos;
+
 }
 
 /**
@@ -294,6 +321,8 @@ private ArrayList<PatientVO> findPatient(int _id, String _username, String _pass
 	  if ( _id > 0 ) {
 		 cs.setInt( 1, _id );
 		 valid = true;
+		 cs.setNull( 2, java.sql.Types.NVARCHAR );
+		 cs.setNull( 3, java.sql.Types.NVARCHAR );
 	  } else {
 		 cs.setNull( 1, java.sql.Types.INTEGER );
 	  }

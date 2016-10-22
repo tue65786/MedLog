@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.vo;
 
+import com.google.gson.*;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
@@ -472,7 +473,8 @@ public boolean isValid(int _ACTION) {
 
 @Override
 public String toJSON() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   Gson g = new GsonBuilder().serializeNulls().create();
+   return g.toJson( this);
 }
 
 @Override
