@@ -3,5 +3,5 @@
   <ServerVersion>Sql2008</ServerVersion>
   <ServerName>GAINSHOSTDEVELO</ServerName>
   <DatabaseName>MedLog</DatabaseName>
-  <DatabaseInformation Version="8" />
+  <DatabaseInformation Version="9" />
 </DatabaseSettings>

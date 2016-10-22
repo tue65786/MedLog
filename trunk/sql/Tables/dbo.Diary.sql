@@ -4,16 +4,16 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[Diary] (
 		[Id]                        [int] IDENTITY(1, 1) NOT NULL,
+		[PatientID]                 [int] NOT NULL,
 		[Title]                     [nvarchar](250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 		[Notes]                     [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 		[NotesActivity]             [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-		[PatientID]                 [int] NOT NULL,
-		[created_date]              [datetime] NOT NULL,
-		[updated_date]              [datetime] NULL,
+		[createdDate]               [datetime] NOT NULL,
+		[updatedDate]               [datetime] NULL,
 		[includce_meds_current]     [nchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-		[attachment_path]           [nvarchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-		[Mood]                      [int] NULL,
-		[Productivity]              [int] NULL,
+		[attachmentPath]            [nvarchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+		[ratingMood]                [int] NULL,
+		[ratingProductivity]        [int] NULL,
 		[USER_FieldA2Id]            [int] NULL,
 		[USER_FieldAId]             [int] NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
@@ -29,7 +29,17 @@ GO
 ALTER TABLE [dbo].[Diary]
 	ADD
 	CONSTRAINT [DF__Diary__CreatedDa__681373AD]
-	DEFAULT (getdate()) FOR [created_date]
+	DEFAULT (getdate()) FOR [createdDate]
+GO
+ALTER TABLE [dbo].[Diary]
+	ADD
+	CONSTRAINT [DF_Diary_ratingMood]
+	DEFAULT ((1)) FOR [ratingMood]
+GO
+ALTER TABLE [dbo].[Diary]
+	ADD
+	CONSTRAINT [DF_Diary_ratingProductivity]
+	DEFAULT ((1)) FOR [ratingProductivity]
 GO
 ALTER TABLE [dbo].[Diary]
 	WITH CHECK
@@ -56,6 +66,12 @@ ALTER TABLE [dbo].[Diary]
 ALTER TABLE [dbo].[Diary]
 	CHECK CONSTRAINT [FK_Diary_USER_FieldA1]
 
+GO
+CREATE FULLTEXT INDEX ON [dbo].[Diary]
+	([Title] LANGUAGE 1033, [Notes] LANGUAGE 1033, [NotesActivity] LANGUAGE 1033)
+	KEY INDEX [PK_Diary]
+	ON (FILEGROUP [PRIMARY], [ftMedLog])
+	WITH CHANGE_TRACKING AUTO, STOPLIST SYSTEM
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'2nd Value To Track', 'SCHEMA', N'dbo', 'TABLE', N'Diary', 'COLUMN', N'USER_FieldA2Id'
 GO
