@@ -138,53 +138,6 @@ public void tearDown() {
    }
 
    /**
-    * Test of findDiaryByPatient method, of class MedLogDAO.
-    */
-   @Test
-   public void testFindDiaryByPatient() {
-	  System.out.println( "findDiaryByPatient" );
-	  PatientVO _vo = null;
-	  MedLogDAO instance = null;
-	  ArrayList<DiaryVO> expResult = null;
-	  ArrayList<DiaryVO> result = instance.findDiaryByPatient( _vo );
-	  assertEquals( expResult, result );
-	  // TODO review the generated test code and remove the default call to fail.
-	  fail( "The test case is a prototype." );
-   }
-
-   /**
-    * Test of findDiaryByPatientAndKeyword method, of class MedLogDAO.
-    */
-   @Test
-   public void testFindDiaryByPatientAndKeyword() {
-	  System.out.println( "findDiaryByPatientAndKeyword" );
-	  PatientVO _vo = null;
-	  String _keyword = "";
-	  MedLogDAO instance = null;
-	  ArrayList<DiaryVO> expResult = null;
-	  ArrayList<DiaryVO> result = instance.findDiaryByPatientAndKeyword( _vo, _keyword );
-	  assertEquals( expResult, result );
-	  // TODO review the generated test code and remove the default call to fail.
-	  fail( "The test case is a prototype." );
-   }
-
-   /**
-    * Test of findDiaryByPatientAndTag method, of class MedLogDAO.
-    */
-   @Test
-   public void testFindDiaryByPatientAndTag() {
-	  System.out.println( "findDiaryByPatientAndTag" );
-	  PatientVO _vo = null;
-	  TagVO _tag = null;
-	  MedLogDAO instance = null;
-	  ArrayList<DiaryVO> expResult = null;
-	  ArrayList<DiaryVO> result = instance.findDiaryByPatientAndTag( _vo, _tag );
-	  assertEquals( expResult, result );
-	  // TODO review the generated test code and remove the default call to fail.
-	  fail( "The test case is a prototype." );
-   }
-
-   /**
     * Test of findPatientByID method, of class MedLogDAO.
     */
    @Test
@@ -284,6 +237,50 @@ public void tearDown() {
 	  MedLogDAO instance = null;
 	  boolean expResult = false;
 	  boolean result = instance.updatePatient( _vo );
+	  assertEquals( expResult, result );
+	  // TODO review the generated test code and remove the default call to fail.
+	  fail( "The test case is a prototype." );
+   }
+
+   /**
+    * Test of findDiaryByKeyword method, of class MedLogDAO.
+    */
+   @Test
+   public void testFindDiaryByKeyword() {
+	  System.out.println( "findDiaryByKeyword" );
+	  String _keyword = "";
+	  MedLogDAO instance = null;
+	  ArrayList<DiaryVO> expResult = null;
+	  ArrayList<DiaryVO> result = instance.findDiaryByKeyword( _keyword );
+	  assertEquals( expResult, result );
+	  // TODO review the generated test code and remove the default call to fail.
+	  fail( "The test case is a prototype." );
+   }
+
+   /**
+    * Test of findDiaryByTag method, of class MedLogDAO.
+    */
+   @Test
+   public void testFindDiaryByTag() {
+	  System.out.println( "findDiaryByTag" );
+	  TagVO _tag = null;
+	  MedLogDAO instance = null;
+	  ArrayList<DiaryVO> expResult = null;
+	  ArrayList<DiaryVO> result = instance.findDiaryByTag( _tag );
+	  assertEquals( expResult, result );
+	  // TODO review the generated test code and remove the default call to fail.
+	  fail( "The test case is a prototype." );
+   }
+
+   /**
+    * Test of getCurrentUser method, of class MedLogDAO.
+    */
+   @Test
+   public void testGetCurrentUser() {
+	  System.out.println( "getCurrentUser" );
+	  MedLogDAO instance = null;
+	  PatientVO expResult = null;
+	  PatientVO result = instance.getCurrentUser();
 	  assertEquals( expResult, result );
 	  // TODO review the generated test code and remove the default call to fail.
 	  fail( "The test case is a prototype." );

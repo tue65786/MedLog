@@ -40,10 +40,11 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    response.setContentType( "application/json" );
    ServletHelpers sh;
    HttpSession session = null;
-   String fn = null;
-   String res = null;// 
+   String fn = null; //Action
+   String res = null;//Entity
    PatientVO currentUser = null;
    Gson gson = null;
+   DbConnection db = null;
    try (PrintWriter out = response.getWriter()) {
 
 	  sh = new ServletHelpers( request, response );
@@ -51,16 +52,17 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 
 	  //Get Request Function
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
-	  res = sh.getStrParameter( API_PARAM_RESOURCE, "DEFAULT" );
+	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
 	  currentUser = getCurrentUser( session );
-	  //www.john.com/home.jsp?name=JOHN
-	  
+
+	  db = new DbConnection();
 
 	  //Valid login functions
 	  if ( currentUser == null && ( fn.equalsIgnoreCase( "login" ) || fn.equalsIgnoreCase( "findPatient" ) ) ) {
 		 String username = sh.getStrParameter( "username", "" );
 		 String password = sh.getStrParameter( "password", "" );
-		 MedLogDAO dao = new MedLogDAO( new DbConnection() );
+
+		 MedLogDAO dao = new MedLogDAO( db, currentUser );
 		 PatientVO vo = dao.findPatientByPatientNameAndPassword( username, password );
 		 if ( vo != null ) {
 			currentUser = vo;
@@ -75,10 +77,11 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 
 	  } else //Check for saved user cred.
-	  if ( currentUser == null ) {
-		 out.print( makeJSONErrorMsg( "Not logged in." ) );
-	  } else { //User is Logged in
-		 switch ( res ) {
+	  {
+		 if ( currentUser == null ) {
+			out.print( makeJSONErrorMsg( "Not logged in." ) );
+		 } else { //User is Logged in
+			switch ( res ) {
 //			   case API_RESOURCE_DIARY:
 //				  break;
 //			   case API_RESOURCE_HEALTHCARE_PROVIDER.getCode():
@@ -89,15 +92,16 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 //				  break;
 //			   case API_RESOURCE_DIATARY_RESTRICTION.getCode():
 //				  break;
-			default:
-			   break;
-		 }
-		 if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
+			   default:
+				  break;
+			}
+			if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
 
-		 } else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
+			} else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
 
-		 } else {
-			out.print( makeJSONErrorMsg( "Invalid function." ) );
+			} else {
+			   out.print( makeJSONErrorMsg( "Invalid function." ) );
+			}
 		 }
 	  }
    }

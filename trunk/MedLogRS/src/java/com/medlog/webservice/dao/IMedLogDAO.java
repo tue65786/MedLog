@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.medlog.webservice.dao;
 
 import com.medlog.webservice.sql.*;
@@ -18,15 +17,19 @@ public interface IMedLogDAO {
 
 /**
  * Return all states
- * @return 
+ *
+ * @return
  */
 public ArrayList<StateVO> findAllStates();
 
 /**
  * Return states by keyword
- * @return 
+ *
+    * @param keyword Abbr or full state name.
+ * @return
  */
 public ArrayList<StateVO> findStatesByKeyword(String keyword);
+
 /**
  *
  * @param _username
@@ -51,6 +54,7 @@ public ArrayList<PatientVO> getPatients();
 
 /**
  * Find user by user ID
+ *
  * @param _id
  * @return
  */
@@ -81,6 +85,7 @@ public boolean deletePatient(PatientVO _vo);
 public boolean updatePatient(PatientVO _vo);
 
 public int createDiary(DiaryVO _vo);
+
 /**
  * Update existing diary
  *
@@ -88,36 +93,44 @@ public int createDiary(DiaryVO _vo);
  * @return success
  */
 public int updateDiary(DiaryVO _vo);
+
 /**
  * Find diary by diary ID
+ *
  * @param _id
  * @return
  */
 public int findDiaryByID(int _id);
+
 /**
  * Find diary entries by PatientVO
+ *
  * @param _vo Patient
- * @return 
+ * @return
  * @see PatientVO
  * @see DiaryVO
  */
-public ArrayList<DiaryVO> findDiaryByPatient(PatientVO _vo);
+public ArrayList<DiaryVO> findDiaryByPatient();
+
 /**
  * Find diary entries by patient and keyword
+ *
  * @param _vo
  * @param keyword
- * @return 
+ * @return
  */
-public ArrayList<DiaryVO> findDiaryByPatientAndKeyword(PatientVO _vo,String keyword);
+public ArrayList<DiaryVO> findDiaryByKeyword(String keyword);
+
 /**
  * Find diary entries by patient and tag
+ *
  * @param _vo
  * @param _tag
- * @return 
+ * @return
  */
-public ArrayList<DiaryVO> findDiaryByPatientAndTag(PatientVO _vo,TagVO _tag);
-
-
+public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag);
 
 public DbConnection getDB();
+
+public PatientVO getCurrentUser();
 }
