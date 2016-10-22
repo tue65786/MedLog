@@ -1,0 +1,94 @@
+#header{
+	width: 90%;
+	height: 100%;
+	background: white;
+}
+#greet{
+	font-size: 18px;
+	margin: 1em;
+	padding: 1em;	
+	border: 1px solid black;
+	display: block;
+	float: left;
+}
+#forward{
+	margin: 1em;
+	float: right;
+}
+#main{
+	clear: both;
+	font-size: 14px;
+	margin: 1em 3em;
+	text-align: center
+}
+.fwdLog {
+	margin: 3em 1em;
+    background-color: #3366CC;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+	display: block;
+	float: right;
+}
+.fwdLog:hover, .fwdLog:focus {
+    background-color: #FF5050;
+}
+.forward {
+    position: relative;
+    display: inline-block;
+	display: block;
+	float: right;
+}
+.log {
+    display: none;
+    position: relative;
+    background-color: #f9f9f9;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+.log a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.forward a:hover {
+	background-color: #FF5050;
+}
+.show {
+	display:block;
+}
+ul.tab{
+	list-style-type: none;
+	margin: none;
+	padding: 0;
+	overflow: hidden;
+	background-color: #3366CC;
+}
+ul.tab li{
+	float: left;
+}
+ul.tab li a {
+	display: inline-block;
+	color: white;
+	text-align: center;
+	padding: 10px 10px;
+	text-decoration:none;
+	transition: 0.5s;
+	font-size: 18px;
+}
+ul.tab li a:hover{
+	background-color: #2E5CB8;
+}
+ul.tab li a:focus, .active{
+	background-color: #FF5050;
+}
+.tabcontent{
+	text-align: left;
+	margin: 0 3em;
+	display: none;
+	padding: 5px;
+	border-top: none;
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dashboard</title>
+		<link rel="stylesheet" type="text/css" href="dstyle.css"/>
+	</head>
+	<body>
+		<div id="header">
+			<div id="greet">
+				<p><strong>Hello, User</strong><p>
+				<p id="date"></p>
+				<script>
+					var d = new Date();
+					var m = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+					document.getElementById("date").innerHTML = "Today is: " + m[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+				</script>
+			</div>
+			<div id="forward">
+				<button onclick="forward()" class="fwdLog">Dropdown</button>
+				<div id="fwd" class="log">
+					<a href=javascript:void(0)>Log 1</a>
+					<a href=javascript:void(0)>Log 2</a>
+					<a href=javascript:void(0)>Log 3</a>
+					<a href=javascript:void(0)>Log 4</a>
+				</div>
+				<script>
+					/* When the user clicks on the button,
+					toggle between hiding and showing the dropdown content */
+					function forward() {
+						document.getElementById("fwd").classList.toggle("show");
+					}
+
+					// Close the dropdown if the user clicks outside of it
+					window.onclick = function(event) {
+						if (!event.target.matches('.fwdLog')) {
+							var dropdowns = document.getElementsByClassName("log");
+							var i;
+							for (i = 0; i < dropdowns.length; i++) {
+								var openDropdown = dropdowns[i];
+								if (openDropdown.classList.contains('show')) {
+								openDropdown.classList.remove('show');
+								}
+							}
+						}
+					}
+				</script>
+			</div>
+		</div>
+		<div id="main">
+			<ul class="tab">
+			  <li><a href="javascript:void(0)" class="tablinks" onclick="openFeature(event, 'Journal')">Personal Journal</a></li>
+			  <li><a href="javascript:void(0)" class="tablinks" onclick="openFeature(event, 'Medication')">Medication and Supplementation</a></li>
+			  <li><a href="javascript:void(0)" class="tablinks" onclick="openFeature(event, 'Diet')">Dietary Restriction</a></li>
+			  <li><a href="javascript:void(0)" class="tablinks" onclick="openFeature(event, 'Provider')">Health Provider</a></li>
+			</ul>
+
+			<div id="Journal" class="tabcontent">
+			  <p>TODO supply content for journal</p>
+			</div>
+
+			<div id="Medication" class="tabcontent">
+			  <p>TODO supply content for medication and supplementation</p>
+			</div>
+
+			<div id="Diet" class="tabcontent">
+			  <p>TODO supply content for dietary restrictions</p>
+			</div>
+			
+			<div id="Provider" class="tabcontent">
+			  <p>TODO supply content for health provider</p>
+			</div>
+			
+			<script>
+			function openFeature(evt, featureName) {
+				var i, tabcontent, tablinks;
+				tabcontent = document.getElementsByClassName("tabcontent");
+				for (i = 0; i < tabcontent.length; i++) {
+					tabcontent[i].style.display = "none";
+				}
+				tablinks = document.getElementsByClassName("tablinks");
+				for (i = 0; i < tablinks.length; i++) {
+					tablinks[i].className = tablinks[i].className.replace(" active", "");
+				}
+				document.getElementById(featureName).style.display = "block";
+				evt.currentTarget.className += " active";
+			}
+			
+			</script>
+		</div>
+	</body>
+</html>
