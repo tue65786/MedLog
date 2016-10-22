@@ -32,6 +32,7 @@ public static final int INSERT = 2;
  * HTTP Method Code: PUSH/UPDATE.
  */
 public static final int UPDATE = 3;
+public static final int DELETE  = 4;
 /**
  * Valid {@linkplain PatientVO} API Functions
  */

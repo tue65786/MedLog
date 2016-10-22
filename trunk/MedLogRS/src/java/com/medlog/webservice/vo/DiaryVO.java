@@ -5,6 +5,8 @@
  */
 package com.medlog.webservice.vo;
 
+import com.medlog.webservice.CONST.*;
+import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -17,20 +19,43 @@ public class DiaryVO implements Serializable, IEntityBase<DiaryVO> {
 
 private static final long serialVersionUID = -2971191299069097176L;
 
-   @Override
-   public boolean isValid() {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public boolean isValid() {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
-   @Override
-   public boolean isValid(DiaryVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public boolean isValid(DiaryVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
+   /**
+    * Validates DiaryVO Object.
+    * @param _ACTION {@linkplain API_ACTIONS#INSERT} does not validate ID.
+    * @return 
+	* @see API_ACTIONS#INSERT
+	* @see API_ACTIONS#DELETE
+    */
    @Override
-   public boolean isValid(int _ACTION) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+public boolean isValid(int _ACTION) {
+   if ( this.patientID == null || this.patientID.getPatientID() <= 0 ) {
+	  return false;
    }
+   if ( _ACTION != INSERT ) {
+	  if ( this.id <= 0 ) {
+		 return false;
+	  }
+   } else {
+	  if ( ( this.mood * this.productivity == 0 ) ) {
+	  return false;
+   }
+	  if (this.notes.isEmpty()){
+		 return false;
+	  }
+	  
+   }
+   return true;
+}
 
 @Override
 public String toJSON() {
@@ -52,7 +77,7 @@ public String attachmentPath;
 public int mood;
 public int productivity;
 
-//   public List<Tag> tagList;
+public List<TagVO> tagList;
 public PatientVO patientID;
 private static final Logger LOG = Logger.getLogger( DiaryVO.class.getName() );
 
