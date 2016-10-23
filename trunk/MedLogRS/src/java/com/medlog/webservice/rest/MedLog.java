@@ -18,6 +18,7 @@ import com.medlog.webservice.vo.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.logging.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
@@ -39,16 +40,15 @@ public class MedLog extends HttpServlet {
 protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 //   response.setContentType( "text/html;charset=UTF-8" );
-   response.setContentType( "application/json" );
+   response.setContentType( "application/json;charset=UTF-8" );
    ServletHelpers sh;
    HttpSession session = null;
    String fn = null; //Action
    String res = null;//Entity
    PatientVO currentUser = null;
    Gson gson = null;
-   DbConnection db = null;
+   DbConnection db = new DbConnection();
    try (PrintWriter out = response.getWriter()) {
-
 	  sh = new ServletHelpers( request, response );
 	  session = request.getSession();
 
@@ -56,29 +56,29 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
 	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
 	  currentUser = getCurrentUser( session );
-
-	  db = new DbConnection();
-
 	  //Valid login functions
-	  if ( currentUser == null && ( fn.equalsIgnoreCase( "login" ) /*
+	  if ( /*currentUser == null &&*/ ( fn.equalsIgnoreCase( "login" ) /*
 								    * || fn.equalsIgnoreCase( "findPatient" )
 								    */ ) ) {
 		 String username = sh.getStrParameter( "username", "" );
 		 String password = sh.getStrParameter( "password", "" );
 
 		 MedLogDAO dao = new MedLogDAO( db, currentUser );
-		 PatientVO vo = dao.findPatientByPatientNameAndPassword( username, password );
-		 if ( vo != null ) {
-			currentUser = PatientVO.newInstance( vo );
-			gson = new Gson();
-//			gson.toJson( vo );
-			out.print( gson.toJson( vo ) );
+		 PatientVO userVO = dao.findPatientByPatientNameAndPassword( username, password );
+		 if ( userVO != null ) {
+			currentUser = PatientVO.newInstance( userVO );
+			if ( DEBUG ) {
+			   gson = new GsonBuilder().setPrettyPrinting().setDateFormat(DATE_FORMAT).serializeNulls().create();
+			} else {
+			   gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
+			}
+			out.print( gson.toJson( userVO ) );
 			session.setAttribute( SESSION_BEAN_USER, currentUser );
 		 } else {
 			out.print( makeJSONErrorMsg( "Invalid Login" ) );
 		 }
 
-//Security Controller
+		 //Security Controller
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 		 session.removeAttribute( SESSION_BEAN_USER );
 		 out.print( makeJSONInfoMsg( "User logged out." ) );
@@ -98,7 +98,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			   break;
 			case API_ACTIONS.API_RESOURCE_PATIENT:
 			   if ( RES_ENUM.API_RESOURCE_PATIENT.isValidFunction( fn ) ) {
-						
+
 			   }
 			   break;
 			case API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION:
@@ -114,7 +114,13 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			out.print( makeJSONErrorMsg( "Invalid function." ) );
 		 }
 	  }
+   } finally {
+	  try {
+		 db.close();
+	  } catch (Exception e) {
+	  }
    }
+
 }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -202,6 +208,9 @@ private ArrayList<StateVO> getStatesList(HttpServletRequest request) {
  * @return JSON
  */
 private String makeJSONErrorMsg(String msg) {
+   if (DEBUG){
+	  LOG.severe(msg);
+   }
    return getJSONMsg( "error", msg );
 }
 
@@ -212,6 +221,9 @@ private String makeJSONErrorMsg(String msg) {
  * @return JSON
  */
 private String makeJSONInfoMsg(String msg) {
+   if (DEBUG){
+	  LOG.info(msg);
+   }
    return getJSONMsg( "info", msg );
 }
 
@@ -221,5 +233,6 @@ private String getJSONMsg(String state, String msg) {
    json.addProperty( "message", StrUtl.toS( msg, state.equals( "error" ) ? "Something went wrong!" : "Unknown" ) );
    return json.toString();
 }
+   private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );
 
 }

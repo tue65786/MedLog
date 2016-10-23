@@ -41,7 +41,7 @@ public IEntityBase getSingle() {
 }
 
 /**
- * Translate3 Diary
+ * Translate Diary
  *
  * @return
  */
@@ -51,14 +51,14 @@ public DiaryVO transformDiaryFromRequest() {
 	  return null;
    }
    ServletHelpers sh = new ServletHelpers( request, response );
-   DiaryVO.Builder transformer = DiaryVO.builder();
-   transformer.id( sh.getIntParameter( "id", 0 ) );
-   transformer.notes( sh.getStrParameter( "notes", "" ) );
-   transformer.title( sh.getStrParameter( "title", "" ) );
-   transformer.patientID( getCurrentUser() );
-   transformer.mood( sh.getIntParameter( "mood", 0 ) );
-   transformer.productivity( sh.getIntParameter( "productivity", 0 ) );
-   return transformer.build();
+   DiaryVO.Builder t = DiaryVO.builder();
+   t.id( sh.getIntParameter( "id", 0 ) );
+   t.notes( sh.getStrParameter( "notes", "" ) );
+   t.title( sh.getStrParameter( "title", "" ) );
+   t.patientID( getCurrentUser() );
+   t.mood( sh.getIntParameter( "mood", 0 ) );
+   t.productivity( sh.getIntParameter( "productivity", 0 ) );
+   return t.build();
 }
 
 public PatientVO loadMedicationFromRequest() {
@@ -66,7 +66,52 @@ public PatientVO loadMedicationFromRequest() {
 }
 
 public PatientVO loadPatientFromRequest() {
-   throw new UnsupportedOperationException( "Not supported yet." );
+   ServletHelpers sh = new ServletHelpers( request, response );
+   PatientVO.Builder p = PatientVO.builder();
+   //Allow id or patientID
+   p.patientID( sh.getIntParameter( "id", sh.getIntParameter( "patientID", 0 ) ) );
+   p.userName( sh.getStrParameter( "userName", "" ) );
+   p.userPassword( sh.getStrParameter( "userPassword", "" ) );
+   p.firstName( sh.getStrParameter( "firstName", "" ) );
+   p.lastName( sh.getStrParameter( "lastName", "" ) );
+   p.phoneHome( sh.getStrParameter( "phoneHome", "" ) );
+   p.phoneMobile( sh.getStrParameter( "phoneMobile", "" ) );
+   p.email( sh.getStrParameter( "email", "" ) );
+   p.status( sh.getStrParameter( "status", "" ) );
+   p.addressStreet( sh.getStrParameter( "addressStreet", "" ) );
+   //Allow stateID or stateid
+   p.addressState( StateVO.builder().stateID( sh.getIntParameter( "stateID", sh.getIntParameter( "stateid", 0 ) ) ).build() );
+   p.addressCountry( sh.getStrParameter( "addressCountry", "USA" ) );
+   p.addressPostalcode( sh.getStrParameter( "addressPostalcode", "" ) );
+   p.dateOfBirth( sh.getDateParameter( "dateOfBirth", new Date() ) );
+   p.userRole( 1 );
+   p.dateJoined( sh.getDateParameter( "dateJoined", new Date() ) );
+   return p.build();
+   // sh.getStrParameter( "", "")
+   //phoneHome
+//   phoneMobile": null,
+//  "email": null,
+//  "status": null,
+//  "addressStreet": "158 Edge",
+//  "addressCity": "BC",
+//  "addressState": {
+//    "stateID": 2,
+//    "stateName": "Pennsylvania",
+//    "stateAbbreviation": "PA",
+//    "patientList": null
+//  },
+//  "addressCountry": null,
+//  "addressPostalcode": null,
+//  "userPreferences": null,
+//  "pwdLastChanged": null,
+//  "lang": null,
+//  "timezoneId": null,
+//  "dateOfBirth": null,
+//  "dateJoined": "Oct 22, 2016",
+//  "picture": null,
+//  "metaData": null,
+//  "userRole": 1,
+
 }
 
 /**
