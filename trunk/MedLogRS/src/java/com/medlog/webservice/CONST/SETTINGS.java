@@ -22,6 +22,7 @@ public static final String JDBC_DRIVE_CLASS = "com.microsoft.sqlserver.jdbc.SQLS
 public static final String PROPS_FILE = "database.properties";
 public static final String CONTEXT_PATH = "MedLogRS";
 public static final int DB_ERROR_CODE  = -1;
+public static final String DATE_FORMAT = "yyyy-MM-dd";
 /**
  * No instantiation.
  */

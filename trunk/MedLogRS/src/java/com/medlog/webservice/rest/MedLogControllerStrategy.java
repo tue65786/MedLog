@@ -5,6 +5,8 @@
  */
 package com.medlog.webservice.rest;
 
+import com.medlog.webservice.rest.helpers.*;
+import com.medlog.webservice.vo.*;
 import java.util.logging.*;
 import javax.servlet.http.*;
 
@@ -34,5 +36,11 @@ private final HttpServletResponse response;
  * Session state.
  */
 private final HttpSession session;
+public DiaryVO loadDiaryFromRequest(){
+  DiaryVO vo = null;
+  ServletHelpers sh = new ServletHelpers(request, response );
 
+  
+ return vo;
+}
 }

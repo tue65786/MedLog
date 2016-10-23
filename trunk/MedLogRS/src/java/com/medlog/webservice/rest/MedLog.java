@@ -78,20 +78,26 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 
 	  } else //Check for saved user cred.
-	   if ( currentUser == null ) {
+	  {
+		 if ( currentUser == null ) {
 			out.print( makeJSONErrorMsg( "Not logged in." ) );
 		 } else { //User is Logged in
 			switch ( res ) {
-//			   case API_RESOURCE_DIARY:
-//				  break;
-//			   case API_RESOURCE_HEALTHCARE_PROVIDER.getCode():
-//				  break;
-//			   case API_RESOURCE_MEDICATION.getCode():
-//				  break;
-//			   case API_RESOURCE_PATIENT.getCode():
-//				  break;
-//			   case API_RESOURCE_DIATARY_RESTRICTION.getCode():
-//				  break;
+			   case API_ACTIONS.API_RESOURCE_DIARY:
+				  break;
+			   case API_ACTIONS.API_RESOURCE_HEALTHCARE_PROVIDER:
+				  break;
+			   case API_ACTIONS.API_RESOURCE_MEDICATION:
+				  break;
+			   case API_ACTIONS.API_RESOURCE_PATIENT:
+				  if (RES_ENUM.API_RESOURCE_PATIENT.isValidFunction( fn )){
+					 
+					 
+					 
+				  }
+				  break;
+			   case API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION:
+				  break;
 			   default:
 				  break;
 			}
@@ -103,6 +109,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			   out.print( makeJSONErrorMsg( "Invalid function." ) );
 			}
 		 }
+	  }
    }
 }
 
