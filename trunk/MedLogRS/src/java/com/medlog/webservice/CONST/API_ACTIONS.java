@@ -40,15 +40,6 @@ public static final String[] PATIENT_API = { "findPatients", "updatePatient", "a
 /**
  * Valid {@linkplain DiaryVO} API functions
  */
-public static final String[] DIARY_API = { "findDiary", "addDiary", "updateDiary" };
-/**
- * Valid Health-care Provider API Function
- */
-public static final String[] HEALTHCAREPROVIDER_API = { "find", "add", "update","assign" };
-/**
- * Valid Medication API Function
- */
-public static final String[] MEDICATION_API = { "find", "add", "update","assign" };
 
 public static final String API_PARAM_RESOURCE = "res";
 public static final String API_RESOURCE_DIARY = "d";

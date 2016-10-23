@@ -5,24 +5,42 @@
  */
 package com.medlog.webservice.CONST;
 
+import com.medlog.webservice.vo.*;
+
 /**
- *
- * @author (c)2016 Guiding Technologies
+ * MedLog web service application settings.
+ * @author DK
  */
 public class SETTINGS {
+/**
+ * Context Path
+ */
+public static final String CONTEXT_PATH = "MedLogRS";
+/**
+ * Standard date format
+ */
+public static final String DATE_FORMAT = "yyyy-MM-dd";
+/**
+ * Standard Err result code
+ */
+public static final int DB_ERROR_CODE  = -1;
 
 /**
  * Global debugging state.. Verbose logging (etc)...
  */
 public static final boolean DEBUG = true;
+/**
+ * JDBC Driver Class
+ */
 public static final String JDBC_DRIVE_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 /**
  * Name of db property file
  */
 public static final String PROPS_FILE = "database.properties";
-public static final String CONTEXT_PATH = "MedLogRS";
-public static final int DB_ERROR_CODE  = -1;
-public static final String DATE_FORMAT = "yyyy-MM-dd";
+/**
+ * Session JavaBan for current user.
+ * @see PatientVO
+ */
 public static final String SESSION_BEAN_USER = "user" ;
 /**
  * No instantiation.

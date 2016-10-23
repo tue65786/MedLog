@@ -20,8 +20,6 @@ import javax.servlet.http.*;
 public class MedLogControllerStrategy {
 
 private static final Logger LOG = Logger.getLogger( MedLogControllerStrategy.class.getName() );
-private RES_ENUM res;
-private String fn;
 
 public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse _response, RES_ENUM res, String fn) {
    this.request = _request;
@@ -40,29 +38,12 @@ public IEntityBase getSingle() {
    return null;
 }
 
-/**
- * Translate Diary
- *
- * @return
- */
-public DiaryVO transformDiaryFromRequest() {
-   if ( getCurrentUser() == null ) {
-	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
-	  return null;
-   }
-   ServletHelpers sh = new ServletHelpers( request, response );
-   DiaryVO.Builder t = DiaryVO.builder();
-   t.id( sh.getIntParameter( "id", 0 ) );
-   t.notes( sh.getStrParameter( "notes", "" ) );
-   t.title( sh.getStrParameter( "title", "" ) );
-   t.patientID( getCurrentUser() );
-   t.mood( sh.getIntParameter( "mood", 0 ) );
-   t.productivity( sh.getIntParameter( "productivity", 0 ) );
-   return t.build();
-}
 
-public PatientVO loadMedicationFromRequest() {
-   throw new UnsupportedOperationException( "Not supported yet." );
+public MedicationVO loadMedicationFromRequest() {
+   ServletHelpers sh = new ServletHelpers( request, response );
+   MedicationVO.Builder t = MedicationVO.builder();
+   //TODO Add request params
+   return t.build();
 }
 
 public PatientVO loadPatientFromRequest() {
@@ -113,6 +94,26 @@ public PatientVO loadPatientFromRequest() {
 //  "userRole": 1,
 
 }
+/**
+ * Translate Diary
+ *
+ * @return
+ */
+public DiaryVO transformDiaryFromRequest() {
+   if ( getCurrentUser() == null ) {
+	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
+	  return null;
+   }
+   ServletHelpers sh = new ServletHelpers( request, response );
+   DiaryVO.Builder t = DiaryVO.builder();
+   t.id( sh.getIntParameter( "id", 0 ) );
+   t.notes( sh.getStrParameter( "notes", "" ) );
+   t.title( sh.getStrParameter( "title", "" ) );
+   t.patientID( getCurrentUser() );
+   t.mood( sh.getIntParameter( "mood", 0 ) );
+   t.productivity( sh.getIntParameter( "productivity", 0 ) );
+   return t.build();
+}
 
 /**
  * Retrieves current user object from session
@@ -128,9 +129,23 @@ private PatientVO getCurrentUser() {
    }
 }
 /**
+ * Request function
+ */
+private final String fn;
+/**
  * Current Request.
  */
 private final HttpServletRequest request;
+/**
+ * Request Resource
+ * @see DiaryVO
+ * @see PatientVO
+ * @see MedicationVO
+ * @see PharmaRxOtcVO
+ * @see HealthcareProviderVO
+ * @see DietaryRestrictionVO
+ */
+private final RES_ENUM res;
 /**
  * Current Response.
  */

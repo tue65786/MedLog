@@ -16,10 +16,10 @@ import com.medlog.webservice.vo.*;
  */
 public enum RES_ENUM {
 
-   /**
-	* Diary Resource Functions
-    * @see DiaryVO
-    */
+/**
+ * Valid {@linkplain DiaryVO} API functions
+ */
+
    API_RESOURCE_DIARY( "d", new String[]{ API_FUNCTION_FIND,
 									   API_FUNCTION_FIND_BY_KEYWORD,
 									   API_FUNCTION_INSERT,
@@ -27,10 +27,16 @@ public enum RES_ENUM {
 									   API_FUNCTION_INSERT,
 									   API_FUNCTION_DELETE
 } ),
-API_RESOURCE_HEALTHCARE_PROVIDER( "h", new String[]{ "", "" } ),
+/**
+ * Valid  {@linkplain HealthcareProviderVO Health-care Provider} API Function
+ */
+   API_RESOURCE_HEALTHCARE_PROVIDER( "h", new String[]{ "", "" } ),
+/**
+ * Valid Medication API Function
+ */
 API_RESOURCE_MEDICATION( "m", new String[]{ "", "" } ),
 /**
- * Patient Resource Functions
+ * {@linkplain PatientVO Patient} Resource Functions
  * @see PatientVO
  */
 API_RESOURCE_PATIENT( "p", new String[]{ API_FUNCTION_INSERT,

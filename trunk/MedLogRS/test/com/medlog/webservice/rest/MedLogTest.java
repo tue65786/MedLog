@@ -52,27 +52,30 @@ public void testGetServletInfo() {
    String result = instance.getServletInfo();
    assertEquals( instance.getServletInfo(), result );
    // TODO review the generated test code and remove the default call to fail.
-  // fail( "The test case is a prototype." );
+   // fail( "The test case is a prototype." );
 }
 
 @Test
 public void testOne() throws IOException, SAXException {
+   HttpUnitOptions.setScriptingEnabled( true );
    ServletRunner sr = new ServletRunner();
+   
    sr.registerServlet( "myServlet", MedLog.class.getName() );
    ServletUnitClient sc = sr.newClient();
    
-   WebRequest request = new PostMethodWebRequest( "http://108.161.127.42/MedLogRS/" );
+   WebRequest request = new GetMethodWebRequest( "http://108.161.128.42/MedLogRS/" );//  PostMethodWebRequest( "http://108.161.127.42/MedLogRS/" );
    request.setParameter( "fn", "login" );
    request.setParameter( "username", "dan" );
-   request.setParameter( "password", "asdfasdf" );
+   request.setParameter( "password", "asdf" );
    InvocationContext ic = sc.newInvocation( request );
-   
-   WebResponse response =ic.getServletResponse();// sc.getResponse( request );
-  
+//   System.out.println( "com.medlog.webservice.rest.MedLogTest.testOne()"+ic.getResponse().getContentType());
+
+   WebResponse response = ic.getServletResponse();// sc.getResponse( request );
+   System.out.println( "len:" + response.getContentLength() );
    System.out.println( "com.medlog.webservice.rest.MedLogTest.testOne()" + response.getText() );
-   System.out.println( "type:"+ response.getContentType() );
+   System.out.println( "type:" + response.getContentType() );
    assertNotNull( "No response received", response );
-   
+
 //   assertEquals( "content type", "text/plain", response.getContentType() );
 //   assertEquals( "requested resource", "You selected red", response.getText() );
 }
