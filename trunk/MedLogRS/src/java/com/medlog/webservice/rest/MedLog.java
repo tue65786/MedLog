@@ -8,6 +8,7 @@ package com.medlog.webservice.rest;
 import com.google.gson.*;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
+import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.dao.*;
 import static com.medlog.webservice.rest.RES_ENUM.*;
 import com.medlog.webservice.rest.helpers.*;
@@ -159,9 +160,9 @@ public String getServletInfo() {
  * @return
  */
 private PatientVO getCurrentUser(HttpSession session) {
-   if ( session != null && session.getAttribute( "user" ) != null ) {
+   if ( session != null && session.getAttribute( SESSION_BEAN_USER) != null ) {
 	  try {
-		 return (PatientVO) session.getAttribute( "user" );
+		 return (PatientVO) session.getAttribute( SESSION_BEAN_USER );
 	  } catch (Exception e) {
 		 return null;
 	  }
