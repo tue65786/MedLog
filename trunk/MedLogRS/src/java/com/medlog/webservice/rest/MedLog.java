@@ -60,55 +60,58 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  db = new DbConnection();
 
 	  //Valid login functions
-	  if ( currentUser == null && ( fn.equalsIgnoreCase( "login" ) || fn.equalsIgnoreCase( "findPatient" ) ) ) {
+	  if ( currentUser == null && ( fn.equalsIgnoreCase( "login" ) /*
+								    * || fn.equalsIgnoreCase( "findPatient" )
+								    */ ) ) {
 		 String username = sh.getStrParameter( "username", "" );
 		 String password = sh.getStrParameter( "password", "" );
 
 		 MedLogDAO dao = new MedLogDAO( db, currentUser );
 		 PatientVO vo = dao.findPatientByPatientNameAndPassword( username, password );
 		 if ( vo != null ) {
-			currentUser = vo;
+			currentUser = PatientVO.newInstance( vo );
 			gson = new Gson();
-			gson.toJson( vo );
-			out.print( vo );
+//			gson.toJson( vo );
+			out.print( gson.toJson( vo ) );
+			session.setAttribute( SESSION_BEAN_USER, currentUser );
 		 } else {
 			out.print( makeJSONErrorMsg( "Invalid Login" ) );
 		 }
 
 //Security Controller
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
+		 session.removeAttribute( SESSION_BEAN_USER );
+		 out.print( makeJSONInfoMsg( "User logged out." ) );
 
-	  } else //Check for saved user cred.
-	  {
-		 if ( currentUser == null ) {
-			out.print( makeJSONErrorMsg( "Not logged in." ) );
-		 } else { //User is Logged in
-			switch ( res ) {
-			   case API_ACTIONS.API_RESOURCE_DIARY:
-				  break;
-			   case API_ACTIONS.API_RESOURCE_HEALTHCARE_PROVIDER:
-				  break;
-			   case API_ACTIONS.API_RESOURCE_MEDICATION:
-				  break;
-			   case API_ACTIONS.API_RESOURCE_PATIENT:
-				  if (RES_ENUM.API_RESOURCE_PATIENT.isValidFunction( fn )){
-					 
-					 
-					 
-				  }
-				  break;
-			   case API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION:
-				  break;
-			   default:
-				  break;
-			}
-			if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
+	  } else if ( currentUser == null ) {//Check for saved user cred.
+		 out.print( makeJSONErrorMsg( "Not logged in." ) );
+	  } else { //User is Logged in
+		 switch ( res ) {
+			case API_ACTIONS.API_RESOURCE_DIARY:
+			   if ( RES_ENUM.API_RESOURCE_DIARY.isValidFunction( fn ) ) {
 
-			} else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
+			   }
+			   break;
+			case API_ACTIONS.API_RESOURCE_HEALTHCARE_PROVIDER:
+			   break;
+			case API_ACTIONS.API_RESOURCE_MEDICATION:
+			   break;
+			case API_ACTIONS.API_RESOURCE_PATIENT:
+			   if ( RES_ENUM.API_RESOURCE_PATIENT.isValidFunction( fn ) ) {
+						
+			   }
+			   break;
+			case API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION:
+			   break;
+			default:
+			   break;
+		 }
+		 if ( StrUtl.matchOR( fn, API_ACTIONS.PATIENT_API ) ) {
 
-			} else {
-			   out.print( makeJSONErrorMsg( "Invalid function." ) );
-			}
+		 } else if ( StrUtl.matchOR( fn, API_ACTIONS.DIARY_API ) ) {
+
+		 } else {
+			out.print( makeJSONErrorMsg( "Invalid function." ) );
 		 }
 	  }
    }
@@ -160,7 +163,7 @@ public String getServletInfo() {
  * @return
  */
 private PatientVO getCurrentUser(HttpSession session) {
-   if ( session != null && session.getAttribute( SESSION_BEAN_USER) != null ) {
+   if ( session != null && session.getAttribute( SESSION_BEAN_USER ) != null ) {
 	  try {
 		 return (PatientVO) session.getAttribute( SESSION_BEAN_USER );
 	  } catch (Exception e) {

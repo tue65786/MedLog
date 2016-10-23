@@ -5,38 +5,55 @@
  */
 package com.medlog.webservice.rest;
 
+import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import com.medlog.webservice.util.*;
+import com.medlog.webservice.vo.*;
 
 /**
+ * API Resources and Valid Functions
  *
- * @author (c)2016 Guiding Technologies
+ * @author Dan
  */
 public enum RES_ENUM {
-API_RESOURCE_DIARY("d",new String[]{"",""},new String[]{"",""})
-,API_RESOURCE_HEALTHCARE_PROVIDER("h",new String[]{"",""},new String[]{"",""})
-,API_RESOURCE_MEDICATION("m",new String[]{"",""},new String[]{"",""})
-,API_RESOURCE_PATIENT("p",new String[]{"",""},new String[]{"",""})
-,API_RESOURCE_DIATARY_RESTRICTION("r",new String[]{"",""},new String[]{"",""});
-//,// = "d";
-//API_RESOURCE_HEALTHCARE_PROVIDER("d",new String{"",""}),//= "h";
-//API_RESOURCE_MEDICATION("d",new String[]{"",""})// = "m";
-//API_RESOURCE_PATIENT("d",new String[]{"","")},// = "p";
-//API_RESOURCE_DIATARY_RESTRICTION("d",new String[]{"",""})// = "r";
 
-RES_ENUM(String rCode, String[] validFunction,String[] params){
-  RESOURCE_Code = rCode;
-VALID_Functions = validFunction;
+   /**
+	* Diary Resource Functions
+    * @see DiaryVO
+    */
+   API_RESOURCE_DIARY( "d", new String[]{ API_FUNCTION_FIND,
+									   API_FUNCTION_FIND_BY_KEYWORD,
+									   API_FUNCTION_INSERT,
+									   API_FUNCTION_UPDATE,
+									   API_FUNCTION_INSERT,
+									   API_FUNCTION_DELETE
+} ),
+API_RESOURCE_HEALTHCARE_PROVIDER( "h", new String[]{ "", "" } ),
+API_RESOURCE_MEDICATION( "m", new String[]{ "", "" } ),
+/**
+ * Patient Resource Functions
+ * @see PatientVO
+ */
+API_RESOURCE_PATIENT( "p", new String[]{ API_FUNCTION_INSERT,
+										 API_FUNCTION_UPDATE,
+										 API_FUNCTION_DELETE,
+										 API_FUNCTION_FIND_BY_ID
+} ),
+API_RESOURCE_DIATARY_RESTRICTION( "r", new String[]{ "", "" } );
+
+RES_ENUM(String rCode, String[] validFunction) {
+   RESOURCE_Code = rCode;
+   VALID_Functions = validFunction;
 }
-public final String getCode(){
+
+public final String getCode() {
    return RESOURCE_Code;
 }
 
-public boolean isValidFunction(String fn){
+public boolean isValidFunction(String fn) {
    return StrUtl.matchOR( fn, VALID_Functions );
 }
 
- private final String RESOURCE_Code;
- private  final String[] VALID_Functions;
-
+private final String RESOURCE_Code;
+private final String[] VALID_Functions;
 
 }

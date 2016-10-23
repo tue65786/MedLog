@@ -49,14 +49,26 @@ public static final String[] HEALTHCAREPROVIDER_API = { "find", "add", "update",
  * Valid Medication API Function
  */
 public static final String[] MEDICATION_API = { "find", "add", "update","assign" };
-public static final String API_PARAM_RESOURCE = "res";
-public static final String API_PARAM_FUNCTION = "fn";
 
+public static final String API_PARAM_RESOURCE = "res";
 public static final String API_RESOURCE_DIARY = "d";
 public static final String API_RESOURCE_HEALTHCARE_PROVIDER = "h";
 public static final String API_RESOURCE_MEDICATION = "m";
 public static final String API_RESOURCE_PATIENT = "p";
 public static final String API_RESOURCE_DIATARY_RESTRICTION = "r";
+
+
+
+public static final String API_PARAM_FUNCTION = "fn";
+public static final String API_FUNCTION_FIND = "find";
+public static final String API_FUNCTION_FIND_BY_KEYWORD = "findByKeyword";
+public static final String API_FUNCTION_FIND_BY_ID = "findByID";
+public static final String API_FUNCTION_INSERT = "add";
+public static final String API_FUNCTION_UPDATE = "update";
+public static final String API_FUNCTION_ASSIGN = "assign";
+public static final String API_FUNCTION_UNASSIGN = "unassign";
+public static final String API_FUNCTION_DELETE = "delete";
+
 
 
 /**
