@@ -97,7 +97,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 out.print( makeJSONErrorMsg( "Not logged in." ) );
 	  } else { //User is Logged in
 //		 dao = new MedLogDAO( db, currentUser );
-		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.API_RESOURCE_DIARY, fn );
+		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.INVALID.findByChar( res), fn );
 		 if ( DEBUG ) {
 			System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().create().toJson( strategy ) );
 		 }
