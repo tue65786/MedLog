@@ -7,6 +7,7 @@
 
 package com.medlog.webservice.util;
 
+import com.google.gson.*;
 import java.io.*;
 import java.util.logging.*;
 import java.util.regex.*;
@@ -23,6 +24,32 @@ private static final String REGEX_HTML_MARKUP_CHARS = "<sty.*<.*>|<scr.*/script>
 private StrUtl(){
    
 }
+/**
+ * get Json
+ * @param state
+ * @param msg
+ * @return 
+ */
+public static String getJSONMsg(String state, String msg) {
+ return StrUtl.getJSONMsg( state, msg, null );
+}
+/**
+ * Get JSON 
+ * @param state info error
+ * @param msg
+ * @return 
+ */
+public static String getJSONMsg(String state, String msg, Integer val) {
+   JsonObject json = new JsonObject();
+   
+   json.addProperty( "state", StrUtl.toS( state ) );
+   json.addProperty( "message", StrUtl.toS( msg, state.equals( "error" ) ? "Something went wrong!" : "Unknown" ) );
+   if (val != null){
+	  json.addProperty( "id", val);
+   }
+   return json.toString();
+}
+
 	/**
 	 * Safe toString method that converts nulls to empty strings.
 	 *

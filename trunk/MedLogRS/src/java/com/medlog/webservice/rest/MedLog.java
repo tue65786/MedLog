@@ -215,7 +215,7 @@ private String makeJSONErrorMsg(String msg) {
    if ( DEBUG ) {
 	  LOG.severe( msg );
    }
-   return getJSONMsg( "error", msg );
+   return StrUtl.getJSONMsg( "error", msg );
 }
 
 /**
@@ -228,15 +228,9 @@ private String makeJSONInfoMsg(String msg) {
    if ( DEBUG ) {
 	  LOG.info( msg );
    }
-   return getJSONMsg( "info", msg );
+   return StrUtl.getJSONMsg( "info", msg );
 }
 
-private String getJSONMsg(String state, String msg) {
-   JsonObject json = new JsonObject();
-   json.addProperty( "state", StrUtl.toS( state ) );
-   json.addProperty( "message", StrUtl.toS( msg, state.equals( "error" ) ? "Something went wrong!" : "Unknown" ) );
-   return json.toString();
-}
 private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );
 
 }

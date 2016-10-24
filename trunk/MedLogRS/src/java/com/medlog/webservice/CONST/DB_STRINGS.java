@@ -13,16 +13,89 @@ import com.medlog.webservice.vo.*;
  * @author (c)2016 Dan Kauffman
  */
 public class DB_STRINGS {
-
 /**
- * Assign/Unassign patient med.
- * Params:<ol> <li> PatientID int,</li><li>PharmID int,</li><li>PhysicanID
- * int=NULL,</li><li>Instructions nvarchar(max) = NULL,</li><li>Sig varchar(50),</li><li>StartDate
- * date = getdate,</li><li>endDate date = NULL,@active bit = 1</li></ol>
+ * Params for Sp.
+ * <ol><li> @PatientID
+ * </li><li>,@Title
+ * </li><li>,@Notes
+ * </li><li>,@NotesActivity
+ * </li><li>,@createdDate
+ * </li><li>,@updatedDate
+ * </li><li>,@includce_meds_current
+ * </li><li>,@attachmentPath
+ * </li><li>,@ratingMood
+ * </li><li>,@ratingProductivity
+ * </li><li>,@inserted OUTPUT</li></ol>
  */
-public static final String SP_PATIENT_MEDICATION = "{call spMedicationPatientChangeBinding("
-												   + "?,?,?,?,?,"
-												   + "?,?,?)}";
+public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
+		+ "?,?,?,?,?,"
+		+ "?,?,?,?,?,"
+		+ "?}";
+/**
+ * Select Diary Entries<ol><li>Id</li> <li> PatientID int</li><li>Keyword (null)</li></ol>
+ */
+public static final String SP_DIARY_SELECT = "{call [spDiarySelect](?,?,?)}";
+/**
+ * Select Healthcare provider Entries<ol><li>DoctorId int</li> <li> PatientID int</li><li>Keyword
+ * (null)</li></ol>
+ */
+public static final String SP_HEALTHCAREPROVIDER_SELECT = "{call [spHealthcareProviderSelect](?,?,?)}";
+/**
+ * Params:
+ * <ol>
+ * <li> @lastname nvarchar (max)
+ * </li><li>@firstname nvarchar (max)
+ * </li><li>@specialty nvarchar (256) = NULL
+ * </li><li>@phoneWork nvarchar (256) =''
+ * </li><li>@phoneMobile nvarchar (256) = NULL
+ * </li><li>@phonePager varbinary (50) = NULL
+ * </li><li>@phoneFax nchar (10) = NULL
+ * </li><li>@email nvarchar (256) = NULL
+ * </li><li>@pathient_log_communication_preference varchar (20) = NULL
+ * </li><li>@addressStreet nvarchar (512) = NULL
+ * </li><li>@addressCity nvarchar (128) = NULL
+ * </li><li>@addressStateID int = NULL
+ * </li><li>@addressZip varchar (10) = NULL
+ * </li><li> @inserted int OUTPUT</li></ol>
+ * @see HealthcareProviderVO
+ */
+public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProviderInsert](?,?,?,?,?,"
+												  + "?,?,?,?,?,"
+												  + "?,?,?,?)}";
+/**
+ * Update {@linkplain HealthcareProviderVO}
+ * Params:
+ * <ol><li> @PATIENTID int </li>
+ * <li> @lastname nvarchar (max)
+ * </li><li>@firstname nvarchar (max)
+ * </li><li>@specialty nvarchar (256) = NULL
+ * </li><li>@phoneWork nvarchar (256) =''
+ * </li><li>@phoneMobile nvarchar (256) = NULL
+ * </li><li>@phonePager varbinary (50) = NULL
+ * </li><li>@phoneFax nchar (10) = NULL
+ * </li><li>@email nvarchar (256) = NULL
+ * </li><li>@pathient_log_communication_preference varchar (20) = NULL
+ * </li><li>@addressStreet nvarchar (512) = NULL
+ * </li><li>@addressCity nvarchar (128) = NULL
+ * </li><li>@addressStateID int = NULL
+ * </li><li>@addressZip varchar (10) = NULL
+ * </li></ol>
+ * @see HealthcareProviderVO
+ */
+public static final String SP_HEALTHCARE_UPDATE = "{call [dbo].[spHealthcareProviderUpdate](?,?,?,?,?,"
+												  + "?,?,?,?,?,"
+												  + "?,?,?,?)}";
+/**
+ * Assigns / Removes {@linkplain PatientVO} to/from {@linkplain HealthcareProviderVO}
+ * Params: <ol>
+ * <li>PatientID</li>
+ * <li>HealthCareID</li>
+ * <li>Assign?</li>
+ * </ol>
+ * @see PatientVO
+ * @see HealthcareProviderVO
+ */
+public static final String SP_PATIENT_HEALTHCARE_CHANGEBINDING = "{call dbo.spPatientChangeHealthCareProviderBinding(?,?,?)}";
 /**
  * INSERT PATIENT STORED PROCEDURE.
  * Param:
@@ -53,73 +126,28 @@ public static final String SP_PATIENT_MEDICATION = "{call spMedicationPatientCha
  * , </li><li>@inserted INT OUTPUT</li></ol>
  */
 public static final String SP_PATIENT_INSERT = "{call [spPatientInsert]("
-											   + "?,?,?,?,?,"
-											   + "?,?,?,?,?,"
-											   + "?,?,?,?,?,"
-											   + "?,?,?,?,?,"
-											   + "?,?,?,?,?)}";
+		+ "?,?,?,?,?,"
+		+ "?,?,?,?,?,"
+		+ "?,?,?,?,?,"
+		+ "?,?,?,?,?,"
+		+ "?,?,?,?,?)}";
 /**
- * UPDATE PATIENT STORED PROCEDURE
+ * Assign/Unassign patient med.
+ * Params:<ol> <li> PatientID int,</li><li>PharmID int,</li><li>PhysicanID
+ * int=NULL,</li><li>Instructions nvarchar(max) = NULL,</li><li>Sig varchar(50),</li><li>StartDate
+ * date = getdate,</li><li>endDate date = NULL,@active bit = 1</li></ol>
  */
-public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate](}";
+public static final String SP_PATIENT_MEDICATION = "{call spMedicationPatientChangeBinding("
+		+ "?,?,?,?,?,"
+		+ "?,?,?)}";
 /**
  * SELECT PATIENT STORED PROCEDURE
  */
 public static final String SP_PATIENT_SELECT = "{call [spPatientSelect](?,?,?)}";
 /**
- * Params:
- * <ol>
- *<li> @lastname nvarchar (max)
- * </li><li>@firstname nvarchar (max)
- * </li><li>@specialty nvarchar (256) = NULL
- * </li><li>@phoneWork nvarchar (256) =''
- * </li><li>@phoneMobile nvarchar (256) = NULL
- * </li><li>@phonePager varbinary (50) = NULL
- * </li><li>@phoneFax nchar (10) = NULL
- * </li><li>@email nvarchar (256) = NULL
- * </li><li>@pathient_log_communication_preference varchar (20) = NULL
- * </li><li>@addressStreet nvarchar (512) = NULL
- * </li><li>@addressCity nvarchar (128) = NULL
- * </li><li>@addressStateID int = NULL
- * </li><li>@addressZip varchar (10) = NULL
- * </li><li> @inserted int OUTPUT</li></ol>
- *
+ * UPDATE PATIENT STORED PROCEDURE
  */
-public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProviderInsert](?,?,?,?,?,"
-												  + "?,?,?,?,?,"
-												  + "?,?,?,?)}";
-/**
- * Params: Patient,Dr,Assign
- */
-public static final String SP_PATIENT_HEALTHCARE_CHANGEBINDING = "{call dbo.spPatientChangeHealthCareProviderBinding(?,?,?)}";
-
-/**
- * Select Diary Entries<ol><li>Id</li> <li> PatientID int</li><li>Keyword (null)</li></ol>
- */
-public static final String SP_DIARY_SELECT = "{call [spDiarySelect](?,?,?)}";
-/**
- * Params for Sp.
- * <ol><li> @PatientID
- * </li><li>,@Title
- * </li><li>,@Notes
- * </li><li>,@NotesActivity
- * </li><li>,@createdDate
- * </li><li>,@updatedDate
- * </li><li>,@includce_meds_current
- * </li><li>,@attachmentPath
- * </li><li>,@ratingMood
- * </li><li>,@ratingProductivity
- * </li><li>,@inserted OUTPUT</li></ol>
- */
-public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
-											 + "?,?,?,?,?,"
-											 + "?,?,?,?,?,"
-											 + "?}";
-/**
- * Select Healthcare provider Entries<ol><li>DoctorId int</li> <li> PatientID int</li><li>Keyword
- * (null)</li></ol>
- */
-public static final String SP_HEALTHCAREPROVIDER_SELECT = "{call [spHealthcareProviderSelect](?,?,?)}";
+public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate](}";
 /**
  * Retrieves all {@linkplain StateVO} objects.
  * Returns in order: ID, Name, Abbr.
