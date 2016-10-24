@@ -19,24 +19,34 @@ public enum RES_ENUM {
 /**
  * Valid {@linkplain DiaryVO} API functions
  */
-
-   API_RESOURCE_DIARY( "d", new String[]{ API_FUNCTION_FIND,
+API_RESOURCE_DIARY( "d", new String[]{ API_FUNCTION_FIND,
 									   API_FUNCTION_FIND_BY_KEYWORD,
 									   API_FUNCTION_INSERT,
 									   API_FUNCTION_UPDATE,
-									   API_FUNCTION_INSERT,
 									   API_FUNCTION_DELETE
 } ),
 /**
- * Valid  {@linkplain HealthcareProviderVO Health-care Provider} API Function
+ * Valid {@linkplain HealthcareProviderVO Health-care Provider} API Function
  */
-   API_RESOURCE_HEALTHCARE_PROVIDER( "h", new String[]{ "", "" } ),
+API_RESOURCE_HEALTHCARE_PROVIDER( "h", new String[]{ API_FUNCTION_ASSIGN,
+													 API_FUNCTION_UNASSIGN,
+													 API_FUNCTION_INSERT,
+													 API_FUNCTION_UPDATE,
+													 API_FUNCTION_FIND,
+													 API_FUNCTION_FIND_BY_KEYWORD,
+													 API_FUNCTION_DELETE } ),
 /**
  * Valid Medication API Function
  */
-API_RESOURCE_MEDICATION( "m", new String[]{ "", "" } ),
+API_RESOURCE_MEDICATION( "m", new String[]{ API_FUNCTION_ASSIGN,
+											API_FUNCTION_UNASSIGN,
+											API_FUNCTION_FIND,
+											API_FUNCTION_FIND_BY_KEYWORD,
+											API_FUNCTION_INSERT,
+											API_FUNCTION_UPDATE, } ),
 /**
  * {@linkplain PatientVO Patient} Resource Functions
+ *
  * @see PatientVO
  */
 API_RESOURCE_PATIENT( "p", new String[]{ API_FUNCTION_INSERT,
