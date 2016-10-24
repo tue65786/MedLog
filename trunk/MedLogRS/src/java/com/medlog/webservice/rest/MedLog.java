@@ -97,27 +97,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 out.print( makeJSONErrorMsg( "Not logged in." ) );
 	  } else { //User is Logged in
 		 dao = new MedLogDAO( db, currentUser );
-		 switch ( res ) {
-			case API_ACTIONS.API_RESOURCE_DIARY:
-			   if ( RES_ENUM.API_RESOURCE_DIARY.isValidFunction( fn ) ) {
-
-			   }
-			   break;
-			case API_ACTIONS.API_RESOURCE_HEALTHCARE_PROVIDER:
-			   break;
-			case API_ACTIONS.API_RESOURCE_MEDICATION:
-			   break;
-			case API_ACTIONS.API_RESOURCE_PATIENT:
-			   if ( RES_ENUM.API_RESOURCE_PATIENT.isValidFunction( fn ) ) {
-
-			   }
-			   break;
-			case API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION:
-			   break;
-			default:
-			   out.print( makeJSONErrorMsg( "Invalid function." ) );
-			   break;
-		 }
+		
 	  }
    } finally {
 	  try {

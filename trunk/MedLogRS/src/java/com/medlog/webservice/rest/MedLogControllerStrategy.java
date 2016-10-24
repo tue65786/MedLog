@@ -38,7 +38,7 @@ public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse
 }
 
 public String execute(DbConnection dbc) {
-   JsonObject jo = new JsonObject();
+//   JsonObject jo = new JsonObject();
    Gson g = new Gson();
    boolean v = true;
    if ( getCurrentUser() == null ) {
