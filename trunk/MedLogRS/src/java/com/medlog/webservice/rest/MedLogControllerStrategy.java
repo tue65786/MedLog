@@ -27,7 +27,7 @@ public class MedLogControllerStrategy {
 
 private static final Logger LOG = Logger.getLogger( MedLogControllerStrategy.class.getName() );
 public boolean success;
-
+public String responseMessage = "";
 public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse _response, RES_ENUM res, String fn) {
    this.request = _request;
    this.response = _response;
@@ -41,17 +41,17 @@ public String execute(DbConnection dbc) {
 //   JsonObject jo = new JsonObject();
    Gson g = new Gson();
    boolean v = true;
+   MedLogDAO dao;
    if ( getCurrentUser() == null ) {
 	  if ( !res.equals( RES_ENUM.API_RESOURCE_PATIENT ) || ( StrUtl.matchOR( fn, "login", API_FUNCTION_INSERT ) ) ) {
 		 v = false;
 	  }
    }
+   
 
-   MedLogDAO dao;
-
-   String retVal = "";
+   
    if ( !v ) {
-	  retVal = StrUtl.getJSONMsg( "error", "Not logged in." );
+	  responseMessage = StrUtl.getJSONMsg( "error", "Not logged in." );
    } else {
 	  dao = new MedLogDAO( dbc, getCurrentUser() );
 	  switch ( res ) {
@@ -68,17 +68,17 @@ public String execute(DbConnection dbc) {
 				  if ( id > 0 ) {
 					 success = true;
 					 vo.id = id ;
-					 retVal = g.toJson( vo );
+					 responseMessage = g.toJson( vo );
 				  } else {
-					 retVal = StrUtl.getJSONMsg( "error", "Diary not added." );
+					 responseMessage = StrUtl.getJSONMsg( "error", "Diary not added." );
 				  }
 			   }//Insert
 			   else if (fn.equalsIgnoreCase( API_FUNCTION_UPDATE ) && vo.isValid( UPDATE )){
 				 success =  dao.updateDiary( vo ) > 0;
-				 retVal = StrUtl.getJSONMsg( success ? "info" : "error", "Diary update" + ( success ? "d" : " failed" ) );
+				 responseMessage = StrUtl.getJSONMsg( success ? "info" : "error", "Diary update" + ( success ? "d" : " failed" ) );
 			   }//Update
 			} else if ( StrUtl.matchOR( fn, API_FUNCTION_FIND, API_FUNCTION_FIND_BY_KEYWORD ) ) {
-			   retVal = getDiaryResponse( dao, g );
+			   responseMessage = getDiaryResponse( dao, g );
 			}//Search
 			break;
 		 ///////////////
@@ -95,9 +95,9 @@ public String execute(DbConnection dbc) {
 					 success = true;
 					 vo.setPatientID( id );
 					 session.setAttribute( SESSION_BEAN_USER, vo );
-					 retVal = g.toJson( vo );
+					 responseMessage = g.toJson( vo );
 				  } else {
-					 retVal = StrUtl.getJSONMsg( "error", "Patient not added." );
+					 responseMessage = StrUtl.getJSONMsg( "error", "Patient not added." );
 				  }
 
 			   } else if ( fn.equalsIgnoreCase( API_FUNCTION_UPDATE )
@@ -110,22 +110,22 @@ public String execute(DbConnection dbc) {
 				  if ( success ) {
 					 session.setAttribute( SESSION_BEAN_USER, vo );
 				  }
-				  retVal = StrUtl.getJSONMsg( success ? "info" : "error", " Update" + ( success ? "d" : " failed" ) );
+				  responseMessage = StrUtl.getJSONMsg( success ? "info" : "error", " Update" + ( success ? "d" : " failed" ) );
 			   } else {
-				  retVal = StrUtl.getJSONMsg( "error", StrUtl.toS( fn, "?" ) + " params are invalid." );
+				  responseMessage = StrUtl.getJSONMsg( "error", StrUtl.toS( fn, "?" ) + " params are invalid." );
 			   }
 
 			} else {//Not valid fn
-			   retVal = StrUtl.getJSONMsg( "error", StrUtl.toS( fn, "?" ) + " is invalid." );
+			   responseMessage = StrUtl.getJSONMsg( "error", StrUtl.toS( fn, "?" ) + " is invalid." );
 			}
 			break;
 		 default:
-			retVal = StrUtl.getJSONMsg( "error", " Invalid res." );
+			responseMessage = StrUtl.getJSONMsg( "error", " Invalid res." );
 			break;
 
 	  }
    }
-   return retVal;
+   return responseMessage;
 }
 
 public ArrayList<IEntityBase> getList() {

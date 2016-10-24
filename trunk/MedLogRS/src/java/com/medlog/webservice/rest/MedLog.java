@@ -63,12 +63,12 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			   */ ( fn.equalsIgnoreCase( "login" ) /*
 					 * || fn.equalsIgnoreCase( "findPatient" )
 					 */ ) ) {
-
+		 
 		 dao = new MedLogDAO( db, currentUser );
 		 PatientVO userVO = dao.findPatientByPatientNameAndPassword(
 				 sh.getStrParameter( "username", "" ),
 				 sh.getStrParameter( "password", "" ) );
-
+		 
 		 if ( userVO != null ) {
 			currentUser = PatientVO.newInstance( userVO );
 			if ( DEBUG ) {
@@ -92,12 +92,18 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 		 session.removeAttribute( SESSION_BEAN_USER );
 		 out.print( makeJSONInfoMsg( "User logged out." ) );
-
+		 
 	  } else if ( currentUser == null ) {//Check for saved user cred.
 		 out.print( makeJSONErrorMsg( "Not logged in." ) );
 	  } else { //User is Logged in
-		 dao = new MedLogDAO( db, currentUser );
-		
+//		 dao = new MedLogDAO( db, currentUser );
+		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.API_RESOURCE_DIARY, fn );
+		 if ( DEBUG ) {
+			System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().create().toJson( strategy ) );
+		 }
+		 //Process
+		 out.print( strategy.execute( db ) );
+		 
 	  }
    } finally {
 	  try {
@@ -161,7 +167,7 @@ private PatientVO getCurrentUser(HttpSession session) {
 	  }
    }
    return null;
-
+   
 }
 
 /**
@@ -175,7 +181,7 @@ private ArrayList<StateVO> getStatesList(HttpServletRequest request) {
    try {
 	  states = (ArrayList<StateVO>) request.getServletContext().getAttribute( "states" );
 	  setStates = states.isEmpty();
-
+	  
    } catch (Exception e) {
 	  setStates = true;
    }
