@@ -14,7 +14,6 @@ import com.medlog.webservice.vo.*;
  */
 public class DB_STRINGS {
 
-
 /**
  * Assign/Unassign patient med.
  * Params:<ol> <li> PatientID int,</li><li>PharmID int,</li><li>PhysicanID
@@ -68,6 +67,33 @@ public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate](}";
  */
 public static final String SP_PATIENT_SELECT = "{call [spPatientSelect](?,?,?)}";
 /**
+ * Params:
+ * <ol>
+ *<li> @lastname nvarchar (max)
+ * </li><li>@firstname nvarchar (max)
+ * </li><li>@specialty nvarchar (256) = NULL
+ * </li><li>@phoneWork nvarchar (256) =''
+ * </li><li>@phoneMobile nvarchar (256) = NULL
+ * </li><li>@phonePager varbinary (50) = NULL
+ * </li><li>@phoneFax nchar (10) = NULL
+ * </li><li>@email nvarchar (256) = NULL
+ * </li><li>@pathient_log_communication_preference varchar (20) = NULL
+ * </li><li>@addressStreet nvarchar (512) = NULL
+ * </li><li>@addressCity nvarchar (128) = NULL
+ * </li><li>@addressStateID int = NULL
+ * </li><li>@addressZip varchar (10) = NULL
+ * </li><li> @inserted int OUTPUT</li></ol>
+ *
+ */
+public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProviderInsert](?,?,?,?,?,"
+												  + "?,?,?,?,?,"
+												  + "?,?,?,?)}";
+/**
+ * Params: Patient,Dr,Assign
+ */
+public static final String SP_PATIENT_HEALTHCARE_CHANGEBINDING = "{call dbo.spPatientChangeHealthCareProviderBinding(?,?,?)}";
+
+/**
  * Select Diary Entries<ol><li>Id</li> <li> PatientID int</li><li>Keyword (null)</li></ol>
  */
 public static final String SP_DIARY_SELECT = "{call [spDiarySelect](?,?,?)}";
@@ -90,10 +116,16 @@ public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
 											 + "?,?,?,?,?,"
 											 + "?}";
 /**
+ * Select Healthcare provider Entries<ol><li>DoctorId int</li> <li> PatientID int</li><li>Keyword
+ * (null)</li></ol>
+ */
+public static final String SP_HEALTHCAREPROVIDER_SELECT = "{call [spHealthcareProviderSelect](?,?,?)}";
+/**
  * Retrieves all {@linkplain StateVO} objects.
- * Returns in order:  ID, Name, Abbr.
+ * Returns in order: ID, Name, Abbr.
  */
 public static final String SP_STATE_SELECT = "{call spStateSelect()}";
+
 /**
  * Do not allow instantiation.
  *
