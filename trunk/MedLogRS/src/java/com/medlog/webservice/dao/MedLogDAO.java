@@ -56,7 +56,15 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 	  if ( valid ) {
 		 rs = cs.executeQuery();
 		 while ( rs.next() ) {
-
+			voList.add( DiaryVO.builder()
+					.id( rs.getInt( "id" ) )
+					.title( rs.getString( "title" ) )
+					.notes( rs.getString( "notes" ) )
+					.mood( rs.getInt( "mood" ) )
+					.productivity( rs.getInt( "productivity" ) )
+					.patientID( getCurrentUser() )
+					.createdDate( rs.getDate( "createdDate" ) )
+					.build() );
 		 }
 	  } else {
 		 this.stateOK = false;
