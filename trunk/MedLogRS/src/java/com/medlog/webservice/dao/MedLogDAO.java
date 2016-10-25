@@ -22,131 +22,21 @@ import java.util.logging.*;
  */
 public class MedLogDAO implements IMedLogDAO {
 
-/**
- * Diary selection base
- *
- * @param _id
- * @param _keyword
- * @return
- */
-private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
-   ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
-   _keyword = StrUtl.toS( _keyword );
-
-   CallableStatement cs = null;
-   ResultSet rs = null;
-   boolean valid = false;
-   try {
-	  cs = db.getConnnection().prepareCall( SP_DIARY_SELECT );
-	  if ( _id > 0 ) {
-		 cs.setInt( 1, _id );
-		 valid = true;
-	  } else {
-		 cs.setNull( 1, java.sql.Types.INTEGER );
-	  }
-	  cs.setInt( 2, getCurrentUser().getPatientID() );
-	  if ( _keyword.isEmpty() ) {
-		 cs.setNull( 3, java.sql.Types.NVARCHAR );
-	  } else {
-		 valid = true;
-		 cs.setString( 3, _keyword );
-		 cs.setNull( 3, java.sql.Types.NVARCHAR );
-	  }
-
-	  if ( valid ) {
-		 rs = cs.executeQuery();
-		 while ( rs.next() ) {
-			voList.add( DiaryVO.builder()
-					.id( rs.getInt( "id" ) )
-					.title( rs.getString( "title" ) )
-					.notes( rs.getString( "notes" ) )
-					.mood( rs.getInt( "mood" ) )
-					.productivity( rs.getInt( "productivity" ) )
-					.patientID( getCurrentUser() )
-					.createdDate( rs.getDate( "createdDate" ) )
-					.build() );
-		 }
-	  } else {
-		 this.stateOK = false;
-		 this.errorMessage = "com.medlog.webservice.dao.MedLogDAO.findPatient() - Invalid Params: Username is required";
-		 if ( DEBUG ) {
-			LOG.severe( this.errorMessage );
-		 }
-	  }
-   } catch (SQLException ex) {
-	  LOG.log( Level.SEVERE, null, ex );
-   } finally {
-	  DbUtl.close( rs );
-	  DbUtl.close( cs );
-   }
-   return voList;
-}
-
-@Override
-public ArrayList<DiaryVO> findDiaryByKeyword(String _keyword) {
-   return findDiary( 0, StrUtl.toS( _keyword ) );
-}
-
-@Override
-public ArrayList<DiaryVO> findDiaryByPatient() {
-   return findDiary( 0, null );
-}
-
-@Override
-public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
-
-@Override
-public DiaryVO findDiaryByID(int _id) {
-   ArrayList<DiaryVO> voList = findDiary( 0, null );
-   if ( voList == null || voList.isEmpty() ) {
-	  return null;
-   } else {
-	  return voList.get( 0 );
-   }
-
-}
-
-@Override
-public PatientVO getCurrentUser() {
-   try {
-	  if ( user != null && user.getPatientID() > 0 && user.getUserName() != null ) {
-		 loggedIn = true;
-	  }
-   } catch (Exception e) {
-
-   }
-   return user;
-}
-
-/**
- * Connection wrapper getter
- *
- * @return the connection wrapper
- */
-@Override
-public DbConnection getDB() {
-   if ( db == null ) {
-	  throw new NullPointerException( "Null Connection in com.medlog.webservice.dao.MedLogDAO.getDB() " );
-   }
-   return db;
-}
-private final DbConnection db;
-private final PatientVO user;
-private boolean loggedIn;
-private boolean stateOK;
-private String errorMessage;
+private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 private static Map<Integer, StateVO> statesList;
 
-public MedLogDAO(DbConnection db, PatientVO u) {
+   /**
+    *
+    * @param db
+    * @param u
+    */
+   public MedLogDAO(DbConnection db, PatientVO u) {
    this.db = db;
    this.user = u;
    stateOK = true;
    errorMessage = "";
    findAllStates();
 }
-private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 
 @Override
 public int createDiary(DiaryVO _vo) {
@@ -314,7 +204,171 @@ public ArrayList<StateVO> findAllStates() {
    return vos;
 
 }
+@Override
+public DiaryVO findDiaryByID(int _id) {
+   ArrayList<DiaryVO> voList = findDiary( 0, null );
+   if ( voList == null || voList.isEmpty() ) {
+	  return null;
+   } else {
+	  return voList.get( 0 );
+   }
+   
+}
+@Override
+public ArrayList<DiaryVO> findDiaryByKeyword(String _keyword) {
+   return findDiary( 0, StrUtl.toS( _keyword ) );
+}
+@Override
+public ArrayList<DiaryVO> findDiaryByPatient() {
+   return findDiary( 0, null );
+}
+@Override
+public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
+@Override
+public PatientVO findPatientByID(int _id) {
+   ArrayList<PatientVO> voList = findPatient( _id, null, null );
+   if ( voList != null && !voList.isEmpty() ) {
+	  if ( DEBUG && voList.size() > 1 ) {
+
+		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByID()\n--Find by ID Returned Multiple VALUES -- something is wrong!" );
+	  }
+	  return voList.get( 0 );
+   } else {
+	  return null;
+   }
+}
+
+@Override
+public PatientVO findPatientByName(String _username) {
+   ArrayList<PatientVO> voList = findPatient( 0, _username, null );
+   if ( voList != null && !voList.isEmpty() ) {
+	  if ( DEBUG && voList.size() > 1 ) {
+
+		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByName()\n--- Returned Multiple VALUES -- something is wrong!" );
+	  }
+	  return voList.get( 0 );
+   } else {
+	  return null;
+   }
+}
+
+@Override
+public PatientVO findPatientByPatientNameAndPassword(String _username, String _password) {
+   ArrayList<PatientVO> voList = findPatient( 0, _username, _password );
+   if ( voList != null && !voList.isEmpty() ) {
+	  if ( DEBUG && voList.size() > 1 ) {
+		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()\n---Returned Multiple VALUES -- something is wrong!" );
+	  }
+	  return voList.get( 0 );
+   } else {
+	  return null;
+   }
+}
+
+@Override
+public ArrayList<StateVO> findStatesByKeyword(String _keyword) {
+   throw new UnsupportedOperationException( "Not supported yet." );
+}
+@Override
+public PatientVO getCurrentUser() {
+   try {
+	  if ( user != null && user.getPatientID() > 0 && user.getUserName() != null ) {
+		 loggedIn = true;
+	  }
+   } catch (Exception e) {
+	  
+   }
+   return user;
+}
+/**
+ * Connection wrapper getter
+ *
+ * @return the connection wrapper
+ */
+@Override
+public DbConnection getDB() {
+   if ( db == null ) {
+	  throw new NullPointerException( "Null Connection in com.medlog.webservice.dao.MedLogDAO.getDB() " );
+   }
+   return db;
+}
+
+@Override
+public ArrayList<PatientVO> getPatients() {
+   throw new UnsupportedOperationException( "Not supported yet." );
+}
+
+@Override
+public int updateDiary(DiaryVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." );
+}
+
+@Override
+public boolean updatePatient(PatientVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+/**
+ * Diary selection base
+ *
+ * @param _id
+ * @param _keyword
+ * @return
+ */
+private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
+   ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
+   _keyword = StrUtl.toS( _keyword );
+   
+   CallableStatement cs = null;
+   ResultSet rs = null;
+   boolean valid = false;
+   try {
+	  cs = db.getConnnection().prepareCall( SP_DIARY_SELECT );
+	  if ( _id > 0 ) {
+		 cs.setInt( 1, _id );
+		 valid = true;
+	  } else {
+		 cs.setNull( 1, java.sql.Types.INTEGER );
+	  }
+	  cs.setInt( 2, getCurrentUser().getPatientID() );
+	  if ( _keyword.isEmpty() ) {
+		 cs.setNull( 3, java.sql.Types.NVARCHAR );
+	  } else {
+		 valid = true;
+		 cs.setString( 3, _keyword );
+		 cs.setNull( 3, java.sql.Types.NVARCHAR );
+	  }
+	  
+	  if ( valid ) {
+		 rs = cs.executeQuery();
+		 while ( rs.next() ) {
+			voList.add( DiaryVO.builder()
+					.id( rs.getInt( "id" ) )
+					.title( rs.getString( "title" ) )
+					.notes( rs.getString( "notes" ) )
+					.mood( rs.getInt( "mood" ) )
+					.productivity( rs.getInt( "productivity" ) )
+					.patientID( getCurrentUser() )
+					.createdDate( rs.getDate( "createdDate" ) )
+					.build() );
+		 }
+	  } else {
+		 this.stateOK = false;
+		 this.errorMessage = "com.medlog.webservice.dao.MedLogDAO.findPatient() - Invalid Params: Username is required";
+		 if ( DEBUG ) {
+			LOG.severe( this.errorMessage );
+		 }
+	  }
+   } catch (SQLException ex) {
+	  LOG.log( Level.SEVERE, null, ex );
+   } finally {
+	  DbUtl.close( rs );
+	  DbUtl.close( cs );
+   }
+   return voList;
+}
 /**
  * Handle patient lookup for login etal
  *
@@ -416,66 +470,10 @@ private ArrayList<PatientVO> findPatient(int _id, String _username, String _pass
    }
    return voList;
 }
-
-@Override
-public PatientVO findPatientByID(int _id) {
-   ArrayList<PatientVO> voList = findPatient( _id, null, null );
-   if ( voList != null && !voList.isEmpty() ) {
-	  if ( DEBUG && voList.size() > 1 ) {
-
-		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByID()\n--Find by ID Returned Multiple VALUES -- something is wrong!" );
-	  }
-	  return voList.get( 0 );
-   } else {
-	  return null;
-   }
-}
-
-@Override
-public PatientVO findPatientByName(String _username) {
-   ArrayList<PatientVO> voList = findPatient( 0, _username, null );
-   if ( voList != null && !voList.isEmpty() ) {
-	  if ( DEBUG && voList.size() > 1 ) {
-
-		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByName()\n--- Returned Multiple VALUES -- something is wrong!" );
-	  }
-	  return voList.get( 0 );
-   } else {
-	  return null;
-   }
-}
-
-@Override
-public PatientVO findPatientByPatientNameAndPassword(String _username, String _password) {
-   ArrayList<PatientVO> voList = findPatient( 0, _username, _password );
-   if ( voList != null && !voList.isEmpty() ) {
-	  if ( DEBUG && voList.size() > 1 ) {
-		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()\n---Returned Multiple VALUES -- something is wrong!" );
-	  }
-	  return voList.get( 0 );
-   } else {
-	  return null;
-   }
-}
-
-@Override
-public ArrayList<StateVO> findStatesByKeyword(String _keyword) {
-   throw new UnsupportedOperationException( "Not supported yet." );
-}
-
-@Override
-public ArrayList<PatientVO> getPatients() {
-   throw new UnsupportedOperationException( "Not supported yet." );
-}
-
-@Override
-public int updateDiary(DiaryVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." );
-}
-
-@Override
-public boolean updatePatient(PatientVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
+private final DbConnection db;
+private String errorMessage;
+private boolean loggedIn;
+private boolean stateOK;
+private final PatientVO user;
 
 }
