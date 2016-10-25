@@ -5,8 +5,11 @@
  */
 package com.medlog.webservice.dao;
 
+import com.google.gson.*;
+import com.google.gson.reflect.*;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.vo.*;
+import java.lang.reflect.*;
 import java.util.*;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -69,7 +72,16 @@ public void tearDown() {
    @Test
    public void testCreateDiary() {
 	  System.out.println( "createDiary" );
-	  DiaryVO _vo = null;
+	  Type gt = new TypeToken<DiaryVO>(){}.getType();
+	  Gson g = new Gson();
+	  
+	  String diary = "{"
+//			  + "\"id\":2,"
+			  + "\"title\":\"test\",\"notes\":\"testNotes\""
+//			  + ",\"createdDate\":\"Oct 25, 2016\""
+			  + ",\"mood\":1,\"productivity\":2,\"patientID\":{\"patientID\":2,\"userName\":\"dan\",\"userPassword\":\"asdf\",\"firstName\":\"dan\",\"lastName\":\"kauffman\",\"addressStreet\":\"158 Edge\",\"addressCity\":\"BC\",\"addressState\":{\"stateID\":2,\"stateName\":\"Pennsylvania\",\"stateAbbreviation\":\"PA\"},\"dateJoined\":\"Oct 22, 2016\",\"userRole\":1}}";
+	  
+	  DiaryVO _vo = g.fromJson( diary, gt );
 	  MedLogDAO instance = null;
 	  int expResult = 0;
 	  int result = instance.createDiary( _vo );

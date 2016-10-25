@@ -50,6 +50,7 @@ public static final String API_RESOURCE_HEALTHCARE_PROVIDER = "h";
 public static final String API_RESOURCE_MEDICATION = "m";
 public static final String API_RESOURCE_PATIENT = "p";
 public static final String API_RESOURCE_DIATARY_RESTRICTION = "r";
+public static final String API_RESOURCE_STATES = "s";
 
 public static final String API_PARAM_FUNCTION = "fn";
 public static final String API_FUNCTION_FIND = "find";

@@ -37,7 +37,9 @@ API_RESOURCE_HEALTHCARE_PROVIDER( "h", new String[]{ API_FUNCTION_ASSIGN,
 													 API_FUNCTION_FIND_BY_KEYWORD,
 													 API_FUNCTION_DELETE } ),
 /**
- * Valid Medication API Function
+ *  Medication API Resource Functions
+ * @see MedicationVO
+ * @see PharmaRxOtcVO
  */
 API_RESOURCE_MEDICATION( "m", new String[]{ API_FUNCTION_ASSIGN,
 											API_FUNCTION_UNASSIGN,
@@ -56,6 +58,12 @@ API_RESOURCE_PATIENT( "p", new String[]{ API_FUNCTION_INSERT,
 										 API_FUNCTION_FIND_BY_ID
 } ),
 API_RESOURCE_DIATARY_RESTRICTION( "r", new String[]{ "", "" } ),
+/**
+ * {@linkplain StateVO} Lookup Resource Functions.
+ * @see StateVO
+ */
+API_RESOURCE_STATES( "s", new String[]{ API_FUNCTION_FIND, 
+										API_FUNCTION_FIND_BY_ID } ),
 INVALID("-",new String[]{ "-" });
 
 RES_ENUM(String rCode, String[] validFunction) {
