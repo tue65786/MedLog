@@ -8,6 +8,8 @@ package com.medlog.webservice.vo;
 import com.google.gson.*;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
+import static com.medlog.webservice.CONST.SETTINGS.*;
+import com.medlog.webservice.util.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -20,9 +22,177 @@ public class DiaryVO implements Serializable, IEntityBase<DiaryVO> {
 
 private static final long serialVersionUID = -2971191299069097176L;
 
-   public static DiaryVO create(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includceMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
-	  return new DiaryVO( id, title, notes, notesActivity, createdDate, updatedDate, includceMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
-   }
+public static DiaryVO create(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includceMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
+   return new DiaryVO( id, title, notes, notesActivity, createdDate, updatedDate, includceMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
+}
+
+/**
+ * @return the attachmentPath
+ */
+public String getAttachmentPath() {
+   return StrUtl.toS(attachmentPath);
+}
+
+/**
+ * @param attachmentPath the attachmentPath to set
+ */
+public void setAttachmentPath(String attachmentPath) {
+   this.attachmentPath = attachmentPath;
+}
+
+/**
+ * @return the createdDate
+ */
+public Date getCreatedDate() {
+   return createdDate != null ? createdDate : new Date();
+}
+
+/**
+ * @param createdDate the createdDate to set
+ */
+public void setCreatedDate(Date createdDate) {
+   this.createdDate = createdDate;
+}
+
+/**
+ * @return the id
+ */
+public int getId() {
+   return id;
+}
+
+/**
+ * @param id the id to set
+ */
+public void setId(int id) {
+   this.id = id;
+}
+
+/**
+ * @return the includceMedsCurrent
+ */
+public String getIncludceMedsCurrent() {
+   return StrUtl.toS(includceMedsCurrent);
+}
+
+/**
+ * @param includceMedsCurrent the includceMedsCurrent to set
+ */
+public void setIncludceMedsCurrent(String includceMedsCurrent) {
+   this.includceMedsCurrent = includceMedsCurrent;
+}
+
+/**
+ * @return the mood
+ */
+public int getMood() {
+   return mood;
+}
+
+/**
+ * @param mood the mood to set
+ */
+public void setMood(int mood) {
+   this.mood = mood;
+}
+
+/**
+ * @return the notes
+ */
+public String getNotes() {
+   return StrUtl.toS( notes );
+}
+
+/**
+ * @param notes the notes to set
+ */
+public void setNotes(String notes) {
+   this.notes = notes;
+}
+
+/**
+ * @return the notesActivity
+ */
+public String getNotesActivity() {
+   return StrUtl.toS( notesActivity );
+}
+
+/**
+ * @param notesActivity the notesActivity to set
+ */
+public void setNotesActivity(String notesActivity) {
+   this.notesActivity = notesActivity;
+}
+
+/**
+ * @return the patientID
+ */
+public PatientVO getPatientID() {
+   return patientID;
+}
+
+/**
+ * @param patientID the patientID to set
+ */
+public void setPatientID(PatientVO patientID) {
+   this.patientID = patientID;
+}
+
+/**
+ * @return the productivity
+ */
+public int getProductivity() {
+   return productivity;
+}
+
+/**
+ * @param productivity the productivity to set
+ */
+public void setProductivity(int productivity) {
+   this.productivity = productivity;
+}
+
+/**
+ * @return the tagList
+ */
+public List<TagVO> getTagList() {
+   return tagList;
+}
+
+/**
+ * @param tagList the tagList to set
+ */
+public void setTagList(List<TagVO> tagList) {
+   this.tagList = tagList;
+}
+
+/**
+ * @return the title
+ */
+public String getTitle() {
+   return title;
+}
+
+/**
+ * @param title the title to set
+ */
+public void setTitle(String title) {
+   this.title = title;
+}
+
+/**
+ * @return the updatedDate
+ */
+public Date getUpdatedDate() {
+   return updatedDate;
+}
+
+/**
+ * @param updatedDate the updatedDate to set
+ */
+public void setUpdatedDate(Date updatedDate) {
+   this.updatedDate = updatedDate;
+}
 
 @Override
 public boolean isValid() {
@@ -34,37 +204,47 @@ public boolean isValid(DiaryVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
-   /**
-    * Validates DiaryVO Object.
-    * @param _ACTION {@linkplain API_ACTIONS#INSERT} does not validate ID.
-    * @return 
-	* @see API_ACTIONS#INSERT
-	* @see API_ACTIONS#DELETE
-    */
-   @Override
+/**
+ * Validates DiaryVO Object.
+ *
+ * @param _ACTION {@linkplain API_ACTIONS#INSERT} does not validate ID.
+ * @return
+ * @see API_ACTIONS#INSERT
+ * @see API_ACTIONS#DELETE
+ */
+@Override
 public boolean isValid(int _ACTION) {
-   if ( this.patientID == null || this.patientID.getPatientID() <= 0 ) {
+   if ( this.getPatientID() == null || this.getPatientID().getPatientID() <= 0 ) {
+	  if ( DEBUG ) {
+		 LOG.warning( "Diary: PatientID invalid" );
+	  }
 	  return false;
    }
    if ( _ACTION != INSERT ) {
-	  if ( this.id <= 0 ) {
+	  if ( this.getId() <= 0 ) {
+		 if ( DEBUG ) {
+			LOG.warning( "Diary: ID invalid" );
+		 }
 		 return false;
 	  }
    } else {
-	  if ( ( this.mood * this.productivity == 0 ) ) {
-	  return false;
-   }
-	  if (this.notes.isEmpty()){
+	  if ( ( this.getMood() * this.getProductivity() == 0 ) ) {
+		 if ( DEBUG ) {
+			LOG.warning( "Diary: mood/prod invalid" );
+		 }
 		 return false;
 	  }
-	  
+	  if ( this.getNotes().isEmpty() ) {
+		 return false;
+	  }
+
    }
    return true;
 }
 
 @Override
 public String toJSON() {
- return new GsonBuilder().serializeNulls().create().toJson( this);
+   return new GsonBuilder().serializeNulls().create().toJson( this );
 }
 
 @Override
@@ -72,122 +252,121 @@ public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
-public int id;//1
-public String title; //2
-public String notes;
-public String notesActivity;//4
-public Date createdDate;
-public Date updatedDate;
-public String includceMedsCurrent;
-public String attachmentPath;
-public int mood;
-public int productivity;
+private int id;//1
+private String title; //2
+private String notes;
+private String notesActivity;//4
+private Date createdDate;
+private Date updatedDate;
+private String includceMedsCurrent;
+private String attachmentPath;
+private int mood;
+private int productivity;
 
-public List<TagVO> tagList;
-public PatientVO patientID;
+private List<TagVO> tagList;
+private PatientVO patientID;
 private static final Logger LOG = Logger.getLogger( DiaryVO.class.getName() );
 
-   public static class Builder {
+public static class Builder {
 
-   private int id;
-   private String title;
-   private String notes;
-   private String notesActivity;
-   private Date createdDate;
-   private Date updatedDate;
-   private String includceMedsCurrent;
-   private String attachmentPath;
-   private int mood;
-   private int productivity;
-   private List<TagVO> tagList;
-   private PatientVO patientID;
+private int id;
+private String title;
+private String notes;
+private String notesActivity;
+private Date createdDate;
+private Date updatedDate;
+private String includceMedsCurrent;
+private String attachmentPath;
+private int mood;
+private int productivity;
+private List<TagVO> tagList;
+private PatientVO patientID;
 
-   private Builder() {
-   }
+private Builder() {
+}
 
-   public Builder id(final int value) {
-	  this.id = value;
-	  return this;
-   }
+public Builder id(final int value) {
+   this.id = value;
+   return this;
+}
 
-   public Builder title(final String value) {
-	  this.title = value;
-	  return this;
-   }
+public Builder title(final String value) {
+   this.title = value;
+   return this;
+}
 
-   public Builder notes(final String value) {
-	  this.notes = value;
-	  return this;
-   }
+public Builder notes(final String value) {
+   this.notes = value;
+   return this;
+}
 
-   public Builder notesActivity(final String value) {
-	  this.notesActivity = value;
-	  return this;
-   }
+public Builder notesActivity(final String value) {
+   this.notesActivity = value;
+   return this;
+}
 
-   public Builder createdDate(final Date value) {
-	  this.createdDate = value;
-	  return this;
-   }
+public Builder createdDate(final Date value) {
+   this.createdDate = value;
+   return this;
+}
 
-   public Builder updatedDate(final Date value) {
-	  this.updatedDate = value;
-	  return this;
-   }
+public Builder updatedDate(final Date value) {
+   this.updatedDate = value;
+   return this;
+}
 
-   public Builder includceMedsCurrent(final String value) {
-	  this.includceMedsCurrent = value;
-	  return this;
-   }
+public Builder includceMedsCurrent(final String value) {
+   this.includceMedsCurrent = value;
+   return this;
+}
 
-   public Builder attachmentPath(final String value) {
-	  this.attachmentPath = value;
-	  return this;
-   }
+public Builder attachmentPath(final String value) {
+   this.attachmentPath = value;
+   return this;
+}
 
-   public Builder mood(final int value) {
-	  this.mood = value;
-	  return this;
-   }
+public Builder mood(final int value) {
+   this.mood = value;
+   return this;
+}
 
-   public Builder productivity(final int value) {
-	  this.productivity = value;
-	  return this;
-   }
+public Builder productivity(final int value) {
+   this.productivity = value;
+   return this;
+}
 
-   public Builder tagList(final List<TagVO> value) {
-	  this.tagList = value;
-	  return this;
-   }
+public Builder tagList(final List<TagVO> value) {
+   this.tagList = value;
+   return this;
+}
 
-   public Builder patientID(final PatientVO value) {
-	  this.patientID = value;
-	  return this;
-   }
+public Builder patientID(final PatientVO value) {
+   this.patientID = value;
+   return this;
+}
 
-   public DiaryVO build() {
-	  return DiaryVO.create( id, title, notes, notesActivity, createdDate, updatedDate, includceMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
-   }
-   }
+public DiaryVO build() {
+   return DiaryVO.create( id, title, notes, notesActivity, createdDate, updatedDate, includceMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
+}
+}
 
-   public static DiaryVO.Builder builder() {
-	  return new DiaryVO.Builder();
-   }
+public static DiaryVO.Builder builder() {
+   return new DiaryVO.Builder();
+}
 
-   private DiaryVO(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includceMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
-	  this.id = id;
-	  this.title = title;
-	  this.notes = notes;
-	  this.notesActivity = notesActivity;
-	  this.createdDate = createdDate;
-	  this.updatedDate = updatedDate;
-	  this.includceMedsCurrent = includceMedsCurrent;
-	  this.attachmentPath = attachmentPath;
-	  this.mood = mood;
-	  this.productivity = productivity;
-	  this.tagList = tagList;
-	  this.patientID = patientID;
-   }
+private DiaryVO(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includceMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
+   this.id = id;
+   this.title = title;
+   this.notes = notes;
+   this.notesActivity = notesActivity;
+   this.createdDate = createdDate;
+   this.updatedDate = updatedDate;
+   this.includceMedsCurrent = includceMedsCurrent;
+   this.attachmentPath = attachmentPath;
+   this.mood = mood;
+   this.productivity = productivity;
+   this.tagList = tagList;
+   this.patientID = patientID;
+}
 
-   
 }

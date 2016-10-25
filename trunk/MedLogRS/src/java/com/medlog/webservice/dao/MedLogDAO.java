@@ -43,8 +43,8 @@ public int createDiary(DiaryVO _vo) {
    CallableStatement cs = null;
    int newID = DB_ERROR_CODE;
    try {
-	  if ( _vo != null && _vo.patientID == null && getCurrentUser() != null ) {
-		 _vo.patientID = getCurrentUser();
+	  if ( _vo != null && _vo.getPatientID() == null && getCurrentUser() != null ) {
+		 _vo.setPatientID( getCurrentUser() );
 	  }
    } catch (Exception e) {
 	  if ( DEBUG ) {
@@ -52,33 +52,32 @@ public int createDiary(DiaryVO _vo) {
 		 e.printStackTrace();
 	  }
    }
-
    if ( _vo.isValid( INSERT ) ) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_DIARY_INSERT );
 		 cs.setInt( 1, getCurrentUser().getPatientID() );
 
-		 if ( _vo.title != null ) {
-			cs.setString( 2, _vo.title );
+		 if ( _vo.getTitle() != null ) {
+			cs.setString(2, _vo.getTitle());
 		 } else {
 			cs.setNull( 2, java.sql.Types.NVARCHAR );
 		 }
 //		 if ( _vo.notes != null ) {
-		 cs.setString( 3, StrUtl.removeHtmlMarkups( _vo.notes ) );
+		 cs.setString( 3, StrUtl.removeHtmlMarkups(_vo.getNotes()) );
 //		 } else {
 //			cs.setNull( 3, java.sql.Types.NVARCHAR );
 //		 }
-		 if ( _vo.notesActivity.isEmpty() ) {
+		 if ( _vo.getNotesActivity().isEmpty() ) {
 			cs.setNull( 4, java.sql.Types.NVARCHAR );
 		 } else {
-			cs.setString( 4, StrUtl.removeHtmlMarkups( _vo.notesActivity ) );
+			cs.setString( 4, StrUtl.removeHtmlMarkups(_vo.getNotesActivity()) );
 		 }
 		 cs.setNull( 5, java.sql.Types.DATE );
 		 cs.setNull( 6, java.sql.Types.DATE );
 		 cs.setNull( 7, java.sql.Types.NCHAR );
 		 cs.setNull( 8, java.sql.Types.NVARCHAR );
-		 cs.setInt( 9, _vo.mood );
-		 cs.setInt( 10, _vo.productivity );
+		 cs.setInt(9, _vo.getMood());
+		 cs.setInt(10, _vo.getProductivity());
 		 cs.registerOutParameter( 11, java.sql.Types.INTEGER );
 		 cs.executeUpdate();
 		 newID = cs.getInt( 11 );
@@ -177,7 +176,7 @@ public boolean deletePatient(PatientVO _vo) {
 }
 
 @Override
-public ArrayList<StateVO> findAllStates() {
+public final ArrayList<StateVO> findAllStates() {
    if ( MedLogDAO.statesList == null ) {
 	  Map<Integer, StateVO> tmpVO = new HashMap<Integer, StateVO>();
 	  CallableStatement cs = null;
@@ -323,7 +322,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
    
    CallableStatement cs = null;
    ResultSet rs = null;
-   boolean valid = false;
+   boolean valid = true;
    try {
 	  cs = db.getConnnection().prepareCall( SP_DIARY_SELECT );
 	  if ( _id > 0 ) {
@@ -333,6 +332,9 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 		 cs.setNull( 1, java.sql.Types.INTEGER );
 	  }
 	  cs.setInt( 2, getCurrentUser().getPatientID() );
+	  if (DEBUG){
+		 System.out.println( "com.medlog.webservice.dao.MedLogDAO.findDiary() UserID=" + getCurrentUser().getPatientID() );
+	  }
 	  if ( _keyword.isEmpty() ) {
 		 cs.setNull( 3, java.sql.Types.NVARCHAR );
 	  } else {
@@ -348,15 +350,16 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 					.id( rs.getInt( "id" ) )
 					.title( rs.getString( "title" ) )
 					.notes( rs.getString( "notes" ) )
-					.mood( rs.getInt( "mood" ) )
-					.productivity( rs.getInt( "productivity" ) )
+					.notesActivity( rs.getString( "notesActivity"))
+					.mood( rs.getInt( "ratingMood" ) )
+					.productivity( rs.getInt( "ratingProductivity" ) )
 					.patientID( getCurrentUser() )
 					.createdDate( rs.getDate( "createdDate" ) )
 					.build() );
 		 }
 	  } else {
 		 this.stateOK = false;
-		 this.errorMessage = "com.medlog.webservice.dao.MedLogDAO.findPatient() - Invalid Params: Username is required";
+		 this.errorMessage = "com.medlog.webservice.dao.MedLogDAO.findDiary() - Invalid Params: Username is required";
 		 if ( DEBUG ) {
 			LOG.severe( this.errorMessage );
 		 }

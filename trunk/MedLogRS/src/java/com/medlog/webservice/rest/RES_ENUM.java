@@ -70,8 +70,7 @@ public final String getCode() {
  * List of valid functions for resource
  * @return csv
  */
-public final String getValidFunctions() {
-   
+public final String getValidFunctions() {  
    return Arrays.toString(VALID_Functions );
 }
 /**
@@ -79,7 +78,7 @@ public final String getValidFunctions() {
  * @param k
  * @return 
  */
-public RES_ENUM findByChar(String k){
+public static RES_ENUM findByChar(String k){
    for (RES_ENUM e : values()){
 	  if (k.equals( e.getCode())){
 		 return e;
@@ -91,6 +90,11 @@ public boolean isValidFunction(String fn) {
    return StrUtl.matchOR( fn, VALID_Functions );
 }
 
+@Override
+public String toString(){
+   
+   return "{\""+ name() + "\":{\""+RESOURCE_Code + "\":\"{functions\":" + getValidFunctions() +  "}}}" + (this.equals( INVALID) ? "":",");
+}
 
 private final String RESOURCE_Code;
 private final String[] VALID_Functions;

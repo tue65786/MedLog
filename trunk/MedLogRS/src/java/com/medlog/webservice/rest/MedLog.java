@@ -93,13 +93,22 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 session.removeAttribute( SESSION_BEAN_USER );
 		 out.print( makeJSONInfoMsg( "User logged out." ) );
 		 
-	  } else if ( currentUser == null ) {//Check for saved user cred.
+	  } else if (fn.equalsIgnoreCase( "help")){
+		out.println("{\"sampleURL\":?res=d&fn=find\"},\"resources\":[");
+		 for (RES_ENUM e : RES_ENUM.values()){
+			   out.println(e.toString());
+		
+		 }
+		 out.println("\n]");
+	  }
+	  
+	  else if ( currentUser == null ) {//Check for saved user cred.
 		 out.print( makeJSONErrorMsg( "Not logged in." ) );
 	  } else { //User is Logged in
 //		 dao = new MedLogDAO( db, currentUser );
-		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.INVALID.findByChar( res), fn );
+		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res), fn );
 		 if ( DEBUG ) {
-			System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().create().toJson( strategy ) );
+			System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create().toJson( strategy ) );
 		 }
 		 //Process
 		 out.print( strategy.execute( db ) );
@@ -201,7 +210,7 @@ private String makeJSONErrorMsg(String msg) {
    if ( DEBUG ) {
 	  LOG.severe( msg );
    }
-   return StrUtl.getJSONMsg( "error", msg );
+   return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], msg );
 }
 
 /**
@@ -214,7 +223,7 @@ private String makeJSONInfoMsg(String msg) {
    if ( DEBUG ) {
 	  LOG.info( msg );
    }
-   return StrUtl.getJSONMsg( "info", msg );
+   return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.INFO], msg );
 }
 
 private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );

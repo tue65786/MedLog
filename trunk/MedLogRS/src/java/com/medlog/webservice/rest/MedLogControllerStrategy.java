@@ -6,6 +6,8 @@
 package com.medlog.webservice.rest;
 
 import com.google.gson.*;
+import com.google.gson.annotations.*;
+import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.dao.*;
@@ -25,8 +27,11 @@ import jdk.nashorn.api.scripting.*;
  */
 public class MedLogControllerStrategy {
 
+@Expose(deserialize = false, serialize = false)
 private static final Logger LOG = Logger.getLogger( MedLogControllerStrategy.class.getName() );
+@Expose(deserialize = true, serialize = true)
 public boolean success;
+@Expose(deserialize = true, serialize = true)
 public String responseMessage = "";
 
 public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse _response, RES_ENUM res, String fn) {
@@ -46,23 +51,35 @@ public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse
  */
 public String execute(DbConnection dbc) {
    Gson g = new Gson();
-   boolean v = true;
+   boolean apiCanExecute = true;
    MedLogDAO dao;
+
+   ///  -  ::}
+   //     __
+   //    /o \___Login
+   //    \__/-="="`
+   /// -  -  -  - :
    if ( getCurrentUser() == null ) {
-	  if ( !res.equals( RES_ENUM.API_RESOURCE_PATIENT ) || ( StrUtl.matchOR( fn, "login", API_FUNCTION_INSERT ) ) ) {
-		 v = false;
+	  if ( !res.equals( RES_ENUM.API_RESOURCE_PATIENT )
+		   || ( StrUtl.matchOR( fn, "login",
+								API_FUNCTION_INSERT ) ) ) {
+		 apiCanExecute = false;
 	  }
    }
 
-   if ( !v ) {
-	  responseMessage = StrUtl.getJSONMsg( "error", "Not logged in." );
+   if ( !apiCanExecute ) {
+	  responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
+										   "Not logged in." );
    } else {
 	  dao = new MedLogDAO( dbc, getCurrentUser() );
 	  switch ( res ) {
-		 //____________
-		 ///\ \ | | / |
-		 //   DIARY  -
-		 //___________\
+		 /////////   __________
+		 //         |dear DiARY|
+		 //         |&&& ======|
+		 //         |[_] =====+|
+		 //         |=== ===?!#|
+		 //         |__________|		 
+		 ///////////////////////////////////		  
 		 case API_RESOURCE_DIARY:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   DiaryVO vo = loadDiaryFromRequest();
@@ -70,24 +87,33 @@ public String execute(DbConnection dbc) {
 				  int id = dao.createDiary( vo );
 				  if ( id > 0 ) {
 					 success = true;
-					 vo.id = id;
+					 vo.setId( id );
 					 responseMessage = g.toJson( vo );
 				  } else {
-					 responseMessage = StrUtl.getJSONMsg( "error", "Diary not added." );
+					 responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Diary not added." );
 				  }
 			   }//Insert
 			   else if ( fn.equalsIgnoreCase( API_FUNCTION_UPDATE ) && vo.isValid( UPDATE ) ) {
 				  success = dao.updateDiary( vo ) > 0;
-				  responseMessage = StrUtl.getJSONMsg( success ? "info" : "error", "Diary update" + ( success ? "d" : " failed" ) );
+				  responseMessage = StrUtl.getJSONMsg( success ? STATE_STATUS[API_ACTIONS.INFO]
+						  : STATE_STATUS[API_ACTIONS.ERROR], "Diary update"
+															 + ( success
+																? "d"
+																: " failed" ) );
 			   }//Update
 			} else if ( StrUtl.matchOR( fn, API_FUNCTION_FIND, API_FUNCTION_FIND_BY_KEYWORD ) ) {
 			   responseMessage = getDiaryResponse( dao, g );
 			}//Search
 			break;
-		 //  ===============
-		 //= |   PATIENT   |
-		 //  ==============
 
+		 /////////////// {}			
+		 //           .-'  '-.      
+		 //          /        )                                 
+		 //          |  C   o( 
+		 //           \      P>tient      
+		 //            )  \  /   
+		 //           _ / `'
+		 ////////////|      / ~  ~ - >
 		 case API_RESOURCE_PATIENT:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   PatientVO vo = loadPatientFromRequest();
@@ -99,7 +125,7 @@ public String execute(DbConnection dbc) {
 					 session.setAttribute( SESSION_BEAN_USER, vo );
 					 responseMessage = g.toJson( vo );
 				  } else {
-					 responseMessage = StrUtl.getJSONMsg( "error", "Patient not added." );
+					 responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Patient not added." );
 				  }
 
 			   } else if ( fn.equalsIgnoreCase( API_FUNCTION_UPDATE )
@@ -112,22 +138,31 @@ public String execute(DbConnection dbc) {
 				  if ( success ) {
 					 session.setAttribute( SESSION_BEAN_USER, vo );
 				  }
-				  responseMessage = StrUtl.getJSONMsg( success ? "info" : "error", " Update" + ( success ? "d" : " failed" ) );
+				  responseMessage = StrUtl.getJSONMsg( success ? STATE_STATUS[API_ACTIONS.INFO]
+						  : STATE_STATUS[API_ACTIONS.ERROR],
+													   " Update" + ( success
+																	? "d" : " failed" ) );
 			   } else {
-				  responseMessage = StrUtl.getJSONMsg( "error", StrUtl.toS( fn, "?" ) + " params are invalid." );
+				  responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
+													   StrUtl.toS( fn, "?" )
+													   + " params are invalid." );
 			   }
 
 			} else {//Not valid fn
-			   responseMessage = StrUtl.getJSONMsg( "error", StrUtl.toS( fn, "?" ) + " is invalid." );
+			   responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
+													StrUtl.toS( fn, "?" )
+													+ " is invalid." );
 			}
 			break;
 		 default:
-			responseMessage = StrUtl.getJSONMsg( "error", " Invalid res." );
+			responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
+												 " Invalid res." );
 			break;
 
 	  }
    }
-   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute()\nRESPONSE:\n=============\n" + responseMessage + "\n-  |  -- - --  |  --- -- --  |  -- --- --  |  - --- --  |  --------  |  -----  |  ----\n" );
+   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute()\nRESPONSE:\n=============\n"
+					   + responseMessage + "\n-  |  -- - --  |  --- -- --  |  -- --- --  |  - --- --  |  --------  |  -----  |  ----\n" );
    return responseMessage;
 }
 
@@ -154,7 +189,7 @@ private String getDiaryResponse(MedLogDAO dao, Gson g) {
    }
 
    if ( voList == null || voList.isEmpty() ) {
-	  return StrUtl.getJSONMsg( "error", "No entries." );
+	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
    } else {
 	  return g.toJson( voList );
    }
@@ -168,6 +203,11 @@ public MedicationVO loadMedicationFromRequest() {
    return t.build();
 }
 
+/**
+ * Builds patient vo from request.
+ *
+ * @return
+ */
 public PatientVO loadPatientFromRequest() {
    ServletHelpers sh = new ServletHelpers( request, response );
    PatientVO.Builder p = PatientVO.builder();
@@ -252,14 +292,17 @@ private PatientVO getCurrentUser() {
 	  return null;
    }
 }
+@Expose(deserialize = true, serialize = true)
 /**
  * Request function
  */
 private final String fn;
+@Expose(deserialize = false, serialize = false)
 /**
  * Current Request.
  */
 private final HttpServletRequest request;
+@Expose(deserialize = true, serialize = true)
 /**
  * Request Resource
  *
@@ -271,10 +314,12 @@ private final HttpServletRequest request;
  * @see DietaryRestrictionVO
  */
 private final RES_ENUM res;
+@Expose(deserialize = false, serialize = false)
 /**
  * Current Response.
  */
 private final HttpServletResponse response;
+@Expose(deserialize = false, serialize = false)
 /**
  * Session state.
  */

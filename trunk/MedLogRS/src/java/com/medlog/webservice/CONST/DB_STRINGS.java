@@ -30,7 +30,7 @@ public class DB_STRINGS {
 public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
 		+ "?,?,?,?,?,"
 		+ "?,?,?,?,?,"
-		+ "?}";
+		+ "?)}";
 /**
  * Select Diary Entries<ol><li>Id</li> <li> PatientID int</li><li>Keyword (null)</li></ol>
  */
