@@ -100,7 +100,7 @@ public int updateDiary(DiaryVO _vo);
  * @param _id
  * @return
  */
-public int findDiaryByID(int _id);
+public DiaryVO findDiaryByID(int _id);
 
 /**
  * Find diary entries by PatientVO

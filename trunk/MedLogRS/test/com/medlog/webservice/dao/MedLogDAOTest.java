@@ -131,7 +131,7 @@ public void tearDown() {
 	  int _id = 0;
 	  MedLogDAO instance = null;
 	  int expResult = 0;
-	  int result = instance.findDiaryByID( _id );
+	  DiaryVO result = instance.findDiaryByID( _id );
 	  assertEquals( expResult, result );
 	  // TODO review the generated test code and remove the default call to fail.
 	  fail( "The test case is a prototype." );

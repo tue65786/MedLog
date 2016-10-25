@@ -76,12 +76,12 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 
 @Override
 public ArrayList<DiaryVO> findDiaryByKeyword(String _keyword) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return findDiary( 0, StrUtl.toS( _keyword ) );
 }
 
 @Override
 public ArrayList<DiaryVO> findDiaryByPatient() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return findDiary( 0, null );
 }
 
 @Override
@@ -90,8 +90,14 @@ public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
 }
 
 @Override
-public int findDiaryByID(int _id) {
-   throw new UnsupportedOperationException( "Not supported yet." );
+public DiaryVO findDiaryByID(int _id) {
+   ArrayList<DiaryVO> voList = findDiary( 0, null );
+   if ( voList == null || voList.isEmpty() ) {
+	  return null;
+   } else {
+	  return voList.get( 0 );
+   }
+
 }
 
 @Override

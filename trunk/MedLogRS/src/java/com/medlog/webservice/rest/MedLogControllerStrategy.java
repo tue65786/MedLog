@@ -28,6 +28,7 @@ public class MedLogControllerStrategy {
 private static final Logger LOG = Logger.getLogger( MedLogControllerStrategy.class.getName() );
 public boolean success;
 public String responseMessage = "";
+
 public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse _response, RES_ENUM res, String fn) {
    this.request = _request;
    this.response = _response;
@@ -37,8 +38,13 @@ public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse
    success = false;
 }
 
+/**
+ * Lookup and exec API Functions
+ *
+ * @param dbc Connection
+ * @return JSON
+ */
 public String execute(DbConnection dbc) {
-//   JsonObject jo = new JsonObject();
    Gson g = new Gson();
    boolean v = true;
    MedLogDAO dao;
@@ -47,45 +53,41 @@ public String execute(DbConnection dbc) {
 		 v = false;
 	  }
    }
-   
 
-   
    if ( !v ) {
 	  responseMessage = StrUtl.getJSONMsg( "error", "Not logged in." );
    } else {
 	  dao = new MedLogDAO( dbc, getCurrentUser() );
 	  switch ( res ) {
-		 /////////////////
-		 /////
-		 /////  DIARY
-		 /////
-		 /////////////////////////////////////
+		 //____________
+		 ///\ \ | | / |
+		 //   DIARY  -
+		 //___________\
 		 case API_RESOURCE_DIARY:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   DiaryVO vo = loadDiaryFromRequest();
 			   if ( fn.equalsIgnoreCase( API_FUNCTION_INSERT ) && vo.isValid( INSERT ) ) {
-				  int id = dao.createDiary(vo );
+				  int id = dao.createDiary( vo );
 				  if ( id > 0 ) {
 					 success = true;
-					 vo.id = id ;
+					 vo.id = id;
 					 responseMessage = g.toJson( vo );
 				  } else {
 					 responseMessage = StrUtl.getJSONMsg( "error", "Diary not added." );
 				  }
 			   }//Insert
-			   else if (fn.equalsIgnoreCase( API_FUNCTION_UPDATE ) && vo.isValid( UPDATE )){
-				 success =  dao.updateDiary( vo ) > 0;
-				 responseMessage = StrUtl.getJSONMsg( success ? "info" : "error", "Diary update" + ( success ? "d" : " failed" ) );
+			   else if ( fn.equalsIgnoreCase( API_FUNCTION_UPDATE ) && vo.isValid( UPDATE ) ) {
+				  success = dao.updateDiary( vo ) > 0;
+				  responseMessage = StrUtl.getJSONMsg( success ? "info" : "error", "Diary update" + ( success ? "d" : " failed" ) );
 			   }//Update
 			} else if ( StrUtl.matchOR( fn, API_FUNCTION_FIND, API_FUNCTION_FIND_BY_KEYWORD ) ) {
 			   responseMessage = getDiaryResponse( dao, g );
 			}//Search
 			break;
-		 ///////////////
-		 /// 
-		 /// PATIENT
-		 /// 
-		 ///////////////////////////////////////////////////
+		 //  ===============
+		 //= |   PATIENT   |
+		 //  ==============
+
 		 case API_RESOURCE_PATIENT:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   PatientVO vo = loadPatientFromRequest();
@@ -125,6 +127,7 @@ public String execute(DbConnection dbc) {
 
 	  }
    }
+   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute()\nRESPONSE:\n=============\n" + responseMessage + "\n-  |  -- - --  |  --- -- --  |  -- --- --  |  - --- --  |  --------  |  -----  |  ----\n" );
    return responseMessage;
 }
 
@@ -186,6 +189,7 @@ public PatientVO loadPatientFromRequest() {
    p.dateOfBirth( sh.getDateParameter( "dateOfBirth", new Date() ) );
    p.userRole( 1 );
    p.dateJoined( sh.getDateParameter( "dateJoined", new Date() ) );
+   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadPatientFromRequest()\n==> " + p.build().toJSON() );
    return p.build();
    // sh.getStrParameter( "", "")
    //phoneHome

@@ -29,6 +29,7 @@ public static final int DB_ERROR_CODE  = -1;
  * Global debugging state.. Verbose logging (etc)...
  */
 public static final boolean DEBUG = true;
+public static final boolean TEST_MODE=true; 
 /**
  * JDBC Driver Class
  */

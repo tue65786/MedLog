@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.vo;
 
+import com.google.gson.*;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import java.io.*;
@@ -63,7 +64,7 @@ public boolean isValid(int _ACTION) {
 
 @Override
 public String toJSON() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+ return new GsonBuilder().serializeNulls().create().toJson( this);
 }
 
 @Override
@@ -188,4 +189,5 @@ private static final Logger LOG = Logger.getLogger( DiaryVO.class.getName() );
 	  this.patientID = patientID;
    }
 
+   
 }
