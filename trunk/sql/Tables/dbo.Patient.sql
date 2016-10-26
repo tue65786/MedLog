@@ -23,7 +23,7 @@ CREATE TABLE [dbo].[Patient] (
 		[lang]                   [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 		[timezone_id]            [nvarchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 		[primary_physsician]     [int] NULL,
-		[date_of_birth]          [bit] NULL,
+		[date_of_birth]          [date] NULL,
 		[date_joined]            [date] NOT NULL,
 		[picture]                [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 		[meta_data]              [xml] NULL,
@@ -42,6 +42,16 @@ ALTER TABLE [dbo].[Patient]
 	ADD
 	CONSTRAINT [DF__Patient__date_jo__76619304]
 	DEFAULT (getdate()) FOR [date_joined]
+GO
+ALTER TABLE [dbo].[Patient]
+	ADD
+	CONSTRAINT [DF_Patient_address_country]
+	DEFAULT (N'USA') FOR [address_country]
+GO
+ALTER TABLE [dbo].[Patient]
+	ADD
+	CONSTRAINT [DF_Patient_userRole]
+	DEFAULT ((1)) FOR [userRole]
 GO
 ALTER TABLE [dbo].[Patient]
 	WITH CHECK

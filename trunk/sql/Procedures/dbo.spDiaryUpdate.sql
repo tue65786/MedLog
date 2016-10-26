@@ -1,7 +1,13 @@
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 GO
-
+-- =============================================
+-- Author:		Dan K.
+-- Project:		MedLog
+-- Create date: 2016-10-10
+-- Modify date: 2016-10-22
+-- Description:	Updates  Diary record
+-- =============================================
 CREATE PROC [dbo].[spDiaryUpdate]
  @Id int
 ,@PatientID int

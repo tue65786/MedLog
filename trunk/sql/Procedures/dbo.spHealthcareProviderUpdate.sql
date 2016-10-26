@@ -1,23 +1,46 @@
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROC [dbo].[spHealthcareProviderUpdate] 
-    @PhysicianID int,
-    @last_name nvarchar(MAX),
-    @first_name nvarchar(MAX),
-    @specialty nvarchar(256) = NULL,
-    @WorkPhone nvarchar(256),
-    @CellPhone nvarchar(256) = NULL,
-    @Pager varbinary(50) = NULL,
-    @Email nvarchar(256) = NULL,
-    @Fax nchar(10) = NULL,
-    @pathient_log_communication_preference varchar(20) = NULL
-AS 
+-- =============================================
+-- Author:		Dan K.
+-- Project:		MedLog
+-- Create date: 2016-10-21
+-- Modify date: 2016-10-24
+-- Description:	UPDATE
+-- =============================================
+CREATE PROC [dbo].[spHealthcareProviderUpdate]
+@PhysicianID int
+,@lastname nvarchar (max) 
+,@firstname nvarchar (max) 
+,@specialty nvarchar (256) = NULL
+,@phoneWork nvarchar (256) 
+,@phoneMobile nvarchar (256) = NULL
+,@phonePager varbinary (50) = NULL
+,@phoneFax nchar (10) = NULL
+,@email nvarchar (256) = NULL
+,@pathient_log_communication_preference varchar (20) = NULL
+,@addressStreet nvarchar (512) = NULL
+,@addressCity nvarchar (128) = NULL
+,@addressStateID int = NULL
+,@addressZip varchar (10) = NULL
+AS
 BEGIN
 	SET NOCOUNT OFF
 	UPDATE [dbo].[HealthcareProvider]
-	SET    [PhysicianID] = @PhysicianID, [last_name] = @last_name, [first_name] = @first_name, [specialty] = @specialty, [WorkPhone] = @WorkPhone, [CellPhone] = @CellPhone, [Pager] = @Pager, [Email] = @Email, [Fax] = @Fax, [pathient_log_communication_preference] = @pathient_log_communication_preference
+	SET     [lastname] = @lastname
+,		   [firstname] = @firstname
+,		   [specialty] = @specialty
+,		   [phoneWork] = @phoneWork
+,		   [phoneMobile] = @phoneMobile
+,		   [phonePager] = @phonePager
+,		   [phoneFax] = @phoneFax
+,		   [email] = @email
+,		   [pathient_log_communication_preference] = @pathient_log_communication_preference
+,		   [addressStreet] = @addressStreet
+,		   [addressCity] = @addressCity
+,		   [addressStateID] = @addressStateID
+,		   [addressZip] = @addressZip
 	WHERE  [PhysicianID] = @PhysicianID
-	
+
 END
 GO
