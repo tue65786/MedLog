@@ -14,52 +14,22 @@ import java.util.*;
  * @author (c)2016 Guiding Technologies
  */
 public interface IMedLogDAO {
-
 /**
- * Return all states
+ * Assigns medication to current user
  *
- * @return
+    * @param _vo
+ * @return newID
  */
-public ArrayList<StateVO> findAllStates();
-
+public int assignMedication(MedicationVO _vo);
+public int createDiary(DiaryVO _vo);
 /**
- * Return states by keyword
+ * Add new patient
  *
-    * @param keyword Abbr or full state name.
- * @return
+    * @param _vo
+ * @param vo
+ * @return inserted ID
  */
-public ArrayList<StateVO> findStatesByKeyword(String keyword);
-
-/**
- *
- * @param _username
- * @param _password
- * @return
- */
-public PatientVO findPatientByPatientNameAndPassword(String _username, String _password);
-
-/**
- *
- * @param _username
- * @return
- */
-public PatientVO findPatientByName(String _username);
-
-/**
- * Retrieves all users
- *
- * @return
- */
-public ArrayList<PatientVO> getPatients();
-
-/**
- * Find user by user ID
- *
- * @param _id
- * @return
- */
-public PatientVO findPatientByID(int _id);
-
+public int createHealthcareProviderVO(HealthcareProviderVO _vo);
 /**
  * Add new patient
  *
@@ -67,7 +37,6 @@ public PatientVO findPatientByID(int _id);
  * @return inserted ID
  */
 public int createPatient(PatientVO vo);
-
 /**
  * Deletes a Patient
  *
@@ -77,23 +46,11 @@ public int createPatient(PatientVO vo);
 public boolean deletePatient(PatientVO _vo);
 
 /**
- * Update existing patient
+ * Return all states
  *
- * @param _vo PatientVO to update. Nulls are ignored
- * @return success
+ * @return
  */
-public boolean updatePatient(PatientVO _vo);
-
-public int createDiary(DiaryVO _vo);
-
-/**
- * Update existing diary
- *
- * @param _vo DiaryVO to update. Nulls are ignored
- * @return success
- */
-public int updateDiary(DiaryVO _vo);
-
+public ArrayList<StateVO> findAllStates();
 /**
  * Find diary by diary ID
  *
@@ -101,7 +58,14 @@ public int updateDiary(DiaryVO _vo);
  * @return
  */
 public DiaryVO findDiaryByID(int _id);
-
+/**
+ * Find diary entries by patient and keyword
+ *
+ * @param _vo
+ * @param keyword
+ * @return
+ */
+public ArrayList<DiaryVO> findDiaryByKeyword(String keyword);
 /**
  * Find diary entries by PatientVO
  *
@@ -111,16 +75,6 @@ public DiaryVO findDiaryByID(int _id);
  * @see DiaryVO
  */
 public ArrayList<DiaryVO> findDiaryByPatient();
-
-/**
- * Find diary entries by patient and keyword
- *
- * @param _vo
- * @param keyword
- * @return
- */
-public ArrayList<DiaryVO> findDiaryByKeyword(String keyword);
-
 /**
  * Find diary entries by patient and tag
  *
@@ -129,8 +83,101 @@ public ArrayList<DiaryVO> findDiaryByKeyword(String keyword);
  * @return
  */
 public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag);
+/**
+ * Find user by HealthcareProviderVO ID
+ *
+ * @param _id
+ * @return {@linkplain HealthcareProviderVO} single
+ */
+public HealthcareProviderVO findHealthcareProviderID(int _id);
 
-public DbConnection getDB();
 
+/**
+ * Retrieves all {@linkplain HealthcareProviderVO} in database.
+ *
+ * @return All providers.
+ */
+public ArrayList<HealthcareProviderVO> findHealthcareProviders();
+/**
+ * Retrieves all HealthcareProviderVO by Keyword
+ *
+ * @param keyword      Search key.
+ * @param onlyAssigned Limit list to those assigned to user.
+ * @return List of matched {@linkplain HealthcareProviderVO}
+ */
+public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String keyword, boolean onlyAssigned);
+
+/**
+ * Retrieves all providers for current {@linkplain PatientVO user}
+ *
+ * @return Assigned {@linkplain HealthcareProviderVO}
+ */
+public ArrayList<HealthcareProviderVO> findHealthcareProvidersByStudent();
+/**
+ * Find user by user ID
+ *
+ * @param _id
+ * @return
+ */
+public PatientVO findPatientByID(int _id);
+/**
+ *
+ * @param _username
+ * @return
+ */
+public PatientVO findPatientByName(String _username);
+/**
+ *
+ * @param _username
+ * @param _password
+ * @return
+ */
+public PatientVO findPatientByPatientNameAndPassword(String _username, String _password);
+/**
+ * Return states by keyword
+ *
+ * @param keyword Abbr or full state name.
+ * @return
+ */
+public ArrayList<StateVO> findStatesByKeyword(String keyword);
 public PatientVO getCurrentUser();
+public DbConnection getDB();
+/**
+ * Retrieves all users
+ *
+ * @return
+ */
+public ArrayList<PatientVO> getPatients();
+
+/**
+ * Unassign medication to current user
+ *
+ * @return success
+ */
+public boolean unassignMedication();
+
+
+/**
+ * Update existing diary
+ *
+ * @param _vo DiaryVO to update. Nulls are ignored
+ * @return success
+ */
+public int updateDiary(DiaryVO _vo);
+/**
+ * Update HealthcareProvider
+ *
+ * @param _vo
+ * @return success
+ * @see HealthcareProviderVO
+ */
+public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo);
+/**
+ * Update existing patient
+ *
+ * @param _vo PatientVO to update. Nulls are ignored
+ * @return success
+ */
+public boolean updatePatient(PatientVO _vo);
+
 }

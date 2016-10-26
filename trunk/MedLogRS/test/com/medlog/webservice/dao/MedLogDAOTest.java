@@ -24,10 +24,13 @@ import static org.junit.Assert.*;
  */
 public class MedLogDAOTest {
 DbConnection db;
+int testNum = 0;
 int USER_ID= 2;
 public MedLogDAOTest() {
 }
-
+public int getTestNum(){
+   return ++testNum;
+}
 @BeforeClass
 public static void setUpClass() {
 }
@@ -132,13 +135,13 @@ public void tearDown() {
     */
    @Test
    public void testFindAllStates() {
-	  System.out.println( "findAllStates" );
-	  MedLogDAO instance = null;
-	  ArrayList<StateVO> expResult = null;
+	  System.out.println( "$ findAllStates" );
+	  MedLogDAO instance = new MedLogDAO(db, PatientVO.builder().patientID( 2).userName( "dan").userPassword( "asdf").build() );
+	  ArrayList<StateVO> expResult = instance.findAllStates();
 	  ArrayList<StateVO> result = instance.findAllStates();
+	  assertNotNull( "State list NULL",result );
 	  assertEquals( expResult, result );
-	  // TODO review the generated test code and remove the default call to fail.
-	  fail( "The test case is a prototype." );
+
    }
 
    /**
