@@ -274,13 +274,13 @@ public ArrayList<StateVO> findStatesByKeyword(String _keyword) {
 @Override
 public PatientVO getCurrentUser() {
    try {
-	  if ( user != null && user.getPatientID() > 0 && user.getUserName() != null ) {
+	  if ( getUser() != null && getUser().getPatientID() > 0 && getUser().getUserName() != null ) {
 		 loggedIn = true;
 	  }
    } catch (Exception e) {
 	  
    }
-   return user;
+   return getUser();
 }
 /**
  * Connection wrapper getter
@@ -299,6 +299,21 @@ public DbConnection getDB() {
 public ArrayList<PatientVO> getPatients() {
    throw new UnsupportedOperationException( "Not supported yet." );
 }
+
+   /**
+    * @return the user
+    */
+   public PatientVO getUser() {
+	  return user;
+   }
+
+   /**
+    * @param user the user to set
+    */
+   public void setUser(PatientVO user) {
+	  this.user = user;
+	  getCurrentUser();
+   }
 
 @Override
 public int updateDiary(DiaryVO _vo) {
@@ -477,6 +492,6 @@ private final DbConnection db;
 private String errorMessage;
 private boolean loggedIn;
 private boolean stateOK;
-private final PatientVO user;
+private PatientVO user;
 
 }

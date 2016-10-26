@@ -13,6 +13,7 @@ import com.medlog.webservice.vo.*;
  * @author (c)2016 Dan Kauffman
  */
 public class DB_STRINGS {
+
 /**
  * Params for Sp.
  * <ol><li> @PatientID
@@ -28,9 +29,9 @@ public class DB_STRINGS {
  * </li><li>,@inserted OUTPUT</li></ol>
  */
 public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
-		+ "?,?,?,?,?,"
-		+ "?,?,?,?,?,"
-		+ "?)}";
+											 + "?,?,?,?,?,"
+											 + "?,?,?,?,?,"
+											 + "?)}";
 /**
  * Select Diary Entries<ol><li>Id</li> <li> PatientID int</li><li>Keyword (null)</li></ol>
  */
@@ -57,6 +58,7 @@ public static final String SP_HEALTHCAREPROVIDER_SELECT = "{call [spHealthcarePr
  * </li><li>@addressStateID int = NULL
  * </li><li>@addressZip varchar (10) = NULL
  * </li><li> @inserted int OUTPUT</li></ol>
+ *
  * @see HealthcareProviderVO
  */
 public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProviderInsert](?,?,?,?,?,"
@@ -80,6 +82,7 @@ public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProv
  * </li><li>@addressStateID int = NULL
  * </li><li>@addressZip varchar (10) = NULL
  * </li></ol>
+ *
  * @see HealthcareProviderVO
  */
 public static final String SP_HEALTHCARE_UPDATE = "{call [dbo].[spHealthcareProviderUpdate](?,?,?,?,?,"
@@ -92,6 +95,7 @@ public static final String SP_HEALTHCARE_UPDATE = "{call [dbo].[spHealthcareProv
  * <li>HealthCareID</li>
  * <li>Assign?</li>
  * </ol>
+ *
  * @see PatientVO
  * @see HealthcareProviderVO
  */
@@ -126,11 +130,11 @@ public static final String SP_PATIENT_HEALTHCARE_CHANGEBINDING = "{call dbo.spPa
  * , </li><li>@inserted INT OUTPUT</li></ol>
  */
 public static final String SP_PATIENT_INSERT = "{call [spPatientInsert]("
-		+ "?,?,?,?,?,"
-		+ "?,?,?,?,?,"
-		+ "?,?,?,?,?,"
-		+ "?,?,?,?,?,"
-		+ "?,?,?,?,?)}";
+											   + "?,?,?,?,?,"
+											   + "?,?,?,?,?,"
+											   + "?,?,?,?,?,"
+											   + "?,?,?,?,?,"
+											   + "?,?,?,?,?)}";
 /**
  * Assign/Unassign patient med.
  * Params:<ol> <li> PatientID int,</li><li>PharmID int,</li><li>PhysicanID
@@ -138,8 +142,8 @@ public static final String SP_PATIENT_INSERT = "{call [spPatientInsert]("
  * date = getdate,</li><li>endDate date = NULL,@active bit = 1</li></ol>
  */
 public static final String SP_PATIENT_MEDICATION = "{call spMedicationPatientChangeBinding("
-		+ "?,?,?,?,?,"
-		+ "?,?,?)}";
+												   + "?,?,?,?,?,"
+												   + "?,?,?)}";
 /**
  * SELECT PATIENT STORED PROCEDURE
  */
@@ -153,6 +157,36 @@ public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate](}";
  * Returns in order: ID, Name, Abbr.
  */
 public static final String SP_STATE_SELECT = "{call spStateSelect()}";
+public static final String SP_PHARM_SELECT = "{call [spPharma_RX_OTCSelect](?,?)}";
+/**
+ * Insert Phar/Otc Record
+ * <ol><li>@MedType varchar (16) = NULL
+ * </li><li>@RXCUI varchar (8)
+ * </li><li>@GENERIC_RXCUI varchar (8) = NULL
+ * </li><li>@TTY varchar (20)
+ * </li><li>@FULL_NAME varchar (3000)
+ * </li><li>@RXN_DOSE_FORM varchar (100)
+ * </li><li>@FULL_GENERIC_NAME varchar (3000)
+ * </li><li>@BRAND_NAME varchar (500) = NULL
+ * </li><li>@DISPLAY_NAME varchar (3000)
+ * </li><li>@ROUTE varchar (100)
+ * </li><li>@NEW_DOSE_FORM varchar (100)
+ * </li><li>@STRENGTH varchar (500)
+ * </li><li>@SUPPRESS_FOR varchar (30) = NULL
+ * </li><li>@DISPLAY_NAME_SYNONYM varchar (500) = NULL
+ * </li><li>@IS_RETIRED varchar (8) = NULL
+ * </li><li>@SXDG_RXCUI varchar (8) = NULL
+ * </li><li>@SXDG_TTY varchar (20) = NULL
+ * </li><li>@SXDG_NAME varchar (3000) = NULL
+ * </li><li>@PSN varchar (3000) = NULL
+ * </li><li> @inserted int OUTPUT</li></ol>
+ * @see PharmaRxOtcVO
+ */
+public static final String SP_PHARM_INSERT = "{call [spPharma_RX_OTCInsert]("
+											 + "?,?,?,?,?,"
+											 + "?,?,?,?,?,"
+											 + "?,?,?,?,?,"
+											 + "?,?,?,?,?)}";
 
 /**
  * Do not allow instantiation.
