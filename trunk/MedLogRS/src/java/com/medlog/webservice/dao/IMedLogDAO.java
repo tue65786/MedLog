@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.dao;
 
+import com.medlog.webservice.CONST.*;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.vo.*;
 import java.util.*;
@@ -17,8 +18,11 @@ public interface IMedLogDAO {
 /**
  * Assigns medication to current user
  *
-    * @param _vo
+    * @param _vo Join Med
+	* SQL SP - {@linkplain DB_STRINGS#SP_PATIENT_MEDICATION}
  * @return newID
+ * @see DB_STRINGS#SP_PATIENT_MEDICATION
+ * 
  */
 public int assignMedication(MedicationVO _vo);
 public int createDiary(DiaryVO _vo);
@@ -153,6 +157,7 @@ public ArrayList<PatientVO> getPatients();
  * Unassign medication to current user
  *
  * @return success
+ * @see DB_STRINGS#SP_PATIENT_MEDICATION
  */
 public boolean unassignMedication();
 

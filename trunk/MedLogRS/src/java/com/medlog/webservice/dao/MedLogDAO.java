@@ -38,6 +38,11 @@ private static Map<Integer, StateVO> statesList;
    findAllStates();
 }
 
+   @Override
+   public int assignMedication(MedicationVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public int createDiary(DiaryVO _vo) {
    CallableStatement cs = null;
@@ -107,6 +112,11 @@ public int createDiary(DiaryVO _vo) {
    }
    return newID;
 }
+
+   @Override
+   public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
 
 @Override
 public int createPatient(PatientVO _vo) {
@@ -226,6 +236,26 @@ public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
+   @Override
+   public HealthcareProviderVO findHealthcareProviderID(int _id) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public ArrayList<HealthcareProviderVO> findHealthcareProviders() {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String _keyword, boolean _onlyAssigned) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public ArrayList<HealthcareProviderVO> findHealthcareProvidersByStudent() {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public PatientVO findPatientByID(int _id) {
    ArrayList<PatientVO> voList = findPatient( _id, null, null );
@@ -315,10 +345,20 @@ public ArrayList<PatientVO> getPatients() {
 	  getCurrentUser();
    }
 
+   @Override
+   public boolean unassignMedication() {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public int updateDiary(DiaryVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." );
 }
+
+   @Override
+   public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
 
 @Override
 public boolean updatePatient(PatientVO _vo) {
