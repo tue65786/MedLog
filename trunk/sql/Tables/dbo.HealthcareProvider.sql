@@ -3,7 +3,7 @@ SET QUOTED_IDENTIFIER ON
 SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[HealthcareProvider] (
-		[PhysicianID]                               [int] NOT NULL,
+		[PhysicianID]                               [int] IDENTITY(1, 1) NOT NULL,
 		[lastname]                                  [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 		[firstname]                                 [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 		[specialty]                                 [nvarchar](256) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

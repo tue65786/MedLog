@@ -1,13 +1,19 @@
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 GO
-
+-- =============================================
+-- Author:		Dan K.
+-- Project:		MedLog
+-- Create date: 2016-10-10
+-- Modify date: 2016-10-25
+-- Description:	Inserts  Diary record
+-- =============================================
 CREATE PROC [dbo].[spDiaryInsert]
 @PatientID int
 ,@Title nvarchar (250) 
 ,@Notes nvarchar (max) 
 ,@NotesActivity nvarchar (max) = NULL
-,@createdDate datetime = GETDATE
+,@createdDate datetime = NULL
 ,@updatedDate datetime = NULL
 ,@includce_meds_current nchar (10) = NULL
 ,@attachmentPath nvarchar (255) = NULL
@@ -35,7 +41,7 @@ BEGIN
 ,		   @Title
 ,		   @Notes
 ,		   @NotesActivity
-,		   @createdDate
+,		   ISNULL(@createdDate,GETDATE())
 ,		   @updatedDate
 ,		   @includce_meds_current
 ,		   @attachmentPath
