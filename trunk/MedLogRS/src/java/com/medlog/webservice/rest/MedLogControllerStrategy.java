@@ -197,9 +197,26 @@ private String getDiaryResponse(MedLogDAO dao, Gson g) {
 }
 
 public MedicationVO loadMedicationFromRequest() {
+    /*if ( getCurrentUser() == null ) {
+	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
+	  return null;
+   }*///don't know if above is necessary or not
    ServletHelpers sh = new ServletHelpers( request, response );
    MedicationVO.Builder t = MedicationVO.builder();
-   //TODO Add request params
+   //TODO Finish request params
+   t.medicationID( sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) ) );
+   t.patientID( getCurrentUser() );
+   //t.pharmID     ????????
+   //t.physician   ???????
+   t.instructions( sh.getStrParameter( "instructions", "" ) );
+   //t.sig ?????
+   t.startDate( sh.getDateParameter( "startDate", new Date() ) );
+   t.endDate( sh.getDateParameter( "endDate", new Date() ) );
+   t.dosage( sh.getStrParameter( "dosage", "" ) );
+   t.frequencySig( sh.getStrParameter( "frequencySig", "" ) );
+   t.active( sh.getBooleanParameter( "active", true ) );
+   //t.tagList ???
+   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadMedicationFromRequest()\n==> " + t.build().toJSON() );
    return t.build();
 }
 
@@ -257,12 +274,37 @@ public PatientVO loadPatientFromRequest() {
 //  "userRole": 1,
 
 }
-
+public HealthcareProviderVO loadProviderFromRequest(){
+    /*if ( getCurrentUser() == null ) {
+	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
+	  return null;
+   }*///don't know if above is necessary or not
+   ServletHelpers sh = new ServletHelpers( request, response );
+   HealthcareProviderVO.Builder q = HealthcareProviderVO.builder();
+   q.physicianID( sh.getIntParameter( "id", sh.getIntParameter( "physicianID", 0 ) ) );
+   q.lastName( sh.getStrParameter( "lastName", "" ) );
+   q.firstName( sh.getStrParameter( "firstName", "" ) );
+   q.specialty( sh.getStrParameter( "specialty", "" ) );
+   q.phoneWork( sh.getStrParameter( "phoneWork", "" ) );
+   q.phoneMobile( sh.getStrParameter( "phoneMobile", "" ) );
+   //q.phonePager ???
+   q.phoneFax( sh.getStrParameter( "phoneFax", "" ) );
+   q.email( sh.getStrParameter( "email", "" ) );
+   q.patientLogCommunicationPreference( sh.getStrParameter( "lastName", "" ) );
+   q.addressStreet( sh.getStrParameter( "addressStreet", "" ) );
+   q.addressCity( sh.getStrParameter( "addressCity", "" ) );
+   q.addressZip( sh.getStrParameter( "addressZip", "" ) );
+   q.addressStateID( StateVO.builder().stateID( sh.getIntParameter( "stateID", sh.getIntParameter( "stateid", 0 ) ) ).build() );
+   //q.patientList
+   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadProviderFromRequest()\n==> " + q.build().toJSON() );
+   return q.build();
+}
 /**
  * Translate Diary
  *
  * @return
  */
+
 public DiaryVO loadDiaryFromRequest() {
    if ( getCurrentUser() == null ) {
 	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
