@@ -27,7 +27,7 @@ private static final long serialVersionUID = -6426975328081170068L;
  * @param phonePager
  * @param phoneFax
  * @param email
- * @param pathientLogCommunicationPreference
+ * @param patientLogCommunicationPreference
  * @param addressStreet
  * @param addressCity
  * @param addressZip
@@ -35,8 +35,8 @@ private static final long serialVersionUID = -6426975328081170068L;
  * @param addressStateID
  * @return 
  */
-   public static HealthcareProviderVO create(final int physicianID, final String lastName, final String firstName, final String specialty, final String phoneWork, final String phoneMobile, final byte[] phonePager, final String phoneFax, final String email, final String pathientLogCommunicationPreference, final String addressStreet, final String addressCity, final String addressZip, final List<PatientVO> patientList, final StateVO addressStateID) {
-	  return new HealthcareProviderVO( physicianID, lastName, firstName, specialty, phoneWork, phoneMobile, phonePager, phoneFax, email, pathientLogCommunicationPreference, addressStreet, addressCity, addressZip, patientList, addressStateID );
+   public static HealthcareProviderVO create(final int physicianID, final String lastName, final String firstName, final String specialty, final String phoneWork, final String phoneMobile, final byte[] phonePager, final String phoneFax, final String email, final String patientLogCommunicationPreference, final String addressStreet, final String addressCity, final String addressZip, final List<PatientVO> patientList, final StateVO addressStateID) {
+	  return new HealthcareProviderVO( physicianID, lastName, firstName, specialty, phoneWork, phoneMobile, phonePager, phoneFax, email, patientLogCommunicationPreference, addressStreet, addressCity, addressZip, patientList, addressStateID );
    }
 
 @Override
@@ -72,7 +72,7 @@ public String phoneMobile;
 public byte[] phonePager;
 public String phoneFax;
 public String email;
-public String pathientLogCommunicationPreference;
+public String patientLogCommunicationPreference;
 public String addressStreet;
 public String addressCity;
 public String addressZip;
@@ -90,7 +90,7 @@ public StateVO addressStateID;
    private byte[] phonePager;
    private String phoneFax;
    private String email;
-   private String pathientLogCommunicationPreference;
+   private String patientLogCommunicationPreference;
    private String addressStreet;
    private String addressCity;
    private String addressZip;
@@ -145,8 +145,8 @@ public StateVO addressStateID;
 	  return this;
    }
 
-   public Builder pathientLogCommunicationPreference(final String value) {
-	  this.pathientLogCommunicationPreference = value;
+   public Builder patientLogCommunicationPreference(final String value) {
+	  this.patientLogCommunicationPreference = value;
 	  return this;
    }
 
@@ -176,7 +176,7 @@ public StateVO addressStateID;
    }
 
    public HealthcareProviderVO build() {
-	  return HealthcareProviderVO.create( physicianID, lastName, firstName, specialty, phoneWork, phoneMobile, phonePager, phoneFax, email, pathientLogCommunicationPreference, addressStreet, addressCity, addressZip, patientList, addressStateID );
+	  return HealthcareProviderVO.create( physicianID, lastName, firstName, specialty, phoneWork, phoneMobile, phonePager, phoneFax, email, patientLogCommunicationPreference, addressStreet, addressCity, addressZip, patientList, addressStateID );
    }
    }
 /**
@@ -197,7 +197,7 @@ public StateVO addressStateID;
 	  this.phonePager = phonePager;
 	  this.phoneFax = phoneFax;
 	  this.email = email;
-	  this.pathientLogCommunicationPreference = pathientLogCommunicationPreference;
+	  this.patientLogCommunicationPreference = patientLogCommunicationPreference;
 	  this.addressStreet = addressStreet;
 	  this.addressCity = addressCity;
 	  this.addressZip = addressZip;
