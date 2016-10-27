@@ -199,7 +199,20 @@ private String getDiaryResponse(MedLogDAO dao, Gson g) {
 public MedicationVO loadMedicationFromRequest() {
    ServletHelpers sh = new ServletHelpers( request, response );
    MedicationVO.Builder t = MedicationVO.builder();
-   //TODO Add request params
+   //TODO Finish request params
+   t.medicationID( sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) ) );
+   t.patientID( getCurrentUser() );
+   //t.pharmID     ????????
+   //t.physician   ???????
+   t.instructions( sh.getStrParameter( "instructions", "" ) );
+   //t.sig ?????
+   t.startDate( sh.getDateParameter( "startDate", new Date() ) );
+   t.endDate( sh.getDateParameter( "endDate", new Date() ) );
+   t.dosage( sh.getStrParameter( "dosage", "" ) );
+   t.frequencySig( sh.getStrParameter( "frequencySig", "" ) );
+   t.active( sh.getBooleanParameter( "active", true ) );
+   //t.tagList ???
+   
    return t.build();
 }
 
