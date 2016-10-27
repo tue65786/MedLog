@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.rest;
 
+import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
@@ -20,52 +21,55 @@ public enum RES_ENUM {
 /**
  * Valid {@linkplain DiaryVO} API functions
  */
-API_RESOURCE_DIARY( "d", new String[]{ API_FUNCTION_FIND,
-									   API_FUNCTION_FIND_BY_KEYWORD,
-									   API_FUNCTION_INSERT,
-									   API_FUNCTION_UPDATE,
-									   API_FUNCTION_DELETE
+API_RESOURCE_DIARY( API_ACTIONS.API_RESOURCE_DIARY, new String[]{ API_FUNCTION_FIND,
+																  API_FUNCTION_FIND_BY_KEYWORD,
+																  API_FUNCTION_INSERT,
+																  API_FUNCTION_UPDATE,
+																  API_FUNCTION_DELETE
 } ),
 /**
  * Valid {@linkplain HealthcareProviderVO Health-care Provider} API Function
  */
-API_RESOURCE_HEALTHCARE_PROVIDER( "h", new String[]{ API_FUNCTION_ASSIGN,
-													 API_FUNCTION_UNASSIGN,
-													 API_FUNCTION_INSERT,
-													 API_FUNCTION_UPDATE,
-													 API_FUNCTION_FIND,
-													 API_FUNCTION_FIND_BY_KEYWORD,
-													 API_FUNCTION_DELETE } ),
+API_RESOURCE_HEALTHCARE_PROVIDER( API_ACTIONS.API_RESOURCE_HEALTHCARE_PROVIDER, new String[]{ API_FUNCTION_ASSIGN,
+																							  API_FUNCTION_UNASSIGN,
+																							  API_FUNCTION_INSERT,
+																							  API_FUNCTION_UPDATE,
+																							  API_FUNCTION_FIND,
+																							  API_FUNCTION_FIND_BY_KEYWORD,
+																							  API_FUNCTION_DELETE } ),
 /**
- *  Medication API Resource Functions
+ * Medication API Resource Functions
+ *
  * @see MedicationVO
  * @see PharmaRxOtcVO
  */
-API_RESOURCE_MEDICATION( "m", new String[]{ API_FUNCTION_ASSIGN,
-											API_FUNCTION_UNASSIGN,
-											API_FUNCTION_FIND,
-											API_FUNCTION_FIND_BY_KEYWORD,
-											API_FUNCTION_INSERT,
-											API_FUNCTION_UPDATE, } ),
+API_RESOURCE_MEDICATION( API_ACTIONS.API_RESOURCE_MEDICATION, new String[]{ API_FUNCTION_ASSIGN,
+																			API_FUNCTION_UNASSIGN,
+																			API_FUNCTION_FIND } ),
 /**
  * {@linkplain PatientVO Patient} Resource Functions
  *
  * @see PatientVO
  */
-API_RESOURCE_PATIENT( "p", new String[]{ API_FUNCTION_INSERT,
-										 API_FUNCTION_UPDATE,
-										 API_FUNCTION_DELETE,
-										 API_FUNCTION_FIND_BY_ID
+API_RESOURCE_PATIENT( API_ACTIONS.API_RESOURCE_PATIENT, new String[]{ API_FUNCTION_INSERT,
+																	  API_FUNCTION_UPDATE,
+																	  API_FUNCTION_DELETE,
+																	  API_FUNCTION_FIND_BY_ID
 } ),
-API_RESOURCE_DIATARY_RESTRICTION( "r", new String[]{ "", "" } ),
+API_RESOURCE_DIATARY_RESTRICTION( API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION, new String[]{ "", "" } ),
 /**
  * {@linkplain StateVO} Lookup Resource Functions.
+ *
  * @see StateVO
  */
-API_RESOURCE_STATES( "s", new String[]{ API_FUNCTION_FIND, 
+API_RESOURCE_STATES( "s", new String[]{ API_FUNCTION_FIND,
 										API_FUNCTION_FIND_BY_ID } ),
-INVALID("-",new String[]{ "-" });
-
+INVALID( "-", new String[]{ "-" } );
+/**
+ * Constructs Resource ENUM
+ * @param rCode Request param value
+ * @param validFunction validFunctions list
+ */
 RES_ENUM(String rCode, String[] validFunction) {
    RESOURCE_Code = rCode;
    VALID_Functions = validFunction;
@@ -74,34 +78,39 @@ RES_ENUM(String rCode, String[] validFunction) {
 public final String getCode() {
    return RESOURCE_Code;
 }
+
 /**
  * List of valid functions for resource
+ *
  * @return csv
  */
-public final String getValidFunctions() {  
-   return Arrays.toString(VALID_Functions );
+public final String getValidFunctions() {
+   return Arrays.toString( VALID_Functions );
 }
+
 /**
  * Tranform
+ *
  * @param k
- * @return 
+ * @return
  */
-public static RES_ENUM findByChar(String k){
-   for (RES_ENUM e : values()){
-	  if (k.equals( e.getCode())){
+public static RES_ENUM findByChar(String k) {
+   for ( RES_ENUM e : values() ) {
+	  if ( k.equals( e.getCode() ) ) {
 		 return e;
 	  }
    }
    return INVALID;
 }
+
 public boolean isValidFunction(String fn) {
    return StrUtl.matchOR( fn, VALID_Functions );
 }
 
 @Override
-public String toString(){
-   
-   return "{\""+ name() + "\":{\""+RESOURCE_Code + "\":\"{functions\":" + getValidFunctions() +  "}}}" + (this.equals( INVALID) ? "":",");
+public String toString() {
+
+   return "{\"" + name() + "\":{\"" + RESOURCE_Code + "\":\"{functions\":" + getValidFunctions() + "}}}" + ( this.equals( INVALID ) ? "" : "," );
 }
 
 private final String RESOURCE_Code;

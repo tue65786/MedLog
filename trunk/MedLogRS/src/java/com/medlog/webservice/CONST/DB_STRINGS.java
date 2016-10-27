@@ -37,8 +37,24 @@ public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
  */
 public static final String SP_DIARY_SELECT = "{call [spDiarySelect](?,?,?)}";
 /**
- * Select Healthcare provider Entries<ol><li>DoctorId int</li> <li> PatientID int</li><li>Keyword
+ * Select Healthcare provider Entries <b>Params:</b><ol><li>DoctorId int</li> <li> PatientID
+ * int</li><li>Keyword
  * (null)</li></ol>
+ * <b>Result Set</b>
+ * <ol><li> [PhysicianID]
+ * </li><li>	[lastname]
+ * </li><li>	[firstname]
+ * </li><li>	[specialty]
+ * </li><li>	[phoneWork]
+ * </li><li>	[phoneMobile]
+ * </li><li>	[phonePager]
+ * </li><li>	[phoneFax]
+ * </li><li>	[email]
+ * </li><li>	[pathient_log_communication_preference]
+ * </li><li>	[addressStreet]
+ * </li><li>	[addressCity]
+ * </li><li>	[addressStateID]
+ * </li><li>	[addressZip]</li></ol>
  */
 public static final String SP_HEALTHCAREPROVIDER_SELECT = "{call [spHealthcareProviderSelect](?,?,?)}";
 /**
@@ -180,6 +196,7 @@ public static final String SP_PHARM_SELECT = "{call [spPharma_RX_OTCSelect](?,?)
  * </li><li>@SXDG_NAME varchar (3000) = NULL
  * </li><li>@PSN varchar (3000) = NULL
  * </li><li> @inserted int OUTPUT</li></ol>
+ *
  * @see PharmaRxOtcVO
  */
 public static final String SP_PHARM_INSERT = "{call [spPharma_RX_OTCInsert]("

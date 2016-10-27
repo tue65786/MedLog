@@ -25,12 +25,12 @@ public class MedLogDAO implements IMedLogDAO {
 private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
 private static Map<Integer, StateVO> statesList;
 
-   /**
-    *
-    * @param db
-    * @param u
-    */
-   public MedLogDAO(DbConnection db, PatientVO u) {
+/**
+ *
+ * @param db
+ * @param u
+ */
+public MedLogDAO(DbConnection db, PatientVO u) {
    this.db = db;
    this.user = u;
    stateOK = true;
@@ -38,10 +38,10 @@ private static Map<Integer, StateVO> statesList;
    findAllStates();
 }
 
-   @Override
-   public int assignMedication(MedicationVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public int assignMedication(MedicationVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public int createDiary(DiaryVO _vo) {
@@ -63,26 +63,26 @@ public int createDiary(DiaryVO _vo) {
 		 cs.setInt( 1, getCurrentUser().getPatientID() );
 
 		 if ( _vo.getTitle() != null ) {
-			cs.setString(2, _vo.getTitle());
+			cs.setString( 2, _vo.getTitle() );
 		 } else {
 			cs.setNull( 2, java.sql.Types.NVARCHAR );
 		 }
 //		 if ( _vo.notes != null ) {
-		 cs.setString( 3, StrUtl.removeHtmlMarkups(_vo.getNotes()) );
+		 cs.setString( 3, StrUtl.removeHtmlMarkups( _vo.getNotes() ) );
 //		 } else {
 //			cs.setNull( 3, java.sql.Types.NVARCHAR );
 //		 }
 		 if ( _vo.getNotesActivity().isEmpty() ) {
 			cs.setNull( 4, java.sql.Types.NVARCHAR );
 		 } else {
-			cs.setString( 4, StrUtl.removeHtmlMarkups(_vo.getNotesActivity()) );
+			cs.setString( 4, StrUtl.removeHtmlMarkups( _vo.getNotesActivity() ) );
 		 }
 		 cs.setNull( 5, java.sql.Types.DATE );
 		 cs.setNull( 6, java.sql.Types.DATE );
 		 cs.setNull( 7, java.sql.Types.NCHAR );
 		 cs.setNull( 8, java.sql.Types.NVARCHAR );
-		 cs.setInt(9, _vo.getMood());
-		 cs.setInt(10, _vo.getProductivity());
+		 cs.setInt( 9, _vo.getMood() );
+		 cs.setInt( 10, _vo.getProductivity() );
 		 cs.registerOutParameter( 11, java.sql.Types.INTEGER );
 		 cs.executeUpdate();
 		 newID = cs.getInt( 11 );
@@ -113,10 +113,10 @@ public int createDiary(DiaryVO _vo) {
    return newID;
 }
 
-   @Override
-   public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public int createPatient(PatientVO _vo) {
@@ -213,6 +213,7 @@ public final ArrayList<StateVO> findAllStates() {
    return vos;
 
 }
+
 @Override
 public DiaryVO findDiaryByID(int _id) {
    ArrayList<DiaryVO> voList = findDiary( 0, null );
@@ -221,40 +222,53 @@ public DiaryVO findDiaryByID(int _id) {
    } else {
 	  return voList.get( 0 );
    }
-   
+
 }
+
 @Override
 public ArrayList<DiaryVO> findDiaryByKeyword(String _keyword) {
    return findDiary( 0, StrUtl.toS( _keyword ) );
 }
+
 @Override
 public ArrayList<DiaryVO> findDiaryByPatient() {
    return findDiary( 0, null );
 }
+
 @Override
 public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+/**
+ * HealtcareProvider Search
+ * @param _id {@linkPlain
+ * @param _keyword 
+ * @param _onlyAssigned For current {@linkplain PatientVO}
+ * @return List
+ */
+private ArrayList<HealthcareProviderVO> findHealthcareProviders(int _id, String _keyword, boolean _onlyAssigned) {
+   return null;
+}
 
-   @Override
-   public HealthcareProviderVO findHealthcareProviderID(int _id) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public HealthcareProviderVO findHealthcareProviderID(int _id) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
-   @Override
-   public ArrayList<HealthcareProviderVO> findHealthcareProviders() {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public ArrayList<HealthcareProviderVO> findHealthcareProviders() {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
-   @Override
-   public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String _keyword, boolean _onlyAssigned) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String _keyword, boolean _onlyAssigned) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
-   @Override
-   public ArrayList<HealthcareProviderVO> findHealthcareProvidersByStudent() {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public ArrayList<HealthcareProviderVO> findHealthcareProvidersByStudent() {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public PatientVO findPatientByID(int _id) {
@@ -301,6 +315,7 @@ public PatientVO findPatientByPatientNameAndPassword(String _username, String _p
 public ArrayList<StateVO> findStatesByKeyword(String _keyword) {
    throw new UnsupportedOperationException( "Not supported yet." );
 }
+
 @Override
 public PatientVO getCurrentUser() {
    try {
@@ -308,10 +323,11 @@ public PatientVO getCurrentUser() {
 		 loggedIn = true;
 	  }
    } catch (Exception e) {
-	  
+
    }
    return getUser();
 }
+
 /**
  * Connection wrapper getter
  *
@@ -330,40 +346,42 @@ public ArrayList<PatientVO> getPatients() {
    throw new UnsupportedOperationException( "Not supported yet." );
 }
 
-   /**
-    * @return the user
-    */
-   public PatientVO getUser() {
-	  return user;
-   }
+/**
+ * @return the user
+ */
+public PatientVO getUser() {
+   return user;
+}
 
-   /**
-    * @param user the user to set
-    */
-   public void setUser(PatientVO user) {
-	  this.user = user;
-	  getCurrentUser();
-   }
+/**
+ * @param user the user to set
+ */
+public void setUser(PatientVO user) {
+   this.user = user;
+   getCurrentUser();
+}
 
-   @Override
-   public boolean unassignMedication() {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public boolean unassignMedication() {
+
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public int updateDiary(DiaryVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." );
 }
 
-   @Override
-   public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public boolean updatePatient(PatientVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
 /**
  * Diary selection base
  *
@@ -374,7 +392,7 @@ public boolean updatePatient(PatientVO _vo) {
 private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
    ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
    _keyword = StrUtl.toS( _keyword );
-   
+
    CallableStatement cs = null;
    ResultSet rs = null;
    boolean valid = true;
@@ -387,7 +405,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 		 cs.setNull( 1, java.sql.Types.INTEGER );
 	  }
 	  cs.setInt( 2, getCurrentUser().getPatientID() );
-	  if (DEBUG){
+	  if ( DEBUG ) {
 		 System.out.println( "com.medlog.webservice.dao.MedLogDAO.findDiary() UserID=" + getCurrentUser().getPatientID() );
 	  }
 	  if ( _keyword.isEmpty() ) {
@@ -397,7 +415,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 		 cs.setString( 3, _keyword );
 		 cs.setNull( 3, java.sql.Types.NVARCHAR );
 	  }
-	  
+
 	  if ( valid ) {
 		 rs = cs.executeQuery();
 		 while ( rs.next() ) {
@@ -405,7 +423,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 					.id( rs.getInt( "id" ) )
 					.title( rs.getString( "title" ) )
 					.notes( rs.getString( "notes" ) )
-					.notesActivity( rs.getString( "notesActivity"))
+					.notesActivity( rs.getString( "notesActivity" ) )
 					.mood( rs.getInt( "ratingMood" ) )
 					.productivity( rs.getInt( "ratingProductivity" ) )
 					.patientID( getCurrentUser() )
@@ -427,6 +445,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
    }
    return voList;
 }
+
 /**
  * Handle patient lookup for login etal
  *
