@@ -77,7 +77,8 @@ public static final String SP_HEALTHCAREPROVIDER_SELECT = "{call [spHealthcarePr
  *
  * @see HealthcareProviderVO
  */
-public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProviderInsert](?,?,?,?,?,"
+public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProviderInsert]("
+												  + "?,?,?,?,?,"
 												  + "?,?,?,?,?,"
 												  + "?,?,?,?)}";
 /**
@@ -101,9 +102,41 @@ public static final String SP_HEALTHCARE_INSERT = "{call [dbo].[spHealthcareProv
  *
  * @see HealthcareProviderVO
  */
-public static final String SP_HEALTHCARE_UPDATE = "{call [dbo].[spHealthcareProviderUpdate](?,?,?,?,?,"
+public static final String SP_HEALTHCARE_UPDATE = "{call [dbo].[spHealthcareProviderUpdate]("
+												  + "?,?,?,?,?,"
 												  + "?,?,?,?,?,"
 												  + "?,?,?,?)}";
+/**
+ * <ol><li>@PatientID int
+ * </li><li>@PharmID int
+ * </li><li>@PhysicanID int = NULL
+ * </li><li>@Instructions nvarchar (max) = NULL
+ * </li><li>@Sig varchar (50) = NULL
+ * </li><li>@StartDate date = getdate
+ * </li><li>@endDate date = NULL
+ * </li><li>@active bit = 1 <i>Set to 0 to delete</i></li></ol>
+ */
+public static final String SP_MEDICATION_CHANGE_BINDING = "{call  [spMedicationPatientChangeBinding]("
+														  + "?,?,?,?,?,"
+														  + "?,?,?)}";
+/**
+ * Param
+ * * <ol><li>MedID <i>null</i>
+ * </li><li>PatientID <b>Req</b></li></ol>
+ * Result
+ * <ol> <li>[MedicationID]
+ * </li><li>	[PatientID]
+ * </li><li>	[PharmID]
+ * </li><li>	[PhysicianID]
+ * </li><li>	[Instructions]
+ * </li><li>	[Sig]
+ * </li><li>	[StartDate]
+ * </li><li>	[EndDate]
+ * </li><li>	[Dosage]
+ * </li><li>	[FrequencySig]
+ * </li><li>	[Active]</li></ol>
+ */
+public static final String SP_MEDICATION_SELECT = "{call [spMedicationSelect](?,?)}";
 /**
  * Assigns / Removes {@linkplain PatientVO} to/from {@linkplain HealthcareProviderVO}
  * Params: <ol>
@@ -115,7 +148,7 @@ public static final String SP_HEALTHCARE_UPDATE = "{call [dbo].[spHealthcareProv
  * @see PatientVO
  * @see HealthcareProviderVO
  */
-public static final String SP_PATIENT_HEALTHCARE_CHANGEBINDING = "{call dbo.spPatientChangeHealthCareProviderBinding(?,?,?)}";
+public static final String SP_PATIENT_HEALTHCARE_CHANGEBINDING = "{call dbo.[spPatientChangeHealthCareProviderBinding](?,?,?)}";
 /**
  * INSERT PATIENT STORED PROCEDURE.
  * Param:
@@ -151,15 +184,7 @@ public static final String SP_PATIENT_INSERT = "{call [spPatientInsert]("
 											   + "?,?,?,?,?,"
 											   + "?,?,?,?,?,"
 											   + "?,?,?,?,?)}";
-/**
- * Assign/Unassign patient med.
- * Params:<ol> <li> PatientID int,</li><li>PharmID int,</li><li>PhysicanID
- * int=NULL,</li><li>Instructions nvarchar(max) = NULL,</li><li>Sig varchar(50),</li><li>StartDate
- * date = getdate,</li><li>endDate date = NULL,@active bit = 1</li></ol>
- */
-public static final String SP_PATIENT_MEDICATION = "{call spMedicationPatientChangeBinding("
-												   + "?,?,?,?,?,"
-												   + "?,?,?)}";
+
 /**
  * SELECT PATIENT STORED PROCEDURE
  */
@@ -168,12 +193,6 @@ public static final String SP_PATIENT_SELECT = "{call [spPatientSelect](?,?,?)}"
  * UPDATE PATIENT STORED PROCEDURE
  */
 public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate](}";
-/**
- * Retrieves all {@linkplain StateVO} objects.
- * Returns in order: ID, Name, Abbr.
- */
-public static final String SP_STATE_SELECT = "{call spStateSelect()}";
-public static final String SP_PHARM_SELECT = "{call [spPharma_RX_OTCSelect](?,?)}";
 /**
  * Insert Phar/Otc Record
  * <ol><li>@MedType varchar (16) = NULL
@@ -204,6 +223,31 @@ public static final String SP_PHARM_INSERT = "{call [spPharma_RX_OTCInsert]("
 											 + "?,?,?,?,?,"
 											 + "?,?,?,?,?,"
 											 + "?,?,?,?,?)}";
+public static final String SP_PHARM_SELECT = "{call [spPharma_RX_OTCSelect](?,?)}";
+/**
+ * Params:
+ * <ol><li>PharmID <i>null</i>
+ * </li><li>PatientID <b>Req</b></li></ol>
+ * Result set order:
+ * <ol><li>ROW_NUMBER() OVER (ORDER BY DISPLAY_NAME,STRENGTH) AS Row
+ * </li><li>d.PharmID
+ * </li><li>d.MedType
+ * </li><li>d.RXCUI
+ * --</li><li>d.GENERIC_RXCUI
+ * </li><li>d.TTY
+ * </li><li>d.DISPLAY_NAME
+ * </li><li>d.STRENGTH</li></ol>
+ */
+public static final String SP_PHARM_SELECT_SHORT = "{call [spPharma_RX_OTCSelectShort](?,?)}";
+/**
+ * SigID
+ */
+public static final String SP_SIGS_SELECT = "{call [spSigSelect](?)}";
+/**
+ * Retrieves all {@linkplain StateVO} objects.
+ * Returns in order: ID, Name, Abbr.
+ */
+public static final String SP_STATE_SELECT = "{call spStateSelect()}";
 
 /**
  * Do not allow instantiation.

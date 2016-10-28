@@ -44,6 +44,19 @@ public class ApplicationBean {
 	  return true;
    }
    
+    public  <T extends IEntityBase>  boolean putPut(String name,Map<Integer,T> voMap){
+	  return true;
+	  
+   }
+   public <T extends IEntityBase> Map<Integer,T> getMap(String name){
+	   try {
+			return  (Map<Integer, T>) context.getAttribute( name );
+		 }
+		 catch(Exception e){
+			
+		 }
+	   return null;
+   }
    public <T extends IEntityBase> ArrayList<T> getList(String name){
 	  
 	  if (context != null && context.getAttribute( name ) != null){
