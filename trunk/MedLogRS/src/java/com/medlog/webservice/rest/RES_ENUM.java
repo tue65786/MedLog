@@ -62,12 +62,20 @@ API_RESOURCE_DIATARY_RESTRICTION( API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION, 
  *
  * @see StateVO
  */
-API_RESOURCE_STATES( "s", new String[]{ API_FUNCTION_FIND,
-										API_FUNCTION_FIND_BY_ID } ),
+API_RESOURCE_STATES( API_ACTIONS.API_RESOURCE_STATES, new String[]{ API_FUNCTION_FIND,
+																	API_FUNCTION_FIND_BY_ID } ),
+API_RESOURCE_SIGS( "g", new String[]{ API_FUNCTION_FIND,
+									  API_FUNCTION_FIND_BY_ID } ),
+API_RESOURCE_PHARM( API_ACTIONS.API_RESOURCE_PHARM, new String[]{ API_FUNCTION_INSERT,
+																  API_FUNCTION_UPDATE,
+																  API_FUNCTION_FIND,
+																  API_FUNCTION_FIND_BY_ID } ),
 INVALID( "-", new String[]{ "-" } );
+
 /**
  * Constructs Resource ENUM
- * @param rCode Request param value
+ *
+ * @param rCode         Request param value
  * @param validFunction validFunctions list
  */
 RES_ENUM(String rCode, String[] validFunction) {

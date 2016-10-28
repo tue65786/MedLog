@@ -274,6 +274,12 @@ public PatientVO loadPatientFromRequest() {
 //  "userRole": 1,
 
 }
+/**
+ * Load from request to POJO
+ * @return 
+ * @see HttpServletRequest#getParameterMap() 
+ * @see HealthcareProviderVO
+ */
 public HealthcareProviderVO loadProviderFromRequest(){
     /*if ( getCurrentUser() == null ) {
 	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
@@ -290,7 +296,7 @@ public HealthcareProviderVO loadProviderFromRequest(){
    //q.phonePager ???
    q.phoneFax( sh.getStrParameter( "phoneFax", "" ) );
    q.email( sh.getStrParameter( "email", "" ) );
-   q.patientLogCommunicationPreference( sh.getStrParameter( "lastName", "" ) );
+   //q.patientLogCommunicationPreference( sh.getStrParameter( "lastName", "" ) );
    q.addressStreet( sh.getStrParameter( "addressStreet", "" ) );
    q.addressCity( sh.getStrParameter( "addressCity", "" ) );
    q.addressZip( sh.getStrParameter( "addressZip", "" ) );

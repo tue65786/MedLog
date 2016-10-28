@@ -180,10 +180,20 @@ public int createPatient(PatientVO _vo) {
    return newID;
 }
 
+   @Override
+   public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
 @Override
 public boolean deletePatient(PatientVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
+   @Override
+   public ArrayList<SigVO> findAllSigs() {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
 
 @Override
 public final ArrayList<StateVO> findAllStates() {
@@ -239,6 +249,36 @@ public ArrayList<DiaryVO> findDiaryByPatient() {
 public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
+   @Override
+   public PharmaRxOtcVO findPharmaRxOtcVO(boolean _onlyAssigned) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public int syncDiary(ArrayList<DiaryVO> _voList) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public int syncMedication(ArrayList<MedicationVO> _voList) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo) {
+	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   }
 /**
  * HealtcareProvider Search
  * @param _id {@linkPlain

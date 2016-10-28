@@ -185,4 +185,19 @@ public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo);
  */
 public boolean updatePatient(PatientVO _vo);
 
+public int syncMedication(ArrayList<MedicationVO> _voList);
+public int syncDiary(ArrayList<DiaryVO> _voList);
+
+public int createPharmaRxOtcVO(PharmaRxOtcVO _vo);
+public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo);
+public PharmaRxOtcVO findPharmaRxOtcVO(boolean onlyAssigned);
+public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id);
+
+public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword,boolean onlyAssigned);
+public ArrayList<SigVO> findAllSigs();
+
+
+
+
+
 }

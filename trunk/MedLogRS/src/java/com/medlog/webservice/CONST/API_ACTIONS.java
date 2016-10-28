@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.CONST;
 
+import com.medlog.webservice.rest.*;
 import com.medlog.webservice.vo.*;
 import java.util.logging.*;
 
@@ -49,9 +50,25 @@ public static final String API_RESOURCE_DIARY = "d";
 public static final String API_RESOURCE_HEALTHCARE_PROVIDER = "h";
 public static final String API_RESOURCE_MEDICATION = "m";
 public static final String API_RESOURCE_PATIENT = "p";
+/**
+ * @see RES_ENUM
+ */
 public static final String API_RESOURCE_PHARM = "ph";
+/**
+ * @see RES_ENUM
+ */
 public static final String API_RESOURCE_DIATARY_RESTRICTION = "f";
+/**
+ * 
+ * SHARED LIST OF STATES
+ * @see RES_ENUM
+ */
 public static final String API_RESOURCE_STATES = "s";
+/**
+ * SHARED LIST OF SIGS
+ * @see RES_ENUM
+ */
+public static final String API_RESOURCE_SIGS = "g";
 
 public static final String API_PARAM_FUNCTION = "fn";
 public static final String API_FUNCTION_FIND = "find";
