@@ -26,27 +26,27 @@
 						<legend>Login Credentials</legend>
 						
 						<!-- Username and Password creation required-->
-						<label for="userName">Create Username:<br></label>
-						<input name="userName" type="text" id="userName" placeholder="Create a unique username" required><br>
-						<label for="userPassword">Create Password:<br><label>
-						<input name="userPassword" type="text" id="userPassword" placeholder="Create a password" required><br>
+						<label for="userName">Create Username:<br/></label>
+						<input name="userName" type="text" id="userName" placeholder="Create a unique username" required/><br/>
+						<label for="userPassword">Create Password:<br/></label>
+						<input name="userPassword" type="text" id="userPassword" placeholder="Create a password" required/><br/>
 					</fieldset>
 					
 					<fieldset>
 						<legend>User Information</legend>
 						
 						<!-- Name Input required-->
-						<label for="firstName">First name:<br></label>
-						<input name="firstName" type="text" id="firstName" placeholder="Enter your first name"><br>
-						<label for="lastName">Last name:<br></label>
-						<input name="lastName" type="text" id="lastName" placeholder="Enter your last name"><br>
+						<label for="firstName">First name:<br/></label>
+						<input name="firstName" type="text" id="firstName" placeholder="Enter your first name"/><br/>
+						<label for="lastName">Last name:<br/></label>
+						<input name="lastName" type="text" id="lastName" placeholder="Enter your last name"/><br/>
 						
 						<!-- Address Input required-->
-						<label for="addressStreet">Street Address:<br></label>
-						<input name="addressStreet" type="text" id="addressStreet" placeholder="ex. 1801 N. Broad St."><br>
-						<label for="addressCity">City:<br></label>
-						<input name="addressCity" type="text" id="addressCity" placeholder="ex. Philadelphia"><br>
-						<label for="addressState">State:<br></label>
+						<label for="addressStreet">Street Address:<br/></label>
+						<input name="addressStreet" type="text" id="addressStreet" placeholder="ex. 1801 N. Broad St."/><br/>
+						<label for="addressCity">City:<br/></label>
+						<input name="addressCity" type="text" id="addressCity" placeholder="ex. Philadelphia"/><br/>
+						<label for="addressState">State:<br/></label>
 						<select id="stateID" name='stateID'>
 							<option>Choose your state...</option>
                                                         <!-- For Loop to traverse through states using stateID -->
@@ -58,23 +58,23 @@
                                                         <option value='PA'>Pennsylvania</option>
                                                         <option value='VA'>Virginia</option>
                                                         <option value='WV'>West Virginia</option>
-                                                </select><br>
-						<label for="addressCountry">Country:<br></label>
-						<input name="addressCountry" type="text" id="addressCountry" placeholder="ex. USA"><br>
-						<label for="addressPostalcode">Zip Code:<br></label>
-						<input name="addressPostalcode" type="text" id="addressPostalcode" placeholder="ex. 19122"><br>
+                                                </select><br/>
+						<label for="addressCountry">Country:<br/></label>
+						<input name="addressCountry" type="text" id="addressCountry" placeholder="ex. USA"/><br/>
+						<label for="addressPostalcode">Zip Code:<br/></label>
+						<input name="addressPostalcode" type="text" id="addressPostalcode" placeholder="ex. 19122"/><br/>
 						
 						<!-- Contact Information optional-->
-						<label for="phoneHome">Home Phone:<br></label>
-						<input name="phoneHome" type="text" id="phoneHome" placeholder="ex. 2152047000"><br>
+						<label for="phoneHome">Home Phone:<br/></label>
+						<input name="phoneHome" type="text" id="phoneHome" placeholder="ex. 2152047000"/><br/>
 						<label for="phoneMobile">Mobile Phone:<br></label>
-						<input name="phoneMobile" type="text" id="phoneMobile" placeholder="ex. 2152047000"><br>
-						<label for="email">Primary Email:<br></label>
-						<input name="email" type="text" id="email" placeholder="ex.youremail@email.com"><br>
+						<input name="phoneMobile" type="text" id="phoneMobile" placeholder="ex. 2152047000"/><br/>
+						<label for="email">Primary Email:<br/></label>
+						<input name="email" type="text" id="email" placeholder="ex.youremail@email.com"/><br/>
 						
 						<!-- Additional Information optional-->
-						<label for="dateOfBirth">Date of Birth:<br></label>
-						<input name="dateOfBirth" type="text" id="dateOfBirth" placeholder="Enter your date of birth"><br>
+						<label for="dateOfBirth">Date of Birth:<br/></label>
+						<input name="dateOfBirth" type="text" id="dateOfBirth" placeholder="Enter your date of birth"/><br/>
 						<!--
 						<label for="gender">Gender:<br></label>
 						<input name="gender" type="radio" id="gender" value="male">Male<br>
@@ -83,13 +83,14 @@
 					</fieldset>
 					
 					<!-- Submit & reset buttons-->
-					<br><button type="submit">Start using MedLog!</button>
+					<br/><button type="submit">Start using MedLog!</button>
 					<button type="reset">Clear</button>
                                         
                                         <!-- Visual area for generated url -->
                                         <textarea id="formVisual" style="height:300px;width:70%" cols="80" rows="5">. 
                                         </textarea>
-                                        <div id='errorMessage'></div>
+                                        <div id='errorMessage'>
+                                        </div>
 				</form>
 			</div>
 		</div>
