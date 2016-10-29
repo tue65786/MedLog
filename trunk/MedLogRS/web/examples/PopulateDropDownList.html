@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../rstyle.css"/>
+		<!--add jquery script reference-->
+		<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+		<!-- add helper function script reference-->
+		<script type='text/javascript' src="populateDropDownList.js?ok=1"></script>
+		<meta name="viewport" content="width=device-width">
+		<title>Create dropdown list options from JSON.</title>
+	</head>
+	<body>
+		<header>Working with lookup fields.. THIS IS FOR WEEK OF 11/05</header>
+		<!-- We will fill the empty tag with a list of states <SELECT> -->
+		<form id='myForm' name='myForm'>
+			
+			<select id='stateID' name='stateID'>
+			</select>
+		
+		
+		</form>
+		<!--		Script is added end of page before </body> tag-->
+		<script type='text/javascript'>
+			 $(document).ready(function () {
+				 /**
+				  * Sample state JSON array (same as what WebService will return)
+				  * @type Array
+				  */
+				 function getStateList() {
+					 return  [
+						 {
+							 "stateID" : 1,
+							 "stateName" : "New Jersey",
+							 "stateAbbreviation" : "NJ"
+						 }, {
+							 "stateID" : 2,
+							 "stateName" : "Pennsylvania",
+							 "stateAbbreviation" : "PA"
+						 }, {
+							 "stateID" : 3,
+							 "stateName" : "Washington",
+							 "stateAbbreviation" : "WA"
+						 }
+					 ];
+				 }
+
+				 //Populate dropdown
+				 generateStateList("stateID", getStateList());
+				 //Set selected value to 2 
+
+//				 setDropDownSelectValue('stateID',selectState);
+
+//			REST OF CODE JUST WAITS 5 SECONDS BEFORE SELECTING STATE.
+//				-Uncomment out the previous line 
+//				-Remove line comments below (so that block is commented)
+//			>> Above "setDropDownSelectValue" function selects state when called
+
+//DELETE // comment here and 10 lines below to remove timer.
+//			/*
+				 //After pauseFor seconds select selectState.
+				 var selectState = 2;
+				 var pauseForSeconds = 3;
+
+				 pauseForSeconds *= 1000;
+				 setTimeout(function () {
+
+					 setDropDownSelectValue('stateID', selectState); //SELECT PENNSYLVANIA AFTER pauseForSeconds seconds.			
+				 }, (pauseForSeconds));
+//			*/	
+
+
+
+
+			 });
+
+		</script>
+	</body>
+</html>

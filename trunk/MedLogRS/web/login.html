@@ -6,15 +6,23 @@ and open the template in the editor.
 -->
 <html>
 	<head>
-		<title>TODO supply a title</title>
+		<title>Login</title>
 		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="rstyle.css"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
 	</head>
 	<body>
-		<form method="post" name="loginForm" id="loginForm" autocomplete="on">
 
+		<div id="header">
+			<table style='width:95%'><tr><td style="width:85%">
+						<h1> Login </h1>
+						<p> Welcome to MedLog. </p>
+						<p> An account is required to use MedLog. </p>
+					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+		</div>
+		<form method="post" name="loginForm" id="loginForm" autocomplete="on">
 			<fieldset>
 				<legend>Login Credentials</legend>
 				<label for="username">Username [SET TO dan]:<br></label>
@@ -27,10 +35,11 @@ and open the template in the editor.
 
 		</form>
 		<!--Logged in View-->
-		<fieldset id="myinfo" style="display:none;"><legend id="loggedinMsg">Welcome back!</legend>
+		<fieldset id="myinfo" style="display:none;">
+			<legend id="loggedinMsg">Welcome back!</legend>
 			<form id="userInfos">
-				<label for="firstname">First name:<br></label>
-				<input name="firstname" type="text" readonly id="firstname" placeholder="Enter your first name" required/>
+				<label for="firstName">First name:<br></label>
+				<input name="firstName" type="text" readonly id="firstname" placeholder="Enter your first name" required/>
 				<br>
 				<label for="lastname">Last name:<br></label>
 				<input name="lastname" type="text" readonly id="lastname" placeholder="Enter your last name" required/><br/>
@@ -50,20 +59,18 @@ and open the template in the editor.
 			 $(document).ready(function () {
 
 				 //Triggered when submit button is clicked!
+				 //#loginForm is name of form
 				 //////////////////////////////////////////////
 				 $("#loginForm").on("submit", function ( event ) {
 					 event.preventDefault();
 					 var username = $("#username").val();
 					 var password = $("#password").val();
 
-					 var theURL = "./api/?res=p&fn=add" + ;
+					 var theURL = "./api/?fn=login&username=" + username + "&password=" + password;
 					 // 
 					 // MAKE AJAX CALL!!
 					 /////////
-
-					
-					var bob;
-		$.post(theURL)
+					 $.post(theURL)
 						 .done(function ( data ) {
 							 if ( typeof data !== 'undefined' ) {
 								 if ( typeof data.message !== 'undefined' ) {

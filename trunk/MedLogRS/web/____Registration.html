@@ -51,7 +51,7 @@
 									<select id="stateID" name='stateID'>
 										<option selected value='2'>Choose state...</option>
 									</select>
-									
+
 
 									<!-- Contact Information optional-->
 									<label for="homephone">Home Phone:<br></label>
@@ -74,7 +74,7 @@
 								<!-- Submit & reset buttons-->
 								<br><button type="submit">Start using MedLog!</button>
 								<button type="reset">Clear</button>
-								<textarea id="allTheFormStuff" style="height:300px;width:70%" cols="80" rows="5">
+								<textarea id="allTheFormStuff" style="height:300px;width:70%" cols="80" rows="5">. 
 						
 								</textarea>
 								<div id='errorMessage'></div>
@@ -96,12 +96,11 @@
 											 // 
 											 // MAKE AJAX CALL!!
 											 /////////
-
-
-
 											 $.post(theURL)
 												 .done(function ( data ) {
 													 console.log(data);
+												 var currentLog = $("#allTheFormStuff").val() + "";
+												$("#allTheFormStuff").val(currentLog + "\n"+allTheFormStuff);
 												 }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
 												 console.log(xhr);
 												 console.log(error);
