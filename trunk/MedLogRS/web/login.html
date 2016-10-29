@@ -48,19 +48,22 @@ and open the template in the editor.
 		</fieldset>
 		<script>
 			 $(document).ready(function () {
-				 
-				//Triggered when submit button is clicked!
-				//////////////////////////////////////////////
-				$("#loginForm").on("submit", function ( event ) {
+
+				 //Triggered when submit button is clicked!
+				 //////////////////////////////////////////////
+				 $("#loginForm").on("submit", function ( event ) {
 					 event.preventDefault();
 					 var username = $("#username").val();
 					 var password = $("#password").val();
 
-					 var theURL = "./api/?fn=login&username=" + username + "&password=" + password;
+					 var theURL = "./api/?res=p&fn=add" + ;
 					 // 
 					 // MAKE AJAX CALL!!
 					 /////////
-					 $.post(theURL)
+
+					
+					var bob;
+		$.post(theURL)
 						 .done(function ( data ) {
 							 if ( typeof data !== 'undefined' ) {
 								 if ( typeof data.message !== 'undefined' ) {
@@ -86,7 +89,7 @@ and open the template in the editor.
 							 $("#message").empty().html("<b style='color:red'>AJAX failed:" + error + "</b>");
 						 });
 				 });
-				//Handle click event when logout is pressed
+				 //Handle click event when logout is pressed
 				 $("#btnLogout").on("click", function ( e ) {
 					 e.preventDefault();
 					 $("#username").val("");

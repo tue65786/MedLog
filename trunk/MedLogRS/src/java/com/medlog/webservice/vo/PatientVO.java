@@ -494,6 +494,7 @@ private String status;
 private String addressStreet;
 private String addressCity;
 private StateVO addressState;
+
 private String addressCountry;
 private String addressPostalcode;
 private String userPreferences;
