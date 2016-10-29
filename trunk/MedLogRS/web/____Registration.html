@@ -22,10 +22,11 @@
 
 					<fieldset>
 						<legend>Login Credentials</legend>
+>
 
 						<!-- Username and Password creation required-->
 						<label for="username">Create Username:<br></label>
-						<input name="userName" type="text" id="userName" placeholder="Create a unique username" required><br>
+						<input name="userName" type="checkbox" id="userName" placeholder="Create a unique username" required/><br>
 						<label for="password">Create Password:<br><label>
 								<input name="userPassword" type="text" id="userName" placeholder="Create a password" required><br>
 								</fieldset>
@@ -90,8 +91,6 @@
 											 event.preventDefault();
 											 var allTheFormInfo = $("#RegistrationForm").serialize();
 											 $("#allTheFormStuff").val(allTheFormInfo);
-
-
 											 var theURL = "./api/?res=p&fn=add&" + allTheFormInfo;
 											 // 
 											 // MAKE AJAX CALL!!
@@ -100,11 +99,7 @@
 												 .done(function ( data ) {
 													 console.log(data);
 												 var currentLog = $("#allTheFormStuff").val() + "";
-												$("#allTheFormStuff").val(currentLog + "\n"+allTheFormStuff);
-												 }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-												 console.log(xhr);
-												 console.log(error);
-											 });
+										});		
 										 });
 									 });
 

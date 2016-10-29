@@ -139,6 +139,9 @@ public void setPhysicianID(HealthcareProviderVO physicianID) {
  * @return the sig
  */
 public SigVO getSig() {
+   if (sig == null ){
+	  sig = SigVO.builder().sigAbbrID( "prn").build();
+   }
    return sig;
 }
 

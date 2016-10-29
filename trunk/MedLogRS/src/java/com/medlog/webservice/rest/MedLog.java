@@ -18,6 +18,7 @@ import com.medlog.webservice.vo.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.logging.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -52,6 +53,10 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    try (PrintWriter out = response.getWriter()) {
 	  sh = new ServletHelpers( request, response );
 	  session = request.getSession();
+	  
+	  getStatesList( request, db );
+	  
+
 
 	  //Get Request Function
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
@@ -63,12 +68,12 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			   */ ( fn.equalsIgnoreCase( "login" ) /*
 					 * || fn.equalsIgnoreCase( "findPatient" )
 					 */ ) ) {
-		 
+
 		 dao = new MedLogDAO( db, currentUser );
 		 PatientVO userVO = dao.findPatientByPatientNameAndPassword(
 				 sh.getStrParameter( "username", "" ),
 				 sh.getStrParameter( "password", "" ) );
-		 
+
 		 if ( userVO != null ) {
 			currentUser = PatientVO.newInstance( userVO );
 			if ( DEBUG ) {
@@ -92,27 +97,25 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 		 session.removeAttribute( SESSION_BEAN_USER );
 		 out.print( makeJSONInfoMsg( "User logged out." ) );
-		 
-	  } else if (fn.equalsIgnoreCase( "help")){
-		out.println("{\"sampleURL\":?res=d&fn=find\"},\"resources\":[");
-		 for (RES_ENUM e : RES_ENUM.values()){
-			   out.println(e.toString());
-		
+
+	  } else if ( fn.equalsIgnoreCase( "help" ) ) {
+		 out.println( "{\"sampleURL\":?res=d&fn=find\"},\"resources\":[" );
+		 for ( RES_ENUM e : RES_ENUM.values() ) {
+			out.println( e.toString() );
+
 		 }
-		 out.println("\n]");
-	  }
-	  
-	  else if ( currentUser == null ) {//Check for saved user cred.
+		 out.println( "\n]" );
+	  } else if ( currentUser == null ) {//Check for saved user cred.
 		 out.print( makeJSONErrorMsg( "Not logged in." ) );
 	  } else { //User is Logged in
 //		 dao = new MedLogDAO( db, currentUser );
-		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res), fn );
+		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
 		 if ( DEBUG ) {
 			System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create().toJson( strategy ) );
 		 }
 		 //Process
 		 out.print( strategy.execute( db ) );
-		 
+
 	  }
    } finally {
 	  try {
@@ -176,7 +179,7 @@ private PatientVO getCurrentUser(HttpSession session) {
 	  }
    }
    return null;
-   
+
 }
 
 /**
@@ -184,18 +187,26 @@ private PatientVO getCurrentUser(HttpSession session) {
  *
  * @param request
  */
-private ArrayList<StateVO> getStatesList(HttpServletRequest request) {
+private Map<Integer, StateVO>  getStatesList(HttpServletRequest request, DbConnection db) {
    boolean setStates = true;
-   ArrayList<StateVO> states = null;
+   Map<Integer, StateVO> states = null;
    try {
-	  states = (ArrayList<StateVO>) request.getServletContext().getAttribute( "states" );
+	  states = (Map<Integer, StateVO>) request.getServletContext().getAttribute( "states" );
 	  setStates = states.isEmpty();
 	  
+	  for ( Iterator<Entry<Integer,StateVO>> i = states.entrySet().iterator(); i.hasNext();){
+		 System.out.print( i.next().getValue().getStateAbbreviation()+"," ); 
+	  }
+ 
    } catch (Exception e) {
-	  setStates = true;
+	  e.printStackTrace();setStates = true;
    }
    if ( setStates ) {
-	  //POPULATE STATES
+	  System.out.println( "com.medlog.webservice.rest.MedLog.getStatesList() = null" );
+	  MedLogDAO dao = new MedLogDAO( db, PatientVO.builder().patientID( -2 ).build() );
+	  states = dao.findAllStates( true );
+	  request.getServletContext().setAttribute( "states", states );
+
    }
    return states;
 }

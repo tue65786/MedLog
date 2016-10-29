@@ -13,6 +13,7 @@ import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.logging.*;
 
 /**
@@ -35,8 +36,14 @@ public MedLogDAO(DbConnection db, PatientVO u) {
    this.user = u;
    stateOK = true;
    errorMessage = "";
-   findAllStates();
+   try {
+	  if ( u != null && u.getPatientID() != -2 ) {
+		 findAllStates();
+	  }
+   } catch (Exception eeee) {
+   }
 }
+
 
 @Override
 public int assignMedication(MedicationVO _vo) {
@@ -180,25 +187,33 @@ public int createPatient(PatientVO _vo) {
    return newID;
 }
 
-   @Override
-   public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public boolean deletePatient(PatientVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
-   @Override
-   public ArrayList<SigVO> findAllSigs() {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
+@Override
+public ArrayList<SigVO> findAllSigs() {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public final ArrayList<StateVO> findAllStates() {
-   if ( MedLogDAO.statesList == null ) {
-	  Map<Integer, StateVO> tmpVO = new HashMap<Integer, StateVO>();
+   Map<Integer, StateVO> tmpVO = findAllStates( false );
+   ArrayList<StateVO> vos = new ArrayList<StateVO>();
+   vos.addAll( MedLogDAO.statesList.values() );
+   return vos;
+}
+
+public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
+   Map<Integer, StateVO> tmpVO = new ConcurrentHashMap<Integer, StateVO>( 64 );
+   if ( MedLogDAO.statesList == null || mustuseSQL ) {
+
 	  CallableStatement cs = null;
 	  ResultSet rs = null;
 	  try {
@@ -217,11 +232,7 @@ public final ArrayList<StateVO> findAllStates() {
 	  }
    }
 
-   ArrayList<StateVO> vos = new ArrayList<StateVO>();
-   vos.addAll( MedLogDAO.statesList.values() );
-
-   return vos;
-
+   return tmpVO;
 }
 
 @Override
@@ -250,45 +261,6 @@ public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
-   @Override
-   public PharmaRxOtcVO findPharmaRxOtcVO(boolean _onlyAssigned) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public int syncDiary(ArrayList<DiaryVO> _voList) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public int syncMedication(ArrayList<MedicationVO> _voList) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo) {
-	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-/**
- * HealtcareProvider Search
- * @param _id {@linkPlain
- * @param _keyword 
- * @param _onlyAssigned For current {@linkplain PatientVO}
- * @return List
- */
-private ArrayList<HealthcareProviderVO> findHealthcareProviders(int _id, String _keyword, boolean _onlyAssigned) {
-   return null;
-}
 
 @Override
 public HealthcareProviderVO findHealthcareProviderID(int _id) {
@@ -350,6 +322,18 @@ public PatientVO findPatientByPatientNameAndPassword(String _username, String _p
 	  return null;
    }
 }
+@Override
+public PharmaRxOtcVO findPharmaRxOtcVO(boolean _onlyAssigned) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+@Override
+public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+@Override
+public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public ArrayList<StateVO> findStatesByKeyword(String _keyword) {
@@ -400,6 +384,14 @@ public void setUser(PatientVO user) {
    this.user = user;
    getCurrentUser();
 }
+@Override
+public int syncDiary(ArrayList<DiaryVO> _voList) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+@Override
+public int syncMedication(ArrayList<MedicationVO> _voList) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
 
 @Override
 public boolean unassignMedication() {
@@ -419,6 +411,10 @@ public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo) {
 
 @Override
 public boolean updatePatient(PatientVO _vo) {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+@Override
+public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
@@ -484,6 +480,17 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 	  DbUtl.close( cs );
    }
    return voList;
+}
+/**
+ * HealtcareProvider Search
+ *
+ * @param _id           {@linkPlain
+ * @param _keyword
+ * @param _onlyAssigned For current {@linkplain PatientVO}
+ * @return List
+ */
+private ArrayList<HealthcareProviderVO> findHealthcareProviders(int _id, String _keyword, boolean _onlyAssigned) {
+   return null;
 }
 
 /**
@@ -586,6 +593,34 @@ private ArrayList<PatientVO> findPatient(int _id, String _username, String _pass
 	  DbUtl.close( cs );
    }
    return voList;
+}
+private int changeMedicationBinding(MedicationVO _vo) {
+   
+   CallableStatement cs = null;
+   int newID = DB_ERROR_CODE;
+   try {
+	  if ( _vo != null && _vo.getPharmID() == null && getCurrentUser() != null ) {
+		 _vo.setPatientID( getCurrentUser() );
+	  }
+   } catch (Exception e) {
+	  if ( DEBUG ) {
+		 LOG.log( Level.SEVERE, "Error setting user", e );
+		 e.printStackTrace();
+	  }
+   }
+   if ( (_vo.isActive() && _vo.isValid( INSERT ) ) || _vo.isValid( DELETE )  && !_vo.isActive()) {
+	  try {
+		 cs = db.getConnnection().prepareCall( SP_MEDICATION_CHANGE_BINDING );
+		 cs.setInt( 1, getCurrentUser().getPatientID() );
+		 cs.setInt(2,_vo.getPharmID().pharmID);
+		 cs.setString( 3, _vo.getInstructions() );
+		 cs.setString(4,_vo.getSig().sigAbbrID);
+		 cs.setDate(5, (java.sql.Date) _vo.getStartDate());
+	  } catch (Exception e) {
+		 
+	  }
+   }
+   return newID;
 }
 private final DbConnection db;
 private String errorMessage;

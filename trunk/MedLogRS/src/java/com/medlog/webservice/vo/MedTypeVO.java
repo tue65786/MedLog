@@ -42,4 +42,15 @@ public String toTableRow() {
 }
 public String medTypeID;
 
+public static MedTypeVO GET_RX(){
+   MedTypeVO vo = new MedTypeVO();
+   vo.medTypeID = "RX";
+   return vo;  
+}
+public static MedTypeVO GET_OTC(){
+   MedTypeVO vo = new MedTypeVO();
+   vo.medTypeID = "OTC";
+   return vo;  
+}
+
 }

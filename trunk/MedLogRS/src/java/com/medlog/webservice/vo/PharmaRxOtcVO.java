@@ -41,13 +41,13 @@ public class PharmaRxOtcVO  implements Serializable, IEntityBase<PharmaRxOtcVO> 
    public String toTableRow() {
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
-public Integer pharmID;
+public int pharmID;
 public MedTypeVO medType;
 public String rxcui;
 
    public static class Builder {
 
-   private Integer pharmID;
+   private int pharmID;
    private MedTypeVO medType;
    private String rxcui;
    private String genericRxcui;
@@ -72,7 +72,7 @@ public String rxcui;
    private Builder() {
    }
 
-   public Builder pharmID(final Integer value) {
+   public Builder pharmID(final int value) {
 	  this.pharmID = value;
 	  return this;
    }
@@ -186,7 +186,7 @@ public String rxcui;
 	  return new PharmaRxOtcVO.Builder();
    }
 
-   private PharmaRxOtcVO(final Integer pharmID, final MedTypeVO medType, final String rxcui, final String genericRxcui, final String tty, final String fullName, final String rxnDoseForm, final String fullGenericName, final String brandName, final String displayName, final String route, final String newDoseForm, final String strength, final String suppressFor, final String displayNameSynonym, final String isRetired, final String sxdgRxcui, final String sxdgTty, final String sxdgName, final String psn, final List<MedicationVO> medicationList) {
+   private PharmaRxOtcVO(final int pharmID, final MedTypeVO medType, final String rxcui, final String genericRxcui, final String tty, final String fullName, final String rxnDoseForm, final String fullGenericName, final String brandName, final String displayName, final String route, final String newDoseForm, final String strength, final String suppressFor, final String displayNameSynonym, final String isRetired, final String sxdgRxcui, final String sxdgTty, final String sxdgName, final String psn, final List<MedicationVO> medicationList) {
 	  this.pharmID = pharmID;
 	  this.medType = medType;
 	  this.rxcui = rxcui;
