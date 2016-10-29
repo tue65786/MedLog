@@ -103,13 +103,13 @@
                             $("#formVisual").val("userInfo");
                             $.post(theURL)
                                 .done(function(data){
-                                console.log(data);
-                            })
-                            .fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-                                $("#message").empty().html("<b style='color:red'>AJAX failed:" + error + "</b>");
+                                    console.log(data);
+                            }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                                console.log(xhr);
+                                console.log(error);
                             });
-                        }
-                    }
+                        });
+                    });
 		</script>
 	</body>
 </html>
