@@ -68,7 +68,7 @@ public static final String API_RESOURCE_STATES = "s";
  * SHARED LIST OF SIGS
  * @see RES_ENUM
  */
-public static final String API_RESOURCE_SIGS = "g";
+public static final String API_RESOURCE_SIG = "g";
 
 public static final String API_PARAM_FUNCTION = "fn";
 public static final String API_FUNCTION_FIND = "find";

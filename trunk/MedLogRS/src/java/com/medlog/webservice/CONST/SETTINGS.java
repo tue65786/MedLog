@@ -44,6 +44,7 @@ public static final String PROPS_FILE = "database.properties";
  */
 public static final String SESSION_BEAN_USER = "user" ;
 public static final String APPLICATION_STATE_BEAN = "com.medlog.webservice.vo.StateVO";
+public static final String APPLICATION_SIG_BEAN = "com.medlog.webservice.vo.SigVO";
 public static final String APPLICATION_RX_BEAN = "com.medlog.webservice.vo.PharmaRXOtcVO";
 /**
  * No instantiation.

@@ -102,7 +102,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 out.println( "{\"sampleURL\":?res=d&fn=find\"},\"resources\":[" );
 		 for ( RES_ENUM e : RES_ENUM.values() ) {
 			out.println( e.toString() );
-
 		 }
 		 out.println( "\n]" );
 	  } else if ( currentUser == null ) {//Check for saved user cred.
@@ -199,7 +198,8 @@ private Map<Integer, StateVO>  getStatesList(HttpServletRequest request, DbConne
 	  }
  
    } catch (Exception e) {
-	  e.printStackTrace();setStates = true;
+	 
+	  setStates = true;
    }
    if ( setStates ) {
 	  System.out.println( "com.medlog.webservice.rest.MedLog.getStatesList() = null" );

@@ -262,7 +262,6 @@ private String includceMedsCurrent;
 private String attachmentPath;
 private int mood;
 private int productivity;
-
 private List<TagVO> tagList;
 private PatientVO patientID;
 private static final Logger LOG = Logger.getLogger( DiaryVO.class.getName() );
@@ -279,8 +278,8 @@ private String includceMedsCurrent;
 private String attachmentPath;
 private int mood;
 private int productivity;
-private List<TagVO> tagList;
-private PatientVO patientID;
+private List<TagVO> tagList;  //no
+private PatientVO patientID; //no
 
 private Builder() {
 }

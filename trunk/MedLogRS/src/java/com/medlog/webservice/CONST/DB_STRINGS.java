@@ -32,6 +32,12 @@ public static final String SP_DIARY_INSERT = "{call [spDiaryInsert]("
 											 + "?,?,?,?,?,"
 											 + "?,?,?,?,?,"
 											 + "?)}";
+
+//  CREATE_PROCEDURE - dbo.spPatientDietaryRestrictionChangeBinding
+//  CREATE_PROCEDURE - dbo.spDietaryRestrictionSelect
+//  CREATE_PROCEDURE - dbo.spDietaryRestrictionInsert
+//  CREATE_PROCEDURE - dbo.spDietaryRestrictionUpdate
+//  CREATE_PROCEDURE - dbo.spDietaryRestrictionDelete
 /**
  * Select Diary Entries<ol><li>Id</li> <li> PatientID int</li><li>Keyword (null)</li></ol>
  */
@@ -191,8 +197,33 @@ public static final String SP_PATIENT_INSERT = "{call [spPatientInsert]("
 public static final String SP_PATIENT_SELECT = "{call [spPatientSelect](?,?,?)}";
 /**
  * UPDATE PATIENT STORED PROCEDURE
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * <ol><li>@PatientID int
+ * </li><li>@userPassword nvarchar (30) = NULL
+ * </li><li>@firstName nvarchar (30) = NULL
+ * </li><li>@lastName nvarchar (30) = NULL
+ * </li><li>@phoneHome nvarchar (50) = NULL
+ * </li><li>@phoneMobile nvarchar (50) = NULL
+ * </li><li>@email nvarchar (100) = NULL
+ * </li><li>@addressStreet nvarchar (150) = NULL
+ * </li><li>@addressCity nvarchar (100) = NULL
+ * </li><li>@addressState int = NULL
+ * </li><li>@address_country nvarchar (25) = NULL
+ * </li><li>@address_postalcode nvarchar (9) = NULL
+ * </li><li>@date_of_birth date = NULL</li></ol>
  */
-public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate](}";
+public static final String SP_PATIENT_UPDATE = "{call [spPatientUpdate]("
+											   + "?,?,?,?,?,"
+											   + "?,?,?,?,?,"
+											   + "?,?,?"
+											   + ")}";
 /**
  * Insert Phar/Otc Record
  * <ol><li>@MedType varchar (16) = NULL

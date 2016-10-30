@@ -9,9 +9,11 @@ import com.google.gson.*;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
+import com.medlog.webservice.util.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import org.apache.commons.lang3.*;
 
 /**
  *
@@ -57,7 +59,7 @@ public static PatientVO create(final int patientID, final String userName, final
     * @return the addressPostalcode
     */
    public String getAddressPostalcode() {
-	  return addressPostalcode;
+	  return StringUtils.left( StrUtl.toS(addressPostalcode).trim(), 9 );
    }
 
    /**
@@ -85,7 +87,7 @@ public static PatientVO create(final int patientID, final String userName, final
     * @return the addressStreet
     */
    public String getAddressStreet() {
-	  return addressStreet;
+	  return StringUtils.left( StrUtl.toS(addressStreet), 145 );
    }
 
    /**

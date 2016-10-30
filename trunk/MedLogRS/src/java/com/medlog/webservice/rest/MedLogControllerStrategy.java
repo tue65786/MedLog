@@ -154,6 +154,7 @@ public String execute(DbConnection dbc) {
 													+ " is invalid." );
 			}
 			break;
+			
 		 default:
 			responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 												 " Invalid res." );
@@ -206,8 +207,8 @@ public MedicationVO loadMedicationFromRequest() {
    //TODO Finish request params
    t.medicationID( sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) ) );
    t.patientID( getCurrentUser() );
-   t.pharmID(PharmaRxOtcVO.builder().pharmID( sh.getIntParameter( "id", sh.getIntParameter( "pharmID", 0 ))).build());
-   t.physicianID( HealthcareProviderVO.builder().physicianID(  sh.getIntParameter( "healthcareProviderI",0)).build());
+   t.pharmID(PharmaRxOtcVO.builder().pharmID( sh.getIntParameter( "pharmid", sh.getIntParameter( "pharmID", 0 ))).build());
+   t.physicianID( HealthcareProviderVO.builder().physicianID(  sh.getIntParameter( "healthcareProviderID",0)).build());
    t.instructions( sh.getStrParameter( "instructions", "" ) );
    //t.sig ?????
    t.startDate( sh.getDateParameter( "startDate", new Date() ) );

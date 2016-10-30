@@ -25,12 +25,12 @@ and open the template in the editor.
 		<form method="post" name="loginForm" id="loginForm" autocomplete="on">
 			<fieldset>
 				<legend>Login Credentials</legend>
-				<label for="username">Username [SET TO dan]:<br></label>
-				<input name="username" type="text" id="username" placeholder="" required><br>
-				<label for="password"> Password [SET TO asdf]:<br></label>
-				<input name="password" type="password" id="password" placeholder="" required><br>
+				<label for="username">Username [SET TO dan]:</label><br/>
+				<input name="username" type="text" id="username" placeholder="" required/><br/>
+				<label for="password"> Password [SET TO asdf]:</label><br/>
+				<input name="password" type="password" id="password" placeholder="" required/><br/>
 			</fieldset>
-			<input type="submit" value="LOGIN" id="btnSubmit"/>
+			<input type="submit" value="LOGIN" id="btnSubmit" />
 			<div id="message" ></div>
 
 		</form>
@@ -38,26 +38,28 @@ and open the template in the editor.
 		<fieldset id="myinfo" style="display:none;">
 			<legend id="loggedinMsg">Welcome back!</legend>
 			<form id="userInfos">
-				<label for="firstName">First name:<br></label>
-				<input name="firstName" type="text" readonly id="firstname" placeholder="Enter your first name" required/>
-				<br>
-				<label for="lastname">Last name:<br></label>
-				<input name="lastname" type="text" readonly id="lastname" placeholder="Enter your last name" required/><br/>
-				<label>Street</label><input type="text" readonly id="street"/>
-				State<br>
+				<label for="firstName">First name:<br/></label>
+				<input name="firstName" type="text" readonly id="firstname" placeholder="Enter your first name"  />
+				<br/>
+				<label for="lastname">Last name:<br/></label>
+				<input name="lastname" type="text" readonly id="lastname" placeholder="Enter your last name" /><br/>
+				<label>Street</label><input type="text" readonly id="street" />
+				State<br/>
 				<select id="state">
 					<option checked value="0">State....</option>
 					<option value="2">Pennsylvania</option></select>
 				<br/>
 				<label>Data Returned from AJAX:</label>
-				<br>
-				<textarea id="jsraw" rows="5" cols="40" style="width:300px;height:200px;"></textarea><br/>
-				<input type="button" value="Logout" id="btnLogout"/>
+				<br/>
+				<textarea id="jsraw" rows="5" cols="40" style="width:300px;height:200px;">
+					
+				</textarea>
+				<br/>
+				<input type="button" value="logout" id="btnLogout" />
 			</form>
 		</fieldset>
 		<script>
 			 $(document).ready(function () {
-
 				 //Triggered when submit button is clicked!
 				 //#loginForm is name of form
 				 //////////////////////////////////////////////

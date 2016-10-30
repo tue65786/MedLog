@@ -7,6 +7,9 @@
 
 package com.medlog.webservice.rest;
 
+import static com.medlog.webservice.CONST.SETTINGS.*;
+import com.medlog.webservice.dao.*;
+import com.medlog.webservice.sql.*;
 import com.medlog.webservice.vo.*;
 import java.util.*;
 import java.util.logging.*;
@@ -18,9 +21,26 @@ import org.apache.catalina.core.*;
  * @author (c)2016 Guiding Technologies
  */
 public class ApplicationBean {
-
-   public ApplicationBean(ServletContext _context) {
+DbConnection db;
+MedLogDAO dao;
+   public ApplicationBean(ServletContext _context,DbConnection db,MedLogDAO dao) {
 	  this.context = _context;
+	  this.db = db;
+	  this.dao = dao;
+   }
+   public synchronized void setApplicationStores(){
+	  
+	  if (context.getAttribute( APPLICATION_STATE_BEAN) == null){
+		 context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true ) );
+	  }
+	  
+	    if (context.getAttribute( APPLICATION_SIG_BEAN) == null){
+		   
+		}
+		
+		
+	  
+	  
    }
 /**
  * Puts list in application

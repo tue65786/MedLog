@@ -411,7 +411,61 @@ public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo) {
 
 @Override
 public boolean updatePatient(PatientVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+    CallableStatement cs = null;
+   int newID = DB_ERROR_CODE;
+   if ( _vo.isValid( UPDATE ) ) {
+	  try {
+		 cs = db.getConnnection().prepareCall( SP_PATIENT_UPDATE );
+
+		 cs.setInt( 1,_vo.getPatientID());
+		 cs.setString( 2, _vo.getUserPassword() );
+		 cs.setString( 3, _vo.getFirstName() );
+		 cs.setString( 4, _vo.getLastName() );
+		 cs.setString( 5, _vo.getPhoneHome() );
+		 cs.setString( 6, _vo.getPhoneMobile() );
+		 cs.setString( 7, _vo.getEmail() );
+		 cs.setString( 10, _vo.getAddressStreet() );
+		 cs.setString( 11, _vo.getAddressCity() );
+		 cs.setInt( 12, _vo.getAddressState().getStateID() );//CHECK FOR VALID STATE
+		 cs.setString( 13, _vo.getAddressCountry() );
+		 cs.setString( 14, _vo.getAddressPostalcode() );
+		 cs.setString( 15, _vo.getUserPreferences() );
+		 cs.setNull( 16, java.sql.Types.DATE );//Password last changed
+		 cs.setNull( 17, java.sql.Types.NVARCHAR );//Lang
+		 cs.setNull( 18, java.sql.Types.DATE );//Timezone
+		 cs.setNull( 19, java.sql.Types.INTEGER );//Physician
+		 try {
+			cs.setDate( 20, (java.sql.Date) _vo.getDateOfBirth() );
+		 } catch (Exception e) {
+			cs.setNull( 20, java.sql.Types.DATE );//Date Joined	
+		 }
+		 cs.setNull( 21, java.sql.Types.DATE );//Date Joined
+		 cs.setNull( 22, java.sql.Types.NVARCHAR );//Picture
+		 cs.setNull( 23, java.sql.Types.SQLXML );//metadata
+		 cs.setInt( 24, _vo.getUserRole() );
+
+		 cs.registerOutParameter( 25, java.sql.Types.INTEGER );
+		 int rows = cs.executeUpdate();
+		 newID = cs.getInt( 25 );
+	  } catch (SQLException ex) {
+		 if ( DEBUG ) {
+			System.err.println( "com.medlog.webservice.dao.MedLogDAO.createPatient()\n" + DbUtl.printJDBCExceptionMsg( ex ) );
+		 }
+		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createPatient()", "SQLEx", ex );
+	  } catch (NullPointerException npe) {
+		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createPatient()", "Null Pointer", npe );
+	  } finally {
+		 DbUtl.close( cs );
+	  }
+   } else {
+	  if ( DEBUG ) {
+		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createPatient()", "INVALID Parmas" );
+	  }
+	  this.stateOK = false;
+	  this.errorMessage = "Create patient, invalid params.";
+   }
+   return true
+		   ;
 }
 @Override
 public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo) {
