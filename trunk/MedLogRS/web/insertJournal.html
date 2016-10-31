@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Log Journal Entry</title>
+        <link rel="stylesheet" type="text/css" href="rstyle.css"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div>
+            <div id="header">
+                <table style='width:95%'><tr><td style="width:85%">
+                            <h1> Log Journal Entry </h1>
+                            <p> This is the page to insert a journal entry </p>
+                            <p> Eventually, site menu may go here </p>
+                        </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+            </div>
+
+            <div>
+                <form method="post" name="insertJournalForm" id="insertJournalForm" autocomplete="on">
+
+                    <fieldset>
+                        <legend>Dates</legend>
+
+                        <label for="createdDate">Date Created:<br/></label>
+                        <input name="createdDate" type="text" id="createdDate" placeholder="...ex. correct date format?" required/><br/>
+                        <label for="updatedDate">Date Updated:<br/></label>
+                        <input name="updatedDate" type="text" id="updatedDate" placeholder="..." required/><br/>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Content</legend>
+
+                        <!-- Name Input required-->
+                        <label for="notes">Sentimental Diary<br/></label>
+                        <!--<input name="notes" type="text" id="notes" placeholder="Enter how you are feeling here"/><br/>-->
+                        <textarea cols ="50" rows ="4" name="notes" id="notes" placeholder = "Enter how you are feeling here"></textarea><br/>
+                        <select id="mood" name='mood'>
+                            <option>Rate your mood</option>
+                            <!-- Better way to accomplish? -->
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                            <option value='8'>8</option>
+                            <option value='9'>9</option>
+                            <option value='10'>10</option>
+                        </select><br/>
+                        <label for="notesActivity">Activity Log<br/></label>
+                        <!--<input name="notesActivity" type="text" id="notesActivity" placeholder="Enter what you have done, accomplishments, achievements, etc here"/><br/>-->
+                        <textarea cols ="50" rows ="4" name="notesActivity" id="notesActivity" placeholder = "Enter what you have done, accomplishments, achievements, etc here"></textarea><br/>
+                        <select id="productivity" name='productivity'>
+                            <option>Rate your productivity</option>
+                            <!-- Better way to accomplish? -->
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                            <option value='8'>8</option>
+                            <option value='9'>9</option>
+                            <option value='10'>10</option>
+                        </select><br/>
+
+                        
+                    </fieldset>
+
+                    <!-- Submit & reset buttons-->
+                    <br/><button type="submit">Submit entry</button>
+                    <button type="reset">Clear</button>
+
+                    <!-- Visual area for generated url -->
+                    <textarea id="formVisual" style="height:300px;width:70%" cols="80" rows="5">. 
+                    </textarea>
+                    <div id='errorMessage'>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

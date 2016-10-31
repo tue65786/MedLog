@@ -22,8 +22,8 @@ public class DiaryVO implements Serializable, IEntityBase<DiaryVO> {
 
 private static final long serialVersionUID = -2971191299069097176L;
 
-public static DiaryVO create(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includceMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
-   return new DiaryVO( id, title, notes, notesActivity, createdDate, updatedDate, includceMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
+public static DiaryVO create(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includeMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
+   return new DiaryVO( id, title, notes, notesActivity, createdDate, updatedDate, includeMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
 }
 
 /**
@@ -71,15 +71,15 @@ public void setId(int id) {
 /**
  * @return the includceMedsCurrent
  */
-public String getIncludceMedsCurrent() {
-   return StrUtl.toS(includceMedsCurrent);
+public String getIncludeMedsCurrent() {
+   return StrUtl.toS(includeMedsCurrent);
 }
 
 /**
  * @param includceMedsCurrent the includceMedsCurrent to set
  */
-public void setIncludceMedsCurrent(String includceMedsCurrent) {
-   this.includceMedsCurrent = includceMedsCurrent;
+public void setIncludeMedsCurrent(String includeMedsCurrent) {
+   this.includeMedsCurrent = includeMedsCurrent;
 }
 
 /**
@@ -258,7 +258,7 @@ private String notes;
 private String notesActivity;//4
 private Date createdDate;
 private Date updatedDate;
-private String includceMedsCurrent;
+private String includeMedsCurrent;
 private String attachmentPath;
 private int mood;
 private int productivity;
@@ -275,7 +275,7 @@ private String notes;
 private String notesActivity;
 private Date createdDate;
 private Date updatedDate;
-private String includceMedsCurrent;
+private String includeMedsCurrent;
 private String attachmentPath;
 private int mood;
 private int productivity;
@@ -315,8 +315,8 @@ public Builder updatedDate(final Date value) {
    return this;
 }
 
-public Builder includceMedsCurrent(final String value) {
-   this.includceMedsCurrent = value;
+public Builder includeMedsCurrent(final String value) {
+   this.includeMedsCurrent = value;
    return this;
 }
 
@@ -346,7 +346,7 @@ public Builder patientID(final PatientVO value) {
 }
 
 public DiaryVO build() {
-   return DiaryVO.create( id, title, notes, notesActivity, createdDate, updatedDate, includceMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
+   return DiaryVO.create( id, title, notes, notesActivity, createdDate, updatedDate, includeMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
 }
 }
 
@@ -354,14 +354,14 @@ public static DiaryVO.Builder builder() {
    return new DiaryVO.Builder();
 }
 
-private DiaryVO(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includceMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
+private DiaryVO(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includeMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
    this.id = id;
    this.title = title;
    this.notes = notes;
    this.notesActivity = notesActivity;
    this.createdDate = createdDate;
    this.updatedDate = updatedDate;
-   this.includceMedsCurrent = includceMedsCurrent;
+   this.includeMedsCurrent = includeMedsCurrent;
    this.attachmentPath = attachmentPath;
    this.mood = mood;
    this.productivity = productivity;
