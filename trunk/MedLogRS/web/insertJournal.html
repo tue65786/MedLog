@@ -25,15 +25,16 @@
                         <legend>Dates</legend>
 
                         <label for="createdDate">Date Created:<br/></label>
-                        <input name="createdDate" type="text" id="createdDate" placeholder="...ex. correct date format?" required/><br/>
+                        <input name="createdDate" type="text" id="createdDate" placeholder="...ex. correct date format?"/><br/>
                         <label for="updatedDate">Date Updated:<br/></label>
-                        <input name="updatedDate" type="text" id="updatedDate" placeholder="..." required/><br/>
+                        <input name="updatedDate" type="text" id="updatedDate" placeholder="..."/><br/>
                     </fieldset>
 
                     <fieldset>
                         <legend>Content</legend>
 
-                        <!-- Name Input required-->
+                        <label for="title">Title<br/></label>
+                        <input name="title" type="text" id="title"/><br/><br/>
                         <label for="notes">Sentimental Diary<br/></label>
                         <!--<input name="notes" type="text" id="notes" placeholder="Enter how you are feeling here"/><br/>-->
                         <textarea cols ="50" rows ="4" name="notes" id="notes" placeholder = "Enter how you are feeling here"></textarea><br/>
@@ -50,7 +51,7 @@
                             <option value='8'>8</option>
                             <option value='9'>9</option>
                             <option value='10'>10</option>
-                        </select><br/>
+                        </select><br/><br/>
                         <label for="notesActivity">Activity Log<br/></label>
                         <!--<input name="notesActivity" type="text" id="notesActivity" placeholder="Enter what you have done, accomplishments, achievements, etc here"/><br/>-->
                         <textarea cols ="50" rows ="4" name="notesActivity" id="notesActivity" placeholder = "Enter what you have done, accomplishments, achievements, etc here"></textarea><br/>
@@ -71,10 +72,14 @@
 
                         
                     </fieldset>
+                    <!--other fields included in DiaryVO.java, but not implemented above
+                        tagList
+                        includeMedsCurrent
+                        attachmentPath  -->
 
                     <!-- Submit & reset buttons-->
                     <br/><button type="submit">Submit entry</button>
-                    <button type="reset">Clear</button>
+                    <button type="reset">Clear</button><br/><br/><br/><br/>
 
                     <!-- Visual area for generated url -->
                     <textarea id="formVisual" style="height:300px;width:70%" cols="80" rows="5">. 
