@@ -42,6 +42,219 @@ public static HealthcareProviderVO create(final int physicianID, final String la
    return new HealthcareProviderVO( physicianID, lastName, firstName, specialty, phoneWork, phoneMobile, phonePager, phoneFax, email, patientLogCommunicationPreference, addressStreet, addressCity, addressZip, patientList, addressStateID );
 }
 
+/**
+ * @return the addressCity
+ */
+public String getAddressCity() {
+   return addressCity;
+}
+
+/**
+ * @param addressCity the addressCity to set
+ */
+public void setAddressCity(String addressCity) {
+   this.addressCity = addressCity;
+}
+
+/**
+ * @return the addressStateID
+ */
+public StateVO getAddressStateID() {
+   if ( addressStateID == null || addressStateID.getStateID() <= 0 ) {
+	  addressStateID = StateVO.create( 2, "Pa", "", null );
+   }
+   return addressStateID;
+}
+
+/**
+ * @param addressStateID the addressStateID to set
+ */
+public void setAddressStateID(StateVO addressStateID) {
+   this.addressStateID = addressStateID;
+}
+
+/**
+ * @return the addressStreet
+ */
+public String getAddressStreet() {
+   return addressStreet;
+}
+
+/**
+ * @param addressStreet the addressStreet to set
+ */
+public void setAddressStreet(String addressStreet) {
+   this.addressStreet = addressStreet;
+}
+
+/**
+ * @return the addressZip
+ */
+public String getAddressZip() {
+   return addressZip;
+}
+
+/**
+ * @param addressZip the addressZip to set
+ */
+public void setAddressZip(String addressZip) {
+   this.addressZip = addressZip;
+}
+
+/**
+ * @return the email
+ */
+public String getEmail() {
+   return email;
+}
+
+/**
+ * @param email the email to set
+ */
+public void setEmail(String email) {
+   this.email = email;
+}
+
+/**
+ * @return the firstName
+ */
+public String getFirstName() {
+   return firstName;
+}
+
+/**
+ * @param firstName the firstName to set
+ */
+public void setFirstName(String firstName) {
+   this.firstName = firstName;
+}
+
+/**
+ * @return the lastName
+ */
+public String getLastName() {
+   return lastName;
+}
+
+/**
+ * @param lastName the lastName to set
+ */
+public void setLastName(String lastName) {
+   this.lastName = lastName;
+}
+
+/**
+ * @return the patientList
+ */
+public List<PatientVO> getPatientList() {
+   return patientList;
+}
+
+/**
+ * @param patientList the patientList to set
+ */
+public void setPatientList(List<PatientVO> patientList) {
+   this.patientList = patientList;
+}
+
+/**
+ * @return the patientLogCommunicationPreference
+ */
+public String getPatientLogCommunicationPreference() {
+   return patientLogCommunicationPreference;
+}
+
+/**
+ * @param patientLogCommunicationPreference the patientLogCommunicationPreference to set
+ */
+public void setPatientLogCommunicationPreference(String patientLogCommunicationPreference) {
+   this.patientLogCommunicationPreference = patientLogCommunicationPreference;
+}
+
+/**
+ * @return the phoneFax
+ */
+public String getPhoneFax() {
+   return phoneFax;
+}
+
+/**
+ * @param phoneFax the phoneFax to set
+ */
+public void setPhoneFax(String phoneFax) {
+   this.phoneFax = phoneFax;
+}
+
+/**
+ * @return the phoneMobile
+ */
+public String getPhoneMobile() {
+   return phoneMobile;
+}
+
+/**
+ * @param phoneMobile the phoneMobile to set
+ */
+public void setPhoneMobile(String phoneMobile) {
+   this.phoneMobile = phoneMobile;
+}
+
+/**
+ * @return the phonePager
+ */
+public byte[] getPhonePager() {
+   return phonePager;
+}
+
+/**
+ * @param phonePager the phonePager to set
+ */
+public void setPhonePager(byte[] phonePager) {
+   this.phonePager = phonePager;
+}
+
+/**
+ * @return the phoneWork
+ */
+public String getPhoneWork() {
+   return phoneWork;
+}
+
+/**
+ * @param phoneWork the phoneWork to set
+ */
+public void setPhoneWork(String phoneWork) {
+   this.phoneWork = phoneWork;
+}
+
+/**
+ * @return the physicianID
+ */
+public int getPhysicianID() {
+   return physicianID;
+}
+
+/**
+ * @param physicianID the physicianID to set
+ */
+public void setPhysicianID(int physicianID) {
+   this.physicianID = physicianID;
+}
+
+/**
+ * @return the specialty
+ */
+public String getSpecialty() {
+   return specialty;
+}
+
+/**
+ * @param specialty the specialty to set
+ */
+public void setSpecialty(String specialty) {
+   this.specialty = specialty;
+}
+
 @Override
 public boolean isValid() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -57,14 +270,14 @@ public boolean isValid(int _ACTION) {
    if ( _ACTION == INSERT ) {
 
    } else if ( _ACTION == UPDATE ) {
-	  if ( addressStateID == null ) {
-		 this.addressStateID = StateVO.builder().stateID( 2 ).build();
-		 if ( this.physicianID <= 0 ) {
+	  if ( getAddressStateID() == null ) {
+		 this.setAddressStateID( StateVO.builder().stateID( 2 ).build() );
+		 if ( this.getPhysicianID() <= 0 ) {
 			return false;
 		 }
 	  }
    }
-   if ( lastName == null || firstName == null || lastName.length() * firstName.length() == 0 ) {
+   if ( getLastName() == null || getFirstName() == null || getLastName().length() * getFirstName().length() == 0 ) {
 	  return false;
    }
    return true;
@@ -79,22 +292,21 @@ public String toJSON() {
 public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
-public int physicianID;
-public String lastName;
-public String firstName;
-public String specialty;
-public String phoneWork;
-public String phoneMobile;
-public byte[] phonePager;
-public String phoneFax;
-public String email;
-public String patientLogCommunicationPreference;
-public String addressStreet;
-public String addressCity;
-public String addressZip;
-public StateVO addressStateID;
-public List<PatientVO> patientList;
-
+private int physicianID;
+private String lastName;
+private String firstName;
+private String specialty;
+private String phoneWork;
+private String phoneMobile;
+private byte[] phonePager;
+private String phoneFax;
+private String email;
+private String patientLogCommunicationPreference;
+private String addressStreet;
+private String addressCity;
+private String addressZip;
+private StateVO addressStateID;
+private List<PatientVO> patientList;
 
 public static class Builder {
 

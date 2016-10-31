@@ -194,7 +194,18 @@ public PharmaRxOtcVO findPharmaRxOtcVO(boolean onlyAssigned);
 public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id);
 
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword,boolean onlyAssigned);
+
+/**
+ * Returns list of all instructions
+ * @return  ArrayList
+ * //spSigSelect
+ */
 public ArrayList<SigVO> findAllSigs();
+public Map<Integer,SigVO> findAllSigsMap();
+public Map<Integer,MedTypeVO> findAllMedTypesMap();
+
+
+
 
 
 

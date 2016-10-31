@@ -20,7 +20,7 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.*;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.*;
 
 /**
@@ -238,5 +238,15 @@ private String makeJSONInfoMsg(String msg) {
 }
 
 private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );
-
+ public  void setApplicationStores(HttpServletRequest request,MedLogDAO dao){
+	  ServletContext context=  request.getServletContext();
+	  if (context.getAttribute( APPLICATION_STATE_BEAN) == null){
+		 context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true ) );
+	  }
+	  
+	    if (context.getAttribute( APPLICATION_SIG_BEAN) == null){
+		   
+		}
+	  
+   }
 }

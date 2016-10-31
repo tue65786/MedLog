@@ -37,9 +37,6 @@ MedLogDAO dao;
 	    if (context.getAttribute( APPLICATION_SIG_BEAN) == null){
 		   
 		}
-		
-		
-	  
 	  
    }
 /**

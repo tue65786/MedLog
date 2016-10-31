@@ -44,7 +44,6 @@ public MedLogDAO(DbConnection db, PatientVO u) {
    }
 }
 
-
 @Override
 public int assignMedication(MedicationVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -122,7 +121,56 @@ public int createDiary(DiaryVO _vo) {
 
 @Override
 public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   ///
+
+   CallableStatement cs = null;
+   int newID = DB_ERROR_CODE;
+   if ( _vo.isValid( INSERT ) ) {
+	  try {
+		 cs = db.getConnnection().prepareCall( SP_HEALTHCARE_INSERT );
+//@phoneFax nchar (10) = NULL
+//@email nvarchar (256) = NULL
+//@pathient_log_communication_preference varchar (20) = NULL
+//@addressStreet nvarchar (512) = NULL
+//@addressCity nvarchar (128) = NULL
+//@addressStateID int = NULL
+//@addressZip varchar (10) = NULL
+//@inserted int OUTPUT
+		 cs.setString( 1, _vo.getLastName() );
+		 cs.setString( 2, _vo.getFirstName() );
+		 cs.setNull( 3, java.sql.Types.NVARCHAR );
+		 cs.setString( 4, _vo.getPhoneWork() );
+		 cs.setString( 5, _vo.getPhoneMobile() );
+		 cs.setNull( 6, java.sql.Types.VARBINARY );
+		 cs.setString( 7, _vo.getPhoneFax() );
+		 cs.setString( 8, _vo.getEmail() );
+		 cs.setNull( 9, java.sql.Types.NVARCHAR );
+		 cs.setString( 11, _vo.getAddressStreet() );
+		 cs.setString( 12, _vo.getAddressCity() );
+		 cs.setInt( 13, _vo.getAddressStateID().getStateID() );//CHECK FOR VALID STATE
+		 cs.setString( 11, _vo.getAddressZip() );
+		 cs.registerOutParameter( 12, java.sql.Types.INTEGER );
+		 int rows = cs.executeUpdate();
+		 newID = cs.getInt( 12 );
+	  } catch (SQLException ex) {
+		 if ( DEBUG ) {
+			System.err.println( "com.medlog.webservice.dao.MedLogDAO.createHealthcareProviderVO()\n" + DbUtl.printJDBCExceptionMsg( ex ) );
+		 }
+		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createHealthcareProviderVO()", "SQLEx", ex );
+	  } catch (NullPointerException npe) {
+		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createHealthcareProviderVO()", "Null Pointer", npe );
+	  } finally {
+		 DbUtl.close( cs );
+	  }
+   } else {
+	  if ( DEBUG ) {
+		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createHealthcareProviderVO()", "INVALID Parmas" );
+	  }
+	  this.stateOK = false;
+	  this.errorMessage = "Create healthcare valid, invalid params.";
+   }
+   return newID;
+
 }
 
 @Override
@@ -198,7 +246,17 @@ public boolean deletePatient(PatientVO _vo) {
 }
 
 @Override
+public Map<Integer, MedTypeVO> findAllMedTypesMap() {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+
+@Override
 public ArrayList<SigVO> findAllSigs() {
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+
+@Override
+public Map<Integer, SigVO> findAllSigsMap() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
@@ -261,7 +319,6 @@ public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
-
 @Override
 public HealthcareProviderVO findHealthcareProviderID(int _id) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -322,14 +379,17 @@ public PatientVO findPatientByPatientNameAndPassword(String _username, String _p
 	  return null;
    }
 }
+
 @Override
 public PharmaRxOtcVO findPharmaRxOtcVO(boolean _onlyAssigned) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
 @Override
 public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
 @Override
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -384,10 +444,12 @@ public void setUser(PatientVO user) {
    this.user = user;
    getCurrentUser();
 }
+
 @Override
 public int syncDiary(ArrayList<DiaryVO> _voList) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
 @Override
 public int syncMedication(ArrayList<MedicationVO> _voList) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -411,13 +473,13 @@ public boolean updateHealthcareProviderVO(HealthcareProviderVO _vo) {
 
 @Override
 public boolean updatePatient(PatientVO _vo) {
-    CallableStatement cs = null;
+   CallableStatement cs = null;
    int newID = DB_ERROR_CODE;
    if ( _vo.isValid( UPDATE ) ) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_PATIENT_UPDATE );
 
-		 cs.setInt( 1,_vo.getPatientID());
+		 cs.setInt( 1, _vo.getPatientID() );
 		 cs.setString( 2, _vo.getUserPassword() );
 		 cs.setString( 3, _vo.getFirstName() );
 		 cs.setString( 4, _vo.getLastName() );
@@ -464,9 +526,9 @@ public boolean updatePatient(PatientVO _vo) {
 	  this.stateOK = false;
 	  this.errorMessage = "Create patient, invalid params.";
    }
-   return true
-		   ;
+   return true;
 }
+
 @Override
 public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -535,6 +597,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
    }
    return voList;
 }
+
 /**
  * HealtcareProvider Search
  *
@@ -648,8 +711,9 @@ private ArrayList<PatientVO> findPatient(int _id, String _username, String _pass
    }
    return voList;
 }
+
 private int changeMedicationBinding(MedicationVO _vo) {
-   
+
    CallableStatement cs = null;
    int newID = DB_ERROR_CODE;
    try {
@@ -662,16 +726,16 @@ private int changeMedicationBinding(MedicationVO _vo) {
 		 e.printStackTrace();
 	  }
    }
-   if ( (_vo.isActive() && _vo.isValid( INSERT ) ) || _vo.isValid( DELETE )  && !_vo.isActive()) {
+   if ( ( _vo.isActive() && _vo.isValid( INSERT ) ) || _vo.isValid( DELETE ) && !_vo.isActive() ) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_MEDICATION_CHANGE_BINDING );
 		 cs.setInt( 1, getCurrentUser().getPatientID() );
-		 cs.setInt(2,_vo.getPharmID().pharmID);
+		 cs.setInt( 2, _vo.getPharmID().pharmID );
 		 cs.setString( 3, _vo.getInstructions() );
-		 cs.setString(4,_vo.getSig().sigAbbrID);
-		 cs.setDate(5, (java.sql.Date) _vo.getStartDate());
+		 cs.setString( 4, _vo.getSig().sigAbbrID );
+		 cs.setDate( 5, (java.sql.Date) _vo.getStartDate() );
 	  } catch (Exception e) {
-		 
+
 	  }
    }
    return newID;

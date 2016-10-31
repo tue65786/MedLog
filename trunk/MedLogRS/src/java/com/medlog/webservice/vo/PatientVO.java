@@ -27,411 +27,413 @@ public static PatientVO create(final int patientID, final String userName, final
    return new PatientVO( patientID, userName, userPassword, userHash, firstName, lastName, phoneHome, phoneMobile, email, status, addressStreet, addressCity, addressState, addressCountry, addressPostalcode, userPreferences, pwdLastChanged, lang, timezoneId, dateOfBirth, dateJoined, picture, metaData, userRole, diaryList, medicationList, primaryPhyssician, healthcareProviderList, tagList );
 }
 
-   /**
-    * @return the addressCity
-    */
-   public String getAddressCity() {
-	  return addressCity;
-   }
+/**
+ * @return the addressCity
+ */
+public String getAddressCity() {
+   return addressCity;
+}
 
-   /**
-    * @param addressCity the addressCity to set
-    */
-   public void setAddressCity(String addressCity) {
-	  this.addressCity = addressCity;
-   }
+/**
+ * @param addressCity the addressCity to set
+ */
+public void setAddressCity(String addressCity) {
+   this.addressCity = addressCity;
+}
 
-   /**
-    * @return the addressCountry
-    */
-   public String getAddressCountry() {
-	  return addressCountry;
-   }
+/**
+ * @return the addressCountry
+ */
+public String getAddressCountry() {
+   return addressCountry;
+}
 
-   /**
-    * @param addressCountry the addressCountry to set
-    */
-   public void setAddressCountry(String addressCountry) {
-	  this.addressCountry = addressCountry;
-   }
+/**
+ * @param addressCountry the addressCountry to set
+ */
+public void setAddressCountry(String addressCountry) {
+   this.addressCountry = addressCountry;
+}
 
-   /**
-    * @return the addressPostalcode
-    */
-   public String getAddressPostalcode() {
-	  return StringUtils.left( StrUtl.toS(addressPostalcode).trim(), 9 );
-   }
+/**
+ * @return the addressPostalcode
+ */
+public String getAddressPostalcode() {
+   return StringUtils.left( StrUtl.toS( addressPostalcode ).trim(), 9 );
+}
 
-   /**
-    * @param addressPostalcode the addressPostalcode to set
-    */
-   public void setAddressPostalcode(String addressPostalcode) {
-	  this.addressPostalcode = addressPostalcode;
-   }
+/**
+ * @param addressPostalcode the addressPostalcode to set
+ */
+public void setAddressPostalcode(String addressPostalcode) {
+   this.addressPostalcode = addressPostalcode;
+}
 
-   /**
-    * @return the addressState
-    */
-   public StateVO getAddressState() {
-	  return addressState;
-   }
+/**
+ * @return the addressState
+ */
+public StateVO getAddressState() {
+   return addressState;
+}
 
-   /**
-    * @param addressState the addressState to set
-    */
-   public void setAddressState(StateVO addressState) {
-	  this.addressState = addressState;
-   }
+/**
+ * @param addressState the addressState to set
+ */
+public void setAddressState(StateVO addressState) {
+   this.addressState = addressState;
+}
 
-   /**
-    * @return the addressStreet
-    */
-   public String getAddressStreet() {
-	  return StringUtils.left( StrUtl.toS(addressStreet), 145 );
-   }
+/**
+ * @return the addressStreet
+ */
+public String getAddressStreet() {
+   return StringUtils.left( StrUtl.toS( addressStreet ), 145 );
+}
 
-   /**
-    * @param addressStreet the addressStreet to set
-    */
-   public void setAddressStreet(String addressStreet) {
-	  this.addressStreet = addressStreet;
-   }
+/**
+ * @param addressStreet the addressStreet to set
+ */
+public void setAddressStreet(String addressStreet) {
+   this.addressStreet = addressStreet;
+}
 
-   /**
-    * @return the dateJoined
-    */
-   public Date getDateJoined() {
-	  return dateJoined;
-   }
+/**
+ * @return the dateJoined
+ */
+public Date getDateJoined() {
+   return dateJoined;
+}
 
-   /**
-    * @param dateJoined the dateJoined to set
-    */
-   public void setDateJoined(Date dateJoined) {
-	  this.dateJoined = dateJoined;
-   }
+/**
+ * @param dateJoined the dateJoined to set
+ */
+public void setDateJoined(Date dateJoined) {
+   this.dateJoined = dateJoined;
+}
 
-   /**
-    * @return the dateOfBirth
-    */
-   public Date getDateOfBirth() {
-	  return dateOfBirth;
-   }
+/**
+ * @return the dateOfBirth
+ */
+public Date getDateOfBirth() {
+   return dateOfBirth;
+}
 
-   /**
-    * @param dateOfBirth the dateOfBirth to set
-    */
-   public void setDateOfBirth(Date dateOfBirth) {
-	  this.dateOfBirth = dateOfBirth;
-   }
+/**
+ * @param dateOfBirth the dateOfBirth to set
+ */
+public void setDateOfBirth(Date dateOfBirth) {
+   this.dateOfBirth = dateOfBirth;
+}
 
-   /**
-    * @return the diaryList
-    */
-   public List<DiaryVO> getDiaryList() {
-	  return diaryList;
-   }
+/**
+ * @return the diaryList
+ */
+public List<DiaryVO> getDiaryList() {
+   return diaryList;
+}
 
-   /**
-    * @param diaryList the diaryList to set
-    */
-   public void setDiaryList(List<DiaryVO> diaryList) {
-	  this.diaryList = diaryList;
-   }
+/**
+ * @param diaryList the diaryList to set
+ */
+public void setDiaryList(List<DiaryVO> diaryList) {
+   this.diaryList = diaryList;
+}
 
-   /**
-    * @return the email
-    */
-   public String getEmail() {
-	  return email;
-   }
+/**
+ * @return the email
+ */
+public String getEmail() {
+   return email;
+}
 
-   /**
-    * @param email the email to set
-    */
-   public void setEmail(String email) {
-	  this.email = email;
-   }
+/**
+ * @param email the email to set
+ */
+public void setEmail(String email) {
+   this.email = email;
+}
 
-   /**
-    * @return the firstName
-    */
-   public String getFirstName() {
-	  return firstName;
-   }
+/**
+ * @return the firstName
+ */
+public String getFirstName() {
+   return firstName;
+}
 
-   /**
-    * @param firstName the firstName to set
-    */
-   public void setFirstName(String firstName) {
-	  this.firstName = firstName;
-   }
+/**
+ * @param firstName the firstName to set
+ */
+public void setFirstName(String firstName) {
+   this.firstName = firstName;
+}
 
-   /**
-    * @return the healthcareProviderList
-    */
-   public List<HealthcareProviderVO> getHealthcareProviderList() {
-	  return healthcareProviderList;
-   }
+/**
+ * @return the healthcareProviderList
+ */
+public List<HealthcareProviderVO> getHealthcareProviderList() {
+   return healthcareProviderList;
+}
 
-   /**
-    * @param healthcareProviderList the healthcareProviderList to set
-    */
-   public void setHealthcareProviderList(List<HealthcareProviderVO> healthcareProviderList) {
-	  this.healthcareProviderList = healthcareProviderList;
-   }
+/**
+ * @param healthcareProviderList the healthcareProviderList to set
+ */
+public void setHealthcareProviderList(List<HealthcareProviderVO> healthcareProviderList) {
+   this.healthcareProviderList = Collections.synchronizedList( healthcareProviderList );
 
-   /**
-    * @return the lang
-    */
-   public String getLang() {
-	  return lang;
-   }
+   
+}
 
-   /**
-    * @param lang the lang to set
-    */
-   public void setLang(String lang) {
-	  this.lang = lang;
-   }
+/**
+ * @return the lang
+ */
+public String getLang() {
+   return lang;
+}
 
-   /**
-    * @return the lastName
-    */
-   public String getLastName() {
-	  return lastName;
-   }
+/**
+ * @param lang the lang to set
+ */
+public void setLang(String lang) {
+   this.lang = lang;
+}
 
-   /**
-    * @param lastName the lastName to set
-    */
-   public void setLastName(String lastName) {
-	  this.lastName = lastName;
-   }
+/**
+ * @return the lastName
+ */
+public String getLastName() {
+   return lastName;
+}
 
-   /**
-    * @return the medicationList
-    */
-   public List<MedicationVO> getMedicationList() {
-	  return medicationList;
-   }
+/**
+ * @param lastName the lastName to set
+ */
+public void setLastName(String lastName) {
+   this.lastName = lastName;
+}
 
-   /**
-    * @param medicationList the medicationList to set
-    */
-   public void setMedicationList(List<MedicationVO> medicationList) {
-	  this.medicationList = medicationList;
-   }
+/**
+ * @return the medicationList
+ */
+public List<MedicationVO> getMedicationList() {
+   return medicationList;
+}
 
-   /**
-    * @return the metaData
-    */
-   public String getMetaData() {
-	  return metaData;
-   }
+/**
+ * @param medicationList the medicationList to set
+ */
+public void setMedicationList(List<MedicationVO> medicationList) {
+   this.medicationList = Collections.synchronizedList( medicationList ); ;
+}
 
-   /**
-    * @param metaData the metaData to set
-    */
-   public void setMetaData(String metaData) {
-	  this.metaData = metaData;
-   }
+/**
+ * @return the metaData
+ */
+public String getMetaData() {
+   return metaData;
+}
 
-   /**
-    * @return the patientID
-    */
-   public int getPatientID() {
-	  return patientID;
-   }
+/**
+ * @param metaData the metaData to set
+ */
+public void setMetaData(String metaData) {
+   this.metaData = metaData;
+}
 
-   /**
-    * @param patientID the patientID to set
-    */
-   public void setPatientID(int patientID) {
-	  this.patientID = patientID;
-   }
+/**
+ * @return the patientID
+ */
+public int getPatientID() {
+   return patientID;
+}
 
-   /**
-    * @return the phoneHome
-    */
-   public String getPhoneHome() {
-	  return phoneHome;
-   }
+/**
+ * @param patientID the patientID to set
+ */
+public void setPatientID(int patientID) {
+   this.patientID = patientID;
+}
 
-   /**
-    * @param phoneHome the phoneHome to set
-    */
-   public void setPhoneHome(String phoneHome) {
-	  this.phoneHome = phoneHome;
-   }
+/**
+ * @return the phoneHome
+ */
+public String getPhoneHome() {
+   return phoneHome;
+}
 
-   /**
-    * @return the phoneMobile
-    */
-   public String getPhoneMobile() {
-	  return phoneMobile;
-   }
+/**
+ * @param phoneHome the phoneHome to set
+ */
+public void setPhoneHome(String phoneHome) {
+   this.phoneHome = phoneHome;
+}
 
-   /**
-    * @param phoneMobile the phoneMobile to set
-    */
-   public void setPhoneMobile(String phoneMobile) {
-	  this.phoneMobile = phoneMobile;
-   }
+/**
+ * @return the phoneMobile
+ */
+public String getPhoneMobile() {
+   return phoneMobile;
+}
 
-   /**
-    * @return the picture
-    */
-   public String getPicture() {
-	  return picture;
-   }
+/**
+ * @param phoneMobile the phoneMobile to set
+ */
+public void setPhoneMobile(String phoneMobile) {
+   this.phoneMobile = phoneMobile;
+}
 
-   /**
-    * @param picture the picture to set
-    */
-   public void setPicture(String picture) {
-	  this.picture = picture;
-   }
+/**
+ * @return the picture
+ */
+public String getPicture() {
+   return picture;
+}
 
-   /**
-    * @return the primaryPhyssician
-    */
-   public HealthcareProviderVO getPrimaryPhyssician() {
-	  return primaryPhyssician;
-   }
+/**
+ * @param picture the picture to set
+ */
+public void setPicture(String picture) {
+   this.picture = picture;
+}
 
-   /**
-    * @param primaryPhyssician the primaryPhyssician to set
-    */
-   public void setPrimaryPhyssician(HealthcareProviderVO primaryPhyssician) {
-	  this.primaryPhyssician = primaryPhyssician;
-   }
+/**
+ * @return the primaryPhyssician
+ */
+public HealthcareProviderVO getPrimaryPhyssician() {
+   return primaryPhyssician;
+}
 
-   /**
-    * @return the pwdLastChanged
-    */
-   public Date getPwdLastChanged() {
-	  return pwdLastChanged;
-   }
+/**
+ * @param primaryPhyssician the primaryPhyssician to set
+ */
+public void setPrimaryPhyssician(HealthcareProviderVO primaryPhyssician) {
+   this.primaryPhyssician = primaryPhyssician;
+}
 
-   /**
-    * @param pwdLastChanged the pwdLastChanged to set
-    */
-   public void setPwdLastChanged(Date pwdLastChanged) {
-	  this.pwdLastChanged = pwdLastChanged;
-   }
+/**
+ * @return the pwdLastChanged
+ */
+public Date getPwdLastChanged() {
+   return pwdLastChanged;
+}
 
-   /**
-    * @return the status
-    */
-   public String getStatus() {
-	  return status;
-   }
+/**
+ * @param pwdLastChanged the pwdLastChanged to set
+ */
+public void setPwdLastChanged(Date pwdLastChanged) {
+   this.pwdLastChanged = pwdLastChanged;
+}
 
-   /**
-    * @param status the status to set
-    */
-   public void setStatus(String status) {
-	  this.status = status;
-   }
+/**
+ * @return the status
+ */
+public String getStatus() {
+   return status;
+}
 
-   /**
-    * @return the tagList
-    */
-   public List<TagVO> getTagList() {
-	  return tagList;
-   }
+/**
+ * @param status the status to set
+ */
+public void setStatus(String status) {
+   this.status = status;
+}
 
-   /**
-    * @param tagList the tagList to set
-    */
-   public void setTagList(List<TagVO> tagList) {
-	  this.tagList = tagList;
-   }
+/**
+ * @return the tagList
+ */
+public List<TagVO> getTagList() {
+   return tagList;
+}
 
-   /**
-    * @return the timezoneId
-    */
-   public String getTimezoneId() {
-	  return timezoneId;
-   }
+/**
+ * @param tagList the tagList to set
+ */
+public void setTagList(List<TagVO> tagList) {
+   this.tagList = tagList;
+}
 
-   /**
-    * @param timezoneId the timezoneId to set
-    */
-   public void setTimezoneId(String timezoneId) {
-	  this.timezoneId = timezoneId;
-   }
+/**
+ * @return the timezoneId
+ */
+public String getTimezoneId() {
+   return timezoneId;
+}
 
-   /**
-    * @return the userHash
-    */
-   public String getUserHash() {
-	  return userHash;
-   }
+/**
+ * @param timezoneId the timezoneId to set
+ */
+public void setTimezoneId(String timezoneId) {
+   this.timezoneId = timezoneId;
+}
 
-   /**
-    * @param userHash the userHash to set
-    */
-   public void setUserHash(String userHash) {
-	  this.userHash = userHash;
-   }
+/**
+ * @return the userHash
+ */
+public String getUserHash() {
+   return userHash;
+}
 
-   /**
-    * @return the userName
-    */
-   public String getUserName() {
-	  return userName;
-   }
+/**
+ * @param userHash the userHash to set
+ */
+public void setUserHash(String userHash) {
+   this.userHash = userHash;
+}
 
-   /**
-    * @param userName the userName to set
-    */
-   public void setUserName(String userName) {
-	  this.userName = userName;
-   }
+/**
+ * @return the userName
+ */
+public String getUserName() {
+   return userName;
+}
 
-   /**
-    * @return the userPassword
-    */
-   public String getUserPassword() {
-	  return userPassword;
-   }
+/**
+ * @param userName the userName to set
+ */
+public void setUserName(String userName) {
+   this.userName = userName;
+}
 
-   /**
-    * @param userPassword the userPassword to set
-    */
-   public void setUserPassword(String userPassword) {
-	  this.userPassword = userPassword;
-   }
+/**
+ * @return the userPassword
+ */
+public String getUserPassword() {
+   return userPassword;
+}
 
-   /**
-    * @return the userPreferences
-    */
-   public String getUserPreferences() {
-	  return userPreferences;
-   }
+/**
+ * @param userPassword the userPassword to set
+ */
+public void setUserPassword(String userPassword) {
+   this.userPassword = userPassword;
+}
 
-   /**
-    * @param userPreferences the userPreferences to set
-    */
-   public void setUserPreferences(String userPreferences) {
-	  this.userPreferences = userPreferences;
-   }
+/**
+ * @return the userPreferences
+ */
+public String getUserPreferences() {
+   return userPreferences;
+}
 
-   /**
-    * @return the userRole
-    */
-   public int getUserRole() {
-	  return userRole;
-   }
+/**
+ * @param userPreferences the userPreferences to set
+ */
+public void setUserPreferences(String userPreferences) {
+   this.userPreferences = userPreferences;
+}
 
-   /**
-    * @param userRole the userRole to set
-    */
-   public void setUserRole(int userRole) {
-	  this.userRole = userRole;
-   }
+/**
+ * @return the userRole
+ */
+public int getUserRole() {
+   return userRole;
+}
+
+/**
+ * @param userRole the userRole to set
+ */
+public void setUserRole(int userRole) {
+   this.userRole = userRole;
+}
 
 @Override
 public boolean isValid() {
@@ -476,7 +478,7 @@ public boolean isValid(int _ACTION) {
 @Override
 public String toJSON() {
    Gson g = new GsonBuilder().serializeNulls().create();
-   return g.toJson( this);
+   return g.toJson( this );
 }
 
 @Override
@@ -720,7 +722,7 @@ public static PatientVO.Builder builder() {
  * @return Instance
  */
 public static PatientVO newInstance(PatientVO vo) {
-   return PatientVO.create(vo.getPatientID(), vo.getUserName(), vo.getUserPassword(), vo.getUserHash(), vo.getFirstName(), vo.getLastName(), vo.getPhoneHome(), vo.getPhoneMobile(), vo.getEmail(), vo.getStatus(), vo.getAddressStreet(), vo.getAddressCity(), vo.getAddressState(), vo.getAddressCountry(), vo.getAddressPostalcode(), vo.getUserPreferences(), vo.getPwdLastChanged(), vo.getLang(), vo.getTimezoneId(), vo.getDateOfBirth(), vo.getDateJoined(), vo.getPicture(), vo.getMetaData(), vo.getUserRole(), vo.getDiaryList(), vo.getMedicationList(), vo.getPrimaryPhyssician(), vo.getHealthcareProviderList(), vo.getTagList());
+   return PatientVO.create( vo.getPatientID(), vo.getUserName(), vo.getUserPassword(), vo.getUserHash(), vo.getFirstName(), vo.getLastName(), vo.getPhoneHome(), vo.getPhoneMobile(), vo.getEmail(), vo.getStatus(), vo.getAddressStreet(), vo.getAddressCity(), vo.getAddressState(), vo.getAddressCountry(), vo.getAddressPostalcode(), vo.getUserPreferences(), vo.getPwdLastChanged(), vo.getLang(), vo.getTimezoneId(), vo.getDateOfBirth(), vo.getDateJoined(), vo.getPicture(), vo.getMetaData(), vo.getUserRole(), vo.getDiaryList(), vo.getMedicationList(), vo.getPrimaryPhyssician(), vo.getHealthcareProviderList(), vo.getTagList() );
 }
 
 /**
