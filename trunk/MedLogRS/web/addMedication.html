@@ -6,33 +6,45 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
     </head>
     <body>
         <div>
             <div id="header">
                 <table style='width:95%'><tr><td style="width:85%">
-                <h1> Additional Medication </h1>
-                <p> Are you taking another medication? </p>
-                <p> Let's add it to the list </p>
-                </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+							<h1> Additional Medication </h1>
+							<p> Are you taking another medication? </p>
+							<p> Let's add it to the list </p>
+						</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
             </div>
+			
+			
+			
+			
+			
+			
             <div>
                 <form method="post" name="medicationForm" id="medicationForm">
-                    <!-- This records information about the medication -->
+                  <input type="text" name="medicationID" id="medicationID" />
+					<!-- This records information about the medication -->
                     <fieldset>
                         <legend> Medication Information </legend>
                         <!-- Information on the medication that is being or will be taken -->
                         <!-- This will be replaced by PharmaRX -->
                         <label for="medicationName"> Medication Name:<br/></label>
-                        <input name="medicationName" type="text" id="medicationName" placeholder="Name of the medication?" required/><br/>
-                        <!-- This will be replaced by HealthcareProvider -->
+<!--DangBong                        
+SELECT Tag for Pharma-->
+						<input name="medicationName" type="text" id="medicationName" placeholder="Name of the medication?" required/><br/>
+
                         <label for="physicianName"> Physician Name:<br/></label>
+						  <!-- 
+ This will be replaced by select tag 
+>> also check MedicationVO for phyID??						  -->
                         <input name="physicianName" type="text" id="physicianName" placeholder="Who prescribe it?"/><br/>
                         <label for="instructions"> How much are you told to take? <br/></label>
                         <input name="instructions" type="text" id="instructions" placeholder="Suposed to take.../Labeled to take..." required/><br/>
                     </fieldset>
-                    
+
                     <!-- This notes the cycle of the medication for the patient -->
                     <fieldset>
                         <legend> Cycle Details </legend>
@@ -45,10 +57,16 @@
                         <label for="frequencySig"> Frequency: <br/></label>
                         <input name="frequencySig" type="text" id="frequencySig" placeholder="How often do you take the dosage? (ex. daily, twice a day, etc.)" required/><br>
                         <label for="active"> Are you currently on this medication? </label><br/>
-                        <input name="active" type="checkbox" id="active" value="true"/> Yes <br/>
-                        <input name="active" type="checkbox" id="active" value="false"/> No <br/>
+
+						<!--
+						DK: only one tag needed for chk
+						-->
+						<input name="active" type="checkbox" id="active"/> Yes <br/>
+						<!--
+						DK: GO AWAY!-->
+						<input name="active" type="checkbox" id="active" value="false"/> No <br/>
                     </fieldset>
-                    
+
                     <!-- Submit & reset buttons-->
                     <button type="submit">Add medication!</button>
                     <button type="reset">Clear</button> <br/>

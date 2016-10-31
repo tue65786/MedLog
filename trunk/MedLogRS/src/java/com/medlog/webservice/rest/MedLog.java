@@ -54,15 +54,23 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  sh = new ServletHelpers( request, response );
 	  session = request.getSession();
 	  
-	  getStatesList( request, db );
+	  ///getStatesList( request, db );
 	  
 
 
 	  //Get Request Function
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
 	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
-	  currentUser = getCurrentUser( session );
+	  
 	  //Valid login functions
+	 if (fn.equalsIgnoreCase( "add") && res.equalsIgnoreCase( API_ACTIONS.API_RESOURCE_PATIENT)){
+		MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
+		out.print(strategy.execute( db ));
+		
+	 } 
+	 
+	 else{ 
+		currentUser = getCurrentUser( session );
 	  if ( /*
 			   * currentUser == null &&
 			   */ ( fn.equalsIgnoreCase( "login" ) /*
@@ -116,6 +124,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 out.print( strategy.execute( db ) );
 
 	  }
+	 }
    } finally {
 	  try {
 		 db.close();

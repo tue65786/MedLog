@@ -159,7 +159,7 @@ public ArrayList<PatientVO> getPatients();
  * @return success
  * @see DB_STRINGS#SP_PATIENT_MEDICATION
  */
-public boolean unassignMedication();
+public boolean unassignMedication(MedicationVO _vo);
 
 
 /**

@@ -236,4 +236,31 @@ public static String getJSONMsg(String state, String msg, Integer val) {
 		}
 	}
    private static final Logger LOG = Logger.getLogger( StrUtl.class.getName() );
+    
+   /**
+	* 
+	* @param input
+	* @param length
+	* @return 
+	*/
+   public static String truncateAtWord( String input, int length ) {
+	 int offset;
+	 int iNextSpace;
+	 offset = 1;
+	 if ( input == null || input.length() < (length - offset) ) {
+		return StrUtl.toS(input);
+	 }
+	 iNextSpace = input.lastIndexOf( " ", length );
+	 String trunc = input;
+	 try {
+		trunc = String.format( input
+			 .substring( 0, (iNextSpace > 0) ? iNextSpace : (length - offset) )
+			 .trim() );
+		return trunc;
+	 }
+	 catch ( Exception e ) {
+		return StrUtl.toS(trunc).trim();
+	 }
+  }
+
 }

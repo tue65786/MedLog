@@ -207,7 +207,9 @@ public boolean isValid(MedicationVO _vo) {
 @Override
 public boolean isValid(int _ACTION) {
    if ( _ACTION != INSERT ) {
-
+	  if (this.pharmID == null ){
+		 return false;
+	  }
    }
    return true;
 }
@@ -232,10 +234,13 @@ public String toTableRow() {
 }
 private int medicationID;
 private PatientVO patientID;
+/**
+ * Name of medication
+ */
 private PharmaRxOtcVO pharmID;
 private HealthcareProviderVO physicianID;
 private String instructions;
-private SigVO sig;
+private SigVO sig;//use or not!
 private Date startDate;
 private Date endDate;
 private String dosage;

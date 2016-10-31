@@ -40,13 +40,16 @@ public MedLogDAO(DbConnection db, PatientVO u) {
 	  if ( u != null && u.getPatientID() != -2 ) {
 		 findAllStates();
 	  }
-   } catch (Exception eeee) {
-   }
+   } catch (Exception eeee) {}
 }
 
 @Override
 public int assignMedication(MedicationVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   if ( _vo.isValid( INSERT ) ) {
+	  return changeMedicationBinding( _vo );
+   } else {
+	  return DB_ERROR_CODE;
+   }
 }
 
 @Override
@@ -142,13 +145,13 @@ public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
 		 cs.setString( 4, _vo.getPhoneWork() );
 		 cs.setString( 5, _vo.getPhoneMobile() );
 		 cs.setNull( 6, java.sql.Types.VARBINARY );
-		 cs.setString( 7, _vo.getPhoneFax() );
+		 cs.setString( 7, StrUtl.truncateAtWord( _vo.getPhoneFax(), 10 ) );
 		 cs.setString( 8, _vo.getEmail() );
 		 cs.setNull( 9, java.sql.Types.NVARCHAR );
 		 cs.setString( 11, _vo.getAddressStreet() );
 		 cs.setString( 12, _vo.getAddressCity() );
 		 cs.setInt( 13, _vo.getAddressStateID().getStateID() );//CHECK FOR VALID STATE
-		 cs.setString( 11, _vo.getAddressZip() );
+		 cs.setString( 11, StrUtl.truncateAtWord( _vo.getAddressZip(), 10 ) );
 		 cs.registerOutParameter( 12, java.sql.Types.INTEGER );
 		 int rows = cs.executeUpdate();
 		 newID = cs.getInt( 12 );
@@ -456,9 +459,13 @@ public int syncMedication(ArrayList<MedicationVO> _voList) {
 }
 
 @Override
-public boolean unassignMedication() {
+public boolean unassignMedication(MedicationVO _vo) {
+   if ( _vo.isValid( DELETE ) ) {
+	  return changeMedicationBinding( _vo ) > 0;
+   } else {
+	  return false;
+   }
 
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
 @Override
@@ -478,8 +485,21 @@ public boolean updatePatient(PatientVO _vo) {
    if ( _vo.isValid( UPDATE ) ) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_PATIENT_UPDATE );
-
+//@PatientID int
+//@userPassword nvarchar (30) = NULL
+//@firstName nvarchar (30) = NULL
+//@lastName nvarchar (30) = NULL
+//@phoneHome nvarchar (50) = NULL
+//@phoneMobile nvarchar (50) = NULL
+//@email nvarchar (100) = NULL
+//@addressStreet nvarchar (150) = NULL
+//@addressCity nvarchar (100) = NULL
+//@addressState int = NULL
+//@address_country nvarchar (25) = NULL
+//@address_postalcode nvarchar (9) = NULL
+//@date_of_birth date = NULL
 		 cs.setInt( 1, _vo.getPatientID() );
+		 
 		 cs.setString( 2, _vo.getUserPassword() );
 		 cs.setString( 3, _vo.getFirstName() );
 		 cs.setString( 4, _vo.getLastName() );
@@ -726,13 +746,22 @@ private int changeMedicationBinding(MedicationVO _vo) {
 		 e.printStackTrace();
 	  }
    }
+//   @PatientID int
+//@PharmID int
+//@PhysicanID int = NULL
+//@Instructions nvarchar (max) = NULL
+//@Sig varchar (50) = NULL
+//@StartDate date = getdate
+//@endDate date = NULL
+//@active bit = 1 Set to 0 to delete
    if ( ( _vo.isActive() && _vo.isValid( INSERT ) ) || _vo.isValid( DELETE ) && !_vo.isActive() ) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_MEDICATION_CHANGE_BINDING );
 		 cs.setInt( 1, getCurrentUser().getPatientID() );
 		 cs.setInt( 2, _vo.getPharmID().pharmID );
-		 cs.setString( 3, _vo.getInstructions() );
-		 cs.setString( 4, _vo.getSig().sigAbbrID );
+		 cs.setInt( 3, _vo.getPhysicianID().getPhysicianID() );
+		 cs.setString( 4, _vo.getInstructions() );
+		 cs.setString( 4, _vo.getSig().getSigAbbrID() );
 		 cs.setDate( 5, (java.sql.Date) _vo.getStartDate() );
 	  } catch (Exception e) {
 

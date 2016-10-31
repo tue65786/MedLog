@@ -18,6 +18,48 @@ public class SigVO  implements Serializable, IEntityBase<SigVO> {
 
    private static final long serialVersionUID = -7174641424768405074L;
 
+   /**
+    * @return the category
+    */
+   public String getCategory() {
+	  return category;
+   }
+
+   /**
+    * @param category the category to set
+    */
+   public void setCategory(String category) {
+	  this.category = category;
+   }
+
+   /**
+    * @return the definition
+    */
+   public String getDefinition() {
+	  return definition;
+   }
+
+   /**
+    * @param definition the definition to set
+    */
+   public void setDefinition(String definition) {
+	  this.definition = definition;
+   }
+
+   /**
+    * @return the sigAbbrID
+    */
+   public String getSigAbbrID() {
+	  return sigAbbrID;
+   }
+
+   /**
+    * @param sigAbbrID the sigAbbrID to set
+    */
+   public void setSigAbbrID(String sigAbbrID) {
+	  this.sigAbbrID = sigAbbrID;
+   }
+
    @Override
    public boolean isValid() {
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -42,9 +84,9 @@ public class SigVO  implements Serializable, IEntityBase<SigVO> {
    public String toTableRow() {
 	  throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
    }
-public String sigAbbrID;
-public String definition;
-public String category;
+private String sigAbbrID;
+private String definition;
+private String category;
    public static class Builder {
 
    private String sigAbbrID;

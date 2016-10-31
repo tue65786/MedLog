@@ -66,7 +66,9 @@ public String getAddressPostalcode() {
  * @param addressPostalcode the addressPostalcode to set
  */
 public void setAddressPostalcode(String addressPostalcode) {
-   this.addressPostalcode = addressPostalcode;
+   if ( !StrUtl.toS( phoneMobile ).isEmpty() && phoneMobile.length() > 50 ) {
+	  StrUtl.truncateAtWord( phoneMobile, 50 );
+   }
 }
 
 /**
@@ -180,7 +182,6 @@ public List<HealthcareProviderVO> getHealthcareProviderList() {
 public void setHealthcareProviderList(List<HealthcareProviderVO> healthcareProviderList) {
    this.healthcareProviderList = Collections.synchronizedList( healthcareProviderList );
 
-   
 }
 
 /**
@@ -222,7 +223,7 @@ public List<MedicationVO> getMedicationList() {
  * @param medicationList the medicationList to set
  */
 public void setMedicationList(List<MedicationVO> medicationList) {
-   this.medicationList = Collections.synchronizedList( medicationList ); ;
+   this.medicationList = Collections.synchronizedList( medicationList );;
 }
 
 /**
@@ -271,6 +272,9 @@ public void setPhoneHome(String phoneHome) {
  * @return the phoneMobile
  */
 public String getPhoneMobile() {
+   if ( !StrUtl.toS( phoneMobile ).isEmpty() && phoneMobile.length() > 50 ) {
+	  StrUtl.truncateAtWord( phoneMobile, 50 );
+   }
    return phoneMobile;
 }
 
@@ -397,6 +401,9 @@ public void setUserName(String userName) {
  * @return the userPassword
  */
 public String getUserPassword() {
+   if ( !StrUtl.toS( userPassword ).isEmpty() ) {
+
+   }
    return userPassword;
 }
 

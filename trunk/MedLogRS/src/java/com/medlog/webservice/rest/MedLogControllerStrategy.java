@@ -53,6 +53,8 @@ public String execute(DbConnection dbc) {
    Gson g = new Gson();
    boolean apiCanExecute = true;
    MedLogDAO dao;
+   
+   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute() " + res.name() + res.toString() );
 
    ///  -  ::}
    //     __
@@ -227,6 +229,7 @@ public MedicationVO loadMedicationFromRequest() {
  * @return
  */
 public PatientVO loadPatientFromRequest() {
+   System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadPatientFromRequest()" );
    ServletHelpers sh = new ServletHelpers( request, response );
    PatientVO.Builder p = PatientVO.builder();
    //Allow id or patientID
@@ -247,6 +250,7 @@ public PatientVO loadPatientFromRequest() {
    p.dateOfBirth( sh.getDateParameter( "dateOfBirth", new Date() ) );
    p.userRole( 1 );
    p.dateJoined( sh.getDateParameter( "dateJoined", new Date() ) );
+   
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadPatientFromRequest()\n==> " + p.build().toJSON() );
    return p.build();
    // sh.getStrParameter( "", "")
