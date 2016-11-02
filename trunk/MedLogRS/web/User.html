@@ -47,8 +47,7 @@
                         <input name="addressCity" type="text" id="addressCity" placeholder="ex. Philadelphia"/><br/>
                         <label for="addressState">State:<br/></label>
                         <select id="stateID" name='stateID'>
-							<option value='2'>Pennsylvania</option>
-
+                                <option>Choose your state...</option>
                         </select><br/>
                         <label for="addressCountry">Country:<br/></label>
                         <input name="addressCountry" type="text" id="addressCountry" placeholder="ex. USA"/><br/>
@@ -65,7 +64,7 @@
 
                         <!-- Additional Information optional-->
                         <label for="dateOfBirth">Date of Birth:<br/></label>
-                        <input name="dateOfBirth" type="text" id="dateOfBirth"  placeholder="Enter your date of birth"/><br/>
+                        <input name="dateOfBirth" type="text" id="dateOfBirth" placeholder="Enter your date of birth"/><br/>
                         <!--
                         <label for="gender">Gender:<br></label>
                         <input name="gender" type="radio" id="gender" value="male">Male<br>
@@ -88,32 +87,15 @@
                 $("#registrationForm").on("submit", function(event){
                     event.preventDefault();
                     var userInfo = $("#registrationForm").serialize();
-                    var prefix = "./api/?res=";
-					var res = "p"; 
-					var fn = "add";
-					var theURL = prefix + res + "&fn=" +fn + userInfo;
-					
-		
-		
-					console.log(theURL);
+                    var theURL = "./api/?res=p&fn=add&" + userInfo;
                     $("#formVisual").val("userInfo");
-                   
-		
-		
-		
-				$.post(theURL).done(function(data){
-        alert('GOOD JOB YOU Added a patient!');               
-		console.log(JSON.stringify(data));
-						$("#formVisual").val(data);
+                    $.post(theURL)
+                        .done(function(data){
+                            console.log(data);
+                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                        console.log(xhr);
+                        console.log(error);
                     });
-						
-			
-			
-//			.fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-//                        console.log(xhr);
-//                        console.log(error);
-//						$("#formVisual").val(JSON.stringify(error));
-//                    });
                 });
             });
         </script>
