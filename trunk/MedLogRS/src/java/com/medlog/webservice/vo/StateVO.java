@@ -101,6 +101,7 @@ public String toJSON() {
 public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
 private int stateID;
 private String stateName;
 private String stateAbbreviation;

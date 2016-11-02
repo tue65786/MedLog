@@ -254,6 +254,14 @@ public static final String SP_PHARM_INSERT = "{call [spPharma_RX_OTCInsert]("
 											 + "?,?,?,?,?,"
 											 + "?,?,?,?,?,"
 											 + "?,?,?,?,?)}";
+/**
+ * @keyword nvarchar (128)
+ * , @pageNum int = 1
+ * , @pageSize int = 100
+ * , @onlyMyRX bit = 0
+ * , @PatientID int = 2--null
+ */
+public static final String SP_PHARM_SEARCH = "{call [[spPharma_RX_OTCSearch](?,?,?,?,?)}";
 public static final String SP_PHARM_SELECT = "{call [spPharma_RX_OTCSelect](?,?)}";
 /**
  * Params:
