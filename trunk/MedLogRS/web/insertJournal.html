@@ -16,7 +16,7 @@
                             <p> This is the page to insert a journal entry </p>
                             <p> Eventually, site menu may go here </p>
                         </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr>
-				</table>
+                </table>
             </div>
 
             <div>
@@ -35,14 +35,9 @@
                         <legend>Content</legend>
 
                         <label for="title">Title<br/></label>
-                        <input name="title" type="text" id="title"/>
-						<br/><br/>
+                        <input name="title" type="text" id="title"/><br/><br/>
                         <label for="notes">Sentimental Diary<br/></label>
-                        
-                        <textarea cols ="50" rows ="4" name="notes" id="notes" placeholder = "Enter how you are feeling here">
-							
-						</textarea>
-						<br/>
+                        <textarea cols ="50" rows ="4" name="notes" id="notes" placeholder = "Enter how you are feeling here"></textarea><br/>
                         <select id="mood" name='mood' required>
                             <option>Rate your mood</option>
                             <!-- Better way to accomplish? -->
@@ -73,8 +68,7 @@
                             <option value='8'>8</option>
                             <option value='9'>9</option>
                             <option value='10'>10</option>
-                        </select>
-						<br/>
+                        </select><br/>
 
 
                     </fieldset>
@@ -95,22 +89,22 @@
                 </form>
             </div>
         </div>
-		 <script>
-            $(document).ready(function(){
-                $("#registrationForm").on("submit", function(event){
-                    event.preventDefault();
-                    var userInfo = $("#registrationForm").serialize();
-                    var theURL = "./api/res=p&fn=add&" + userInfo;
-                    $("#formVisual").val("userInfo");
-                    $.post(theURL)
-                        .done(function(data){
-                            console.log(data);
-                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-                        console.log(xhr);
-                        console.log(error);
-                    });
-                });
-            });
-        </script>
+        <!--<script>
+   $(document).ready(function(){
+       $("#registrationForm").on("submit", function(event){
+           event.preventDefault();
+           var userInfo = $("#registrationForm").serialize();
+           var theURL = "./api/res=p&fn=add&" + userInfo;
+           $("#formVisual").val("userInfo");
+           $.post(theURL)
+               .done(function(data){
+                   console.log(data);
+           }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+               console.log(xhr);
+               console.log(error);
+           });
+       });
+   });
+</script>-->
     </body>
 </html>
