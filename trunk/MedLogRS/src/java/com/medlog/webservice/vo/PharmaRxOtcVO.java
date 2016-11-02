@@ -49,6 +49,10 @@ public static PharmaRxOtcVO.Builder builder() {
    return new PharmaRxOtcVO.Builder();
 }
 
+   public static PharmaRxOtcVO create(final int pharmID, final MedTypeVO medType, final String rxcui, final String genericRxcui, final String tty, final String fullName, final String rxnDoseForm, final String fullGenericName, final String brandName, final String displayName, final String route, final String newDoseForm, final String strength, final String suppressFor, final String displayNameSynonym, final String isRetired, final String sxdgRxcui, final String sxdgTty, final String sxdgName, final String psn, final List<MedicationVO> medicationList) {
+	  return new PharmaRxOtcVO( pharmID, medType, rxcui, genericRxcui, tty, fullName, rxnDoseForm, fullGenericName, brandName, displayName, route, newDoseForm, strength, suppressFor, displayNameSynonym, isRetired, sxdgRxcui, sxdgTty, sxdgName, psn, medicationList );
+   }
+
 @Override
 public boolean isValid() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
@@ -254,7 +258,7 @@ public Builder medicationList(final List<MedicationVO> value) {
 }
 
 public PharmaRxOtcVO build() {
-   PharmaRxOtcVO ret = new com.medlog.webservice.vo.PharmaRxOtcVO( pharmID, medType, rxcui, genericRxcui, tty, fullName, rxnDoseForm, fullGenericName, brandName, displayName, route, newDoseForm, StrUtl.toS( strength, "prn" ), suppressFor, displayNameSynonym, isRetired, sxdgRxcui, sxdgTty, sxdgName, psn, medicationList );
+   PharmaRxOtcVO ret = PharmaRxOtcVO.create( pharmID, medType, rxcui, genericRxcui, tty, fullName, rxnDoseForm, fullGenericName, brandName, displayName, route, newDoseForm, StrUtl.toS( strength, "prn" ), suppressFor, displayNameSynonym, isRetired, sxdgRxcui, sxdgTty, sxdgName, psn, medicationList );
    return ret;
 
 }

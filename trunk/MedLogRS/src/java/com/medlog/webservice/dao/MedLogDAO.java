@@ -40,7 +40,8 @@ public MedLogDAO(DbConnection db, PatientVO u) {
 	  if ( u != null && u.getPatientID() != -2 ) {
 		 findAllStates();
 	  }
-   } catch (Exception eeee) {}
+   } catch (Exception eeee) {
+   }
 }
 
 @Override
@@ -324,22 +325,22 @@ public ArrayList<DiaryVO> findDiaryByTag(TagVO _tag) {
 
 @Override
 public HealthcareProviderVO findHealthcareProviderID(int _id) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return getFirstItem( findHealthCareProviders( _id, "", false ) );
 }
 
 @Override
 public ArrayList<HealthcareProviderVO> findHealthcareProviders() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return findHealthCareProviders( -1, "", false );
 }
 
 @Override
 public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String _keyword, boolean _onlyAssigned) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return findHealthCareProviders( -1, StrUtl.toS(_keyword), _onlyAssigned );
 }
 
 @Override
 public ArrayList<HealthcareProviderVO> findHealthcareProvidersByStudent() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return findHealthCareProviders( -1, "", true );
 }
 
 @Override
@@ -396,6 +397,39 @@ public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
 @Override
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+
+@Override
+public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, int _pageNumber, int _pageSize, boolean _onlyAssigned) {
+   ArrayList<PharmaRxOtcVO> voList = new ArrayList<PharmaRxOtcVO>();
+   CallableStatement cs = null;
+   ResultSet rs = null;
+   try {
+	  cs = db.getConnnection().prepareCall( SP_PHARM_SEARCH );
+	  if ( _keyword != null ) {
+		 cs.setString( 1, StrUtl.truncateAtWord( _keyword, 40 ) );
+	  } else {
+		 cs.setNull( 1, java.sql.Types.NVARCHAR );
+	  }
+	  cs.setInt( 2, _pageNumber );
+	  cs.setInt( 3, _pageSize );
+	  cs.setBoolean( 4, false );
+	  cs.setInt( 5, getCurrentUser().getPatientID() );
+	  rs = cs.executeQuery();
+	  while ( rs.next() ) {
+		 voList.add( PharmaRxOtcVO
+				 .builder()
+				 .pharmID( rs.getInt( 1 ) )
+				 .build() );
+	  }
+   } catch (SQLException ex) {
+	  LOG.log( Level.SEVERE, null, ex );
+   } catch (Exception ex) {
+	  LOG.log( Level.SEVERE, null, ex );
+   } finally {
+	  DbUtl.close( cs, rs );
+   }
+   return voList;
 }
 
 @Override
@@ -470,7 +504,72 @@ public boolean unassignMedication(MedicationVO _vo) {
 
 @Override
 public int updateDiary(DiaryVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." );
+//      CallableStatement cs = null;
+   int newID = DB_ERROR_CODE;
+//   try {
+//	  if ( _vo != null && _vo.getPatientID() == null && getCurrentUser() != null ) {
+//		 _vo.setPatientID( getCurrentUser() );
+//	  }
+//   } catch (Exception e) {
+//	  if ( DEBUG ) {
+//		 LOG.log( Level.SEVERE, "Error setting user", e );
+//		 e.printStackTrace();
+//	  }
+//   }
+//   if ( _vo.isValid( INSERT ) ) {
+//	  try {
+//		 cs = db.getConnnection().prepareCall( SP );
+//		 cs.setInt( 1, getCurrentUser().getPatientID() );
+//
+//		 if ( _vo.getTitle() != null ) {
+//			cs.setString( 2, _vo.getTitle() );
+//		 } else {
+//			cs.setNull( 2, java.sql.Types.NVARCHAR );
+//		 }
+////		 if ( _vo.notes != null ) {
+//		 cs.setString( 3, StrUtl.removeHtmlMarkups( _vo.getNotes() ) );
+////		 } else {
+////			cs.setNull( 3, java.sql.Types.NVARCHAR );
+////		 }
+//		 if ( _vo.getNotesActivity().isEmpty() ) {
+//			cs.setNull( 4, java.sql.Types.NVARCHAR );
+//		 } else {
+//			cs.setString( 4, StrUtl.removeHtmlMarkups( _vo.getNotesActivity() ) );
+//		 }
+//		 cs.setNull( 5, java.sql.Types.DATE );
+//		 cs.setNull( 6, java.sql.Types.DATE );
+//		 cs.setNull( 7, java.sql.Types.NCHAR );
+//		 cs.setNull( 8, java.sql.Types.NVARCHAR );
+//		 cs.setInt( 9, _vo.getMood() );
+//		 cs.setInt( 10, _vo.getProductivity() );
+//		 cs.registerOutParameter( 11, java.sql.Types.INTEGER );
+//		 cs.executeUpdate();
+//		 newID = cs.getInt( 11 );
+//
+//	  } catch (SQLException ex) {
+//		 if ( DEBUG ) {
+//			System.err.println( "com.medlog.webservice.dao.MedLogDAO.createDiary()\n" + DbUtl.printJDBCExceptionMsg( ex ) );
+//		 }
+//		 this.stateOK = false;
+//		 this.errorMessage = ex.getMessage();
+//		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createDiary()", "SQLEx", ex );
+//
+//	  } catch (NullPointerException npe) {
+//		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createDiary()", "Null Pointer", npe );
+//		 this.stateOK = false;
+//		 this.errorMessage = npe.getMessage();
+//	  } finally {
+//		 DbUtl.close( cs );
+//	  }
+//   } else {
+//	  if ( DEBUG ) {
+//		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createDiary()", "INVALID Parmas" );
+//	  }
+//	  this.stateOK = false;
+//	  this.errorMessage = "createDiary, invalid params.";
+//
+//   }
+   return newID;
 }
 
 @Override
@@ -499,7 +598,7 @@ public boolean updatePatient(PatientVO _vo) {
 //@address_postalcode nvarchar (9) = NULL
 //@date_of_birth date = NULL
 		 cs.setInt( 1, _vo.getPatientID() );
-		 
+
 		 cs.setString( 2, _vo.getUserPassword() );
 		 cs.setString( 3, _vo.getFirstName() );
 		 cs.setString( 4, _vo.getLastName() );
@@ -552,6 +651,47 @@ public boolean updatePatient(PatientVO _vo) {
 @Override
 public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+
+private int changeMedicationBinding(MedicationVO _vo) {
+
+   CallableStatement cs = null;
+   int newID = DB_ERROR_CODE;
+   try {
+	  if ( _vo != null && _vo.getPharmID() == null && getCurrentUser() != null ) {
+		 _vo.setPatientID( getCurrentUser() );
+	  }
+   } catch (Exception e) {
+	  if ( DEBUG ) {
+		 LOG.log( Level.SEVERE, "Error setting user", e );
+		 e.printStackTrace();
+	  }
+   }
+//   @PatientID int
+//@PharmID int
+//@PhysicanID int = NULL
+//@Instructions nvarchar (max) = NULL
+//@Sig varchar (50) = NULL
+//@StartDate date = getdate
+//@endDate date = NULL
+//@active bit = 1 Set to 0 to delete
+   if ( ( _vo.isActive() && _vo.isValid( INSERT ) ) || _vo.isValid( DELETE ) && !_vo.isActive() ) {
+	  try {
+		 cs = db.getConnnection().prepareCall( SP_MEDICATION_CHANGE_BINDING );
+		 cs.setInt( 1, getCurrentUser().getPatientID() );
+		 cs.setInt( 2, _vo.getPharmID().pharmID );
+		 cs.setInt( 3, _vo.getPhysicianID().getPhysicianID() );
+		 cs.setString( 4, _vo.getInstructions() );
+		 cs.setString( 4, _vo.getSig().getSigAbbrID() );
+		 cs.setDate( 5, (java.sql.Date) _vo.getStartDate() );
+		 cs.setNull( 6, java.sql.Types.BIT );
+		 cs.executeUpdate();
+
+	  } catch (Exception e) {
+
+	  }
+   }
+   return newID;
 }
 
 /**
@@ -619,11 +759,96 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 }
 
 /**
+ * Search doctors
+ *
+ * @param _id           doctor id
+ * @param _keyword      search key
+ * @param _onlyassigned only current user (For current {@linkplain PatientVO})
+ * @return list :
+ *
+ * <ol><li>[PhysicianID]
+ * </li><li>[lastname]
+ * </li><li>[firstname]
+ * </li><li>[specialty]
+ * </li><li>[phoneWork]
+ * </li><li>[phoneMobile]
+ * </li><li>[phonePager]
+ * </li><li>[phoneFax]
+ * </li><li>[email]
+ * </li><li>[pathient_log_communication_preference]
+ * </li><li>[addressStreet]
+ * </li><li>[addressCity]
+ * </li><li>[addressStateID]
+ * </li><li>[addressZip]</li></ol>
+ */
+private ArrayList<HealthcareProviderVO> findHealthCareProviders(int _id, String _keyword, boolean _onlyassigned) {
+   ArrayList<HealthcareProviderVO> voList = new ArrayList<HealthcareProviderVO>();
+
+//   Select Healthcare provider Entries Params:
+//DoctorId int
+//PatientID int
+//Keyword (null)
+//Result Set
+   CallableStatement cs = null;
+   ResultSet rs = null;
+   try {
+	  cs = db.getConnnection().prepareCall( SP_HEALTHCAREPROVIDER_SELECT );
+	  if ( _keyword != null ) {
+		 cs.setString( 1, StrUtl.truncateAtWord( _keyword, 40 ) );
+	  } else {
+		 cs.setNull( 1, java.sql.Types.NVARCHAR );
+	  }
+	  if ( _id > 0 ) {
+		 cs.setInt( 1, _id );
+	  } else {
+		 cs.setNull( 1, java.sql.Types.INTEGER );
+	  }
+	  if ( _onlyassigned ) {
+		 cs.setInt( 2, getCurrentUser().getPatientID() );
+	  } else {
+		 cs.setNull( 2, java.sql.Types.INTEGER );
+	  }
+	  if ( StrUtl.toS( _keyword ).isEmpty() ) {
+		 cs.setNull( 3, java.sql.Types.NVARCHAR );
+	  } else {
+		 cs.setString( 3, _keyword );
+	  }
+	  cs.setBoolean( 4, false );
+	  cs.setInt( 5, getCurrentUser().getPatientID() );
+	  rs = cs.executeQuery();
+	  while ( rs.next() ) {
+		 voList.add( HealthcareProviderVO.builder()
+				 .physicianID( rs.getInt( 1 ) )
+				 .lastName( rs.getString( 2 ) )
+				 .firstName( rs.getString( 3 ) )
+				 .specialty( rs.getString( 4 ) )
+				 .phoneWork( rs.getString( 5 ) )
+				 .phoneMobile( rs.getString( 6 ) )
+				 .email( rs.getString( 8 ) )
+				 .addressStreet( rs.getString( 7 ) )
+				 .addressCity( rs.getString( 8 ) )
+				 .addressStateID( statesList.get( rs.getInt( 9 ) ) )//Add error handling for state
+				 .addressZip( rs.getString( 10 ) )
+				 .build()
+		 );
+	  }
+
+   } catch (SQLException ex) {
+	  LOG.log( Level.SEVERE, null, ex );
+   } catch (Exception ex) {
+	  LOG.log( Level.SEVERE, null, ex );
+   } finally {
+	  DbUtl.close( cs, rs );
+   }
+   return voList;
+}
+
+/**
  * HealtcareProvider Search
  *
  * @param _id           {@linkPlain
  * @param _keyword
- * @param _onlyAssigned For current {@linkplain PatientVO}
+ * @param _onlyAssigned 
  * @return List
  */
 private ArrayList<HealthcareProviderVO> findHealthcareProviders(int _id, String _keyword, boolean _onlyAssigned) {
@@ -732,42 +957,26 @@ private ArrayList<PatientVO> findPatient(int _id, String _username, String _pass
    return voList;
 }
 
-private int changeMedicationBinding(MedicationVO _vo) {
-
-   CallableStatement cs = null;
-   int newID = DB_ERROR_CODE;
-   try {
-	  if ( _vo != null && _vo.getPharmID() == null && getCurrentUser() != null ) {
-		 _vo.setPatientID( getCurrentUser() );
-	  }
-   } catch (Exception e) {
-	  if ( DEBUG ) {
-		 LOG.log( Level.SEVERE, "Error setting user", e );
-		 e.printStackTrace();
-	  }
-   }
-//   @PatientID int
-//@PharmID int
-//@PhysicanID int = NULL
-//@Instructions nvarchar (max) = NULL
-//@Sig varchar (50) = NULL
-//@StartDate date = getdate
-//@endDate date = NULL
-//@active bit = 1 Set to 0 to delete
-   if ( ( _vo.isActive() && _vo.isValid( INSERT ) ) || _vo.isValid( DELETE ) && !_vo.isActive() ) {
+/**
+ *
+ * @param <T>
+ * @param _voList
+ * @return
+ */
+private <T extends IEntityBase> T getFirstItem(ArrayList<T> _voList) {
+   if ( _voList == null || _voList.isEmpty() ) {
+	  return null;
+   } else {
 	  try {
-		 cs = db.getConnnection().prepareCall( SP_MEDICATION_CHANGE_BINDING );
-		 cs.setInt( 1, getCurrentUser().getPatientID() );
-		 cs.setInt( 2, _vo.getPharmID().pharmID );
-		 cs.setInt( 3, _vo.getPhysicianID().getPhysicianID() );
-		 cs.setString( 4, _vo.getInstructions() );
-		 cs.setString( 4, _vo.getSig().getSigAbbrID() );
-		 cs.setDate( 5, (java.sql.Date) _vo.getStartDate() );
+		 return _voList.get( 0 );
 	  } catch (Exception e) {
-
+		 if ( DEBUG ) {
+			LOG.log( Level.WARNING, StrUtl.toS( _voList.getClass().getName() + " " + _voList.getClass().toGenericString() ), e );
+		 }
 	  }
    }
-   return newID;
+   return null;
+
 }
 private final DbConnection db;
 private String errorMessage;
