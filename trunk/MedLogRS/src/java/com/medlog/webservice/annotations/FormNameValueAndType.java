@@ -27,8 +27,21 @@ public @interface FormNameValueAndType {
      * @return if field is Name
      */
     public boolean isName() default false;
-	
+	/**
+	 * Type of form field:
+	 * text = input text
+	 * checkbox = input checkbox
+	 * select = select
+	 * @return 
+	 */
 	public String formFieldType() default "text";
+	/**
+	 * When attribute is set to false, skip field on form for MVP.
+	 * @since 0
+	 * @return omit? (defeault = false)
+	 */
+	public boolean canOmitFromForm() default false;
+	public String[] validLookups() default {""}; 
 }
 
 

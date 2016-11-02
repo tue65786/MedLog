@@ -6,6 +6,7 @@
 package com.medlog.webservice.vo;
 
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
+import com.medlog.webservice.annotations.*;
 import com.medlog.webservice.util.*;
 import java.io.*;
 import java.util.*;
@@ -49,8 +50,310 @@ public static PharmaRxOtcVO.Builder builder() {
    return new PharmaRxOtcVO.Builder();
 }
 
-   public static PharmaRxOtcVO create(final int pharmID, final MedTypeVO medType, final String rxcui, final String genericRxcui, final String tty, final String fullName, final String rxnDoseForm, final String fullGenericName, final String brandName, final String displayName, final String route, final String newDoseForm, final String strength, final String suppressFor, final String displayNameSynonym, final String isRetired, final String sxdgRxcui, final String sxdgTty, final String sxdgName, final String psn, final List<MedicationVO> medicationList) {
-	  return new PharmaRxOtcVO( pharmID, medType, rxcui, genericRxcui, tty, fullName, rxnDoseForm, fullGenericName, brandName, displayName, route, newDoseForm, strength, suppressFor, displayNameSynonym, isRetired, sxdgRxcui, sxdgTty, sxdgName, psn, medicationList );
+public static PharmaRxOtcVO create(final int pharmID, final MedTypeVO medType, final String rxcui, final String genericRxcui, final String tty, final String fullName, final String rxnDoseForm, final String fullGenericName, final String brandName, final String displayName, final String route, final String newDoseForm, final String strength, final String suppressFor, final String displayNameSynonym, final String isRetired, final String sxdgRxcui, final String sxdgTty, final String sxdgName, final String psn, final List<MedicationVO> medicationList) {
+   return new PharmaRxOtcVO( pharmID, medType, rxcui, genericRxcui, tty, fullName, rxnDoseForm, fullGenericName, brandName, displayName, route, newDoseForm, strength, suppressFor, displayNameSynonym, isRetired, sxdgRxcui, sxdgTty, sxdgName, psn, medicationList );
+}
+
+   /**
+    * @return the brandName
+    */
+   public String getBrandName() {
+	  return brandName;
+   }
+
+   /**
+    * @param brandName the brandName to set
+    */
+   public void setBrandName(String brandName) {
+	  this.brandName = brandName;
+   }
+
+   /**
+    * Required Field
+    * @return the displayName
+    */
+   public String getDisplayName() {
+	  return displayName;
+   }
+
+   /**
+    * Required Field
+    * @param displayName the displayName to set
+    */
+   public void setDisplayName(String displayName) {
+	  this.displayName = displayName;
+   }
+
+   /**
+    * @return the displayNameSynonym
+    */
+   public String getDisplayNameSynonym() {
+	  return displayNameSynonym;
+   }
+
+   /**
+    * @param displayNameSynonym the displayNameSynonym to set
+    */
+   public void setDisplayNameSynonym(String displayNameSynonym) {
+	  this.displayNameSynonym = displayNameSynonym;
+   }
+
+   /**
+    * @return the fullGenericName
+    */
+   public String getFullGenericName() {
+	  return fullGenericName;
+   }
+
+   /**
+    * @param fullGenericName the fullGenericName to set
+    */
+   public void setFullGenericName(String fullGenericName) {
+	  this.fullGenericName = fullGenericName;
+   }
+
+   /**
+    * @return the fullName
+    */
+   public String getFullName() {
+	  return StrUtl.toS(fullName);
+   }
+
+   /**
+    * @param fullName the fullName to set
+    */
+   public void setFullName(String fullName) {
+	  this.fullName = fullName;
+   }
+
+   /**
+    * @return the genericRxcui
+    */
+   public String getGenericRxcui() {
+	  return genericRxcui;
+   }
+
+   /**
+    * @param genericRxcui the genericRxcui to set
+    */
+   public void setGenericRxcui(String genericRxcui) {
+	  this.genericRxcui = genericRxcui;
+   }
+
+   /**
+    * @return the isRetired
+    */
+   public String getIsRetired() {
+	  return isRetired;
+   }
+
+   /**
+    * @param isRetired the isRetired to set
+    */
+   public void setIsRetired(String isRetired) {
+	  this.isRetired = isRetired;
+   }
+
+   /**
+    * Required Field
+    * Default value: {@linkplain MedTypeVO#GET_OTC()}
+    * @return the medType
+    */
+   public MedTypeVO getMedType() {
+	  return medType;
+   }
+
+   /**
+    * Required Field
+    * Default value: {@linkplain MedTypeVO#GET_OTC()}
+    * @param medType the medType to set
+    */
+   public void setMedType(MedTypeVO medType) {
+	  this.medType = medType;
+   }
+
+   /**
+    * @return the medicationList
+    */
+   public List<MedicationVO> getMedicationList() {
+	  return medicationList;
+   }
+
+   /**
+    * @param medicationList the medicationList to set
+    */
+   public void setMedicationList(List<MedicationVO> medicationList) {
+	  this.medicationList = medicationList;
+   }
+
+   /**
+    * @return the newDoseForm
+    */
+   public String getNewDoseForm() {
+	  return newDoseForm;
+   }
+
+   /**
+    * @param newDoseForm the newDoseForm to set
+    */
+   public void setNewDoseForm(String newDoseForm) {
+	  this.newDoseForm = newDoseForm;
+   }
+
+   /**
+    * @return the pharmID
+    */
+   public int getPharmID() {
+	  return pharmID;
+   }
+
+   /**
+    * @param pharmID the pharmID to set
+    */
+   public void setPharmID(int pharmID) {
+	  this.pharmID = pharmID;
+   }
+
+   /**
+    * @return the psn
+    */
+   public String getPsn() {
+	  return psn;
+   }
+
+   /**
+    * @param psn the psn to set
+    */
+   public void setPsn(String psn) {
+	  this.psn = psn;
+   }
+
+   /**
+    * @return the route
+    */
+   public String getRoute() {
+	  return route;
+   }
+
+   /**
+    * @param route the route to set
+    */
+   public void setRoute(String route) {
+	  this.route = route;
+   }
+
+   /**
+    * @return the rxcui
+    */
+   public String getRxcui() {
+	  return rxcui;
+   }
+
+   /**
+    * @param rxcui the rxcui to set
+    */
+   public void setRxcui(String rxcui) {
+	  this.rxcui = rxcui;
+   }
+
+   /**
+    * @return the rxnDoseForm
+    */
+   public String getRxnDoseForm() {
+	  return rxnDoseForm;
+   }
+
+   /**
+    * @param rxnDoseForm the rxnDoseForm to set
+    */
+   public void setRxnDoseForm(String rxnDoseForm) {
+	  this.rxnDoseForm = rxnDoseForm;
+   }
+
+   /**
+    * Required Field
+    * @return the strength
+    */
+   public String getStrength() {
+	  return StrUtl.toS(strength);
+   }
+
+   /**
+    * Required Field
+    * @param strength the strength to set
+    */
+   public void setStrength(String strength) {
+	  this.strength = strength;
+   }
+
+   /**
+    * @return the suppressFor
+    */
+   public String getSuppressFor() {
+	  return suppressFor;
+   }
+
+   /**
+    * @param suppressFor the suppressFor to set
+    */
+   public void setSuppressFor(String suppressFor) {
+	  this.suppressFor = suppressFor;
+   }
+
+   /**
+    * @return the sxdgName
+    */
+   public String getSxdgName() {
+	  return sxdgName;
+   }
+
+   /**
+    * @param sxdgName the sxdgName to set
+    */
+   public void setSxdgName(String sxdgName) {
+	  this.sxdgName = sxdgName;
+   }
+
+   /**
+    * @return the sxdgRxcui
+    */
+   public String getSxdgRxcui() {
+	  return sxdgRxcui;
+   }
+
+   /**
+    * @param sxdgRxcui the sxdgRxcui to set
+    */
+   public void setSxdgRxcui(String sxdgRxcui) {
+	  this.sxdgRxcui = sxdgRxcui;
+   }
+
+   /**
+    * @return the sxdgTty
+    */
+   public String getSxdgTty() {
+	  return sxdgTty;
+   }
+
+   /**
+    * @param sxdgTty the sxdgTty to set
+    */
+   public void setSxdgTty(String sxdgTty) {
+	  this.sxdgTty = sxdgTty;
+   }
+
+   /**
+    * @return the tty
+    */
+   public String getTty() {
+	  return tty;
+   }
+
+   /**
+    * @param tty the tty to set
+    */
+   public void setTty(String tty) {
+	  this.tty = tty;
    }
 
 @Override
@@ -66,16 +369,16 @@ public boolean isValid(PharmaRxOtcVO _vo) {
 @Override
 public boolean isValid(int _ACTION) {
    if ( _ACTION == INSERT ) {
-	  if ( this.medType == null || this.medType.medTypeID == null ) {
-		 this.medType = MedTypeVO.GET_OTC();
+	  if ( this.getMedType() == null || this.getMedType().medTypeID == null ) {
+		 this.setMedType( MedTypeVO.GET_OTC() );
 	  }
-	  if ( this.displayName.isEmpty() || this.strength.isEmpty() ) {
+	  if ( this.getFullName().isEmpty() || this.getStrength().isEmpty() ) {
 		 return false;
 
 	  }
 
    } else {
-	  return this.pharmID > 0;
+	  return this.getPharmID() > 0;
    }
    return true;
 }
@@ -87,42 +390,58 @@ public String toJSON() {
 
 @Override
 public String toTableRow() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return "";
 }
-
-public String brandName;
+@FormNameValueAndType(canOmitFromForm = true)
+private String brandName;
 /**
  * Required Field
  */
-public String displayName;
-public String displayNameSynonym;
-public String fullGenericName;
-public String fullName;
-public String genericRxcui;
-public String isRetired;
+@FormNameValueAndType(canOmitFromForm = true)
+private String displayName;
+@FormNameValueAndType(canOmitFromForm = true)
+private String displayNameSynonym;
+@FormNameValueAndType(canOmitFromForm = true)
+private String fullGenericName;
+@FormNameValueAndType(formFieldType = "text", isName = true, canOmitFromForm = false)
+private String fullName;
+@FormNameValueAndType(canOmitFromForm = true)
+private String genericRxcui;
+@FormNameValueAndType(canOmitFromForm = true)
+private String isRetired;
 /**
  * Required Field
  * Default value: {@linkplain MedTypeVO#GET_OTC()}
- * 
+ *
  */
-public MedTypeVO medType;
-
-public String newDoseForm;
-public int pharmID;
-public String psn;
-public String route;
-public String rxcui;
-public String rxnDoseForm;
+private MedTypeVO medType;
+@FormNameValueAndType(canOmitFromForm = true)
+private String newDoseForm;
+@FormNameValueAndType(formFieldType = "hidden", isPK = true)
+private int pharmID;
+@FormNameValueAndType(canOmitFromForm = true)
+private String psn;
+@FormNameValueAndType(canOmitFromForm = true)
+private String route;
+@FormNameValueAndType(canOmitFromForm = true)
+private String rxcui;
+@FormNameValueAndType(canOmitFromForm = true)
+private String rxnDoseForm;
 /**
  * Required Field
  */
-public String strength;
-public String suppressFor;
-public String sxdgName;
-public String sxdgRxcui;
-public String sxdgTty;
-public String tty;
-public List<MedicationVO> medicationList;
+private String strength;
+@FormNameValueAndType(canOmitFromForm = true)
+private String suppressFor;
+@FormNameValueAndType(canOmitFromForm = true)
+private String sxdgName;
+@FormNameValueAndType(canOmitFromForm = true)
+private String sxdgRxcui;
+@FormNameValueAndType(canOmitFromForm = true)
+private String sxdgTty;
+@FormNameValueAndType(canOmitFromForm = true, validLookups = { "SCD", "SBD" })
+private String tty;
+private List<MedicationVO> medicationList;
 
 public static class Builder {
 

@@ -241,36 +241,105 @@ public int createPatient(PatientVO _vo) {
 
 @Override
 public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   CallableStatement cs = null;
+
+   int newID = DB_ERROR_CODE;
+   if ( _vo.isValid( INSERT ) ) {
+	  try {
+		 cs = db.getConnnection().prepareCall( SP_PHARM_INSERT );
+		 cs.setString( 1, StrUtl.toS( _vo.getMedType().medTypeID, "OTC" ) );
+		 cs.setString( 2, StrUtl.toS( _vo.getRxcui() ) );
+		 cs.setString( 3, StrUtl.toS( _vo.getGenericRxcui() ) );
+		 cs.setString( 4, StrUtl.toS( _vo.getTty(), "OTC" ) );
+		 cs.setString( 5, _vo.getFullName() );
+		 cs.setString( 6, _vo.getRxnDoseForm() );
+		 cs.setNull( 7, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 8, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 9, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 10, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 11, java.sql.Types.VARCHAR );//full generic
+		 cs.setString( 12, StrUtl.toS( _vo.getStrength() ) );
+		 cs.setNull( 13, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 14, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 15, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 16, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 17, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 18, java.sql.Types.VARCHAR );//full generic
+		 cs.setNull( 19, java.sql.Types.VARCHAR );//full generic
+		 cs.registerOutParameter( 20, java.sql.Types.INTEGER );
+		 int ct = cs.executeUpdate();
+		 newID = cs.getInt( 20 );
+
+	  } catch (SQLException e) {
+		 if ( DEBUG ) {
+			System.out.println( "com.medlog.webservice.dao.MedLogDAO.createPharmaRxOtcVO()" + DbUtl.printJDBCExceptionMsg( e ) );
+			LOG.log( Level.SEVERE, null, e );
+			e.printStackTrace();
+		 }
+	  } catch (Exception e) {
+		 if ( DEBUG ) {
+			System.out.println( "com.medlog.webservice.dao.MedLogDAO.createPharmaRxOtcVO()" + e.getMessage() );
+			e.printStackTrace();
+			LOG.log( Level.SEVERE, null, e );
+		 }
+	  } finally {
+		 DbUtl.close( cs );
+	  }
+	
+   }
+  return newID;
 }
 
-@Override
-public boolean deletePatient(PatientVO _vo) {
+   @Override
+   public boolean deletePatient
+   (PatientVO _vo
+   
+   
+   
+	  ) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
+   }
 
-@Override
-public Map<Integer, MedTypeVO> findAllMedTypesMap() {
+   @Override
+   public Map<Integer, MedTypeVO> findAllMedTypesMap
+
+   
+	  () {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
+   }
 
-@Override
-public ArrayList<SigVO> findAllSigs() {
+   @Override
+   public ArrayList<SigVO> findAllSigs
+
+   
+	  () {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
+   }
 
-@Override
-public Map<Integer, SigVO> findAllSigsMap() {
+   @Override
+   public Map<Integer, SigVO> findAllSigsMap
+
+   
+	  () {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-}
+   }
 
-@Override
-public final ArrayList<StateVO> findAllStates() {
+   @Override
+   public final ArrayList<StateVO> findAllStates
+
+   
+	  () {
    Map<Integer, StateVO> tmpVO = findAllStates( false );
-   ArrayList<StateVO> vos = new ArrayList<StateVO>();
-   vos.addAll( MedLogDAO.statesList.values() );
-   return vos;
-}
+	  ArrayList<StateVO> vos = new ArrayList<StateVO>();
+	  vos.addAll( MedLogDAO.statesList.values() );
+	  return vos;
+   }
+
+
+
+
+
+
 
 public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
    Map<Integer, StateVO> tmpVO = new ConcurrentHashMap<Integer, StateVO>( 64 );
@@ -335,7 +404,7 @@ public ArrayList<HealthcareProviderVO> findHealthcareProviders() {
 
 @Override
 public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String _keyword, boolean _onlyAssigned) {
-   return findHealthCareProviders( -1, StrUtl.toS(_keyword), _onlyAssigned );
+   return findHealthCareProviders( -1, StrUtl.toS( _keyword ), _onlyAssigned );
 }
 
 @Override
@@ -396,7 +465,7 @@ public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
 
 @Override
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   return findPharmaRxOtcVOByKeword( _keyword, 1, 1000, _onlyAssigned );
 }
 
 @Override
@@ -679,7 +748,7 @@ private int changeMedicationBinding(MedicationVO _vo) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_MEDICATION_CHANGE_BINDING );
 		 cs.setInt( 1, getCurrentUser().getPatientID() );
-		 cs.setInt( 2, _vo.getPharmID().pharmID );
+		 cs.setInt( 2, _vo.getPharmID().getPharmID() );
 		 cs.setInt( 3, _vo.getPhysicianID().getPhysicianID() );
 		 cs.setString( 4, _vo.getInstructions() );
 		 cs.setString( 4, _vo.getSig().getSigAbbrID() );
@@ -848,7 +917,7 @@ private ArrayList<HealthcareProviderVO> findHealthCareProviders(int _id, String 
  *
  * @param _id           {@linkPlain
  * @param _keyword
- * @param _onlyAssigned 
+ * @param _onlyAssigned
  * @return List
  */
 private ArrayList<HealthcareProviderVO> findHealthcareProviders(int _id, String _keyword, boolean _onlyAssigned) {
