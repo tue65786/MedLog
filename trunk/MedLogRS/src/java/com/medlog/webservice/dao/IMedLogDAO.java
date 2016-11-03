@@ -200,9 +200,9 @@ public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword,int pa
  * @return  ArrayList
  * //spSigSelect
  */
-public ArrayList<SigVO> findAllSigs();
-public Map<Integer,SigVO> findAllSigsMap();
-public Map<Integer,MedTypeVO> findAllMedTypesMap();
+public ArrayList<SigVO> findAllSigs(boolean onlyTime);
+public Map<String,SigVO> findAllSigsMap();
+public Map<String,MedTypeVO> findMedTypesMap();
 
 
 

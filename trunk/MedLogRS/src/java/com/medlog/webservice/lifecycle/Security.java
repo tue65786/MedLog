@@ -175,7 +175,7 @@ private boolean isLoggedIn(HttpServletRequest httprequest) {
 	  return ret;
    } catch (Exception e) {
 	  if ( DEBUG ) {
-		 e.printStackTrace();
+//	e.printStackTrace();
 	  }
    }
    return false;

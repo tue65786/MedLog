@@ -250,8 +250,11 @@ public void setApplicationStores(HttpServletRequest request, MedLogDAO dao) {
    }
 
    if ( context.getAttribute( APPLICATION_SIG_BEAN ) == null ) {
-
+	  context.setAttribute( APPLICATION_SIG_BEAN, dao.findAllSigsMap() );
    }
+    
+   
+   
 
 }
 }

@@ -31,8 +31,8 @@ and open the template in the editor.
 				<input name="password" type="password" id="password" placeholder="" required/><br/>
 			</fieldset>
 			<input type="submit" value="LOGIN" id="btnSubmit" />
+			<a href="Registration.html">Register</a>
 			<div id="message" ></div>
-
 		</form>
 		<!--Logged in View-->
 		<fieldset id="myinfo" style="display:none;">
@@ -79,14 +79,15 @@ and open the template in the editor.
 									 $("#message").empty().html("<b style='color:red'>" + data.message + "</b>");
 								 } else {
 									 //No errors! --- show Logged in Version
-									 $("#loginForm").hide();
-									 $("#myinfo").slideDown();
-									 //Set form fields from AJAX response stored in 'data' variable.
-									 $("#firstname").val(data.firstName);
-									 $("#street").val(data.addressStreet);
-									 $("#lastname").val(data.lastName);
-									 $("#state").val(data.addressState.stateID);
-									 $("#jsraw").val(JSON.stringify(data));
+									 top.location.href = "home.jsp"
+//									 $("#loginForm").hide();
+//									 $("#myinfo").slideDown();
+//									 //Set form fields from AJAX response stored in 'data' variable.
+//									 $("#firstname").val(data.firstName);
+//									 $("#street").val(data.addressStreet);
+//									 $("#lastname").val(data.lastName);
+//									 $("#state").val(data.addressState.stateID);
+//									 $("#jsraw").val(JSON.stringify(data));
 								 }
 							 } else {
 								 $("#message").empty().

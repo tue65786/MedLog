@@ -26,24 +26,12 @@
 	 }
  });
 
- var APIURlBuilder = function () {
-	 this.res = "";
-	 this.params = "";
-	 this.fn = "";
-	 var apiPrefix = "./api/?";
-	 
-	 this.setRes = function ( r ) {
-		 this.res = r;
-		 return this; 
-	 };
-	 this.setFn= function(f){
-		 this.fn = f;
-		 return this;		 
-	 }
-	 this.setFormData = function (formData){
-		 this.params= formData;
-	 }
-	 this.build = function(){
-		 return 
+ //<table id="formTable">
+
+
+ function makeTableFromJSON() {
+	 for ( i = 0; i < data.length; i++ ) {
+		 var mPrompt = new PromptProto(data[i]);
+		 $('#formTable tr:last').after(mPrompt.getFormFields(i));
 	 }
  }

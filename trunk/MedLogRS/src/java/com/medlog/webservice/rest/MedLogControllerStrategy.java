@@ -30,10 +30,6 @@ public class MedLogControllerStrategy {
 
 @Expose(deserialize = false, serialize = false)
 private static final Logger LOG = Logger.getLogger( MedLogControllerStrategy.class.getName() );
-@Expose(deserialize = true, serialize = true)
-public boolean success;
-@Expose(deserialize = true, serialize = true)
-public String responseMessage = "";
 
 public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse _response, RES_ENUM res, String fn) {
    this.request = _request;
@@ -46,6 +42,31 @@ public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse
 
 public String execute(DbConnection dbc) {
    return handleUserResourceFn( dbc, res.isLoginRequired( fn ) );
+}
+
+public void setApplicationStores(MedLogDAO dao) {
+   ServletContext context = request.getServletContext();
+   if ( context.getAttribute( APPLICATION_STATE_BEAN ) == null ) {
+	  context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true ) );
+   }
+
+   if ( context.getAttribute( APPLICATION_SIG_BEAN ) == null ) {
+	  context.setAttribute( APPLICATION_SIG_BEAN, dao.findAllSigsMap() );
+   }
+   if ( context.getAttribute( APPLICATION_DR_BEAN ) == null ) {
+
+   }
+
+}
+
+public ArrayList<IEntityBase> getList() {
+   ArrayList<IEntityBase> voList = null;
+//   getSingle( sendDiaryToResponse( null,null ) );
+   return voList;
+}
+
+public IEntityBase getSingle(ArrayList<? extends IEntityBase> voList) {
+   return voList.get( 0 );
 }
 
 /**
@@ -71,7 +92,7 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 		 apiCanExecute = false;
 	  }
    }
-   
+
    if ( !apiCanExecute ) {
 	  responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 										   "Not logged in." );
@@ -83,7 +104,7 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 		 //         |&&& ======|
 		 //         |[_] =====+|
 		 //         |=== ===?!#|
-		 //         |__________|		 
+		 //         |__________|
 		 ///////////////////////////////////		  
 		 case API_RESOURCE_DIARY:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
@@ -111,12 +132,12 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 			}//Search
 			break;
 
-		 /////////////// {}			
-		 //           .-'  '-.      
-		 //          /        )                                 
-		 //          |  C   o( 
-		 //           \      P>tient      
-		 //            )  \  /   
+		 /////////////// {}
+		 //           .-'  '-.
+		 //          /        )
+		 //          |  C   o(
+		 //           \      P>tient
+		 //            )  \  /
 		 //           _ / `'
 		 ////////////|      / ~  ~ - >
 		 case API_RESOURCE_PATIENT:
@@ -159,7 +180,41 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 													+ " is invalid." );
 			}
 			break;
+	
+		 case API_RESOURCE_MEDICATION:
+			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
+			   MedicationVO vo = loadMedicationFromRequest();
+			}
+			break;
+			
+					
 
+
+
+
+
+
+
+
+		 case API_RESOURCE_STATES:
+			ArrayList<StateVO> states = dao.findAllStates();
+			responseMessage = new GsonBuilder().disableInnerClassSerialization().serializeNulls().create().toJson( states );
+		 break;
+	
+
+
+
+
+
+
+
+
+
+
+		 case API_RESOURCE_SIG:
+			ArrayList<SigVO> sigs = dao.findAllSigs( true);
+			responseMessage = new GsonBuilder().disableInnerClassSerialization().serializeNulls().create().toJson( sigs );
+			
 		 default:
 			responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 												 " Invalid res." );
@@ -172,34 +227,25 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
    return responseMessage;
 }
 
-public ArrayList<IEntityBase> getList() {
-   ArrayList<IEntityBase> voList = null;
-//   getSingle( sendDiaryToResponse( null,null ) );
-   return voList;
-}
-
-public IEntityBase getSingle(ArrayList<? extends IEntityBase> voList) {
-   return voList.get( 0 );
-}
-
-private String getDiaryResponse(MedLogDAO dao, Gson g) {
+/**
+ * Translate Diary
+ *
+ * @return
+ */
+public DiaryVO loadDiaryFromRequest() {
+   if ( getCurrentUser() == null ) {
+	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
+	  return null;
+   }
    ServletHelpers sh = new ServletHelpers( request, response );
-   ArrayList<DiaryVO> voList = null;
-   String key = sh.getStrParameter( "keyword", "" );
-   if ( fn.equals( API_FUNCTION_FIND_BY_KEYWORD ) && !key.isEmpty() ) {
-	  voList = dao.findDiaryByKeyword( key );
-   } else if ( fn.equals( API_FUNCTION_FIND ) ) {
-	  voList = dao.findDiaryByPatient();
-   } else {
-	  success = false;
-   }
-
-   if ( voList == null || voList.isEmpty() ) {
-	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
-   } else {
-	  return g.toJson( voList );
-   }
-
+   DiaryVO.Builder t = DiaryVO.builder();
+   t.id( sh.getIntParameter( "id", 0 ) );
+   t.notes( sh.getStrParameter( "notes", "" ) );
+   t.title( sh.getStrParameter( "title", "" ) );
+   t.patientID( getCurrentUser() );
+   t.mood( sh.getIntParameter( "mood", 0 ) );
+   t.productivity( sh.getIntParameter( "productivity", 0 ) );
+   return t.build();
 }
 
 public MedicationVO loadMedicationFromRequest() {
@@ -219,7 +265,7 @@ public MedicationVO loadMedicationFromRequest() {
    t.pharmID( PharmaRxOtcVO.builder().pharmID( sh.getIntParameter( "pharmid", sh.getIntParameter( "pharmID", 0 ) ) ).build() );
    t.physicianID( HealthcareProviderVO.builder().physicianID( sh.getIntParameter( "healthcareProviderID", 0 ) ).build() );
    t.instructions( sh.getStrParameter( "instructions", "" ) );
-   //t.sig ?????
+   t.sig( SigVO.builder().sigAbbrID(sh.getStrParameter( "sig", "p.r.n")).build());
    t.startDate( sh.getDateParameter( "startDate", new Date() ) );
    t.endDate( sh.getDateParameter( "endDate", new Date() ) );
    t.dosage( sh.getStrParameter( "dosage", "" ) );
@@ -325,27 +371,6 @@ public HealthcareProviderVO loadProviderFromRequest() {
 }
 
 /**
- * Translate Diary
- *
- * @return
- */
-public DiaryVO loadDiaryFromRequest() {
-   if ( getCurrentUser() == null ) {
-	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
-	  return null;
-   }
-   ServletHelpers sh = new ServletHelpers( request, response );
-   DiaryVO.Builder t = DiaryVO.builder();
-   t.id( sh.getIntParameter( "id", 0 ) );
-   t.notes( sh.getStrParameter( "notes", "" ) );
-   t.title( sh.getStrParameter( "title", "" ) );
-   t.patientID( getCurrentUser() );
-   t.mood( sh.getIntParameter( "mood", 0 ) );
-   t.productivity( sh.getIntParameter( "productivity", 0 ) );
-   return t.build();
-}
-
-/**
  * Retrieves current user object from session
  *
  * @see PatientVO
@@ -359,20 +384,29 @@ private PatientVO getCurrentUser() {
    }
 }
 
-public  void setApplicationStores(MedLogDAO dao) {
-   ServletContext context = request.getServletContext();
-   if ( context.getAttribute( APPLICATION_STATE_BEAN ) == null ) {
-	  context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true));
+private String getDiaryResponse(MedLogDAO dao, Gson g) {
+   ServletHelpers sh = new ServletHelpers( request, response );
+   ArrayList<DiaryVO> voList = null;
+   String key = sh.getStrParameter( "keyword", "" );
+   if ( fn.equals( API_FUNCTION_FIND_BY_KEYWORD ) && !key.isEmpty() ) {
+	  voList = dao.findDiaryByKeyword( key );
+   } else if ( fn.equals( API_FUNCTION_FIND ) ) {
+	  voList = dao.findDiaryByPatient();
+   } else {
+	  success = false;
    }
 
-   if ( context.getAttribute( APPLICATION_SIG_BEAN ) == null ) {
-	   context.setAttribute( APPLICATION_SIG_BEAN, dao.findAllSigsMap());
+   if ( voList == null || voList.isEmpty() ) {
+	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
+   } else {
+	  return g.toJson( voList );
    }
-     if ( context.getAttribute( APPLICATION_DR_BEAN ) == null ) {
-		
-	 }
 
 }
+@Expose(deserialize = true, serialize = true)
+public String responseMessage = "";
+@Expose(deserialize = true, serialize = true)
+public boolean success;
 @Expose(deserialize = true, serialize = true)
 /**
  * Request function

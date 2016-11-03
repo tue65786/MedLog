@@ -2,10 +2,12 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="../rstyle.css"/>
-		<!--add jquery script reference-->
-		<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
-		<!-- add helper function script reference-->
-		<script type='text/javascript' src="populateDropDownList.js?ok=1"></script>
+		<script src="../scripts/jquery.min.js" type="text/javascript"></script>
+		<script src="../scripts/json.js" type="text/javascript"></script>
+		<script src="../scripts/utils.js" type="text/javascript"></script>
+		
+		
+		
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 		<meta name="viewport" content="width=device-width">
@@ -28,23 +30,7 @@
 				  * Sample state JSON array (same as what WebService will return)
 				  * @type Array
 				  */
-				 function getStateList() {
-					 return  [
-						 {
-							 "stateID" : 1,
-							 "stateName" : "New Jersey",
-							 "stateAbbreviation" : "NJ"
-						 }, {
-							 "stateID" : 2,
-							 "stateName" : "Pennsylvania",
-							 "stateAbbreviation" : "PA"
-						 }, {
-							 "stateID" : 3,
-							 "stateName" : "Washington",
-							 "stateAbbreviation" : "WA"
-						 }
-					 ];
-				 }
+			
 
 				 //Populate dropdown
 				 generateStateList("stateID", getStateList());

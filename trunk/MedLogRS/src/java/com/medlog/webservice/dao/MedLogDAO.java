@@ -8,6 +8,7 @@ package com.medlog.webservice.dao;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.DB_STRINGS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
+import com.medlog.webservice.rest.controller.*;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
@@ -37,10 +38,11 @@ public MedLogDAO(DbConnection db, PatientVO u) {
    stateOK = true;
    errorMessage = "";
    try {
-	  if ( u != null && u.getPatientID() != -2 ) {
-		 findAllStates();
-	  }
+	  //  if ( u != null && u.getPatientID() != -2 ) {
+	  findAllStates();
+	  //  }
    } catch (Exception eeee) {
+	  eeee.printStackTrace();
    }
 }
 
@@ -285,61 +287,64 @@ public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
 	  } finally {
 		 DbUtl.close( cs );
 	  }
-	
+
    }
-  return newID;
+   return newID;
 }
 
-   @Override
-   public boolean deletePatient
-   (PatientVO _vo
-   
-   
-   
-	  ) {
+@Override
+public boolean deletePatient(PatientVO _vo
+) {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+
+@Override
+public Map<String, MedTypeVO> findMedTypesMap() {
+   Map<String, MedTypeVO> m = new ConcurrentHashMap<>();
+   m.put( "RX", MedTypeVO.GET_RX() );
+   m.put( "OTC", MedTypeVO.GET_OTC() );
+   return m;
+}
+
+@Override
+public ArrayList<SigVO> findAllSigs(boolean onlyTime) {
+   ArrayList<SigVO> voList = new ArrayList<SigVO>();
+   voList.addAll( findAllSigsMap().values() );
+   if ( onlyTime ) {
+	  SigFacadeImpl _impl = new SigFacadeImpl( SigVO.class, voList );
+	  return _impl.getPrimarySigs();
    }
+   return voList;
+}
 
-   @Override
-   public Map<Integer, MedTypeVO> findAllMedTypesMap
-
-   
-	  () {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+@Override
+public Map<String, SigVO> findAllSigsMap() {
+   Map<String, SigVO> map = new HashMap<String, SigVO>();
+   CallableStatement cs = null;
+   ResultSet rs = null;
+   try {
+	  cs = db.getConnnection().prepareCall( SP_SIGS_SELECT );
+	  cs.setNull( 1, java.sql.Types.INTEGER );
+	  rs = cs.executeQuery();
+	  while ( rs.next() ) {
+		 map.put( rs.getString( 1 ), SigVO.builder().sigAbbrID( rs.getString( 1 ) ).definition( rs.getString( 2 ) ).category( rs.getString( 3 ) ).build() );
+	  }
+   } catch (SQLException ex) {
+	  Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
+   } finally {
+	  DbUtl.close( rs );
+	  DbUtl.close( cs );
    }
+   return map;
+}
 
-   @Override
-   public ArrayList<SigVO> findAllSigs
-
-   
-	  () {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public Map<Integer, SigVO> findAllSigsMap
-
-   
-	  () {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public final ArrayList<StateVO> findAllStates
-
-   
-	  () {
-   Map<Integer, StateVO> tmpVO = findAllStates( false );
-	  ArrayList<StateVO> vos = new ArrayList<StateVO>();
-	  vos.addAll( MedLogDAO.statesList.values() );
-	  return vos;
-   }
-
-
-
-
-
-
+@Override
+public final ArrayList<StateVO> findAllStates() {
+   Map<Integer, StateVO> tmpVO = findAllStates( true );
+   ArrayList<StateVO> vos = new ArrayList<StateVO>();
+   vos.addAll( MedLogDAO.statesList.values() );
+   return vos;
+}
 
 public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
    Map<Integer, StateVO> tmpVO = new ConcurrentHashMap<Integer, StateVO>( 64 );
@@ -352,6 +357,7 @@ public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
 		 rs = cs.executeQuery();
 		 while ( rs.next() ) {
 			tmpVO.put( rs.getInt( 1 ), StateVO.builder().stateID( rs.getInt( 1 ) ).stateName( rs.getString( 2 ) ).stateAbbreviation( rs.getString( 3 ) ).build() );
+//			System.out.println(tmpVO.get(rs.getInt(1)).setStateName( DATE_FORMAT ));
 		 }
 		 MedLogDAO.statesList = new HashMap<Integer, StateVO>();
 		 MedLogDAO.statesList.putAll( tmpVO );
