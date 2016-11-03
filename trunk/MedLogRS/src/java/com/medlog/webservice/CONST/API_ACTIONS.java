@@ -79,6 +79,8 @@ public static final String API_FUNCTION_UPDATE = "update";
 public static final String API_FUNCTION_ASSIGN = "assign";
 public static final String API_FUNCTION_UNASSIGN = "unassign";
 public static final String API_FUNCTION_DELETE = "delete";
+public static final String API_FUNCTION_LOGIN = "login";
+public static final String API_FUNCTION_LOGOUT = "logout";
 
 /**
  * No instantiation

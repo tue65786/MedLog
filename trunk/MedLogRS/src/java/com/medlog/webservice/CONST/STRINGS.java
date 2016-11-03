@@ -3,8 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 package com.medlog.webservice.CONST;
 
 import java.util.logging.*;
@@ -16,13 +14,20 @@ import java.util.regex.*;
  */
 public class STRINGS {
 
-   /**
-    *
-    */
-   public static final Pattern REGEX_EMAIL = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-   private static final Logger LOG = Logger.getLogger( STRINGS.class.getName() );
-private STRINGS(){
+/**
+ *
+ */
+public static final String REG_EX_email = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+/**
+ * When matched anonymous users can acccess page.
+ */
+public static final String REG_EX_isNonSecurePages = "(RegistratiOn\\.htm|login\\.htm)";
+
+private static final Logger LOG = Logger.getLogger( STRINGS.class.getName() );
+/**
+ * No instantiate.
+ */
+private STRINGS() {
 
 }
 }
-

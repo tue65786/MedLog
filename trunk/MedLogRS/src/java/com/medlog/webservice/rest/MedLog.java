@@ -65,7 +65,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  //Valid login functions
 	 if (fn.equalsIgnoreCase( "add") && res.equalsIgnoreCase( API_ACTIONS.API_RESOURCE_PATIENT)){
 		MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
-		out.print(strategy.execute( db ));
+		out.print(strategy.execute(db ));
 		
 	 } 
 	 
@@ -121,7 +121,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create().toJson( strategy ) );
 		 }
 		 //Process
-		 out.print( strategy.execute( db ) );
+		 out.print( strategy.execute(db ) );
 
 	  }
 	 }

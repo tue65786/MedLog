@@ -17,6 +17,7 @@ import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
 import java.util.*;
 import java.util.logging.*;
+import javax.servlet.*;
 import javax.servlet.http.*;
 import jdk.nashorn.api.scripting.*;
 
@@ -43,17 +44,21 @@ public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse
    success = false;
 }
 
+public String execute(DbConnection dbc) {
+   return handleUserResourceFn( dbc, res.isLoginRequired( fn ) );
+}
+
 /**
  * Lookup and exec API Functions
  *
  * @param dbc Connection
  * @return JSON
  */
-public String execute(DbConnection dbc) {
+public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
    Gson g = new Gson();
    boolean apiCanExecute = true;
    MedLogDAO dao;
-   
+
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute() " + res.name() + res.toString() );
 
    ///  -  ::}
@@ -62,13 +67,11 @@ public String execute(DbConnection dbc) {
    //    \__/-="="`
    /// -  -  -  - :
    if ( getCurrentUser() == null ) {
-	  if ( !res.equals( RES_ENUM.API_RESOURCE_PATIENT )
-		   || ( StrUtl.matchOR( fn, "login",
-								API_FUNCTION_INSERT ) ) ) {
+	  if ( isUserFunction ) {
 		 apiCanExecute = false;
 	  }
    }
-
+   
    if ( !apiCanExecute ) {
 	  responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 										   "Not logged in." );
@@ -156,7 +159,7 @@ public String execute(DbConnection dbc) {
 													+ " is invalid." );
 			}
 			break;
-			
+
 		 default:
 			responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 												 " Invalid res." );
@@ -200,17 +203,21 @@ private String getDiaryResponse(MedLogDAO dao, Gson g) {
 }
 
 public MedicationVO loadMedicationFromRequest() {
-    /*if ( getCurrentUser() == null ) {
-	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
-	  return null;
-   }*///don't know if above is necessary or not
+   /*
+    * if ( getCurrentUser() == null ) {
+    * System.err.println(
+    * "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED
+    * IN" );
+    * return null;
+    * }
+    *///don't know if above is necessary or not
    ServletHelpers sh = new ServletHelpers( request, response );
    MedicationVO.Builder t = MedicationVO.builder();
    //TODO Finish request params
    t.medicationID( sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) ) );
    t.patientID( getCurrentUser() );
-   t.pharmID(PharmaRxOtcVO.builder().pharmID( sh.getIntParameter( "pharmid", sh.getIntParameter( "pharmID", 0 ))).build());
-   t.physicianID( HealthcareProviderVO.builder().physicianID(  sh.getIntParameter( "healthcareProviderID",0)).build());
+   t.pharmID( PharmaRxOtcVO.builder().pharmID( sh.getIntParameter( "pharmid", sh.getIntParameter( "pharmID", 0 ) ) ).build() );
+   t.physicianID( HealthcareProviderVO.builder().physicianID( sh.getIntParameter( "healthcareProviderID", 0 ) ).build() );
    t.instructions( sh.getStrParameter( "instructions", "" ) );
    //t.sig ?????
    t.startDate( sh.getDateParameter( "startDate", new Date() ) );
@@ -250,7 +257,7 @@ public PatientVO loadPatientFromRequest() {
    p.dateOfBirth( sh.getDateParameter( "dateOfBirth", new Date() ) );
    p.userRole( 1 );
    p.dateJoined( sh.getDateParameter( "dateJoined", new Date() ) );
-   
+
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadPatientFromRequest()\n==> " + p.build().toJSON() );
    return p.build();
    // sh.getStrParameter( "", "")
@@ -279,17 +286,23 @@ public PatientVO loadPatientFromRequest() {
 //  "userRole": 1,
 
 }
+
 /**
  * Load from request to POJO
- * @return 
- * @see HttpServletRequest#getParameterMap() 
+ *
+ * @return
+ * @see HttpServletRequest#getParameterMap()
  * @see HealthcareProviderVO
  */
-public HealthcareProviderVO loadProviderFromRequest(){
-    /*if ( getCurrentUser() == null ) {
-	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
-	  return null;
-   }*///don't know if above is necessary or not
+public HealthcareProviderVO loadProviderFromRequest() {
+   /*
+    * if ( getCurrentUser() == null ) {
+    * System.err.println(
+    * "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED
+    * IN" );
+    * return null;
+    * }
+    *///don't know if above is necessary or not
    ServletHelpers sh = new ServletHelpers( request, response );
    HealthcareProviderVO.Builder q = HealthcareProviderVO.builder();
    q.physicianID( sh.getIntParameter( "id", sh.getIntParameter( "physicianID", 0 ) ) );
@@ -310,12 +323,12 @@ public HealthcareProviderVO loadProviderFromRequest(){
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadProviderFromRequest()\n==> " + q.build().toJSON() );
    return q.build();
 }
+
 /**
  * Translate Diary
  *
  * @return
  */
-
 public DiaryVO loadDiaryFromRequest() {
    if ( getCurrentUser() == null ) {
 	  System.err.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadDiaryFromRequest() -- USER NOT LOGGED IN" );
@@ -345,6 +358,21 @@ private PatientVO getCurrentUser() {
 	  return null;
    }
 }
+
+public  void setApplicationStores(MedLogDAO dao) {
+   ServletContext context = request.getServletContext();
+   if ( context.getAttribute( APPLICATION_STATE_BEAN ) == null ) {
+	  context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true));
+   }
+
+   if ( context.getAttribute( APPLICATION_SIG_BEAN ) == null ) {
+	   context.setAttribute( APPLICATION_SIG_BEAN, dao.findAllSigsMap());
+   }
+     if ( context.getAttribute( APPLICATION_DR_BEAN ) == null ) {
+		
+	 }
+
+}
 @Expose(deserialize = true, serialize = true)
 /**
  * Request function
@@ -368,6 +396,7 @@ private final HttpServletRequest request;
  */
 private final RES_ENUM res;
 @Expose(deserialize = false, serialize = false)
+
 /**
  * Current Response.
  */

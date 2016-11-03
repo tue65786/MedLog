@@ -110,6 +110,42 @@
 //});
 //
 
+$("#profiles-thread").select2({
+    minimumInputLength: 2,
+    tags: [],
+    ajax: {
+        url: URL,
+        dataType: 'json',
+        type: "GET",
+        quietMillis: 50,
+        data: function (term) {
+            return {
+                term: term
+            };
+        },
+        results: function (data) {
+            return {
+                results: $.map(data, function (item) {
+                    return {
+                        text: item.completeName,
+                        slug: item.slug,
+                        id: item.id
+                    }
+                })
+            };
+        }
+    }
+});   processResults: function (data) {
+        return {
+            results: $.map(data.items, function (item) {
+                return {
+                    text: item.tag_value,
+                    id: item.tag_id
+                }
+            })
+        };
+    }
+
 			 });
 
 		</script>

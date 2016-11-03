@@ -9,6 +9,7 @@ import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import org.apache.commons.lang3.builder.*;
 
 /**
  *
@@ -277,10 +278,7 @@ public boolean isValid(int _ACTION) {
 		 }
 	  }
    }
-   if ( getLastName() == null || getFirstName() == null || getLastName().length() * getFirstName().length() == 0 ) {
-	  return false;
-   }
-   return true;
+   return !( getLastName() == null || getFirstName() == null || getLastName().length() * getFirstName().length() == 0 );
 }
 
 @Override
@@ -289,7 +287,13 @@ public String toJSON() {
 }
 
 @Override
+public String toString() {
+   return "<td>" + physicianID + "</td><td>" + lastName + "</td><td>" + firstName + "</td><td>" + phoneWork + "</td><td>" + addressCity + "</td><td>" + addressZip + "</td><td>" + addressStateID + "</td><td><input type='button' class='edit' value='" + physicianID + "'>Edit</input></td></tr>";
+}
+
+@Override
 public String toTableRow() {
+
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 private int physicianID;

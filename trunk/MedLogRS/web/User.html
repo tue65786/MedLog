@@ -48,15 +48,6 @@
                         <label for="addressState">State:<br/></label>
                         <select id="stateID" name='stateID'>
                                 <option>Choose your state...</option>
-                                <!-- For Loop to traverse through states using stateID -->
-                                <!-- But for now, small list: -->
-                                <option value='DE'>Delaware</option>
-                                <option value='MD'>Maryland</option>
-                                <option value='NJ'>New Jersey</option>
-                                <option value='NY'>New York</option>
-                                <option value='PA'>Pennsylvania</option>
-                                <option value='VA'>Virginia</option>
-                                <option value='WV'>West Virginia</option>
                         </select><br/>
                         <label for="addressCountry">Country:<br/></label>
                         <input name="addressCountry" type="text" id="addressCountry" placeholder="ex. USA"/><br/>
@@ -96,7 +87,7 @@
                 $("#registrationForm").on("submit", function(event){
                     event.preventDefault();
                     var userInfo = $("#registrationForm").serialize();
-                    var theURL = "./api/res=p&fn=add&" + userInfo;
+                    var theURL = "./api/?res=p&fn=add&" + userInfo;
                     $("#formVisual").val("userInfo");
                     $.post(theURL)
                         .done(function(data){

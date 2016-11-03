@@ -10,6 +10,7 @@ import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
 import java.util.*;
+import org.apache.commons.lang3.builder.*;
 
 /**
  * API Resources and Valid Functions
@@ -27,6 +28,7 @@ API_RESOURCE_DIARY( API_ACTIONS.API_RESOURCE_DIARY, new String[]{ API_FUNCTION_F
 																  API_FUNCTION_UPDATE,
 																  API_FUNCTION_DELETE
 } ),
+API_RESOURCE_DIATARY_RESTRICTION( API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION, new String[]{ "", "" } ),
 /**
  * Valid {@linkplain HealthcareProviderVO Health-care Provider} API Function
  */
@@ -56,7 +58,10 @@ API_RESOURCE_PATIENT( API_ACTIONS.API_RESOURCE_PATIENT, new String[]{ API_FUNCTI
 																	  API_FUNCTION_DELETE,
 																	  API_FUNCTION_FIND_BY_ID
 } ),
-API_RESOURCE_DIATARY_RESTRICTION( API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION, new String[]{ "", "" } ),
+API_RESOURCE_PHARM( API_ACTIONS.API_RESOURCE_PHARM, new String[]{ API_FUNCTION_INSERT,
+																  API_FUNCTION_UPDATE,
+																  API_FUNCTION_FIND,
+																  API_FUNCTION_FIND_BY_ID } ),
 /**
  * {@linkplain StateVO} Lookup Resource Functions.
  *
@@ -65,12 +70,10 @@ API_RESOURCE_DIATARY_RESTRICTION( API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION, 
 API_RESOURCE_STATES( API_ACTIONS.API_RESOURCE_STATES, new String[]{ API_FUNCTION_FIND,
 																	API_FUNCTION_FIND_BY_ID } ),
 API_RESOURCE_SIG( API_ACTIONS.API_RESOURCE_SIG, new String[]{ API_FUNCTION_FIND,
-									  API_FUNCTION_FIND_BY_ID } ),
-API_RESOURCE_PHARM( API_ACTIONS.API_RESOURCE_PHARM, new String[]{ API_FUNCTION_INSERT,
-																  API_FUNCTION_UPDATE,
-																  API_FUNCTION_FIND,
-																  API_FUNCTION_FIND_BY_ID } ),
-INVALID( "-", new String[]{ "-" } );
+															  API_FUNCTION_FIND_BY_ID } ),
+
+
+INVALID( "-", new String[]{ API_FUNCTION_LOGIN } );
 
 /**
  * Constructs Resource ENUM
@@ -113,6 +116,17 @@ public static RES_ENUM findByChar(String k) {
 
 public boolean isValidFunction(String fn) {
    return StrUtl.matchOR( fn, VALID_Functions );
+}
+
+/**
+ * Funtion requires login
+ *
+ * @param fn
+ * @return
+ */
+public boolean isLoginRequired(String fn) {
+   boolean a = this.getCode().compareTo( "p" ) + fn.compareTo( API_FUNCTION_INSERT ) == 0;
+   return !( a ||  StrUtl.matchOR( true, fn.equals( API_FUNCTION_LOGIN ), fn.equals( API_FUNCTION_LOGOUT ) ));
 }
 
 @Override
