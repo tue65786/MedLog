@@ -6,11 +6,15 @@
 package com.medlog.webservice.lifecycle;
 
 import static com.medlog.webservice.CONST.SETTINGS.*;
+import static com.medlog.webservice.CONST.STRINGS.*;
+import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.*;
+import java.util.logging.*;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -108,15 +112,33 @@ public void doFilter(ServletRequest request, ServletResponse response,
    HttpServletResponse httpresponse = (HttpServletResponse) response;
    PatientVO user;
    boolean isLoggedIn;
-   
-   if ( debug ) {
+   boolean shouldDeny = false;
+   String uri = null;
+   String file = null;
+
+   if ( DEBUG ) {
 	  log( "Security:doFilter()" );
    }
+   isLoggedIn = isLoggedIn( httprequest );
+   if ( DEBUG ) {
+	  log( String.format( "User %s", isLoggedIn ? "IS LOGGED IN!!" : " IS NOT LOGGED IN" ) );
+   }
 
-   user = (PatientVO) httprequest.getSession().getAttribute(SESSION_BEAN_USER );
-   isLoggedIn = user != null && user.getPatientID() > 0;
+   Map m = new TreeMap();
+   m.put( "URI", httprequest.getRequestURI() );
+   m.put( "URL", httprequest.getRequestURL().toString() );
+   StrUtl.toS( httprequest.getRequestURI() );
+
    doBeforeProcessing( request, response );
-
+   String[] urlParts = getUriParts( httprequest );
+   uri = urlParts[0];
+   file = urlParts[1];
+   if ( !hasAccess( uri, httprequest ) ) {
+	  if ( DEBUG ) {
+		 log( "Not logged in! Redirect" );
+	  }
+	  httpresponse.sendRedirect( "login.html?d=1" );
+   }
    Throwable problem = null;
    try {
 	  chain.doFilter( request, response );
@@ -124,6 +146,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
 	  // If an exception is thrown somewhere down the filter chain,
 	  // we still want to execute our after processing, and then
 	  // rethrow the problem after that.
+
 	  problem = t;
 	  t.printStackTrace();
    }
@@ -141,6 +164,48 @@ public void doFilter(ServletRequest request, ServletResponse response,
 	  }
 	  sendProcessingError( problem, response );
    }
+}
+
+private boolean isLoggedIn(HttpServletRequest httprequest) {
+   try {
+	  boolean ret = ( (PatientVO) httprequest.getSession().getAttribute( SESSION_BEAN_USER ) ).getPatientID() > 0;
+	  if ( DEBUG ) {
+		 log( String.format( "User %s", ret ? "IS LOGGED IN!!" : " IS NOT LOGGED IN" ) );
+	  }
+	  return ret;
+   } catch (Exception e) {
+	  if ( DEBUG ) {
+		 e.printStackTrace();
+	  }
+   }
+   return false;
+
+}
+
+private boolean hasAccess(String uri, HttpServletRequest httprequest) {
+   boolean hasAccess = isLoggedIn( httprequest ) || StrUtl.regexTest( REG_EX_isNonSecurePages, StrUtl.toS( uri ), true );
+   if ( DEBUG ) {
+	  log( String.format( "User %s have access to %s.", hasAccess ? "IS LOGGED IN!!" : " IS NOT LOGGED IN", StrUtl.toS( uri ) ) );
+   }
+   return hasAccess;
+}
+
+private String[] getUriParts(HttpServletRequest httprequest) {
+   String[] ret = new String[2];
+   ret[0] = StrUtl.toS( httprequest.getRequestURI() );
+   try {
+	  String file = ret[0];
+	  if ( file.contains( "/" ) ) {
+		 file = file.substring( file.lastIndexOf( "/" ) + 1, file.length() );
+	  }
+	  if ( file.contains( "?" ) ) {
+		 file = file.substring( 0, file.indexOf( "?" ) );
+	  }
+	  ret[1] = file;
+   } catch (Exception e) {
+	  ret[1] = "";
+   }
+   return ret;
 }
 
 /**
@@ -238,5 +303,6 @@ public static String getStackTrace(Throwable t) {
 public void log(String msg) {
    filterConfig.getServletContext().log( msg );
 }
+private static final Logger LOG = Logger.getLogger( Security.class.getName() );
 
 }

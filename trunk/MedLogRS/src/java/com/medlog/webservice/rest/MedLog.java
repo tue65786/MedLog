@@ -53,78 +53,73 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    try (PrintWriter out = response.getWriter()) {
 	  sh = new ServletHelpers( request, response );
 	  session = request.getSession();
-	  
+
 	  ///getStatesList( request, db );
-	  
-
-
 	  //Get Request Function
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
 	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
-	  
+
 	  //Valid login functions
-	 if (fn.equalsIgnoreCase( "add") && res.equalsIgnoreCase( API_ACTIONS.API_RESOURCE_PATIENT)){
-		MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
-		out.print(strategy.execute(db ));
-		
-	 } 
-	 
-	 else{ 
-		currentUser = getCurrentUser( session );
-	  if ( /*
-			   * currentUser == null &&
-			   */ ( fn.equalsIgnoreCase( "login" ) /*
-					 * || fn.equalsIgnoreCase( "findPatient" )
-					 */ ) ) {
-
-		 dao = new MedLogDAO( db, currentUser );
-		 PatientVO userVO = dao.findPatientByPatientNameAndPassword(
-				 sh.getStrParameter( "username", "" ),
-				 sh.getStrParameter( "password", "" ) );
-
-		 if ( userVO != null ) {
-			currentUser = PatientVO.newInstance( userVO );
-			if ( DEBUG ) {
-			   gson = new GsonBuilder().setPrettyPrinting().
-					   setDateFormat( DATE_FORMAT ).
-					   serializeNulls().
-					   create();
-			} else {
-			   gson = new GsonBuilder().
-					   setDateFormat( DATE_FORMAT ).
-					   create();
-			}
-			//Print current user and store it to session,
-			out.print( gson.toJson( userVO ) );
-			session.setAttribute( SESSION_BEAN_USER, currentUser );
-		 } else {
-			out.print( makeJSONErrorMsg( "Invalid login." ) );
-		 }
-
-		 //Security Controller
-	  } else if ( fn.equalsIgnoreCase( "logout" ) ) {
-		 session.removeAttribute( SESSION_BEAN_USER );
-		 out.print( makeJSONInfoMsg( "User logged out." ) );
-
-	  } else if ( fn.equalsIgnoreCase( "help" ) ) {
-		 out.println( "{\"sampleURL\":?res=d&fn=find\"},\"resources\":[" );
-		 for ( RES_ENUM e : RES_ENUM.values() ) {
-			out.println( e.toString() );
-		 }
-		 out.println( "\n]" );
-	  } else if ( currentUser == null ) {//Check for saved user cred.
-		 out.print( makeJSONErrorMsg( "Not logged in." ) );
-	  } else { //User is Logged in
-//		 dao = new MedLogDAO( db, currentUser );
+	  if ( fn.equalsIgnoreCase( "add" ) && res.equalsIgnoreCase( API_ACTIONS.API_RESOURCE_PATIENT ) ) {
 		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
-		 if ( DEBUG ) {
-			System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create().toJson( strategy ) );
-		 }
-		 //Process
-		 out.print( strategy.execute(db ) );
+		 out.print( strategy.execute( db ) );
 
+	  } else {
+		 currentUser = getCurrentUser( session );
+		 if ( /*
+				  * currentUser == null &&
+				  */ ( fn.equalsIgnoreCase( "login" ) /*
+					    * || fn.equalsIgnoreCase( "findPatient" )
+					    */ ) ) {
+
+			dao = new MedLogDAO( db, currentUser );
+			PatientVO userVO = dao.findPatientByPatientNameAndPassword(
+					sh.getStrParameter( "username", "" ),
+					sh.getStrParameter( "password", "" ) );
+
+			if ( userVO != null ) {
+			   currentUser = PatientVO.newInstance( userVO );
+			   if ( DEBUG ) {
+				  gson = new GsonBuilder().setPrettyPrinting().
+						  setDateFormat( DATE_FORMAT ).
+						  serializeNulls().
+						  create();
+			   } else {
+				  gson = new GsonBuilder().
+						  setDateFormat( DATE_FORMAT ).
+						  create();
+			   }
+			   //Print current user and store it to session,
+			   out.print( gson.toJson( userVO ) );
+			   session.setAttribute( SESSION_BEAN_USER, currentUser );
+			} else {
+			   out.print( makeJSONErrorMsg( "Invalid login." ) );
+			}
+
+			//Security Controller
+		 } else if ( fn.equalsIgnoreCase( "logout" ) ) {
+			session.removeAttribute( SESSION_BEAN_USER );
+			out.print( makeJSONInfoMsg( "User logged out." ) );
+
+		 } else if ( fn.equalsIgnoreCase( "help" ) ) {
+			out.println( "{\"sampleURL\":?res=d&fn=find\"},\"resources\":[" );
+			for ( RES_ENUM e : RES_ENUM.values() ) {
+			   out.println( e.toString() );
+			}
+			out.println( "\n]" );
+		 } else if ( currentUser == null ) {//Check for saved user cred.
+			out.print( makeJSONErrorMsg( "Not logged in." ) );
+		 } else { //User is Logged in
+//		 dao = new MedLogDAO( db, currentUser );
+			MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
+			if ( DEBUG ) {
+			   System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create().toJson( strategy ) );
+			}
+			//Process
+			out.print( strategy.execute( db ) );
+
+		 }
 	  }
-	 }
    } finally {
 	  try {
 		 db.close();
@@ -195,19 +190,19 @@ private PatientVO getCurrentUser(HttpSession session) {
  *
  * @param request
  */
-private Map<Integer, StateVO>  getStatesList(HttpServletRequest request, DbConnection db) {
+private Map<Integer, StateVO> getStatesList(HttpServletRequest request, DbConnection db) {
    boolean setStates = true;
    Map<Integer, StateVO> states = null;
    try {
 	  states = (Map<Integer, StateVO>) request.getServletContext().getAttribute( "states" );
 	  setStates = states.isEmpty();
-	  
-	  for ( Iterator<Entry<Integer,StateVO>> i = states.entrySet().iterator(); i.hasNext();){
-		 System.out.print( i.next().getValue().getStateAbbreviation()+"," ); 
+
+	  for ( Iterator<Entry<Integer, StateVO>> i = states.entrySet().iterator(); i.hasNext(); ) {
+		 System.out.print( i.next().getValue().getStateAbbreviation() + "," );
 	  }
- 
+
    } catch (Exception e) {
-	 
+
 	  setStates = true;
    }
    if ( setStates ) {
@@ -247,15 +242,16 @@ private String makeJSONInfoMsg(String msg) {
 }
 
 private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );
- public  void setApplicationStores(HttpServletRequest request,MedLogDAO dao){
-	  ServletContext context=  request.getServletContext();
-	  if (context.getAttribute( APPLICATION_STATE_BEAN) == null){
-		 context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true ) );
-	  }
-	  
-	    if (context.getAttribute( APPLICATION_SIG_BEAN) == null){
-		   
-		}
-	  
+
+public void setApplicationStores(HttpServletRequest request, MedLogDAO dao) {
+   ServletContext context = request.getServletContext();
+   if ( context.getAttribute( APPLICATION_STATE_BEAN ) == null ) {
+	  context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true ) );
    }
+
+   if ( context.getAttribute( APPLICATION_SIG_BEAN ) == null ) {
+
+   }
+
+}
 }
