@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
+		<script src="scripts/utils.js" type="text/javascript"></script>
     </head>
 
     <body>
@@ -21,7 +22,9 @@
 
             <div>
                 <form method="post" name="registrationForm" id="registrationForm" autocomplete="on">
-                    <fieldset>
+                    <input type="text" disabled="" name="patientID" id="patientID"/>
+					
+					<fieldset>
                         <legend>Login Credentials</legend>
 
                         <!-- Username and Password creation required-->
@@ -46,10 +49,18 @@
                         <label for="addressCity">City:<br/></label>
                         <input name="addressCity" type="text" id="addressCity" placeholder="ex. Philadelphia"/><br/>
                         <label for="addressState">State:<br/></label>
-                        <select id="stateID" name='stateID'>
+                        
+						
+						
+						<select id="stateID" name='stateID'>
 							<option value='2'>Pennsylvania</option>
+							
 
-                        </select><br/>
+                        </select>
+						
+						
+						
+						<br/>
                         <label for="addressCountry">Country:<br/></label>
                         <input name="addressCountry" type="text" id="addressCountry" placeholder="ex. USA"/><br/>
                         <label for="addressPostalcode">Zip Code:<br/></label>
@@ -88,23 +99,23 @@
                 $("#registrationForm").on("submit", function(event){
                     event.preventDefault();
                     var userInfo = $("#registrationForm").serialize();
-                    var prefix = "./api/?res=";
-					var res = "p"; 
-					var fn = "add";
-					var theURL = prefix + res + "&fn=" +fn + userInfo;
+                  
 					
+					var urlBld = new URLBuilder().setRes("d").setFn("add").setFormData(userInfo);
+					          
+                    
+	            var theURL = urlBld.build();
 		
-		
-					console.log(theURL);
-                    $("#formVisual").val("userInfo");
-                   
-		
-		
-		
-				$.post(theURL).done(function(data){
-        alert('GOOD JOB YOU Added a patient!');               
+				$.post(theURL);
+				//
+				/////.done(function(data){
+       /// alert('GOOD JOB YOU Added a patient!');               
 		console.log(JSON.stringify(data));
-						$("#formVisual").val(data);
+						$("#formVisual").val(JSON.stringify(data));
+						
+						
+						$("#patientID").val(data.patientID); 
+//						$("#lastName").val(data.lastName);
                     });
 						
 			
