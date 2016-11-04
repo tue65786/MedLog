@@ -193,6 +193,7 @@ public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo);
 public PharmaRxOtcVO findPharmaRxOtcVO(boolean onlyAssigned);
 public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id);
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword,boolean onlyAssigned);
+public Map<Integer,PharmaRxOtcVO> findPharmaMapRxOtcVOByKeword(String _keyword,int pageNumber, int pageSize, boolean onlyAssigned);
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword,int pageNumber, int pageSize, boolean onlyAssigned);
 
 /**

@@ -49,7 +49,9 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    PatientVO currentUser = null;
    Gson gson = null;
    MedLogDAO dao = null;
+   ApplicationBean appBean;
    DbConnection db = new DbConnection();
+   
    try (PrintWriter out = response.getWriter()) {
 	  sh = new ServletHelpers( request, response );
 	  session = request.getSession();
@@ -58,7 +60,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 	  //Get Request Function
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
 	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
-
+	  
 	  //Valid login functions
 	  if ( fn.equalsIgnoreCase( "add" ) && res.equalsIgnoreCase( API_ACTIONS.API_RESOURCE_PATIENT ) ) {
 		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
@@ -243,18 +245,5 @@ private String makeJSONInfoMsg(String msg) {
 
 private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );
 
-public void setApplicationStores(HttpServletRequest request, MedLogDAO dao) {
-   ServletContext context = request.getServletContext();
-   if ( context.getAttribute( APPLICATION_STATE_BEAN ) == null ) {
-	  context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true ) );
-   }
 
-   if ( context.getAttribute( APPLICATION_SIG_BEAN ) == null ) {
-	  context.setAttribute( APPLICATION_SIG_BEAN, dao.findAllSigsMap() );
-   }
-    
-   
-   
-
-}
 }

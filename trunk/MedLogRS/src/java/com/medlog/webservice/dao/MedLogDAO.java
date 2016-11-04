@@ -475,8 +475,14 @@ public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boole
 }
 
 @Override
-public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, int _pageNumber, int _pageSize, boolean _onlyAssigned) {
+public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, int pageNumber, int pageSize, boolean onlyAssigned) {
+   return new ArrayList<PharmaRxOtcVO>( findPharmaMapRxOtcVOByKeword( _keyword, pageNumber, pageSize, onlyAssigned ).values() );
+}
+
+@Override
+public Map<Integer, PharmaRxOtcVO> findPharmaMapRxOtcVOByKeword(String _keyword, int _pageNumber, int _pageSize, boolean _onlyAssigned) {
    ArrayList<PharmaRxOtcVO> voList = new ArrayList<PharmaRxOtcVO>();
+   Map<Integer, PharmaRxOtcVO> mapp = new ConcurrentHashMap<Integer, PharmaRxOtcVO>( 512 );
    CallableStatement cs = null;
    ResultSet rs = null;
    try {
@@ -492,10 +498,14 @@ public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, int _
 	  cs.setInt( 5, getCurrentUser().getPatientID() );
 	  rs = cs.executeQuery();
 	  while ( rs.next() ) {
-		 voList.add( PharmaRxOtcVO
-				 .builder()
-				 .pharmID( rs.getInt( 1 ) )
-				 .build() );
+		 mapp.put( rs.getInt( 1 ), PharmaRxOtcVO
+				   .builder()
+				   .pharmID( rs.getInt( 1 ) )
+				   .medType( rs.getString( 2 ) )
+				   .rxcui( rs.getString( 3 ) )
+				   .tty( rs.getString( 3 ) )
+				   .fullName( rs.getString( 4 ) )
+				   .build() );
 	  }
    } catch (SQLException ex) {
 	  LOG.log( Level.SEVERE, null, ex );
@@ -504,7 +514,7 @@ public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, int _
    } finally {
 	  DbUtl.close( cs, rs );
    }
-   return voList;
+   return mapp;
 }
 
 @Override

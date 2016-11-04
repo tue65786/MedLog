@@ -41,22 +41,31 @@ public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse
 }
 
 public String execute(DbConnection dbc) {
+
    return handleUserResourceFn( dbc, res.isLoginRequired( fn ) );
 }
 
-public void setApplicationStores(MedLogDAO dao) {
+public ApplicationBean setApplicationStores(MedLogDAO dao) {
    ServletContext context = request.getServletContext();
-   if ( context.getAttribute( APPLICATION_STATE_BEAN ) == null ) {
-	  context.setAttribute( APPLICATION_STATE_BEAN, dao.findAllStates( true ) );
+   try {
+	  System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.setApplicationStores()" + context.getContextPath() + "  :  " + context.toString() );
+   } catch (Exception ee) {
+   }
+   ApplicationBean app = new ApplicationBean( context, dao.getDB(), dao );
+   if ( !app.isStateSet() ) {
+	  app.setStatesMap( dao.findAllStates( true ) );
+	  context.setAttribute( APPLICATION_STATE_BEAN, app.getStatesMap() );
+   }
+   if ( !app.isSigSet() ) {
+	  app.setSigMap( dao.findAllSigsMap() );
+	  context.setAttribute( APPLICATION_SIG_BEAN, app.getSigMap() );
+   }
+   if ( !app.isRxSet() ) {
+	  app.setRxMap( dao.findPharmaMapRxOtcVOByKeword( "a", 1, 100, false ) );
+	  context.setAttribute( APPLICATION_RX_BEAN, app.getRxMap() );
    }
 
-   if ( context.getAttribute( APPLICATION_SIG_BEAN ) == null ) {
-	  context.setAttribute( APPLICATION_SIG_BEAN, dao.findAllSigsMap() );
-   }
-   if ( context.getAttribute( APPLICATION_DR_BEAN ) == null ) {
-
-   }
-
+   return app;
 }
 
 public ArrayList<IEntityBase> getList() {
@@ -78,7 +87,14 @@ public IEntityBase getSingle(ArrayList<? extends IEntityBase> voList) {
 public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
    Gson g = new Gson();
    boolean apiCanExecute = true;
-   MedLogDAO dao;
+   MedLogDAO dao = new MedLogDAO( dbc, getCurrentUser() );
+   ApplicationBean app = null;
+   try {
+	  app = setApplicationStores( dao );
+
+   } catch (Exception e) {
+
+   }
 
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute() " + res.name() + res.toString() );
 
@@ -180,41 +196,26 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 													+ " is invalid." );
 			}
 			break;
-	
+
 		 case API_RESOURCE_MEDICATION:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   MedicationVO vo = loadMedicationFromRequest();
 			}
+			else if (fn.equals( "find")){
+			   
+			}
 			break;
-			
-					
-
-
-
-
-
-
-
 
 		 case API_RESOURCE_STATES:
-			ArrayList<StateVO> states = dao.findAllStates();
+			ArrayList<StateVO> states = new ArrayList<StateVO> (app.getStatesMap().values());
+			Collections.sort( states );
 			responseMessage = new GsonBuilder().disableInnerClassSerialization().serializeNulls().create().toJson( states );
-		 break;
-	
-
-
-
-
-
-
-
-
-
+			break;
 
 		 case API_RESOURCE_SIG:
-			ArrayList<SigVO> sigs = dao.findAllSigs( true);
+			ArrayList<SigVO> sigs = new ArrayList<SigVO> (app.getSigMap().values());
 			responseMessage = new GsonBuilder().disableInnerClassSerialization().serializeNulls().create().toJson( sigs );
-			
+
 		 default:
 			responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 												 " Invalid res." );
@@ -265,7 +266,7 @@ public MedicationVO loadMedicationFromRequest() {
    t.pharmID( PharmaRxOtcVO.builder().pharmID( sh.getIntParameter( "pharmid", sh.getIntParameter( "pharmID", 0 ) ) ).build() );
    t.physicianID( HealthcareProviderVO.builder().physicianID( sh.getIntParameter( "healthcareProviderID", 0 ) ).build() );
    t.instructions( sh.getStrParameter( "instructions", "" ) );
-   t.sig( SigVO.builder().sigAbbrID(sh.getStrParameter( "sig", "p.r.n")).build());
+   t.sig( SigVO.builder().sigAbbrID( sh.getStrParameter( "sig", "p.r.n" ) ).build() );
    t.startDate( sh.getDateParameter( "startDate", new Date() ) );
    t.endDate( sh.getDateParameter( "endDate", new Date() ) );
    t.dosage( sh.getStrParameter( "dosage", "" ) );

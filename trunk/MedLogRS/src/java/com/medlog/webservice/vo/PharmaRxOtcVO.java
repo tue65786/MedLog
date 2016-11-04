@@ -432,8 +432,6 @@ private String route;
 @FormNameValueAndType(canOmitFromForm = true)
 private String rxcui;
 
-
-
 @FormNameValueAndType(canOmitFromForm = true)
 private String rxnDoseForm;
 /**
@@ -487,6 +485,15 @@ public Builder pharmID(final int value) {
 
 public Builder medType(final MedTypeVO value) {
    this.medType = value;
+   return this;
+}
+/**
+ * By key
+ * @param value
+ * @return 
+ */
+public Builder medType(final String value) {
+   this.medType = value.equalsIgnoreCase( "RX" ) ? MedTypeVO.GET_RX() : MedTypeVO.GET_OTC();
    return this;
 }
 

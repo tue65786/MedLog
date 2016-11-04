@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+		   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<!--<link rel="stylesheet" href="/resources/demos/style.css">-->
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script>
+			 $(function () {
+				 $("#menu").menu();
+
+				 $("#menu").menu({
+					 select : function ( event, ui ) {
+
+						 console.log(event);
+						 console.log(ui);
+					 }
+				 });
+			 });
+
+		</script>
+		<style>
+			.ui-menu { width: 150px; }
+		</style>
+	</head>
+	<body>
+		<ul id="menu">
+			<li id="diary" data-url="">
+				<div><span class="ui-icon ui-icon-contact"></span>Diary</div>
+			</li><li id="diary" data-url="">
+				<div><span class="ui-icon ui-icon-note"></span>Diary</div>
+			</li>
+			<li>
+				<div><span class="ui-icon ui-icon-cart"></span>Healthcare</div>
+			</li>
+			<li>
+				<div><span class="ui-icon ui-icon-home"></span>Healthcare</div>
+			</li>
+			<li>
+				<div><span class="ui-icon ui-icon-person"></span>Healthcare</div>
+			</li>
+			<li>
+				<div><span class="ui-icon ui-icon-comment"></span>Zoom Out</div>
+			</li>
+			<li class="ui-state-disabled">
+				<div><span class="ui-icon ui-icon-script"></span>Medication</div>
+			</li>
+<!--			<li>
+				<div>Disabled</div>
+				<ul>
+					<li>
+						<div><span class="ui-icon ui-icon-clipboard"></span>Doctor</div>
+					</li>
+					<li>
+						<div><span class="ui-icon ui-icon-stop"></span>Stop</div>
+					</li>
+					<li>
+						<div><span class="ui-icon ui-icon-play"></span>Play</div>
+					</li>
+					<li>
+						<div><span class="ui-icon ui-icon-seek-end"></span>Next</div>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<div>Learn more about this menu</div>
+			</li>-->
+		</ul>
+	</body>
+</html>

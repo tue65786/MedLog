@@ -8,17 +8,26 @@ package com.medlog.webservice.vo;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import org.apache.commons.lang3.builder.*;
 
 /**
  *
  * @author (c)2016 Guiding Technologies
  */
-public class StateVO implements Serializable, IEntityBase<StateVO> {
+public class StateVO implements Serializable, IEntityBase<StateVO>,Comparable<StateVO> {
 
 private static final long serialVersionUID = -7661073258202665741L;
 
    public static StateVO create(final int stateID, final String stateName, final String stateAbbreviation, final List<PatientVO> patientList) {
 	  return new StateVO( stateID, stateName, stateAbbreviation, patientList );
+   }
+
+   @Override
+   public int compareTo(StateVO that) {
+	 CompareToBuilder b = new CompareToBuilder();
+	b.append( this.getStateName().toLowerCase(), that.getStateName().toLowerCase());
+	b.append( this.getStateAbbreviation(), that.getStateAbbreviation());
+	return b.build();
    }
 
    /**
