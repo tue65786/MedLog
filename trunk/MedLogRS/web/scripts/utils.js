@@ -13,6 +13,8 @@
 
 /**
  * API URL BUILDER
+ * @example  var apiUrlWithOutForm = new URLBuilder().setRes("d").setFn("find").build(); //(Finds all diary entries for current user) 
+ * * @example var apiUrlWithForm = new URLBuilder().setRes("d").setFn("add").setFormData(userInfo).build(); // Adds diary entry  -- assumes you have stored form serialized data in 'userInfo'
  * @returns {URLBuilder}
  */
 
@@ -20,7 +22,7 @@
 	 this.res = "";
 	 this.params = "";
 	 this.fn = "";
-	 var apiPrefix = "./api/";
+	 var apiPrefix = "/MedLogRS/api/";
 	 var isFirst = true;
 
 	 this.setRes = function ( r ) {
@@ -35,13 +37,23 @@
 		 isFirst = false;
 		 return this;
 	 };
+	 /**
+	  * Adds formdata 
+	  * @example (should use $([idForm]).serialize();
+	  * @param {type} formData -- JQ serialized
+	  * @returns {URLBuilder}
+	  */
 	 this.setFormData = function ( formData ) {
 		 this.params = formData;
 		 apiPrefix = apiPrefix + (isFirst ? "?" : "&") + "" + formData;
 		 isFirst = false;
+		 return this;
 	 };
+	 /**
+	  * Builds the URL string
+	  * @returns {String}
+	  */
 	 this.build = function () {
-		 alert(apiPrefix);
 		 return apiPrefix;
 	 };
  };
@@ -79,7 +91,9 @@
 		 var optionMarkup = "<option value='" + value
 			 + (selected ? " selected " : "")
 			 + "'>" + text + "</option>";
+console.log(optionMarkup);
 		 return optionMarkup;
+		 
 	 }
 	 return "";
  } //end function  
@@ -94,15 +108,16 @@
  */
  function generateLookupList( drownDownListID, jsonData, nameOfValueField, nameOfDisplayField ) {
 	 var dropDownTagSelector = "#" + drownDownListID;
-	 var optionTags = makeOptionTag("", "Select....", true); // Add default option to select.
-	 if ( $.isArray(jsonData, nameOfValueField, nameOfDisplayField) && jsonData.legth > 0) {//validate array
+	 
+	 var optionTags = "";
+	
 		 $(jsonData).each(function ( i, vo ) { //for loop
 			 optionTags += makeOptionTag(vo[nameOfValueField],vo[nameOfDisplayField]);
 		 }); //function
 		 //Update HTML
-
 		 $(dropDownTagSelector).empty().html(optionTags);
-	 } //valid voList
+		 $(dropDownTagSelector).val("52");
+	
  } //function
 
 
