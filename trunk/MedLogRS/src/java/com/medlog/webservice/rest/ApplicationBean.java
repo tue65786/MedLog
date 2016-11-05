@@ -5,6 +5,8 @@
  */
 package com.medlog.webservice.rest;
 
+import com.google.gson.*;
+import com.google.gson.annotations.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.dao.*;
 import com.medlog.webservice.sql.*;
@@ -23,11 +25,12 @@ import org.apache.commons.collections4.*;
  * @author (c)2016 Guiding Technologies
  */
 public class ApplicationBean implements Serializable {
+
 private static final Logger LOG = Logger.getLogger( ApplicationBean.class.getName() );
 
 private static final long serialVersionUID = 3372922617040246869L;
 
-public ApplicationBean(ServletContext context, DbConnection db, MedLogDAO dao) {
+public ApplicationBean(ServletContext context) {
    try {
 	  try {
 		 if ( context.getAttribute( APPLICATION_STATE_BEAN ) != null ) {
@@ -35,7 +38,7 @@ public ApplicationBean(ServletContext context, DbConnection db, MedLogDAO dao) {
 			stateSet = !statesMap.isEmpty();
 		 }
 	  } catch (Exception ea) {
-		 
+
 	  }
 	  try {
 		 if ( context.getAttribute( APPLICATION_SIG_BEAN ) != null ) {
@@ -43,22 +46,20 @@ public ApplicationBean(ServletContext context, DbConnection db, MedLogDAO dao) {
 			sigSet = !sigMap.isEmpty();
 		 }
 	  } catch (Exception eb) {
-		 
+
 	  }
 	  try {
 		 if ( context.getAttribute( APPLICATION_RX_BEAN ) != null ) {
-			this.rxMap = (Map<Integer, PharmaRxOtcVO>) context.getAttribute( APPLICATION_RX_BEAN ) ;
+			this.rxMap = (Map<Integer, PharmaRxOtcVO>) context.getAttribute( APPLICATION_RX_BEAN );
 			rxSet = !rxMap.isEmpty();
 		 }
 	  } catch (Exception ec) {
-		 
+
 	  }
    } catch (Exception e) {
-	  
+
    }
    this.context = context;
-   this.db = db;
-   this.dao = dao;
 }
 
 /**
@@ -74,22 +75,24 @@ public ServletContext getContext() {
 public void setContext(ServletContext context) {
    this.context = context;
 }
+
 public <T extends IEntityBase> ArrayList<T> getList(String name) {
-   
+
    if ( getContext() != null && getContext().getAttribute( name ) != null ) {
 	  try {
 		 return (ArrayList<T>) getContext().getAttribute( name );
 	  } catch (Exception e) {
-		 
+
 	  }
    }
    return null;
 }
+
 public <T extends IEntityBase> Map<Integer, T> getMap(String name) {
    try {
 	  return (Map<Integer, T>) getContext().getAttribute( name );
    } catch (Exception e) {
-	  
+
    }
    return null;
 }
@@ -106,11 +109,10 @@ public Map<Integer, PharmaRxOtcVO> getRxMap() {
  */
 public void setRxMap(Map<Integer, PharmaRxOtcVO> rxmap) {
    this.rxMap = rxmap;
-   if (rxMap != null && !rxMap.isEmpty()){
-	  setRxSet( true);
+   if ( rxMap != null && !rxMap.isEmpty() ) {
+	  setRxSet( true );
    }
-   
-	
+
 }
 
 /**
@@ -125,8 +127,8 @@ public Map<String, SigVO> getSigMap() {
  */
 public void setSigMap(Map<String, SigVO> sigMap) {
    this.sigMap = sigMap;
-   if (sigMap != null && !sigMap.isEmpty()){
-	  setSigSet( true);
+   if ( sigMap != null && !sigMap.isEmpty() ) {
+	  setSigSet( true );
    }
 }
 
@@ -141,54 +143,54 @@ public Map<Integer, StateVO> getStatesMap() {
  * @param statesMap the statesMap to set
  */
 public void setStatesMap(Map<Integer, StateVO> statesMap) {
-   
+
    this.statesMap = statesMap;
-    if (statesMap != null && !statesMap.isEmpty()){
-	  setStateSet(true);
+   if ( statesMap != null && !statesMap.isEmpty() ) {
+	  setStateSet( true );
    }
 }
 
-   /**
-    * @return the rxSet
-    */
-   public boolean isRxSet() {
-	  return rxSet;
-   }
+/**
+ * @return the rxSet
+ */
+public boolean isRxSet() {
+   return rxSet;
+}
 
-   /**
-    * @param rxSet the rxSet to set
-    */
-   public void setRxSet(boolean rxSet) {
-	  this.rxSet = rxSet;
-   }
+/**
+ * @param rxSet the rxSet to set
+ */
+public void setRxSet(boolean rxSet) {
+   this.rxSet = rxSet;
+}
 
-   /**
-    * @return the sigSet
-    */
-   public boolean isSigSet() {
-	  return sigSet;
-   }
+/**
+ * @return the sigSet
+ */
+public boolean isSigSet() {
+   return sigSet;
+}
 
-   /**
-    * @param sigSet the sigSet to set
-    */
-   public void setSigSet(boolean sigSet) {
-	  this.sigSet = sigSet;
-   }
+/**
+ * @param sigSet the sigSet to set
+ */
+public void setSigSet(boolean sigSet) {
+   this.sigSet = sigSet;
+}
 
-   /**
-    * @return the stateSet
-    */
-   public boolean isStateSet() {
-	  return stateSet;
-   }
+/**
+ * @return the stateSet
+ */
+public boolean isStateSet() {
+   return stateSet;
+}
 
-   /**
-    * @param stateSet the stateSet to set
-    */
-   public void setStateSet(boolean stateSet) {
-	  this.stateSet = stateSet;
-   }
+/**
+ * @param stateSet the stateSet to set
+ */
+public void setStateSet(boolean stateSet) {
+   this.stateSet = stateSet;
+}
 
 /**
  * Puts list in application
@@ -203,11 +205,11 @@ public <T extends IEntityBase> boolean putList(String name, ArrayList<T> voList)
 
 }
 
-
 public <T extends IEntityBase> boolean putPut(String name, Map<Integer, T> voMap) {
    return true;
 
 }
+
 /**
  * Puts single VO in application
  *
@@ -220,15 +222,24 @@ public <T extends IEntityBase> boolean putSingle(String name, T vo) {
    return true;
 }
 
+public String toJSONSTring() {
+   return new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create().toJson( this );
 
+}
+
+@Expose(deserialize = false, serialize = false)
 private ServletContext context;
+@Expose(deserialize = true, serialize = true)
 private Map<Integer, PharmaRxOtcVO> rxMap;
+@Expose(deserialize = true, serialize = true)
 private boolean rxSet;
+@Expose(deserialize = true, serialize = true)
 private Map<String, SigVO> sigMap;
+@Expose(deserialize = true, serialize = true)
 private boolean sigSet;
+@Expose(deserialize = true, serialize = true)
 private Map<Integer, StateVO> statesMap;
+@Expose(deserialize = true, serialize = true)
 private boolean stateSet;
-private MedLogDAO dao;
-private DbConnection db;
 
 }

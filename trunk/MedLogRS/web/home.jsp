@@ -30,28 +30,38 @@
 		</script>
 		<style>
 			.ui-menu { width: 150px; }
+			#menu a {text-decoration: none;}
 		</style>
     </head>
     <body>
 
 		<ul id="menu">
 			<li>
-				<div><span class="ui-icon ui-icon-disk"></span>Save</div>
+				<div><span class="ui-icon ui-icon-home"></span><a href="home.jsp">Medlog</a></div>
 			</li>
 			<li>
-				<div><span class="ui-icon ui-icon-zoomin"></span>Zoom In</div>
+				<div><span class="ui-icon ui-icon-person"></span>Profile</div>
+			</li>
+			<li id="diary" data-url="">
+				<div><span class="ui-icon ui-icon-contact"></span>Diary</div>
+			</li><li id="diary">
+				<div><span class="ui-icon ui-icon-note"></span><a href="insertJournal.html">Diary</a></div>
 			</li>
 			<li>
-				<div><span class="ui-icon ui-icon-zoomout"></span>Zoom Out</div>
+				<div><span class="ui-icon ui-icon-cart"></span><a href="HealthcareProvider.htm">Healthcare</a></div>
+			</li>
+			
+			<li>
+				<div><span class="ui-icon ui-icon-comment"></span></div>
 			</li>
 			<li class="ui-state-disabled">
-				<div><span class="ui-icon ui-icon-print"></span>Print...</div>
+				<div><span class="ui-icon ui-icon-script"></span>Medication</div>
 			</li>
-			<li>
-				<div>Playback</div>
+<!--			<li>
+				<div>Disabled</div>
 				<ul>
 					<li>
-						<div><span class="ui-icon ui-icon-seek-start"></span>Prev</div>
+						<div><span class="ui-icon ui-icon-clipboard"></span>Doctor</div>
 					</li>
 					<li>
 						<div><span class="ui-icon ui-icon-stop"></span>Stop</div>
@@ -66,7 +76,7 @@
 			</li>
 			<li>
 				<div>Learn more about this menu</div>
-			</li>
+			</li>-->
 		</ul>
     </body>
 </html>

@@ -51,19 +51,30 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
    MedLogDAO dao = null;
    ApplicationBean appBean;
    DbConnection db = new DbConnection();
-   
+
    try (PrintWriter out = response.getWriter()) {
 	  sh = new ServletHelpers( request, response );
 	  session = request.getSession();
-
+	  try {
+		 for ( Enumeration<String> e = request.getServletContext().getAttributeNames(); e.hasMoreElements(); ) {
+			System.out.println( "Contxt name: " + e.nextElement() );
+		 }
+	  } catch (Exception e) {
+		 if ( DEBUG ) {
+			e.printStackTrace();
+		 }
+	  }
 	  ///getStatesList( request, db );
 	  //Get Request Function
 	  fn = sh.getStrParameter( API_PARAM_FUNCTION, "" );
 	  res = sh.getStrParameter( API_PARAM_RESOURCE, "" );
-	  
+	  MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
+	  dao = new MedLogDAO( db, PatientVO.builder().build() );
+	  appBean = strategy.setApplicationStores( dao );
+
 	  //Valid login functions
 	  if ( fn.equalsIgnoreCase( "add" ) && res.equalsIgnoreCase( API_ACTIONS.API_RESOURCE_PATIENT ) ) {
-		 MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
+
 		 out.print( strategy.execute( db ) );
 
 	  } else {
@@ -113,7 +124,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			out.print( makeJSONErrorMsg( "Not logged in." ) );
 		 } else { //User is Logged in
 //		 dao = new MedLogDAO( db, currentUser );
-			MedLogControllerStrategy strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
+			strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
 			if ( DEBUG ) {
 			   System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create().toJson( strategy ) );
 			}
@@ -244,6 +255,5 @@ private String makeJSONInfoMsg(String msg) {
 }
 
 private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );
-
 
 }

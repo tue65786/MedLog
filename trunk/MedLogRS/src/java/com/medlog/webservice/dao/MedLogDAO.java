@@ -8,6 +8,7 @@ package com.medlog.webservice.dao;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.DB_STRINGS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
+import com.medlog.webservice.rest.*;
 import com.medlog.webservice.rest.controller.*;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.util.*;
@@ -24,8 +25,66 @@ import java.util.logging.*;
  */
 public class MedLogDAO implements IMedLogDAO {
 
+/**
+ * @return the rxMap
+ */
+public Map<Integer, PharmaRxOtcVO> getRxMap() {
+   return rxMap;
+}
+
+/**
+ * @param rxMap the rxMap to set
+ */
+public void setRxMap(Map<Integer, PharmaRxOtcVO> rxMap) {
+   this.rxMap = rxMap;
+}
+
+/**
+ * @return the sigMap
+ */
+public Map<String, SigVO> getSigMap() {
+   return sigMap;
+}
+
+/**
+ * @param sigMap the sigMap to set
+ */
+public void setSigMap(Map<String, SigVO> sigMap) {
+   this.sigMap = sigMap;
+}
+
+/**
+ * @return the statesMap
+ */
+public Map<Integer, StateVO> getStatesMap() {
+//   if ( statesMap == null || statesMap.isEmpty() ) {
+//	  if ( statesLoading  || !statesLoaded) {
+//		 try {
+//			Thread.sleep( 300 );
+//			System.out.println( "com.medlog.webservice.dao.MedLogDAO.getStatesMap() zzz" );
+//		 } catch (InterruptedException ex) {
+//			Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
+//		 }
+//	  } else {
+//		 findAllStates( true );
+//	  }
+//   }
+   return statesMap;
+}
+
+/**
+ * @param statesMap the statesMap to set
+ */
+public void setStatesMap(Map<Integer, StateVO> statesMap) {
+   this.statesMap = statesMap;
+}
+
+private Map<Integer, PharmaRxOtcVO> rxMap;
+private Map<String, SigVO> sigMap;
+private Map<Integer, StateVO> statesMap;
+
 private static final Logger LOG = Logger.getLogger( MedLogDAO.class.getName() );
-private static Map<Integer, StateVO> statesList;
+//private static Map<Integer, StateVO> statesList;
 
 /**
  *
@@ -39,10 +98,59 @@ public MedLogDAO(DbConnection db, PatientVO u) {
    errorMessage = "";
    try {
 	  //  if ( u != null && u.getPatientID() != -2 ) {
-	  findAllStates();
+//	  findAllStates();
 	  //  }
    } catch (Exception eeee) {
 	  eeee.printStackTrace();
+   }
+}
+
+public MedLogDAO(DbConnection db, PatientVO u, ApplicationBean app) {
+   this.db = db;
+   this.user = u;
+   stateOK = true;
+   errorMessage = "";
+   try {
+	  if ( app.isRxSet() ) {
+		 rxMap = app.getRxMap();
+	  }
+	  if ( app.isSigSet() ) {
+		 sigMap = app.getSigMap();
+	  }
+	  if ( app.isStateSet() ) {
+		 statesMap = app.getStatesMap();
+	  }
+   } catch (Exception e) {
+
+   }
+   try {
+	  //  if ( u != null && u.getPatientID() != -2 ) {
+//	  findAllStates();
+	  //  }
+   } catch (Exception eeee) {
+	  eeee.printStackTrace();
+   }
+}
+
+public void setAppContext(ApplicationBean app) {
+   try {
+	  if ( app.isRxSet() ) {
+		 setRxMap( app.getRxMap() );
+	  }
+	  if ( app.isSigSet() ) {
+		 setSigMap( app.getSigMap() );
+	  }
+	  if ( app.isStateSet() ) {
+		 setStatesMap( app.getStatesMap() );
+	  }
+   } catch (Exception e) {
+	  if ( DEBUG ) {
+		 e.printStackTrace();
+	  }
+   }
+   try {
+   } catch (Exception eeee) {
+
    }
 }
 
@@ -319,57 +427,84 @@ public ArrayList<SigVO> findAllSigs(boolean onlyTime) {
 
 @Override
 public Map<String, SigVO> findAllSigsMap() {
-   Map<String, SigVO> map = new HashMap<String, SigVO>();
-   CallableStatement cs = null;
-   ResultSet rs = null;
-   try {
-	  cs = db.getConnnection().prepareCall( SP_SIGS_SELECT );
-	  cs.setNull( 1, java.sql.Types.INTEGER );
-	  rs = cs.executeQuery();
-	  while ( rs.next() ) {
-		 map.put( rs.getString( 1 ), SigVO.builder().sigAbbrID( rs.getString( 1 ) ).definition( rs.getString( 2 ) ).category( rs.getString( 3 ) ).build() );
-	  }
-   } catch (SQLException ex) {
-	  Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
-   } finally {
-	  DbUtl.close( rs );
-	  DbUtl.close( cs );
-   }
-   return map;
-}
 
-@Override
-public final ArrayList<StateVO> findAllStates() {
-   Map<Integer, StateVO> tmpVO = findAllStates( true );
-   ArrayList<StateVO> vos = new ArrayList<StateVO>();
-   vos.addAll( MedLogDAO.statesList.values() );
-   return vos;
-}
-
-public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
-   Map<Integer, StateVO> tmpVO = new ConcurrentHashMap<Integer, StateVO>( 64 );
-   if ( MedLogDAO.statesList == null || mustuseSQL ) {
-
+   if ( getSigMap() == null || getSigMap().isEmpty() ) {
+	  Map<String, SigVO> map = new HashMap<String, SigVO>();
 	  CallableStatement cs = null;
 	  ResultSet rs = null;
 	  try {
-		 cs = db.getConnnection().prepareCall( SP_STATE_SELECT );
+		 cs = db.getConnnection().prepareCall( SP_SIGS_SELECT );
+		 cs.setNull( 1, java.sql.Types.INTEGER );
 		 rs = cs.executeQuery();
 		 while ( rs.next() ) {
-			tmpVO.put( rs.getInt( 1 ), StateVO.builder().stateID( rs.getInt( 1 ) ).stateName( rs.getString( 2 ) ).stateAbbreviation( rs.getString( 3 ) ).build() );
-//			System.out.println(tmpVO.get(rs.getInt(1)).setStateName( DATE_FORMAT ));
+			map.put( rs.getString( 1 ), SigVO.builder().sigAbbrID( rs.getString( 1 ) ).definition( rs.getString( 2 ) ).category( rs.getString( 3 ) ).build() );
 		 }
-		 MedLogDAO.statesList = new HashMap<Integer, StateVO>();
-		 MedLogDAO.statesList.putAll( tmpVO );
 	  } catch (SQLException ex) {
 		 Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
 	  } finally {
 		 DbUtl.close( rs );
 		 DbUtl.close( cs );
 	  }
+	  setSigMap( map );
+	  return map;
+   } else {
+	  if ( DEBUG ) {
+		 LOG.info( "Using Sig Bean" );
+	  }
+	  return getSigMap();
+   }
+}
+
+@Override
+public final ArrayList<StateVO> findAllStates() {
+   Map<Integer, StateVO> tmpVO = findAllStates( true );
+   ArrayList<StateVO> vos = new ArrayList<StateVO>();
+   vos.addAll( getStatesMap().values() );
+   return vos;
+}
+private boolean statesLoading = false;
+private boolean statesLoaded = false;
+
+public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
+   Map<Integer, StateVO> tmpVO = new ConcurrentHashMap<Integer, StateVO>( 64 );
+   if ( getStatesMap() == null || getStatesMap().isEmpty() ) {
+	  if ( getStatesMap() == null || mustuseSQL && !statesLoading ) {
+		 statesLoading = true;
+		 CallableStatement cs = null;
+		 ResultSet rs = null;
+		 try {
+			cs = db.getConnnection().prepareCall( SP_STATE_SELECT );
+			rs = cs.executeQuery();
+			while ( rs.next() ) {
+			   tmpVO.put( rs.getInt( 1 ), StateVO.builder().stateID( rs.getInt( 1 ) ).stateName( rs.getString( 2 ) ).stateAbbreviation( rs.getString( 3 ) ).build() );
+//			System.out.println(tmpVO.get(rs.getInt(1)).setStateName( DATE_FORMAT ));
+			}
+			if ( getStatesMap() == null ) {
+			   setStatesMap( new ConcurrentHashMap<Integer, StateVO>( 64 ) );
+			}
+			getStatesMap().putAll( tmpVO );
+		 } catch (SQLException ex) {
+			Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
+		 } finally {
+			DbUtl.close( rs );
+			DbUtl.close( cs );
+			statesLoading = false;
+		 }
+	  }
+	  setStatesMap( tmpVO );
+	  statesLoading = false;
+	  statesLoaded = true;
+	  return tmpVO;
+   } else {
+
+	  statesLoading = false;
+	  statesLoaded = true;
+	  if ( DEBUG ) {
+		 LOG.info( "Using state Bean" );
+	  }
+	  return getStatesMap();
    }
 
-   return tmpVO;
 }
 
 @Override
@@ -912,7 +1047,7 @@ private ArrayList<HealthcareProviderVO> findHealthCareProviders(int _id, String 
 				 .email( rs.getString( 8 ) )
 				 .addressStreet( rs.getString( 7 ) )
 				 .addressCity( rs.getString( 8 ) )
-				 .addressStateID( statesList.get( rs.getInt( 9 ) ) )//Add error handling for state
+				 .addressStateID( getStatesMap().get( rs.getInt( 9 ) ) )//Add error handling for state
 				 .addressZip( rs.getString( 10 ) )
 				 .build()
 		 );
@@ -949,6 +1084,7 @@ private ArrayList<HealthcareProviderVO> findHealthcareProviders(int _id, String 
  * @return
  */
 private ArrayList<PatientVO> findPatient(int _id, String _username, String _password) {
+   findAllStates( true);
    _username = StrUtl.toS( _username );
    _password = StrUtl.toS( _password );
    ArrayList<PatientVO> voList = new ArrayList<PatientVO>();
@@ -992,7 +1128,7 @@ private ArrayList<PatientVO> findPatient(int _id, String _username, String _pass
 					.status( rs.getString( 10 ) )
 					.addressStreet( rs.getString( 11 ) )
 					.addressCity( rs.getString( 12 ) )
-					.addressState( statesList.get( rs.getInt( 13 ) ) )//Add error handling for state
+					.addressState( getStatesMap().get( rs.getInt( 13 ) ) )//Add error handling for state
 					.addressCountry( rs.getString( 14 ) )
 					.addressPostalcode( rs.getString( 15 ) )
 					.userPreferences( rs.getString( 16 ) )

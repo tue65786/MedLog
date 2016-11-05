@@ -23,6 +23,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
+import org.apache.commons.lang3.*;
 
 /**
  *
@@ -133,11 +134,11 @@ public void doFilter(ServletRequest request, ServletResponse response,
    String[] urlParts = getUriParts( httprequest );
    uri = urlParts[0];
    file = urlParts[1];
-   if ( !hasAccess( uri, httprequest ) ) {
+   if ( !hasAccess( uri, file, httprequest ) ) {
 	  if ( DEBUG ) {
 		 log( "Not logged in! Redirect" );
 	  }
-	  httpresponse.sendRedirect( "login.html?d=1" );
+	  httpresponse.sendRedirect( "/MedLogRS/login.html?d=1" );
    }
    Throwable problem = null;
    try {
@@ -182,8 +183,8 @@ private boolean isLoggedIn(HttpServletRequest httprequest) {
 
 }
 
-private boolean hasAccess(String uri, HttpServletRequest httprequest) {
-   boolean hasAccess = isLoggedIn( httprequest ) || StrUtl.regexTest( REG_EX_isNonSecurePages, StrUtl.toS( uri ), true );
+private boolean hasAccess(String uri,String file, HttpServletRequest httprequest) {
+   boolean hasAccess = isLoggedIn( httprequest ) || StrUtl.regexTest( REG_EX_isNonSecurePages, StrUtl.toS( uri ), true ) || !StringUtils.endsWith( uri, "html" );
    if ( DEBUG ) {
 	  log( String.format( "User %s have access to %s.", hasAccess ? "IS LOGGED IN!!" : " IS NOT LOGGED IN", StrUtl.toS( uri ) ) );
    }
@@ -201,6 +202,7 @@ private String[] getUriParts(HttpServletRequest httprequest) {
 	  if ( file.contains( "?" ) ) {
 		 file = file.substring( 0, file.indexOf( "?" ) );
 	  }
+	  System.out.println( "com.medlog.webservice.lifecycle.Security.getUriParts() FileName " + file  );
 	  ret[1] = file;
    } catch (Exception e) {
 	  ret[1] = "";

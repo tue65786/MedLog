@@ -261,7 +261,7 @@ public static final String SP_PHARM_INSERT = "{call [spPharma_RX_OTCInsert]("
  * , @onlyMyRX bit = 0
  * , @PatientID int = 2--null
  */
-public static final String SP_PHARM_SEARCH = "{call [[spPharma_RX_OTCSearch](?,?,?,?,?)}";
+public static final String SP_PHARM_SEARCH = "{call [spPharma_RX_OTCSearch](?,?,?,?,?)}";
 public static final String SP_PHARM_SELECT = "{call [spPharma_RX_OTCSelect](?,?)}";
 /**
  * Params:
