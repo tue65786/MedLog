@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
+        <script src="scripts/utils.js" type="text/javascript"></script>
     </head>
 
     <body>
@@ -88,14 +89,17 @@
                     event.preventDefault();
                     var userInfo = $("#registrationForm").serialize();
                     var theURL = "./api/?res=p&fn=add&" + userInfo;
-                    $("#formVisual").val("userInfo");
-                    $.post(theURL)
-                        .done(function(data){
-                            console.log(data);
-                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-                        console.log(xhr);
-                        console.log(error);
-                    });
+//                    $("#formVisual").val("userInfo");
+                    $.post(theURL);
+                    console.log(JSON.stringify(data));
+                    $("#formVisual").val(JSON.stringify(data));
+                    $("#patientID").val(data.patientID); 
+//                        .done(function(data){
+//                            console.log(data);
+//                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+//                        console.log(xhr);
+//                        console.log(error);
+//                    });
                 });
             });
         </script>
