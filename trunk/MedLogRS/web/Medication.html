@@ -20,22 +20,16 @@
             
             <div>
                 <form method="post" name="medicationForm" id="medicationForm">
-                  <input type="text" name="medicationID" id="medicationID" />
+                    <input type="text" disabled="" name="medicationID" id="medicationID"/>
                     
                     <!-- This records information about the medication -->
                     <fieldset>
                         <legend> Medication Information </legend>
                         <!-- Information on the medication that is being or will be taken -->
-                        <!-- This will be replaced by PharmaRX -->
                         <label for="medicationName"> Medication Name:<br/></label>
-<!--DangBong                        
-SELECT Tag for Pharma-->
-			<select id="medicationID" name='medicationID'>
+			<select id="pharmID" name='pharmID'>
                         </select><br/>
                         <label for="physicianName"> Physician Name:<br/></label>
-						  <!-- 
- This will be replaced by select tag 
->> also check MedicationVO for phyID??						  -->
                         <select id="physicianID" name='physicianID'>
                         </select><br/>
                         <label for="instructions"> How much are you told to take? <br/></label>
@@ -67,5 +61,22 @@ SELECT Tag for Pharma-->
                 </form>
             </div>
         </div>
+        <script>
+            $(document).ready(function(){
+                $("#medicationForm").on("submit", function(event){
+                    event.preventDefault();
+                    var userInfo = $("#medicationForm").serialize();
+                    var theURL = "./api/?res=ph&fn=add&" + userInfo;
+                    $("#formVisual").val("userInfo");
+                    $.post(theURL)
+                        .done(function(data){
+                            console.log(data);
+                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                        console.log(xhr);
+                        console.log(error);
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

@@ -25,6 +25,7 @@ and open the template in the editor.
             
             <div>
                 <form method="post" name="healthcareProviderForm" id="healthcareProviderForm">
+                    <input type="text" disabled="" name="physicianID" id="physicianID"/>
                     <fieldset>
                         <!-- Provider name and specialty -->
                         <legend> Provider Information </legend>
@@ -67,7 +68,23 @@ and open the template in the editor.
                     <div id='errorMessage'></div> 
                 </form>
             </div>
-            
         </div>
+        <script>
+            $(document).ready(function(){
+                $("#healthcareProviderForm").on("submit", function(event){
+                    event.preventDefault();
+                    var userInfo = $("#healthcareProviderForm").serialize();
+                    var theURL = "./api/?res=p&fn=add&" + userInfo;
+                    $("#formVisual").val("userInfo");
+                    $.post(theURL)
+                        .done(function(data){
+                            console.log(data);
+                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                        console.log(xhr);
+                        console.log(error);
+                    });
+                });
+            });
+        </script>
     </body>
 </html>
