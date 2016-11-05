@@ -157,7 +157,14 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 		 //           _ / `'
 		 ////////////|      / ~  ~ - >
 		 case API_RESOURCE_PATIENT:
-			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
+			if (fn.equalsIgnoreCase( API_FUNCTION_FIND)){
+			   if (getCurrentUser() != null){
+				  responseMessage = g.toJson( getCurrentUser() );
+			   }else{
+				   responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Patient not found." );
+			   }
+			}
+			else if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   PatientVO vo = loadPatientFromRequest();
 			   if ( fn.equalsIgnoreCase( API_FUNCTION_INSERT ) && vo.isValid( INSERT ) ) {
 				  int id = dao.createPatient( vo );
