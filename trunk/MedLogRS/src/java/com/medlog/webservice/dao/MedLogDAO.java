@@ -601,16 +601,36 @@ public PharmaRxOtcVO findPharmaRxOtcVO(boolean _onlyAssigned) {
 
 @Override
 public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+   if ( rxMap.containsKey( _id ) ) {
+	  return rxMap.get( _id );
+   } else {
+
+	  ArrayList<PharmaRxOtcVO> voList = new ArrayList<PharmaRxOtcVO>();
+	  Map<Integer, PharmaRxOtcVO> mapp = new ConcurrentHashMap<Integer, PharmaRxOtcVO>( 512 );
+	  CallableStatement cs = null;
+//	  ResultSet rs = null;
+//	  try {
+//		 try {
+//			cs = db.getConnnection().prepareCall( SP_PHARM_SELECT );
+//
+//			cs.setNull( 1, java.sql.Types.NVARCHAR 
+//			);
+//		 } catch (SQLException ex) {
+//			Logger.getLogger( MedLogDAO.class.getName() ).log( Level.SEVERE, null, ex );
+//		 }
+   }
+   return null;
 }
 
 @Override
-public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned) {
+public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, boolean _onlyAssigned
+) {
    return findPharmaRxOtcVOByKeword( _keyword, 1, 1000, _onlyAssigned );
 }
 
 @Override
-public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, int pageNumber, int pageSize, boolean onlyAssigned) {
+public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword, int pageNumber, int pageSize, boolean onlyAssigned
+) {
    return new ArrayList<PharmaRxOtcVO>( findPharmaMapRxOtcVOByKeword( _keyword, pageNumber, pageSize, onlyAssigned ).values() );
 }
 
@@ -653,7 +673,8 @@ public Map<Integer, PharmaRxOtcVO> findPharmaMapRxOtcVOByKeword(String _keyword,
 }
 
 @Override
-public ArrayList<StateVO> findStatesByKeyword(String _keyword) {
+public ArrayList<StateVO> findStatesByKeyword(String _keyword
+) {
    throw new UnsupportedOperationException( "Not supported yet." );
 }
 
@@ -804,19 +825,6 @@ public boolean updatePatient(PatientVO _vo) {
    if ( _vo.isValid( UPDATE ) ) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_PATIENT_UPDATE );
-//@PatientID int
-//@userPassword nvarchar (30) = NULL
-//@firstName nvarchar (30) = NULL
-//@lastName nvarchar (30) = NULL
-//@phoneHome nvarchar (50) = NULL
-//@phoneMobile nvarchar (50) = NULL
-//@email nvarchar (100) = NULL
-//@addressStreet nvarchar (150) = NULL
-//@addressCity nvarchar (100) = NULL
-//@addressState int = NULL
-//@address_country nvarchar (25) = NULL
-//@address_postalcode nvarchar (9) = NULL
-//@date_of_birth date = NULL
 		 cs.setInt( 1, _vo.getPatientID() );
 
 		 cs.setString( 2, _vo.getUserPassword() );
@@ -924,7 +932,7 @@ private int changeMedicationBinding(MedicationVO _vo) {
 private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
    ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
    _keyword = StrUtl.toS( _keyword );
-
+int ct=0;
    CallableStatement cs = null;
    ResultSet rs = null;
    boolean valid = true;
@@ -960,7 +968,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 					.productivity( rs.getInt( "ratingProductivity" ) )
 					.patientID( getCurrentUser() )
 					.createdDate( rs.getDate( "createdDate" ) )
-					.build() );
+					.build(ct++) );
 		 }
 	  } else {
 		 this.stateOK = false;
@@ -1084,7 +1092,7 @@ private ArrayList<HealthcareProviderVO> findHealthcareProviders(int _id, String 
  * @return
  */
 private ArrayList<PatientVO> findPatient(int _id, String _username, String _password) {
-   findAllStates( true);
+   findAllStates( true );
    _username = StrUtl.toS( _username );
    _password = StrUtl.toS( _password );
    ArrayList<PatientVO> voList = new ArrayList<PatientVO>();
@@ -1142,25 +1150,6 @@ private ArrayList<PatientVO> findPatient(int _id, String _username, String _pass
 					.metaData( rs.getString( 24 ) )
 					.userRole( rs.getInt( 25 ) )
 					.build() );
-			/*
-			 * [email]
-			 * ,	[status]
-			 * ,	[addressStreet]
-			 * ,	[addressCity]
-			 * ,	[addressState]
-			 * ,	[address_country]
-			 * ,	[address_postalcode]
-			 * ,	[user_preferences]
-			 * ,	[pwd_last_changed]
-			 * ,	[lang]
-			 * ,	[timezone_id]
-			 * ,	[primary_physsician]
-			 * ,	[date_of_birth]
-			 * ,	[date_joined]
-			 * ,	[picture]
-			 * ,	[meta_data]
-			 * ,	[userRole]
-			 */
 		 }
 	  } else {
 		 this.stateOK = false;

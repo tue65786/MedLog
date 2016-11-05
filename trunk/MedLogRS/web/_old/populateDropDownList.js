@@ -64,9 +64,9 @@
   * Name valiue pair syntax uses colon comma and quotes(for string values) -->
   * 
   * @syntax {
-  "stateID" : 1,
+  {"stateID" : 1,
   "stateName" : "New Jersey",
-  "stateAbbreviation" : "NJ"
+  "stateAbbreviation" : "NJ"}
   }
   * @description JAVA version looks like:
   * public class StateVO{

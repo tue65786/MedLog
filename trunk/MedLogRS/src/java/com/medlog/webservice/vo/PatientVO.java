@@ -524,8 +524,15 @@ private List<HealthcareProviderVO> healthcareProviderList;
 private List<TagVO> tagList;
 
 public static class Builder {
-
+/**
+ * Primary Key 
+ */
 private int patientID;
+
+
+/**
+ * userNameBuilder
+ */
 private String userName;
 private String userPassword;
 private String userHash;
@@ -557,12 +564,20 @@ private List<TagVO> tagList;
 
 private Builder() {
 }
-
+/**
+ * Builder sets patientID
+ * @param value
+ * @return 
+ */
 public Builder patientID(final int value) {
    this.patientID = value;
    return this;
 }
-
+/**
+ * Builder sets userName
+ * @param value
+ * @return 
+ */
 public Builder userName(final String value) {
    this.userName = value;
    return this;
@@ -577,7 +592,11 @@ public Builder userHash(final String value) {
    this.userHash = value;
    return this;
 }
-
+/**
+ * Builder sets firstName
+ * @param value
+ * @return 
+ */
 public Builder firstName(final String value) {
    this.firstName = value;
    return this;
@@ -597,7 +616,11 @@ public Builder phoneMobile(final String value) {
    this.phoneMobile = value;
    return this;
 }
-
+/**
+ * Email value for builder.
+ * @param value
+ * @return 
+ */
 public Builder email(final String value) {
    this.email = value;
    return this;

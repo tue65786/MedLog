@@ -184,7 +184,7 @@ private boolean isLoggedIn(HttpServletRequest httprequest) {
 }
 
 private boolean hasAccess(String uri,String file, HttpServletRequest httprequest) {
-   boolean hasAccess = isLoggedIn( httprequest ) || StrUtl.regexTest( REG_EX_isNonSecurePages, StrUtl.toS( uri ), true ) || !StringUtils.endsWith( uri, "html" );
+   boolean hasAccess = isLoggedIn( httprequest ) || StrUtl.regexTest( REG_EX_isNonSecurePages, StrUtl.toS( uri ), true ) || (!StringUtils.endsWith( uri, "html" ) &&!StringUtils.endsWith( uri, "jsp" )  );
    if ( DEBUG ) {
 	  log( String.format( "User %s have access to %s.", hasAccess ? "IS LOGGED IN!!" : " IS NOT LOGGED IN", StrUtl.toS( uri ) ) );
    }

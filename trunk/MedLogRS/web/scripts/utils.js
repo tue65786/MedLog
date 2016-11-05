@@ -116,7 +116,7 @@ console.log(optionMarkup);
 		 }); //function
 		 //Update HTML
 		 $(dropDownTagSelector).empty().html(optionTags);
-		 $(dropDownTagSelector).val("52");
+		 
 	
  } //function
 

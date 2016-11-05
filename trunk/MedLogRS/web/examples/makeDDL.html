@@ -38,6 +38,7 @@ and open the template in the editor.
 				 var selectTagID = "stateID";
 				 var stateVOValueField = "stateID";
 				 var stateVODisplayField = "stateName";
+				 
 				 function setDropDownSelectValue( drownDownListID, selectedOption ) {
 
 					 $("#stateID").val(selectedOption); // set value
@@ -48,9 +49,12 @@ and open the template in the editor.
 					 .done(function ( jsonResponseData ) {
 
 						 $("#jsraw").val(JSON.stringify(jsonResponseData));
+					 
 
-
-						 generateLookupList(selectTagID, jsonResponseData, stateVOValueField, stateVODisplayField);
+						 generateLookupList(selectTagID
+						 , jsonResponseData
+						 , stateVOValueField
+						 , stateVODisplayField);
 
 
 					 }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!

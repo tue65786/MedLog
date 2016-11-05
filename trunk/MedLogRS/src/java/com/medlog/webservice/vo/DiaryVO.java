@@ -152,6 +152,20 @@ public void setProductivity(int productivity) {
    this.productivity = productivity;
 }
 
+   /**
+    * @return the row
+    */
+   public int getRow() {
+	  return row;
+   }
+
+   /**
+    * @param row the row to set
+    */
+   public void setRow(int row) {
+	  this.row = row;
+   }
+
 /**
  * @return the tagList
  */
@@ -264,6 +278,7 @@ private int mood;
 private int productivity;
 private List<TagVO> tagList;
 private PatientVO patientID;
+private int row = 0;
 private static final Logger LOG = Logger.getLogger( DiaryVO.class.getName() );
 
 public static class Builder {
@@ -347,7 +362,12 @@ public Builder patientID(final PatientVO value) {
 public DiaryVO build() {
    return DiaryVO.create( id, title, notes, notesActivity, createdDate, updatedDate, includeMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
 }
+public DiaryVO build(int ct) {
+  DiaryVO vo =   DiaryVO.create( id, title, notes, notesActivity, createdDate, updatedDate, includeMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
+  vo.setRow( ct );
+  return vo;
 }
+   }
 
 public static DiaryVO.Builder builder() {
    return new DiaryVO.Builder();

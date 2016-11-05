@@ -30,7 +30,7 @@
                         <label for="medicationName"> Medication Name:<br/></label>
 <!--DangBong                        
 SELECT Tag for Pharma-->
-			<select id="medicationID" name='medicationID'>
+			<select id="pharmID" name='pharmID'>
                         </select><br/>
                         <label for="physicianName"> Physician Name:<br/></label>
 						  <!-- 
@@ -67,5 +67,18 @@ SELECT Tag for Pharma-->
                 </form>
             </div>
         </div>
+		 <script>
+			 $(document).ready(function () {
+				 var theStateListURL = "./api/?res=ph&fn=find";
+				 $.get(theStateListURL).done(function ( drugDataLoadedFromServer ) {
+					 generateLookupList("pharmID"
+						 , drugDataLoadedFromServer
+						 , 'pharmID'
+						 , 'fullName');
+				 });
+
+				 
+			 });
+        </script>
     </body>
 </html>

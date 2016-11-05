@@ -1,0 +1,8 @@
+https://static.jstree.com/3.3.3/assets/dist/themes/default/32px.png
+
+curl -X POST --header 'Content-Type: text/plain' --header 'Accept: application/json' -d 'Do you like birds like I like birds?' 'https://watson-api-explorer.mybluemix.net/tone-analyzer/api/v3/tone?version=2016-05-19'
+{
+  "url": "https://gateway.watsonplatform.net/tone-analyzer/api",
+  "password": "iG3q4VeDckSF",
+  "username": "976f48de-3802-431a-bab4-d75b592abe44"
+}
