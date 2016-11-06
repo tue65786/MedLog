@@ -22,7 +22,7 @@
 
             <div>
                 <form method="post" name="insertJournalForm" id="insertJournalForm" autocomplete="on">
-
+<input type="text" name="id" id="id" readonly />
                     <fieldset>
                         <legend>Dates</legend>
 
@@ -108,9 +108,13 @@
 //                    $("#formVisual").val("userInfo");
                     $.post(theURL)
                         .done(function(data){
+								 if ( typeof data.id !== 'undefined' && data.id > 0 ) {
+									 $("#id").val(data.id);
+								 	alert('Success!');
+								 }
                             console.log(data);
 						$("#loader1").hide();
-						alert('Success!');
+					
 					
                     }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
                         console.log(xhr);$("#loader1").hide();

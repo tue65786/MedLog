@@ -46,7 +46,7 @@ and open the template in the editor.
                         <label for="addressZip">Zip Code:<br/></label>
                         <input name="addressZip" type="text" id="addressZip" placeholder="ex. 19122"><br/>
                         <select id="stateID" name='stateID'>
-							
+
                         </select><br/>
                         <label for="phoneWork">Business Number:<br/></label>
                         <input name="phoneWork" type="text" id="phoneWork" placeholder="ex. 2152047000"/><br/>
@@ -68,6 +68,17 @@ and open the template in the editor.
                 </form>
             </div>
         </div>
+		<div id="loader1" style="display:none;">
+			<div class="ui-widget-overlay ui-front"></div>
+			<div id="InnerTableCellOverlay">
+				<img alt="(loading)" src="images/loader.gif"/>
+				<br/>
+				<b style="color:black;font-size:2em;">&nbsp;&nbsp;Working, please wait...</b>
+			</div>
+			<div id="redirect" class="message messageSuccess" style="display:none;">
+				Created! Redirecting to login page.
+			</div>
+		</div>
         <script>
 			 $(document).ready(function () {
 
@@ -81,17 +92,23 @@ and open the template in the editor.
 
 				 $("#healthcareProviderForm").on("submit", function ( event ) {
 					 event.preventDefault();
+					 $("#loader1").show();
 					 var userInfo = $("#healthcareProviderForm").serialize();
 					 var theURL = "./api/?res=h&fn=add&" + userInfo;
 //                    $("#formVisual").val("userInfo");
 					 $.post(theURL)
 						 .done(function ( data ) {
 							 console.log(data);
+						 $("#loader1").hide();
 							 $("#formVisual").val(JSON.stringify(data));
-							 $("#physicianID").val(data.physicianID);
+							 if ( typeof data.physicianID !== 'undefined' && data.physicianID > 0 ) {
+									 $("#physicianID").val(data.physicianID);
+								 	alert('Success!');
+								 } 
 						 }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
 						 console.log(xhr);
 						 console.log(error);
+						 $("#loader1").hide();
 					 });
 				 });
 			 });
