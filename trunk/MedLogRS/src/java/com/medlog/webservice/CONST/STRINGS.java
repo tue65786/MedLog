@@ -21,7 +21,7 @@ public static final String REG_EX_email = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-
 /**
  * When matched anonymous users can acccess page.
  */
-public static final String REG_EX_isNonSecurePages = "(RegistratiOn\\.htm|login\\.htm)";
+public static final String REG_EX_isNonSecurePages = "(User\\.htm|login\\.htm)";
 
 private static final Logger LOG = Logger.getLogger( STRINGS.class.getName() );
 /**
@@ -29,5 +29,5 @@ private static final Logger LOG = Logger.getLogger( STRINGS.class.getName() );
  */
 private STRINGS() {
 
-}
+}  
 }

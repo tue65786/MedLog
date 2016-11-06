@@ -13,16 +13,17 @@ and open the template in the editor.
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
+		<script src="scripts/utils.js" type="text/javascript"></script>
 	</head>
 	<body>
 
-		<div id="header">
+		<a href="home.jsp"><div id="header">
 			<table style='width:95%'><tr><td style="width:85%">
 						<h1> Login </h1>
 						<p> Welcome to MedLog. </p>
 						<p> An account is required to use MedLog. </p>
 					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
-		</div>
+		</div></a>
 		<form method="post" name="loginForm" id="loginForm" autocomplete="on">
 			<fieldset>
 				<legend>Login Credentials</legend>
@@ -32,7 +33,7 @@ and open the template in the editor.
 				<input name="password" type="password" id="password" placeholder="" required/><br/>
 			</fieldset>
 			<input type="submit" value="LOGIN" id="btnSubmit" />
-			<a href="Registration.html">Register</a>
+			<a href="User.html">Register</a>
 			<div id="message" ></div>
 		</form>
 		<!--Logged in View-->
@@ -68,9 +69,7 @@ and open the template in the editor.
 			</div>
 		</div>
 		<script type="text/javascript">
-			 function redir() {
-				 top.location.href = "home.jsp";
-			 }
+		
 			 $(document).ready(function () {
 				 //Triggered when submit button is clicked!
 				 //#loginForm is name of form
@@ -95,7 +94,7 @@ and open the template in the editor.
 									 $("#loader1").hide();
 								 } else {
 									 //No errors! --- show Logged in Version
-									 setTimeout(redir(), 5000);
+									 setTimeout(redir("home.jsp"), 5000);
 
 
 //									 $("#loginForm").hide();

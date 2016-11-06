@@ -12,13 +12,14 @@
 
     <body>
         <div>
-            <div id="header">
-                <table style='width:95%'><tr><td style="width:85%">
-                <h1> Registration </h1>
-                <p> Welcome to MedLog. </p>
-                <p> An account is required to use MedLog. </p>
-                </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
-            </div>
+            
+			<div id="header"><a href="home.jsp">
+			<table style='width:95%'><tr><td style="width:85%">
+			<h1> Registration </h1>
+							<p> Welcome to MedLog. </p>
+							<p> An account is required to use MedLog. </p>
+					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+		</a></div>
 
             <div>
                 <form method="post" name="registrationForm" id="registrationForm" autocomplete="on">
@@ -48,7 +49,7 @@
                         <input name="addressCity" type="text" id="addressCity" placeholder="ex. Philadelphia"/><br/>
                         <label for="addressState">State:<br/></label>
                         <select id="stateID" name='stateID'>
-                                <option>Choose your state...</option>
+							<option>Choose your state...</option>
                         </select><br/>
                         <label for="addressCountry">Country:<br/></label>
                         <input name="addressCountry" type="text" id="addressCountry" placeholder="ex. USA"/><br/>
@@ -78,40 +79,58 @@
                     <button type="reset">Clear</button><br/>
 
                     <!-- Visual area for generated url -->
-                    <textarea id="formVisual" style="height:300px;width:70%" cols="80" rows="5">.</textarea>
+                    <textarea id="formVisual" style="height:300px;width:70%;display:none;" cols="80" rows="5">.</textarea>
                     <div id='errorMessage'></div>    
                 </form>
             </div>
         </div>
+		<div id="loader1" style="display:none;">
+			<div class="ui-widget-overlay ui-front"></div>
+			<div id="InnerTableCellOverlay">
+				<img alt="(loading)" src="images/loader.gif"/>
+				<br/>
+				<b style="color:black;font-size:2em;">&nbsp;&nbsp;Working, please wait...</b>
+			</div>
+			<div id="redirect" class="message messageSuccess" style="display:none;">
+				Created! Redirecting to login page.
+			</div>
+		</div>
         <script>
-            $(document).ready(function(){
-	 var theStateListURL = "./api/?res=s&fn=find";
+			 $(document).ready(function () {
+				 var theStateListURL = "./api/?res=s&fn=find";
 				 $.get(theStateListURL).done(function ( stateListDataLoadedFromServer ) {
 					 generateLookupList("stateID"
 						 , stateListDataLoadedFromServer
 						 , 'stateID'
 						 , 'stateName');
 				 });
-		
-		$("#registrationForm").on("submit", function(event){
-                    event.preventDefault();
-                    var userInfo = $("#registrationForm").serialize();
-                    var theURL = "./api/?res=p&fn=add&" + userInfo;
-//                    $("#formVisual").val("userInfo");
-                    $.post(theURL).done(function ( data ) {
-					console.log(JSON.stringify(data));
-                    $("#formVisual").val(JSON.stringify(data));
-                    $("#patientID").val(data.patientID); 
-				 });; 
-                    
+
+				 $("#registrationForm").on("submit", function ( event ) {
+					 event.preventDefault();
+					 $("#loader1").show();
+					 var userInfo = $("#registrationForm").serialize();
+					 var theURL = "./api/?res=p&fn=add&" + userInfo;
+					 $.post(theURL).done(function ( data ) {
+						 console.log(JSON.stringify(data));
+						 $("#formVisual").val(JSON.stringify(data));
+						 $("#loader1").hide();
+						 if ( typeof data.patientID !== 'undefined' && data.patientID > 0 ) {
+							 setTimeout(redir("login.html"), 4000);
+						 }
+						 $("#patientID").val(data.patientID);
+
+					 }).always(function () {
+						 $("#loader1").hide();
+					 });
+
 //                        .done(function(data){
 //                            console.log(data);
 //                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
 //                        console.log(xhr);
 //                        console.log(error);
 //                    });
-                });
-            });
+				 });
+			 });
         </script>
     </body>
 </html>

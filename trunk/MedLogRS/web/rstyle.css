@@ -25,6 +25,7 @@ body{
 	border-radius:6px;
 
 }
+#header a{color:white; text-decoration: none;}
 .messageSuccess {
     padding-left:45px;
     padding-top:5px;

@@ -141,3 +141,7 @@ console.log(optionMarkup);
  $("input").blur(function () {
 	 $(this).css("background-color", "#FFF");
  });
+ 
+ 	 function redir(pg) {
+				 top.location.href = pg;
+			 }

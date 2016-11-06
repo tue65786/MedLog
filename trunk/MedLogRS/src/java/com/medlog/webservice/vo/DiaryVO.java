@@ -13,6 +13,7 @@ import com.medlog.webservice.util.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import org.apache.commons.lang3.builder.*;
 
 /**
  *
@@ -25,6 +26,7 @@ private static final long serialVersionUID = -2971191299069097176L;
 public static DiaryVO create(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includeMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
    return new DiaryVO( id, title, notes, notesActivity, createdDate, updatedDate, includeMedsCurrent, attachmentPath, mood, productivity, tagList, patientID );
 }
+
 
 /**
  * @return the attachmentPath
@@ -261,9 +263,18 @@ public String toJSON() {
    return new GsonBuilder().serializeNulls().create().toJson( this );
 }
 
+   @Override
+   public String toString() {
+	ToStringBuilder  tsb = new ToStringBuilder(this, ToStringStyle.JSON_STYLE);
+	return tsb.build();
+   }
+
 @Override
-public String toTableRow() {
-   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+public String toTableRow() {//(\"[, =A-Za-z\"]+)(\"[, =A-Za-z\"]+)
+    return  "<tr><td>"+ id + "</td><td>"+ StrUtl.truncateAtWord(title,30) + "</td><td>"+ StrUtl.truncateAtWord( getNotes(), 40) + "</td><td>"+ StrUtl.getDateWithFormat( createdDate ) + "</td><td>"+ mood + "</td><td>"+ productivity + "</td><td >"+ patientID + "</td></tr>";
+   
+   
+   
 }
 
 private int id;//1

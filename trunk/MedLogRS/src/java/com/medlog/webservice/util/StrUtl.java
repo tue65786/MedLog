@@ -8,6 +8,8 @@ package com.medlog.webservice.util;
 import com.google.gson.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import java.io.*;
+import java.text.*;
+import java.util.*;
 import java.util.logging.*;
 import java.util.regex.*;
 
@@ -25,7 +27,6 @@ private static final String REGEX_HTML_MARKUP_CHARS = "<sty.*<.*>|<scr.*/script>
 private StrUtl() {
 
 }
-
 
 /**
  * get Json
@@ -287,17 +288,44 @@ public static boolean regexTest(String REGEX, String val, boolean partialMatch) 
 	  Pattern regex = Pattern.compile( REGEX, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE | Pattern.COMMENTS );
 	  Matcher regexMatcher = regex.matcher( StrUtl.toS( val ) );
 	  foundMatch = partialMatch ? regexMatcher.find() : regexMatcher.matches();
-   } catch (PatternSyntaxException e){
+   } catch (PatternSyntaxException e) {
 	  if ( DEBUG ) {
 		 e.printStackTrace();
 	  }
-   
-} catch (IllegalArgumentException e) {
+
+   } catch (IllegalArgumentException e) {
 	  if ( DEBUG ) {
 		 e.printStackTrace();
 	  }
-	  
+
+   }
+   return foundMatch;
 }
-	  return foundMatch;
+/**
+ * Return format date with specified format.
+ * @param n date
+ * @param format date format
+ * @return 
+ */
+public static String getDateWithFormat(Date n, String format) {
+   if ( n == null ) {
+	  if ( DEBUG ) {
+		 System.out.println( "com.medlog.webservice.util.StrUtl.getDateWithFormat() : Null Date" );
+		 return "";
+	  }
+
+   }
+   DateFormat d = new SimpleDateFormat( format );
+   d.setTimeZone( TimeZone.getTimeZone( "EST" ) );
+   return d.format( n );
+}
+/**
+ * Format date as string
+ * @param n datte
+ * @return date format yyyy--MM--dd
+ */
+public static String getDateWithFormat(Date n) {
+   return StrUtl.getDateWithFormat( n, "yyyy-MM-dd" );
+
 }
 }

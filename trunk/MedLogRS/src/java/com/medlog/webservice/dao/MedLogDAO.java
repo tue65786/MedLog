@@ -895,13 +895,6 @@ private int changeMedicationBinding(MedicationVO _vo) {
 		 e.printStackTrace();
 	  }
    }
-//   @PatientID int
-//@PharmID int
-//@PhysicanID int = NULL
-//@Instructions nvarchar (max) = NULL
-//@Sig varchar (50) = NULL
-//@StartDate date = getdate
-//@endDate date = NULL
 //@active bit = 1 Set to 0 to delete
    if ( ( _vo.isActive() && _vo.isValid( INSERT ) ) || _vo.isValid( DELETE ) && !_vo.isActive() ) {
 	  try {
@@ -932,7 +925,7 @@ private int changeMedicationBinding(MedicationVO _vo) {
 private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
    ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
    _keyword = StrUtl.toS( _keyword );
-int ct=0;
+   int ct = 0;
    CallableStatement cs = null;
    ResultSet rs = null;
    boolean valid = true;
@@ -968,7 +961,7 @@ int ct=0;
 					.productivity( rs.getInt( "ratingProductivity" ) )
 					.patientID( getCurrentUser() )
 					.createdDate( rs.getDate( "createdDate" ) )
-					.build(ct++) );
+					.build( ct++ ) );
 		 }
 	  } else {
 		 this.stateOK = false;
