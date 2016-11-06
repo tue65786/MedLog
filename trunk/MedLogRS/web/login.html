@@ -64,13 +64,13 @@ and open the template in the editor.
 			<div id="InnerTableCellOverlay">
 				<img alt="(loading)" src="images/loader.gif"/>
 				<br/>
-				<b color="black;font-size:2em;">&nbsp;&nbsp;Working, please wait...</b>
+				<b style="color:black;font-size:2em;">&nbsp;&nbsp;Working, please wait...</b>
 			</div>
 		</div>
 		<script type="text/javascript">
-			function redir(){
-				top.location.href = "home.jsp";
-			}
+			 function redir() {
+				 top.location.href = "home.jsp";
+			 }
 			 $(document).ready(function () {
 				 //Triggered when submit button is clicked!
 				 //#loginForm is name of form
@@ -89,9 +89,10 @@ and open the template in the editor.
 					 })
 						 .done(function ( data ) {
 							 if ( typeof data !== 'undefined' ) {
+								 
 								 if ( typeof data.message !== 'undefined' ) {
 									 $("#message").empty().html("<b style='color:red'>" + data.message + "</b>");
-								 $("#loader1").hide();
+									 $("#loader1").hide();
 								 } else {
 									 //No errors! --- show Logged in Version
 									 setTimeout(redir(), 5000);
@@ -133,6 +134,6 @@ and open the template in the editor.
 				 window.onhashchange = function () {
 					 window.location.hash = "no-back-button";
 				 };
-			 });		</script>	
+			 });</script>	
 	</body>
 </html>
