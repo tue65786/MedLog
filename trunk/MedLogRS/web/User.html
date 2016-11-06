@@ -104,11 +104,15 @@
 						 , stateListDataLoadedFromServer
 						 , 'stateID'
 						 , 'stateName');
+						 
+					if ( editID > 0 ) {
+					 console.log(editID);
+					 loadCurrentUser();
+				 }	 
+						 
 				 });
 
-				 if ( editID > 0 ) {
-					 loadCurrentUser();
-				 }
+				 
 				 /**
 				  * Populates user values to form.
 				  * @returns {undefined}
@@ -120,8 +124,8 @@
 
 						 } else {
 							 for ( var key in currentUserData ) {
-								 if ( key === "stateID" ) {
-									 $("#stateID").val(currentUserData["stateID"].stateID);
+								 if ( key === "addressState" ) {
+									 $("#stateID").val(""+currentUserData.addressState.stateID);
 								 } else
 									 $('[name="' + key + '"]').val(currentUserData[key]);
 							 }

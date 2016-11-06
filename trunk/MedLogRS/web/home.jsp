@@ -10,8 +10,13 @@
 <jsp:useBean id="user" class="com.medlog.webservice.vo.PatientVO" scope="session" />
 <jsp:setProperty name="user" property="*"/>
 <%
+   String onload="";
    if ( user == null || user.getPatientID() <= 0 ) {
-	  response.sendRedirect( "login.html" );
+	  try {
+		 response.sendRedirect( "login.html" );
+	  } catch (Exception e) { 
+			onload = " onload=\"top.location.href='login.html'\" " ;  
+	  }
    }
 %>
 <!DOCTYPE html>
@@ -35,7 +40,7 @@
 //		   // Call the service and get the tone
 //		   ToneAnalysis tone = service.getTone( text, null ).execute();
 //		   System.out.println( tone );
-		%>
+%>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>MedLog</title>
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -64,7 +69,7 @@
 						 console.log(ui);
 					 }
 				 });
-			 
+
 				 $("#tabs").tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
 				 $("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
 			 });
@@ -72,7 +77,7 @@
 
     </head>
 
-    <body>
+    <body <%=onload%>>
 		<div style="width:95%; float:left;height: 125px;"><div style="float:left;margin-left:165px;padding:80px 0 45px 40px;font-size:24pt;vertical-align: bottom;font-weight: bolder;font-family: verdana;">Welcome to MedLog</div><div style="float:right;margin-right:30%;"><img src="Logo.png" style="height:75%;width:75%;" alt="log"></div></div>	
 		<div style="clear:both;"></div>
 		<ul id="menu" style="float:left;">
@@ -80,7 +85,7 @@
 				<div><span class="ui-icon ui-icon-home"></span><a href="home.jsp">Medlog</a></div>
 			</li>
 			<li>
-				<div><span class="ui-icon ui-icon-person"></span><a href="User.html">Profile</a></div>
+				<div><span class="ui-icon ui-icon-person"></span><a href="User.html?id=1">Profile</a></div>
 				<ul><li><div>	<a href="User.html">Register</a></div></li></ul>
 			</li>
 			<li id="diary" data-url="">
