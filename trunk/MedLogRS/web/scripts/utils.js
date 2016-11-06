@@ -5,18 +5,20 @@
   */
  var $ = window.jQuery || window.$;
  var resource_name = {
-	 "patient" : {"res" : "r","functions":["add"]}
+	 "patient" : {"res" : "r", "functions" : [
+			 "add"
+		 ]}
 	 , "diary" : {"res" : "d"}
 	 , "medication" : {"res" : "m"}
 	 , "state" : {"res" : "s"}
  };
 
-/**
- * API URL BUILDER
- * @example  var apiUrlWithOutForm = new URLBuilder().setRes("d").setFn("find").build(); //(Finds all diary entries for current user) 
- * * @example var apiUrlWithForm = new URLBuilder().setRes("d").setFn("add").setFormData(userInfo).build(); // Adds diary entry  -- assumes you have stored form serialized data in 'userInfo'
- * @returns {URLBuilder}
- */
+ /**
+  * API URL BUILDER
+  * @example  var apiUrlWithOutForm = new URLBuilder().setRes("d").setFn("find").build(); //(Finds all diary entries for current user) 
+  * * @example var apiUrlWithForm = new URLBuilder().setRes("d").setFn("add").setFormData(userInfo).build(); // Adds diary entry  -- assumes you have stored form serialized data in 'userInfo'
+  * @returns {URLBuilder}
+  */
 
  var URLBuilder = function () {
 	 this.res = "";
@@ -91,33 +93,33 @@
 		 var optionMarkup = "<option value='" + value
 			 + (selected ? " selected " : "")
 			 + "'>" + text + "</option>";
-console.log(optionMarkup);
+		 console.log(optionMarkup);
 		 return optionMarkup;
-		 
+
 	 }
 	 return "";
  } //end function  
 
-/**
- * 
- * @param {type} drownDownListID id attr of slect tag
- * @param {type} jsonData array of states from server.
- * @param {type} nameOfValueField stateID for example
- * @param {type} nameOfDisplayField stateAbbreviation for example
- * @returns {undefined}
- */
+ /**
+  * 
+  * @param {type} drownDownListID id attr of slect tag
+  * @param {type} jsonData array of states from server.
+  * @param {type} nameOfValueField stateID for example
+  * @param {type} nameOfDisplayField stateAbbreviation for example
+  * @returns {undefined}
+  */
  function generateLookupList( drownDownListID, jsonData, nameOfValueField, nameOfDisplayField ) {
 	 var dropDownTagSelector = "#" + drownDownListID;
-	 
+
 	 var optionTags = "";
-	
-		 $(jsonData).each(function ( i, vo ) { //for loop
-			 optionTags += makeOptionTag(vo[nameOfValueField],vo[nameOfDisplayField]);
-		 }); //function
-		 //Update HTML
-		 $(dropDownTagSelector).empty().html(optionTags);
-		 
-	
+
+	 $(jsonData).each(function ( i, vo ) { //for loop
+		 optionTags += makeOptionTag(vo[nameOfValueField], vo[nameOfDisplayField]);
+	 }); //function
+	 //Update HTML
+	 $(dropDownTagSelector).empty().html(optionTags);
+
+
  } //function
 
 
@@ -141,7 +143,26 @@ console.log(optionMarkup);
  $("input").blur(function () {
 	 $(this).css("background-color", "#FFF");
  });
+
+ function redir( pg ) {
+	 top.location.href = pg;
+ }
+ /**
+  * ID PARAM
+  * @returns {Number}
+  */
+ function getIDParamFromRequest() {
+	 var id = 0;
+	 try {
+		 id = $.getUrlVar("id");
+		 id = parseInt(id);
+	 } catch (e) {
+		 id = 0;
+	 }
+	 if (typeof id === 'undefined' || id === null || id == ''){
+		 id =0;
+	 }
+	 
+	 return id;
+ }
  
- 	 function redir(pg) {
-				 top.location.href = pg;
-			 }

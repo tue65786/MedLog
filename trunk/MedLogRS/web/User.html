@@ -12,14 +12,14 @@
 
     <body>
         <div>
-            
+
 			<div id="header"><a href="home.jsp">
-			<table style='width:95%'><tr><td style="width:85%">
-			<h1> Registration </h1>
-							<p> Welcome to MedLog. </p>
-							<p> An account is required to use MedLog. </p>
-					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
-		</a></div>
+					<table style='width:95%'><tr><td style="width:85%">
+								<h1> Registration </h1>
+								<p> Welcome to MedLog. </p>
+								<p> An account is required to use MedLog. </p>
+							</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+				</a></div>
 
             <div>
                 <form method="post" name="registrationForm" id="registrationForm" autocomplete="on">
@@ -97,6 +97,7 @@
 		</div>
         <script>
 			 $(document).ready(function () {
+				 var editID = getIDParamFromRequest();
 				 var theStateListURL = "./api/?res=s&fn=find";
 				 $.get(theStateListURL).done(function ( stateListDataLoadedFromServer ) {
 					 generateLookupList("stateID"
@@ -104,6 +105,29 @@
 						 , 'stateID'
 						 , 'stateName');
 				 });
+
+				 if ( editID > 0 ) {
+					 loadCurrentUser();
+				 }
+				 /**
+				  * Populates user values to form.
+				  * @returns {undefined}
+				  */
+				 function loadCurrentUser() {
+					 var currentUserFn = "./api/?res=p&fn=find";
+					 $.get(currentUserFn).done(function ( currentUserData ) {
+						 if ( typeof currentUserData === 'undefined' ) {
+
+						 } else {
+							 for ( var key in currentUserData ) {
+								 if ( key === "stateID" ) {
+									 $("#stateID").val(currentUserData["stateID"].stateID);
+								 } else
+									 $('[name="' + key + '"]').val(currentUserData[key]);
+							 }
+						 }
+					 });
+				 }
 
 				 $("#registrationForm").on("submit", function ( event ) {
 					 event.preventDefault();

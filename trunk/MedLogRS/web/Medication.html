@@ -11,25 +11,25 @@
     </head>
     <body>
         <div>
-          
-				<div id="header"><a href="home.jsp">
-			<table style='width:95%'><tr><td style="width:85%">
-				     <h1> Additional Medication </h1>
-                    <p> Are you taking another medication? </p>
-                    <p> Let's add it to the list. </p>
-					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
-		</a></div>
-            
+
+			<div id="header"><a href="home.jsp">
+					<table style='width:95%'><tr><td style="width:85%">
+								<h1> Additional Medication </h1>
+								<p> Are you taking another medication? </p>
+								<p> Let's add it to the list. </p>
+							</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+				</a></div>
+
             <div>
                 <form method="post" name="medicationForm" id="medicationForm">
                     <input type="text" disabled="" name="medicationID" id="medicationID"/>
-                    
+
                     <!-- This records information about the medication -->
                     <fieldset>
                         <legend> Medication Information </legend>
                         <!-- Information on the medication that is being or will be taken -->
                         <label for="medicationName"> Medication Name:<br/></label>
-			<select id="pharmID" name='pharmID'>
+						<select id="pharmID" name='pharmID'>
                         </select><br/>
                         <label for="physicianName"> Physician Name:<br/></label>
                         <select id="physicianID" name='physicianID'>
@@ -50,7 +50,7 @@
                         <label for="frequencySig"> Frequency: <br/></label>
                         <input name="frequencySig" type="text" id="frequencySig" placeholder="How often do you take the dosage? (ex. daily, twice a day, etc.)" required/><br>
                         <label for="active"> Check box if you are currently on this medication. </label><br/>
-			<input name="active" type="checkbox" id="active"/><br/>
+						<input name="active" type="checkbox" id="active"/><br/>
                     </fieldset>
 
                     <!-- Submit & reset buttons-->
@@ -64,24 +64,24 @@
             </div>
         </div>
         <script>
-            $(document).ready(function(){
-                $("#medicationForm").on("submit", function(event){
-                    event.preventDefault();
-                    var userInfo = $("#medicationForm").serialize();
-                    var theURL = "./api/?res=ph&fn=add&" + userInfo;
+			 $(document).ready(function () {
+				 $("#medicationForm").on("submit", function ( event ) {
+					 event.preventDefault();
+					 var userInfo = $("#medicationForm").serialize();
+					 var theURL = "./api/?res=ph&fn=add&" + userInfo;
 //                    $("#formVisual").val("userInfo");
-                    $.post(theURL);
-                    console.log(JSON.stringify(data));
-                    $("#formVisual").val(JSON.stringify(data));
-                    $("#medicationID").val(data.medicationID); 
+					 $.post(theURL);
+					 console.log(JSON.stringify(data));
+					 $("#formVisual").val(JSON.stringify(data));
+					 $("#medicationID").val(data.medicationID);
 //                        .done(function(data){
 //                            console.log(data);
 //                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
 //                        console.log(xhr);
 //                        console.log(error);
 //                    });
-                });
-            });
+				 });
+			 });
         </script>
     </body>
 </html>
