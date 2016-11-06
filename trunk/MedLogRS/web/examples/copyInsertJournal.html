@@ -99,14 +99,15 @@
         </div>
 		 <script>
             $(document).ready(function(){
-                $("#registrationForm").on("submit", function(event){
+                $("#insertJournalForm").on("submit", function(event){
                     event.preventDefault();
-                    var userInfo = $("#registrationForm").serialize();
-                    var theURL = "./api/res=p&fn=add&" + userInfo;
-                    $("#formVisual").val("userInfo");
+                    var userInfo = $("#insertJournalForm").serialize();
+                    var theURL = "./api/res=d&fn=add&" + userInfo;
+//                    $("#formVisual").val("userInfo");
                     $.post(theURL)
                         .done(function(data){
                             console.log(data);
+					
                     }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
                         console.log(xhr);
                         console.log(error);

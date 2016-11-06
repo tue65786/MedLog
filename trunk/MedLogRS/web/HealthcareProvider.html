@@ -16,15 +16,15 @@ and open the template in the editor.
     </head>
     <body>
         <div>            	<div id="header"><a href="home.jsp">
-			<table style='width:95%'><tr><td style="width:85%">
-				    <h1> Additional Healthcare Provider </h1>
-                    <p> Are you being assisted by other healthcare providers? </p>
-                    <p> Let's add it to the list.</p>
-					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
-		</a></div>
+					<table style='width:95%'><tr><td style="width:85%">
+								<h1> Additional Healthcare Provider </h1>
+								<p> Are you being assisted by other healthcare providers? </p>
+								<p> Let's add it to the list.</p>
+							</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+				</a></div>
             <div>
                 <form method="post" name="healthcareProviderForm" id="healthcareProviderForm">
-                    <input type="text" disabled="" name="physicianID" id="physicianID"/>
+                    <input type="text" readonly="" name="physicianID" id="physicianID"/>
                     <fieldset>
                         <!-- Provider name and specialty -->
                         <legend> Provider Information </legend>
@@ -35,7 +35,7 @@ and open the template in the editor.
                         <label for="specialty">Specialty:<br/></label>
                         <input name="specialty" type="text" id="specialty" placeholder="What does your provider specialized in?"/><br/>
                     </fieldset>
-                    
+
                     <fieldset>
                         <!-- Provider contact/location information -->
                         <legend> Provider Contact Details </legend>
@@ -46,7 +46,7 @@ and open the template in the editor.
                         <label for="addressZip">Zip Code:<br/></label>
                         <input name="addressZip" type="text" id="addressZip" placeholder="ex. 19122"><br/>
                         <select id="stateID" name='stateID'>
-                                <option>Choose your provider state...</option>
+							
                         </select><br/>
                         <label for="phoneWork">Business Number:<br/></label>
                         <input name="phoneWork" type="text" id="phoneWork" placeholder="ex. 2152047000"/><br/>
@@ -57,7 +57,7 @@ and open the template in the editor.
                         <label for="email">Email Address:<br/></label>
                         <input name="email" type="text" id="email" placeholder="ex. youremail@temple.edu"/><br/>                        
                     </fieldset>
-                    
+
                     <!-- Submit & reset buttons-->
                     <button type="submit">Add healthcare provider!</button>
                     <button type="reset">Clear</button> <br/>
@@ -69,24 +69,32 @@ and open the template in the editor.
             </div>
         </div>
         <script>
-            $(document).ready(function(){
-                $("#healthcareProviderForm").on("submit", function(event){
-                    event.preventDefault();
-                    var userInfo = $("#healthcareProviderForm").serialize();
-                    var theURL = "./api/?res=p&fn=add&" + userInfo;
+			 $(document).ready(function () {
+
+				 var theStateListURL = "./api/?res=s&fn=find";
+				 $.get(theStateListURL).done(function ( stateListDataLoadedFromServer ) {
+					 generateLookupList("stateID"
+						 , stateListDataLoadedFromServer
+						 , 'stateID'
+						 , 'stateName');
+				 });
+
+				 $("#healthcareProviderForm").on("submit", function ( event ) {
+					 event.preventDefault();
+					 var userInfo = $("#healthcareProviderForm").serialize();
+					 var theURL = "./api/?res=h&fn=add&" + userInfo;
 //                    $("#formVisual").val("userInfo");
-                    $.post(theURL);
-                    console.log(JSON.stringify(data));
-                    $("#formVisual").val(JSON.stringify(data));
-                    $("#physicianID").val(data.physicianID); 
-//                        .done(function(data){
-//                            console.log(data);
-//                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-//                        console.log(xhr);
-//                        console.log(error);
-//                    });
-                });
-            });
+					 $.post(theURL)
+						 .done(function ( data ) {
+							 console.log(data);
+							 $("#formVisual").val(JSON.stringify(data));
+							 $("#physicianID").val(data.physicianID);
+						 }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+						 console.log(xhr);
+						 console.log(error);
+					 });
+				 });
+			 });
         </script>
     </body>
 </html>

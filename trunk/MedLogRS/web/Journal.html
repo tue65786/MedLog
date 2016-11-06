@@ -13,9 +13,10 @@
           
 		<div id="header"><a href="home.jsp">
 			<table style='width:95%'><tr><td style="width:85%">
-						<h1> Login </h1>
-						<p> Welcome to MedLog. </p>
-						<p> An account is required to use MedLog. </p>
+						<h1> Journal </h1>
+						 <p> This is the page to insert a journal entry </p>
+                            <p> Eventually, site menu may go here </p>
+
 					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
 		</a></div>
 
@@ -26,9 +27,9 @@
                         <legend>Dates</legend>
 
                         <label for="createdDate">Date Created:<br/></label>
-                        <input name="createdDate" type="text" id="createdDate" placeholder="...ex. correct date format?"/><br/>
+                        <input name="createdDate" type="text" id="createdDate" readonly placeholder="...ex. correct date format?"/><br/>
                         <label for="updatedDate">Date Updated:<br/></label>
-						                        <input name="updatedDate" type="text" id="updatedDate" placeholder="..."/>
+						                        <input name="updatedDate" type="text" id="updatedDate" readonly placeholder="..."/>
 
 						
 						<br/>
@@ -38,11 +39,11 @@
                         <legend>Content</legend>
 
                         <label for="title">Title<br/></label>
-                        <input name="title" type="text" id="title"/><br/><br/>
+                        <input name="title" type="text" id="title" required=""/><br/><br/>
                         <label for="notes">Sentimental Diary<br/></label>
                         <textarea cols ="50" rows ="4" name="notes" id="notes" placeholder = "Enter how you are feeling here"></textarea><br/>
                         <select id="mood" name='mood' required>
-                            <option>Rate your mood</option>
+                            <option >Rate your mood</option>
                             <!-- Better way to accomplish? -->
                             <option value='1'>1</option>
                             <option value='2'>2</option>
@@ -56,11 +57,11 @@
                             <option value='10'>10</option>
                         </select><br/><br/>
                         <label for="notesActivity">Activity Log<br/></label>
-                        <!--<input name="notesActivity" type="text" id="notesActivity" placeholder="Enter what you have done, accomplishments, achievements, etc here"/><br/>-->
+                       
                         <textarea cols ="50" rows ="4" name="notesActivity" id="notesActivity" placeholder = "Enter what you have done, accomplishments, achievements, etc here"></textarea><br/>
                         <select id="productivity" name='productivity' required>
                             <option>Rate your productivity</option>
-                            <!-- Better way to accomplish? -->
+                          
                             <option value='1'>1</option>
                             <option value='2'>2</option>
                             <option value='3'>3</option>
@@ -75,10 +76,7 @@
 
 
                     </fieldset>
-                    <!--other fields included in DiaryVO.java, but not implemented above
-                        tagList
-                        includeMedsCurrent
-                        attachmentPath  -->
+      
 
                     <!-- Submit & reset buttons-->
                     <br/><button type="submit">Submit entry</button>
@@ -92,22 +90,34 @@
                 </form>
             </div>
         </div>
-        <!--<script>
-   $(document).ready(function(){
-       $("#registrationForm").on("submit", function(event){
-           event.preventDefault();
-           var userInfo = $("#registrationForm").serialize();
-           var theURL = "./api/res=p&fn=add&" + userInfo;
-           $("#formVisual").val("userInfo");
-           $.post(theURL)
-               .done(function(data){
-                   console.log(data);
-           }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-               console.log(xhr);
-               console.log(error);
-           });
-       });
-   });
-</script>-->
+<div id="loader1" style="display:none;">
+			<div class="ui-widget-overlay ui-front"></div>
+			<div id="InnerTableCellOverlay">
+				<img alt="(loading)" src="images/loader.gif"/>
+				<br/>
+				<b style="color:black;font-size:2em;">&nbsp;&nbsp;Working, please wait...</b>
+			</div>
+		</div>
+<script>
+            $(document).ready(function(){
+                $("#insertJournalForm").on("submit", function(event){
+					$("#loader1").show();
+                    event.preventDefault();
+                    var journalInfo = $("#insertJournalForm").serialize();
+                    var theURL = "./api/res=d&fn=add&" + journalInfo;
+//                    $("#formVisual").val("userInfo");
+                    $.post(theURL)
+                        .done(function(data){
+                            console.log(data);
+						$("#loader1").hide();
+						alert('Success!');
+					
+                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                        console.log(xhr);$("#loader1").hide();
+                        console.log(error);
+                    });
+                });
+            });
+        </script>
     </body>
 </html>
