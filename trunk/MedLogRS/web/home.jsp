@@ -3,20 +3,42 @@
     Created on : Nov 3, 2016, 8:56:21 AM
     Author     : (c)2016 Guiding Technologies
 --%>
-
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.medlog.webservice.vo.DiaryVO"%>
+<%@page import="com.medlog.webservice.dao.MedLogDAO"%>
+<%@page import="com.medlog.webservice.sql.DbConnection"%>
+<%@page import="com.medlog.webservice.util.StrUtl"%>
 <%@page import="com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneAnalysis"%>
 <%@page import="com.ibm.watson.developer_cloud.tone_analyzer.v3.ToneAnalyzer"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="user" class="com.medlog.webservice.vo.PatientVO" scope="session" />
 <jsp:setProperty name="user" property="*"/>
 <%
+   String name  ="";
    String onload="";
+   String diaryEntires="";
    if ( user == null || user.getPatientID() <= 0 ) {
 	  try {
 		 response.sendRedirect( "login.html" );
 	  } catch (Exception e) { 
 			onload = " onload=\"top.location.href='login.html'\" " ;  
 	  }
+   }else{
+	 try{ name = StrUtl.coalesce( user.getFirstName(),user.getLastName(),user.getUserName(),""); 
+	 if (!name.isEmpty()){
+		name = " back " + name;
+		
+	 }
+	  DbConnection db = new DbConnection();
+	  MedLogDAO dao = new MedLogDAO(db, user );
+	  ArrayList<DiaryVO> diary=  dao.findDiaryByPatient();
+	  if (diary != null && !diary.isEmpty()){
+		 diaryEntires =  diary.size() + " recent entries. Last entry was " + diary.get( diary.size()-1).getCreatedDate().toString() + ".  <ul><li>Mood is looking up!</li><li>Work on productivity.</li></ul> <br/> Don't forget to keep your journal up to date.";
+	  }
+	  db.close();
+	 }
+	 catch(Exception e){	
+	 }	  
    }
 %>
 <!DOCTYPE html>
@@ -78,7 +100,7 @@
     </head>
 
     <body <%=onload%>>
-		<div style="width:95%; float:left;height: 125px;"><div style="float:left;margin-left:165px;padding:80px 0 45px 40px;font-size:24pt;vertical-align: bottom;font-weight: bolder;font-family: verdana;">Welcome to MedLog</div><div style="float:right;margin-right:30%;"><img src="Logo.png" style="height:75%;width:75%;" alt="log"></div></div>	
+		<div style="width:95%; float:left;height: 125px;"><div style="float:left;margin-left:165px;padding:80px 0 45px 40px;font-size:24pt;vertical-align: bottom;font-weight: bolder;font-family: verdana;">Welcome <%=name%></div><div style="float:right;margin-right:30%;"><img src="Logo.png" style="height:75%;width:75%;" alt="log"></div></div>	
 		<div style="clear:both;"></div>
 		<ul id="menu" style="float:left;">
 			<li>
@@ -131,6 +153,8 @@
 			</ul>
 			<div id="tabs-1">
 				<h2>You logged .....</h2>
+
+				<p><%=diaryEntires%></p> 
 				<p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
 			</div>
 			<div id="tabs-2">

@@ -5,8 +5,9 @@
         <link rel="stylesheet" type="text/css" href="rstyle.css"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="scripts/jquery.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
+		<script src="scripts/utils.js" type="text/javascript"></script>
     </head>
     <body>
         <div>
@@ -104,13 +105,16 @@
 					$("#loader1").show();
                     event.preventDefault();
                     var journalInfo = $("#insertJournalForm").serialize();
-                    var theURL = "./api/res=d&fn=add&" + journalInfo;
+                    var theURL = "./api?res=d&fn=add&" + journalInfo;
 //                    $("#formVisual").val("userInfo");
                     $.post(theURL)
                         .done(function(data){
 								 if ( typeof data.id !== 'undefined' && data.id > 0 ) {
 									 $("#id").val(data.id);
-								 	alert('Success!');
+								 
+								 	if( confirm('Journal Added!')){
+										redir('home.jsp');
+									}
 								 }
                             console.log(data);
 						$("#loader1").hide();
