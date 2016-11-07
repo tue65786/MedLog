@@ -22,7 +22,7 @@
 				</a></div>
             <div>
                 <form method="post" name="registrationForm" id="registrationForm" autocomplete="on">
-					<input type="hidden" name="patientID" id="patientID" />
+					<input type="text" readonly="" name="patientID" id="patientID" />
                     <fieldset>
                         <legend>Login Credentials</legend>
                         <!-- Username and Password creation required-->
@@ -138,17 +138,24 @@
 					 $("#loader1").show();
 					 $("#errorMessage").hide();
 					 var userInfo = $("#registrationForm").serialize();
-					 var theURL = new URLBuilder().setRes("p").setFn((editID > 0 ? "u"
-						 : "a")).setFormData(userInfo);
-
-					 // "./api/?res=p&fn=add&" + userInfo;
+					 var theURL = "./api?res=p&fn=add&" + userInfo;
+					 //Page to go to after save. 
+					 var redirectPage = "login.html";
+					 //If editing change url			
+					 if ( editID > 0 ) {
+						 theURL = "./api?res=p&fn=update&" + userInfo;
+						 redirectPage = "home.jsp";
+					 }
+					 //Send data to server 
 					 $.post(theURL).done(function ( data ) {
 						 console.log(JSON.stringify(data));
-						 $("#formVisual").val(JSON.stringify(data));
+						 //Hide loader and redirect
 						 $("#loader1").hide();
+
+						 redir(redirectPage);
 						 if ( editID === 0 && typeof data.patientID !== 'undefined' && data.patientID > 0 ) {
 							 $("#patientID").val(data.patientID);
-							 setTimeout(redir("login.html"), 4000);
+
 						 } else if ( typeof data.message !== 'undefined' ) {
 							 $("#errorMessage").empty().html(data.message);
 						 }
