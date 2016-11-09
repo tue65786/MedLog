@@ -41,7 +41,7 @@ public MedLogControllerStrategy(HttpServletRequest _request, HttpServletResponse
 }
 
 public String execute(DbConnection dbc) {
-   
+
    return handleUserResourceFn( dbc, res.isLoginRequired( fn ) );
 }
 
@@ -91,11 +91,13 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
    ApplicationBean app = null;
    try {
 	  app = setApplicationStores( dao );
-	  
+
    } catch (Exception e) {
-	if (DEBUG)e.printStackTrace();
+	  if ( DEBUG ) {
+		 e.printStackTrace();
+	  }
    }
-   
+
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute() " + res.name() + res.toString() );
 
    ///  -  ::}
@@ -108,7 +110,7 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 		 apiCanExecute = false;
 	  }
    }
-   
+
    if ( !apiCanExecute ) {
 	  responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 										   "Not logged in." );
@@ -136,7 +138,7 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 				  }
 			   }//Insert
 			   else if ( fn.equalsIgnoreCase( API_FUNCTION_UPDATE ) && vo.isValid( UPDATE ) ) {
-				  success = dao.updateDiary( vo ) > 0;
+				  success = dao.updateDiary( vo );
 				  responseMessage = StrUtl.getJSONMsg( success ? STATE_STATUS[API_ACTIONS.INFO]
 						  : STATE_STATUS[API_ACTIONS.ERROR], "Diary update"
 															 + ( success
@@ -157,14 +159,13 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 		 //           _ / `'
 		 ////////////|      / ~  ~ - >
 		 case API_RESOURCE_PATIENT:
-			if (fn.equalsIgnoreCase( API_FUNCTION_FIND)){
-			   if (getCurrentUser() != null){
+			if ( fn.equalsIgnoreCase( API_FUNCTION_FIND ) ) {
+			   if ( getCurrentUser() != null ) {
 				  responseMessage = g.toJson( getCurrentUser() );
-			   }else{
-				   responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Patient not found." );
+			   } else {
+				  responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Patient not found." );
 			   }
-			}
-			else if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
+			} else if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   PatientVO vo = loadPatientFromRequest();
 			   if ( fn.equalsIgnoreCase( API_FUNCTION_INSERT ) && vo.isValid( INSERT ) ) {
 				  int id = dao.createPatient( vo );
@@ -176,13 +177,15 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 				  } else {
 					 responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Patient not added." );
 				  }
-				  
+
 			   } else if ( fn.equalsIgnoreCase( API_FUNCTION_UPDATE )
 						   && vo.isValid( UPDATE )
 						   && getCurrentUser() != null
-						   && vo.getPatientID() == getCurrentUser().getPatientID()
-						   && vo.getPatientID() > 0 ) {
+						   //						   && vo.getPatientID() == getCurrentUser().getPatientID()
+						   //						   && vo.getPatientID() > 0 
+						   && getCurrentUser().getPatientID() > 0 ) {
 				  //Execute
+				  vo.setPatientID( getCurrentUser().getPatientID() );
 				  success = dao.updatePatient( vo );
 				  if ( success ) {
 					 session.setAttribute( SESSION_BEAN_USER, vo );
@@ -196,37 +199,81 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 													   StrUtl.toS( fn, "?" )
 													   + " params are invalid." );
 			   }
-			   
+
 			} else {//Not valid fn
 			   responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 													StrUtl.toS( fn, "?" )
 													+ " is invalid." );
 			}
 			break;
-		 
+		 ////////////////////////////////////
+		 //        ,.--.  
+		 //       //r\  \ 
+		 //       \\  \x/ 
+		 //        `'--'   						 
+		 /////////////////////////////////
 		 case API_RESOURCE_MEDICATION:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
 			   MedicationVO vo = loadMedicationFromRequest();
-			} else if ( fn.equals( "find" ) ) {
-			   
+			   if ( fn.equalsIgnoreCase( API_FUNCTION_INSERT ) && vo.isValid( INSERT ) ) {
+				  int id = dao.assignMedication( vo );
+				  if ( id > 0 ) {
+					 success = true;
+					 vo.setMedicationID( id );
+					 responseMessage = g.toJson( vo );
+				  } else {
+					 responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Medication not added." );
+				  }
+
+			   } else if ( fn.equals( "find" ) ) {
+
+			   }
 			}
 			break;
-		 
+
+		 /////////////////
+		 //        .----. 
+		 //       ===(?)==   
+		 //      // 6  6 \\ 
+		 //		    >>  
+		 //         \__
+		 ////////////////////////////
+		 case API_RESOURCE_HEALTHCARE_PROVIDER:
+			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
+			   HealthcareProviderVO vo = loadProviderFromRequest();
+			   if ( fn.equalsIgnoreCase( API_FUNCTION_INSERT ) && vo.isValid( INSERT ) ) {
+				  int id = dao.createHealthcareProviderVO( vo );
+				  if ( id > 0 ) {
+					 success = true;
+					 vo.setPhysicianID( id );
+					 responseMessage = g.toJson( vo );
+				  } else {
+					 responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
+														  StrUtl.toS( fn, "??" )
+														  + " params are invalid." );
+				  }
+
+			   }
+
+			}
+
+			break;
+
 		 case API_RESOURCE_STATES:
 			ArrayList<StateVO> states = new ArrayList<StateVO>( app.getStatesMap().values() );
 			Collections.sort( states );
 			responseMessage = new GsonBuilder().disableInnerClassSerialization().serializeNulls().create().toJson( states );
 			break;
-		 
+
 		 case API_RESOURCE_SIG:
 			ArrayList<SigVO> sigs = new ArrayList<SigVO>( app.getSigMap().values() );
 			responseMessage = new GsonBuilder().disableInnerClassSerialization().serializeNulls().create().toJson( sigs );
-		 
+
 		 default:
 			responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
 												 " Invalid res." );
 			break;
-		 
+
 	  }
    }
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute()\nRESPONSE:\n=============\n"
@@ -310,7 +357,7 @@ public PatientVO loadPatientFromRequest() {
    p.dateOfBirth( sh.getDateParameter( "dateOfBirth", new Date() ) );
    p.userRole( 1 );
    p.dateJoined( sh.getDateParameter( "dateJoined", new Date() ) );
-   
+
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.loadPatientFromRequest()\n==> " + p.build().toJSON() );
    return p.build();
    // sh.getStrParameter( "", "")
@@ -402,13 +449,13 @@ private String getDiaryResponse(MedLogDAO dao, Gson g) {
    } else {
 	  success = false;
    }
-   
+
    if ( voList == null || voList.isEmpty() ) {
 	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
    } else {
 	  return g.toJson( voList );
    }
-   
+
 }
 @Expose(deserialize = true, serialize = true)
 public String responseMessage = "";

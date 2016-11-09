@@ -168,7 +168,7 @@ public boolean unassignMedication(MedicationVO _vo);
  * @param _vo DiaryVO to update. Nulls are ignored
  * @return success
  */
-public int updateDiary(DiaryVO _vo);
+public boolean updateDiary(DiaryVO _vo);
 /**
  * Update HealthcareProvider
  *

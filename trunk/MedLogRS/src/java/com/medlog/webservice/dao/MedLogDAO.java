@@ -744,9 +744,9 @@ public boolean unassignMedication(MedicationVO _vo) {
 }
 
 @Override
-public int updateDiary(DiaryVO _vo) {
-//      CallableStatement cs = null;
-   int newID = DB_ERROR_CODE;
+public boolean updateDiary(DiaryVO _vo) {
+      CallableStatement cs = null;
+//
 //   try {
 //	  if ( _vo != null && _vo.getPatientID() == null && getCurrentUser() != null ) {
 //		 _vo.setPatientID( getCurrentUser() );
@@ -810,7 +810,7 @@ public int updateDiary(DiaryVO _vo) {
 //	  this.errorMessage = "createDiary, invalid params.";
 //
 //   }
-   return newID;
+   return true;
 }
 
 @Override
