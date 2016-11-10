@@ -80,38 +80,70 @@ and open the template in the editor.
 			</div>
 		</div>
         <script>
-			 $(document).ready(function () {
+                $(document).ready(function () {
+                        var submitURL = new URLBuilder();
+                        var editID = getIDParamFromRequest();
+                        //State drop down
+                        var theStateListURL = "./api/?res=s&fn=find";
+                        $.get(theStateListURL).done(function ( stateListDataLoadedFromServer ) {
+                                generateLookupList("stateID"
+                                , stateListDataLoadedFromServer
+                                , 'stateID'
+                                , 'stateName');
+                                if (editID > 0) {
+                                    console.log(editID);
+                                    loadCurrentHealthcareProvider();
+                                }
+                        });
+                        //to edit/update provider that has already been added
+                        function loadCurrentHealthcareProvider(){
+                            var currentProviderFn = "./api/?res=h&fn=find";
+                            $.get(currentProviderFn).done(function ( currentProviderData ) {
+                                        if ( typeof currentProviderData === 'undefined' ) {
+                                        } else {
+                                                for ( var key in currentProviderData ) {
+                                                        if ( key === "addressState" ) {
+                                                                $("#stateID").val("" + currentProviderData.addressState.stateID);
+                                                        } else
+                                                                $('[name="' + key + '"]').val(currentProviderData[key]);
+                                                        }
+						$("#btnSubmit").html("Update Provider");
+                                        }
+                            });
+                        }
+                        
 
-				 var theStateListURL = "./api/?res=s&fn=find";
-				 $.get(theStateListURL).done(function ( stateListDataLoadedFromServer ) {
-					 generateLookupList("stateID"
-						 , stateListDataLoadedFromServer
-						 , 'stateID'
-						 , 'stateName');
-				 });
-
-				 $("#healthcareProviderForm").on("submit", function ( event ) {
-					 event.preventDefault();
-					 $("#loader1").show();
-					 var userInfo = $("#healthcareProviderForm").serialize();
-					 var theURL = "./api/?res=h&fn=add&" + userInfo;
-//                    $("#formVisual").val("userInfo");
-					 $.post(theURL)
-						 .done(function ( data ) {
-							 console.log(data);
-						 $("#loader1").hide();
-							 $("#formVisual").val(JSON.stringify(data));
-							 if ( typeof data.physicianID !== 'undefined' && data.physicianID > 0 ) {
-									 $("#physicianID").val(data.physicianID);
-								 	alert('Success!');
-								 } 
-						 }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-						 console.log(xhr);
-						 console.log(error);
-						 $("#loader1").hide();
-					 });
-				 });
-			 });
+                        $("#healthcareProviderForm").on("submit", function ( event ) {
+                                event.preventDefault();
+                                $("#loader1").show();
+                                $("#errorMessage").hide();
+                                var userInfo = $("#healthcareProviderForm").serialize();
+                                var theURL = "./api/?res=h&fn=add&" + userInfo;
+                                var redirectPage = "login.html";
+                                if ( editID > 0 ) {
+						theURL = "./api?res=h&fn=update&" + userInfo;
+						redirectPage = "home.jsp";
+                                }
+                                $.post(theURL).done(function ( data ) {
+                                        console.log(JSON.stringify(data));
+                                        $("#loader1").hide();
+                                        
+                                        if ( editID == 0 && typeof data.physicianID !== 'undefined' && data.physicianID > 0 ) {
+                                                $("#physicianID").val(data.physicianID);
+                                        } else if ( typeof data.message !== 'undefined'){
+                                                    $("#errorMessage").empty().html(data.message);
+                                        }
+                                }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                                        console.log(xhr);
+                                        console.log(error);
+                                        $("#loader1").hide();
+                                        $("#errorMessage").empty().html(error);
+                                        $("#errorMessage").show();
+                                }).always(function() {
+                                        $("#loader1").hide();
+                                });
+                        });
+                });
         </script>
     </body>
 </html>
