@@ -32,7 +32,7 @@ import org.apache.commons.lang3.*;
 @WebFilter(filterName = "Security", urlPatterns = { "/*" })
 public class Security implements Filter {
 
-private static final boolean debug = true;
+private static final boolean debug = DEBUG ;
 
 // The filter configuration object we are associated with.  If
 // this value is null, this filter instance is not currently
@@ -125,10 +125,10 @@ public void doFilter(ServletRequest request, ServletResponse response,
 	  log( String.format( "User %s", isLoggedIn ? "IS LOGGED IN!!" : " IS NOT LOGGED IN" ) );
    }
 
-   Map m = new TreeMap();
-   m.put( "URI", httprequest.getRequestURI() );
-   m.put( "URL", httprequest.getRequestURL().toString() );
-   StrUtl.toS( httprequest.getRequestURI() );
+//   Map m = new TreeMap();
+//   m.put( "URI", httprequest.getRequestURI() );
+//   m.put( "URL", httprequest.getRequestURL().toString() );
+//   StrUtl.toS( httprequest.getRequestURI() );
 
    doBeforeProcessing( request, response );
    String[] urlParts = getUriParts( httprequest );
@@ -186,7 +186,7 @@ private boolean isLoggedIn(HttpServletRequest httprequest) {
 private boolean hasAccess(String uri,String file, HttpServletRequest httprequest) {
    boolean hasAccess = isLoggedIn( httprequest ) || StrUtl.regexTest( REG_EX_isNonSecurePages, StrUtl.toS( uri ), true ) || (!StringUtils.endsWith( uri, "html" ) &&!StringUtils.endsWith( uri, "jsp" )  );
    if ( DEBUG ) {
-	  log( String.format( "User %s have access to %s.", hasAccess ? "IS LOGGED IN!!" : " IS NOT LOGGED IN", StrUtl.toS( uri ) ) );
+	  log( String.format( "User %s access to %s.", hasAccess ? "HAS" : "DOES HOT HAVE", StrUtl.toS( uri ) ) );
    }
    return hasAccess;
 }

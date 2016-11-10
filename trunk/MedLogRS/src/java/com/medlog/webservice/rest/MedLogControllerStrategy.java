@@ -233,10 +233,10 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 
 		 /////////////////
 		 //        .----. 
-		 //       ===(?)==   
+		 //       ===(@)==   
 		 //      // 6  6 \\ 
-		 //		    >>  
-		 //         \__
+		 //		     >>  
+		 //      (__ \/ __)
 		 ////////////////////////////
 		 case API_RESOURCE_HEALTHCARE_PROVIDER:
 			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
@@ -284,7 +284,7 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 /**
  * Translate Diary
  *
- * @return
+ * @return diary pojo from request params
  */
 public DiaryVO loadDiaryFromRequest() {
    if ( getCurrentUser() == null ) {
@@ -301,7 +301,13 @@ public DiaryVO loadDiaryFromRequest() {
    t.productivity( sh.getIntParameter( "productivity", 0 ) );
    return t.build();
 }
-
+/**
+ * Translates Medication  POJO
+ * @return Medication Object
+ * @see MedicationVO
+ * @see PharmaRxOtcVO
+ * 
+ */
 public MedicationVO loadMedicationFromRequest() {
    /*
     * if ( getCurrentUser() == null ) {

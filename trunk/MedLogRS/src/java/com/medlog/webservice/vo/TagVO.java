@@ -11,7 +11,7 @@ import java.util.logging.*;
 
 /**
  *
- * @author (c)2016 Guiding Technologies
+ * 
  */
 public class TagVO implements Serializable, IEntityBase<TagVO> {
 public int id;
