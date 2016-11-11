@@ -30,28 +30,19 @@ and open the template in the editor.
                     <input type="text" disabled="" name="pharmID" id="physicianID"/>
                     <!-- This records information about the medication -->
                     <fieldset>
-                        <legend> RX Information </legend>
-                        <!-- Information on the pharmaRX -->
-                        <label for="typeMed">Medication type:<br/></label>
-                        <select id="medicationID" name="medicationID">
-                        </select>
-                        <label for="tty">Term Type (BR or GE):<br/></label>
-                        <input name="tty" type="text" id="tty" placeholder="BR=brand, GE=generic"/><br/>
-                        <label for="genericName">Generic Name:<br/></label>
-                        <input name="genericName" type="text" id="genericName" placeholder="ex. Ibuprofen"/><br/>
-                        <label for="brandName">Brand Name:<br/></label>
-                        <input name="brandName" type="text" id="brandName" placeholder="ex. Advil"/><br/>
-                        <label for="displayName">Display Name:<br/></label>
-                        <input name="displayName" type="text" id="displayName" placeholder="What do you want to call it?" required/><br/>
-                    </fieldset>
-
-                    <!-- This notes the dosage -->
-                    <fieldset>
                         <legend> Dosage Details </legend>
-                        <label for="route">Route of Administration:<br/></label>
-                        <input name="route" type="text" id="route" placeholder="oral, injectable, etc."/><br/>
-                        <label for="newDoseForm">Dosage Form:<br/></label>
-                        <input name="newDoseForm" type="text" id="newDoseForm" placeholder="capsule, liquid, cream, etc"/><br/>
+                        <label for="fullName">Name:<br/></label>
+                        <input name="fullName" type="text" id="fullName" placeholder="What do you want to call it?" required/><br/>
+                        <label for="typeMed">Medication type:<br/></label>
+                        <select id="medType" name="medType">
+                            <option value="OTC">Over the Counter</option>
+                            <option value="RX">Prescription</option>
+                        </select>
+                        <label for="tty">Term Type:<br/></label>
+                        <select id="tty" name="tty">
+                            <option value="SBD">Brand</option>
+                            <option value="SCD">Generic</option>
+                        </select>
                         <label for="strength">Strength:<br/></label>
                         <input name="strength" type="text" id="strength" placeholder="How strong is the dosage?" required/><br/>
                     </fieldset>
@@ -70,21 +61,27 @@ and open the template in the editor.
             $(document).ready(function(){
                 $("#pharmaForm").on("submit", function(event){
                     event.preventDefault();
+                    $("#loader1").show();
+                    $("#errorMessage").hide();
                     var userInfo = $("#pharmaForm").serialize();
                     var theURL = "./api/?res=m&fn=add&" + userInfo;
-//                    $("#formVisual").val("userInfo");
-                    $.post(theURL);
-                    console.log(JSON.stringify(data));
-                    $("#formVisual").val(JSON.stringify(data));
-                    $("#pharmID").val(data.pharmID); 
-//                        .done(function(data){
-//                            console.log(data);
-//                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-//                        console.log(xhr);
-//                        console.log(error);
-//                    });
+                    var redirectPage = "login.html";
+                    $.post(theURL).done(function (data) {
+                            console.log(JSON.stringify(data));
+                            $("#loader1").hide();
+                            $("#formVisual").val(JSON.stringify(data));
+                            $("#pharmID").val(data.pharmID); 
+                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                            console.log(xhr);
+                            console.log(error);
+                            $("#loader1").hide();
+                            $("#errorMessage").empty().html(error);
+                            $("#errorMessage").show();
+                    }).always(function () {
+                            $("#loader1").hide();
                 });
             });
+        });
         </script>
     </body>
 </html>

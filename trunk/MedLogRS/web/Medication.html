@@ -64,24 +64,70 @@
             </div>
         </div>
         <script>
-			 $(document).ready(function () {
-				 $("#medicationForm").on("submit", function ( event ) {
-					 event.preventDefault();
-					 var userInfo = $("#medicationForm").serialize();
-					 var theURL = "./api/?res=ph&fn=add&" + userInfo;
-//                    $("#formVisual").val("userInfo");
-					 $.post(theURL);
-					 console.log(JSON.stringify(data));
-					 $("#formVisual").val(JSON.stringify(data));
-					 $("#medicationID").val(data.medicationID);
-//                        .done(function(data){
-//                            console.log(data);
-//                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-//                        console.log(xhr);
-//                        console.log(error);
-//                    });
-				 });
-			 });
+                    $(document).ready(function () {
+                            var submitURL = new URLBuilder();
+                            var editID = getIDParamFromRequest();
+                            var theMedicationListURL = "./api/?res=ph&fn=find";
+                            var theProviderListURL = "./api/?res=h&fn=find";
+                            $.get(theProviderListURL).done(function ( medicationListDataLoadedFromServer, providerListDataLoadedFromServer ) {
+                                    generateLookupList("pharmID"
+                                            , medicationListDataLoadedFromServer
+                                            , 'pharmID'
+                                            , 'fullName');
+                                
+                                    generateLookupList("physicianID"
+                                            , providerListDataLoadedFromServer
+                                            , 'physicianID'
+                                            , 'lastName');
+                                            
+                                    if ( editID > 0 ) {
+                                            console.log(editID);
+                                            loadCurrentMedication();
+                                    }
+                            });
+                            
+                            function loadCurrentUser() {
+                                    var currentMedicationFn = "./api/?res=ph&fn=find";
+                                    $.get(currentMedicationFn).done(function ( currentMedicationData ) {
+                                            if ( typeof currentMedicationData === 'undefined' ) {
+                                            } else {
+                                                    $("#btnSubmit").html("Update Medication");
+                                            }
+                                    });
+                            }
+
+                            $("#medicationForm").on("submit", function ( event ) {
+                                    event.preventDefault();
+                                    $("#loader1").show();
+                                    $("#errorMessage").hide();
+                                    var userInfo = $("#medicationForm").serialize();
+                                    var theURL = "./api/?res=ph&fn=add&" + userInfo;
+                                    var redirectPage = "login.html";			
+                                    if ( editID > 0 ) {
+                                            theURL = "./api?res=pH&fn=update&" + userInfo;
+                                            redirectPage = "home.jsp";
+                                    }
+                                    
+                                    $.post(theURL).done(function ( data ) {
+                                            console.log(JSON.stringify(data));
+                                            $("#loader1").hide();
+                                            redir(redirectPage);
+                                            if ( editID === 0 && typeof data.pharmID !== 'undefined' && data.patientID > 0 ) {
+                                                    $("#pharmID").val(data.pharmID);
+                                            } else if ( typeof data.message !== 'undefined' ) {
+                                                    $("#errorMessage").empty().html(data.message);
+                                            }
+                                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                                            console.log(xhr);
+                                            console.log(error);
+                                            $("#loader1").hide();
+                                            $("#errorMessage").empty().html(error);
+                                            $("#errorMessage").show();
+                                    }).always(function () {
+                                            $("#loader1").hide();
+                                    });
+                            });
+                    });
         </script>
     </body>
 </html>
