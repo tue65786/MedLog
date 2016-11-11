@@ -258,7 +258,30 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 			}
 
 			break;
+		 ////////////////
+		 // RX
+		 ////////////////////////
+		 case API_RESOURCE_PHARM:
+			if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
+			   PharmaRxOtcVO vo = loadPharmRxOTCFromRequest();
 
+			   if ( fn.equalsIgnoreCase( API_FUNCTION_INSERT ) && vo.isValid( INSERT ) ) {
+				  int id = dao.createPharmaRxOtcVO( vo );
+				  if ( id > 0 ) {
+					 success = true;
+					 vo.setPharmID( id );
+					 responseMessage = g.toJson( vo );
+				  } else {
+					 responseMessage = StrUtl.getJSONMsg( "WARN", "Error inserting pharm" );
+				  }
+			   } else if ( fn.equalsIgnoreCase( API_FUNCTION_UPDATE ) && vo.isValid( UPDATE ) ) {
+			   } else {
+				  responseMessage = StrUtl.getJSONMsg( "ERR", String.format( "Invalid [%s] pharm params", fn ) );
+			   }
+
+			}
+
+			break;
 		 case API_RESOURCE_STATES:
 			ArrayList<StateVO> states = new ArrayList<StateVO>( app.getStatesMap().values() );
 			Collections.sort( states );
@@ -277,7 +300,8 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 	  }
    }
    System.out.println( "com.medlog.webservice.rest.MedLogControllerStrategy.execute()\nRESPONSE:\n=============\n"
-					   + responseMessage + "\n-  |  -- - --  |  --- -- --  |  -- --- --  |  - --- --  |  --------  |  -----  |  ----\n" );
+					   + responseMessage
+					   + "\n-  |  -- - --  |  --- -- --  |  -- --- --  |  - --- --  |  --------  |  -----  |  ----\n" );
    return responseMessage;
 }
 
@@ -301,12 +325,14 @@ public DiaryVO loadDiaryFromRequest() {
    t.productivity( sh.getIntParameter( "productivity", 0 ) );
    return t.build();
 }
+
 /**
- * Translates Medication  POJO
+ * Translates Medication POJO
+ *
  * @return Medication Object
  * @see MedicationVO
  * @see PharmaRxOtcVO
- * 
+ *
  */
 public MedicationVO loadMedicationFromRequest() {
    /*
@@ -461,6 +487,29 @@ private String getDiaryResponse(MedLogDAO dao, Gson g) {
    } else {
 	  return g.toJson( voList );
    }
+
+}
+
+/**
+ * Translates Request into PharmRxOTCVo POJO
+ *
+ * @return POJO from Request.
+ * @see PharmaRxOtcVO
+ * @see MedicationVO
+ */
+private PharmaRxOtcVO loadPharmRxOTCFromRequest() {
+   ServletHelpers sh = new ServletHelpers( request, response );
+   PharmaRxOtcVO.Builder b = PharmaRxOtcVO.builder();
+   b.fullName( sh.getStrParameter( "fullName", sh.getStrParameter( "displayName", "" ) ) );
+   String medTypeTmp = sh.getStrParameter( "medType", "OTC" );
+   if ( medTypeTmp.equalsIgnoreCase( "OTC" ) ) {
+	  b.medType( MedTypeVO.GET_OTC() );
+   } else {
+	  b.medType( MedTypeVO.GET_RX() );
+   }
+   b.strength( sh.getStrParameter( "strength", "" ) );
+   b.tty( sh.getStrParameter( "TTY", sh.getStrParameter( "tty", "SCD" ) ) );
+   return b.build();
 
 }
 @Expose(deserialize = true, serialize = true)
