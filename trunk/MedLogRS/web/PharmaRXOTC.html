@@ -61,21 +61,27 @@ and open the template in the editor.
             $(document).ready(function(){
                 $("#pharmaForm").on("submit", function(event){
                     event.preventDefault();
+                    $("#loader1").show();
+                    $("#errorMessage").hide();
                     var userInfo = $("#pharmaForm").serialize();
                     var theURL = "./api/?res=m&fn=add&" + userInfo;
-//                    $("#formVisual").val("userInfo");
-                    $.post(theURL);
-                    console.log(JSON.stringify(data));
-                    $("#formVisual").val(JSON.stringify(data));
-                    $("#pharmID").val(data.pharmID); 
-//                        .done(function(data){
-//                            console.log(data);
-//                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-//                        console.log(xhr);
-//                        console.log(error);
-//                    });
+                    var redirectPage = "login.html";
+                    $.post(theURL).done(function (data) {
+                            console.log(JSON.stringify(data));
+                            $("#loader1").hide();
+                            $("#formVisual").val(JSON.stringify(data));
+                            $("#pharmID").val(data.pharmID); 
+                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
+                            console.log(xhr);
+                            console.log(error);
+                            $("#loader1").hide();
+                            $("#errorMessage").empty().html(error);
+                            $("#errorMessage").show();
+                    }).always(function () {
+                            $("#loader1").hide();
                 });
             });
+        });
         </script>
     </body>
 </html>
