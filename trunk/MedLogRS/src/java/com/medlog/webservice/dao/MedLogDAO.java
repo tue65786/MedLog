@@ -25,6 +25,35 @@ import java.util.logging.*;
  */
 public class MedLogDAO implements IMedLogDAO {
 
+@Override
+public ArrayList<MedicationVO> findMedicationByPatient() {
+   ArrayList<MedicationVO> voList = new ArrayList<MedicationVO>();
+   CallableStatement cs = null;
+   ResultSet rs = null;
+   try {
+	  cs = db.getConnnection().prepareCall( SP_MEDICATION_SELECT );
+	  cs.setNull( 1, java.sql.Types.INTEGER );
+	  cs.setInt( 1, getCurrentUser().getPatientID() );
+	  rs = cs.executeQuery();
+	  while ( rs.next() ) {
+		 voList.add( MedicationVO.builder()
+				 .medicationID( rs.getInt( "MedicationID" ) )
+				 .pharmID( getRxMap().get( rs.getInt( "pharmID" ) ) )
+				 .patientID( getCurrentUser() )
+				 .startDate( rs.getDate( "startDate" ) )
+				 .instructions( rs.getString( "instructions" ) )
+				 .build() );
+		 
+	  }
+   } catch (Exception e) {
+	  
+   } finally {
+	  DbUtl.close( rs );
+	  DbUtl.close( cs );
+   }
+   throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
+}
+
 /**
  * @return the rxMap
  */
@@ -121,7 +150,7 @@ public MedLogDAO(DbConnection db, PatientVO u, ApplicationBean app) {
 		 statesMap = app.getStatesMap();
 	  }
    } catch (Exception e) {
-
+	  
    }
    try {
 	  //  if ( u != null && u.getPatientID() != -2 ) {
@@ -150,7 +179,7 @@ public void setAppContext(ApplicationBean app) {
    }
    try {
    } catch (Exception eeee) {
-
+	  
    }
 }
 
@@ -181,7 +210,7 @@ public int createDiary(DiaryVO _vo) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_DIARY_INSERT );
 		 cs.setInt( 1, getCurrentUser().getPatientID() );
-
+		 
 		 if ( _vo.getTitle() != null ) {
 			cs.setString( 2, _vo.getTitle() );
 		 } else {
@@ -206,7 +235,7 @@ public int createDiary(DiaryVO _vo) {
 		 cs.registerOutParameter( 11, java.sql.Types.INTEGER );
 		 cs.executeUpdate();
 		 newID = cs.getInt( 11 );
-
+		 
 	  } catch (SQLException ex) {
 		 if ( DEBUG ) {
 			System.err.println( "com.medlog.webservice.dao.MedLogDAO.createDiary()\n" + DbUtl.printJDBCExceptionMsg( ex ) );
@@ -214,7 +243,7 @@ public int createDiary(DiaryVO _vo) {
 		 this.stateOK = false;
 		 this.errorMessage = ex.getMessage();
 		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createDiary()", "SQLEx", ex );
-
+		 
 	  } catch (NullPointerException npe) {
 		 LOG.logp( Level.SEVERE, this.getClass().getName(), "createDiary()", "Null Pointer", npe );
 		 this.stateOK = false;
@@ -228,7 +257,7 @@ public int createDiary(DiaryVO _vo) {
 	  }
 	  this.stateOK = false;
 	  this.errorMessage = "createDiary, invalid params.";
-
+	  
    }
    return newID;
 }
@@ -284,7 +313,7 @@ public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
 	  this.errorMessage = "Create healthcare valid, invalid params.";
    }
    return newID;
-
+   
 }
 
 @Override
@@ -295,7 +324,7 @@ public int createPatient(PatientVO _vo) {
    if ( _vo.isValid( INSERT ) ) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_PATIENT_INSERT );
-
+		 
 		 cs.setString( 1, _vo.getUserName() );
 		 cs.setString( 2, _vo.getUserPassword() );
 		 cs.setNull( 3, java.sql.Types.NVARCHAR );
@@ -325,7 +354,7 @@ public int createPatient(PatientVO _vo) {
 		 cs.setNull( 22, java.sql.Types.NVARCHAR );//Picture
 		 cs.setNull( 23, java.sql.Types.SQLXML );//metadata
 		 cs.setInt( 24, _vo.getUserRole() );
-
+		 
 		 cs.registerOutParameter( 25, java.sql.Types.INTEGER );
 		 int rows = cs.executeUpdate();
 		 newID = cs.getInt( 25 );
@@ -352,7 +381,7 @@ public int createPatient(PatientVO _vo) {
 @Override
 public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
    CallableStatement cs = null;
-
+   
    int newID = DB_ERROR_CODE;
    if ( _vo.isValid( INSERT ) ) {
 	  try {
@@ -379,7 +408,7 @@ public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
 		 cs.registerOutParameter( 20, java.sql.Types.INTEGER );
 		 int ct = cs.executeUpdate();
 		 newID = cs.getInt( 20 );
-
+		 
 	  } catch (SQLException e) {
 		 if ( DEBUG ) {
 			System.out.println( "com.medlog.webservice.dao.MedLogDAO.createPharmaRxOtcVO()" + DbUtl.printJDBCExceptionMsg( e ) );
@@ -395,7 +424,7 @@ public int createPharmaRxOtcVO(PharmaRxOtcVO _vo) {
 	  } finally {
 		 DbUtl.close( cs );
 	  }
-
+	  
    }
    return newID;
 }
@@ -427,7 +456,7 @@ public ArrayList<SigVO> findAllSigs(boolean onlyTime) {
 
 @Override
 public Map<String, SigVO> findAllSigsMap() {
-
+   
    if ( getSigMap() == null || getSigMap().isEmpty() ) {
 	  Map<String, SigVO> map = new HashMap<String, SigVO>();
 	  CallableStatement cs = null;
@@ -496,7 +525,7 @@ public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
 	  statesLoaded = true;
 	  return tmpVO;
    } else {
-
+	  
 	  statesLoading = false;
 	  statesLoaded = true;
 	  if ( DEBUG ) {
@@ -504,7 +533,7 @@ public final Map<Integer, StateVO> findAllStates(boolean mustuseSQL) {
 	  }
 	  return getStatesMap();
    }
-
+   
 }
 
 @Override
@@ -515,7 +544,7 @@ public DiaryVO findDiaryByID(int _id) {
    } else {
 	  return voList.get( 0 );
    }
-
+   
 }
 
 @Override
@@ -549,7 +578,7 @@ public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String _
 }
 
 @Override
-public ArrayList<HealthcareProviderVO> findHealthcareProvidersByStudent() {
+public ArrayList<HealthcareProviderVO> findHealthcareProvidersByPatient() {
    return findHealthCareProviders( -1, "", true );
 }
 
@@ -558,7 +587,7 @@ public PatientVO findPatientByID(int _id) {
    ArrayList<PatientVO> voList = findPatient( _id, null, null );
    if ( voList != null && !voList.isEmpty() ) {
 	  if ( DEBUG && voList.size() > 1 ) {
-
+		 
 		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByID()\n--Find by ID Returned Multiple VALUES -- something is wrong!" );
 	  }
 	  return voList.get( 0 );
@@ -572,7 +601,7 @@ public PatientVO findPatientByName(String _username) {
    ArrayList<PatientVO> voList = findPatient( 0, _username, null );
    if ( voList != null && !voList.isEmpty() ) {
 	  if ( DEBUG && voList.size() > 1 ) {
-
+		 
 		 LOG.warning( "com.medlog.webservice.dao.MedLogDAO.findPatientByName()\n--- Returned Multiple VALUES -- something is wrong!" );
 	  }
 	  return voList.get( 0 );
@@ -604,7 +633,7 @@ public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id) {
    if ( rxMap.containsKey( _id ) ) {
 	  return rxMap.get( _id );
    } else {
-
+	  
 	  ArrayList<PharmaRxOtcVO> voList = new ArrayList<PharmaRxOtcVO>();
 	  Map<Integer, PharmaRxOtcVO> mapp = new ConcurrentHashMap<Integer, PharmaRxOtcVO>( 512 );
 	  CallableStatement cs = null;
@@ -685,7 +714,7 @@ public PatientVO getCurrentUser() {
 		 loggedIn = true;
 	  }
    } catch (Exception e) {
-
+	  
    }
    return getUser();
 }
@@ -740,12 +769,12 @@ public boolean unassignMedication(MedicationVO _vo) {
    } else {
 	  return false;
    }
-
+   
 }
 
 @Override
 public boolean updateDiary(DiaryVO _vo) {
-      CallableStatement cs = null;
+   CallableStatement cs = null;
 //
 //   try {
 //	  if ( _vo != null && _vo.getPatientID() == null && getCurrentUser() != null ) {
@@ -826,7 +855,7 @@ public boolean updatePatient(PatientVO _vo) {
 	  try {
 		 cs = db.getConnnection().prepareCall( SP_PATIENT_UPDATE );
 		 cs.setInt( 1, _vo.getPatientID() );
-
+		 
 		 cs.setString( 2, _vo.getUserPassword() );
 		 cs.setString( 3, _vo.getFirstName() );
 		 cs.setString( 4, _vo.getLastName() );
@@ -838,13 +867,13 @@ public boolean updatePatient(PatientVO _vo) {
 		 cs.setInt( 10, _vo.getAddressState().getStateID() );//CHECK FOR VALID STATE
 		 cs.setString( 11, _vo.getAddressCountry() );
 		 cs.setString( 12, _vo.getAddressPostalcode() );
-	
+		 
 		 try {
 			cs.setDate( 13, (java.sql.Date) _vo.getDateOfBirth() );
 		 } catch (Exception e) {
 			cs.setNull( 13, java.sql.Types.DATE );//Date Joined	
 		 }
-		  rows = cs.executeUpdate();
+		 rows = cs.executeUpdate();
 		 
 	  } catch (SQLException ex) {
 		 if ( DEBUG ) {
@@ -872,7 +901,7 @@ public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo) {
 }
 
 private int changeMedicationBinding(MedicationVO _vo) {
-
+   
    CallableStatement cs = null;
    int newID = DB_ERROR_CODE;
    try {
@@ -897,9 +926,9 @@ private int changeMedicationBinding(MedicationVO _vo) {
 		 cs.setDate( 5, (java.sql.Date) _vo.getStartDate() );
 		 cs.setNull( 6, java.sql.Types.BIT );
 		 cs.executeUpdate();
-
+		 
 	  } catch (Exception e) {
-
+		 
 	  }
    }
    return newID;
@@ -938,7 +967,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
 		 cs.setString( 3, _keyword );
 		 cs.setNull( 3, java.sql.Types.NVARCHAR );
 	  }
-
+	  
 	  if ( valid ) {
 		 rs = cs.executeQuery();
 		 while ( rs.next() ) {
@@ -1043,7 +1072,7 @@ private ArrayList<HealthcareProviderVO> findHealthCareProviders(int _id, String 
 				 .build()
 		 );
 	  }
-
+	  
    } catch (SQLException ex) {
 	  LOG.log( Level.SEVERE, null, ex );
    } catch (Exception ex) {
@@ -1169,7 +1198,7 @@ private <T extends IEntityBase> T getFirstItem(ArrayList<T> _voList) {
 	  }
    }
    return null;
-
+   
 }
 private final DbConnection db;
 private String errorMessage;

@@ -225,8 +225,8 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 					 responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "Medication not added." );
 				  }
 
-			   } else if ( fn.equals( "find" ) ) {
-
+			   } else if ( fn.equals( API_FUNCTION_FIND ) ) {
+				  responseMessage = getMedicationResponse( dao, g );
 			   }
 			}
 			break;
@@ -255,6 +255,8 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 
 			   }
 
+			} else if ( fn.equals( API_FUNCTION_FIND ) ) {
+			   responseMessage = getHealthcareProviderResponse( dao, g );
 			}
 
 			break;
@@ -469,11 +471,13 @@ private PatientVO getCurrentUser() {
 	  return null;
    }
 }
+
 /**
  * Retrieve doctors from response.
+ *
  * @param dao
  * @param g
- * @return 
+ * @return
  */
 private String getHealthcareProviderResponse(MedLogDAO dao, Gson g) {
    ServletHelpers sh = new ServletHelpers( request, response );
@@ -481,7 +485,27 @@ private String getHealthcareProviderResponse(MedLogDAO dao, Gson g) {
    String key = sh.getStrParameter( "keyword", "" );
 
    if ( fn.equals( API_FUNCTION_FIND ) ) {
-	  voList = dao.findHealthcareProvidersByStudent();
+	  voList = dao.findHealthcareProvidersByPatient();
+	  success = true;
+
+   } else {
+	  success = false;
+   }
+   if ( voList == null || voList.isEmpty() ) {
+	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
+   } else {
+	  return g.toJson( voList );
+   }
+
+}
+
+private String getMedicationResponse(MedLogDAO dao, Gson g) {
+   ServletHelpers sh = new ServletHelpers( request, response );
+   ArrayList<MedicationVO> voList = null;
+   String key = sh.getStrParameter( "keyword", "" );
+
+   if ( fn.equals( API_FUNCTION_FIND ) ) {
+	  voList = dao.findMedicationByPatient();
 	  success = true;
 
    } else {

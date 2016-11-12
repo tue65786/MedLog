@@ -116,7 +116,7 @@ public ArrayList<HealthcareProviderVO> findHealthcareProvidersByKeyword(String k
  *
  * @return Assigned {@linkplain HealthcareProviderVO}
  */
-public ArrayList<HealthcareProviderVO> findHealthcareProvidersByStudent();
+public ArrayList<HealthcareProviderVO> findHealthcareProvidersByPatient();
 /**
  * Find user by user ID
  *
@@ -192,6 +192,7 @@ public int createPharmaRxOtcVO(PharmaRxOtcVO _vo);
 public boolean updatePharmaRxOtcVO(PharmaRxOtcVO _vo);
 public PharmaRxOtcVO findPharmaRxOtcVO(boolean onlyAssigned);
 public PharmaRxOtcVO findPharmaRxOtcVOByID(int _id);
+public ArrayList<MedicationVO> findMedicationByPatient();
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword,boolean onlyAssigned);
 public Map<Integer,PharmaRxOtcVO> findPharmaMapRxOtcVOByKeword(String _keyword,int pageNumber, int pageSize, boolean onlyAssigned);
 public ArrayList<PharmaRxOtcVO> findPharmaRxOtcVOByKeword(String _keyword,int pageNumber, int pageSize, boolean onlyAssigned);
