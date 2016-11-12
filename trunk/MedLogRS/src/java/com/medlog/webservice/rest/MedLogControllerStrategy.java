@@ -469,6 +469,31 @@ private PatientVO getCurrentUser() {
 	  return null;
    }
 }
+/**
+ * Retrieve doctors from response.
+ * @param dao
+ * @param g
+ * @return 
+ */
+private String getHealthcareProviderResponse(MedLogDAO dao, Gson g) {
+   ServletHelpers sh = new ServletHelpers( request, response );
+   ArrayList<HealthcareProviderVO> voList = null;
+   String key = sh.getStrParameter( "keyword", "" );
+
+   if ( fn.equals( API_FUNCTION_FIND ) ) {
+	  voList = dao.findHealthcareProvidersByStudent();
+	  success = true;
+
+   } else {
+	  success = false;
+   }
+   if ( voList == null || voList.isEmpty() ) {
+	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
+   } else {
+	  return g.toJson( voList );
+   }
+
+}
 
 private String getDiaryResponse(MedLogDAO dao, Gson g) {
    ServletHelpers sh = new ServletHelpers( request, response );
