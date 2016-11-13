@@ -498,21 +498,42 @@ private String getHealthcareProviderResponse(MedLogDAO dao, Gson g) {
    }
 
 }
-
+/**
+ * Transform Medication Java objects to JSON.
+ * @param dao
+ * @param g
+ * @return 
+ */
 private String getMedicationResponse(MedLogDAO dao, Gson g) {
    ServletHelpers sh = new ServletHelpers( request, response );
    ArrayList<MedicationVO> voList = null;
    String key = sh.getStrParameter( "keyword", "" );
+   if ( StrUtl.matchOR( fn, API_FUNCTION_FIND, API_FUNCTION_FIND_BY_ID ) ) {
+	  if ( fn.equals( API_FUNCTION_FIND ) ) {
+		 voList = dao.findMedicationByPatient();
+		 success = true;
 
-   if ( fn.equals( API_FUNCTION_FIND ) ) {
-	  voList = dao.findMedicationByPatient();
-	  success = true;
-
-   } else {
-	  success = false;
+	  } else if ( fn.equals( API_FUNCTION_FIND_BY_ID ) ) {
+		 int iD = sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) );
+		 if ( iD > 0 ) {
+			voList = dao.findMedicationByPatient();
+			for ( MedicationVO vo : voList ) {
+			   if ( iD == vo.getMedicationID() ) {
+				  ArrayList<MedicationVO> tmp = new ArrayList<>( 2 );
+				  tmp.add( vo );
+				  return g.toJson( tmp );
+			   }
+			}
+		 } else {
+			success = false;
+		 }
+	  } else {
+		 success = false;
+	  }
    }
    if ( voList == null || voList.isEmpty() ) {
-	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
+	  success = false;
+	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No matching entries." );
    } else {
 	  return g.toJson( voList );
    }
