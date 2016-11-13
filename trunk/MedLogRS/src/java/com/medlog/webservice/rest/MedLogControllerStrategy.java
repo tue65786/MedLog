@@ -483,52 +483,71 @@ private String getHealthcareProviderResponse(MedLogDAO dao, Gson g) {
    ServletHelpers sh = new ServletHelpers( request, response );
    ArrayList<HealthcareProviderVO> voList = null;
    String key = sh.getStrParameter( "keyword", "" );
-
-   if ( fn.equals( API_FUNCTION_FIND ) ) {
-	  voList = dao.findHealthcareProvidersByPatient();
-	  success = true;
-
-   } else {
-	  success = false;
+   // @TODO ADD FIND BY KEYWORD.
+   switch ( fn ) {
+   	  case API_FUNCTION_FIND:
+		 voList = dao.findHealthcareProvidersByPatient();
+		 success = true;
+		 break;
+   	  case API_FUNCTION_FIND_BY_ID:
+		 int iD = sh.getIntParameter( "id", sh.getIntParameter( "physicianID", 0 ) );
+		 if ( iD > 0 ) {
+			voList = dao.findHealthcareProvidersByPatient();
+			for ( HealthcareProviderVO vo : voList ) {
+			   if ( iD == vo.getPhysicianID() ) {
+				  ArrayList<HealthcareProviderVO> tmp = new ArrayList<>( 2 );
+				  tmp.add( vo );
+				  return g.toJson( tmp );
+			   }
+			}
+		 }	 break;
+   	  default:
+		 success = false;
+		 break;
    }
    if ( voList == null || voList.isEmpty() ) {
+	  success=false;
 	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
    } else {
 	  return g.toJson( voList );
    }
 
 }
+
 /**
  * Transform Medication Java objects to JSON.
+ *
  * @param dao
  * @param g
- * @return 
+ * @return
  */
 private String getMedicationResponse(MedLogDAO dao, Gson g) {
    ServletHelpers sh = new ServletHelpers( request, response );
    ArrayList<MedicationVO> voList = null;
    String key = sh.getStrParameter( "keyword", "" );
    if ( StrUtl.matchOR( fn, API_FUNCTION_FIND, API_FUNCTION_FIND_BY_ID ) ) {
-	  if ( fn.equals( API_FUNCTION_FIND ) ) {
-		 voList = dao.findMedicationByPatient();
-		 success = true;
-
-	  } else if ( fn.equals( API_FUNCTION_FIND_BY_ID ) ) {
-		 int iD = sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) );
-		 if ( iD > 0 ) {
+	  switch ( fn ) {
+	  	 case API_FUNCTION_FIND:
 			voList = dao.findMedicationByPatient();
-			for ( MedicationVO vo : voList ) {
-			   if ( iD == vo.getMedicationID() ) {
-				  ArrayList<MedicationVO> tmp = new ArrayList<>( 2 );
-				  tmp.add( vo );
-				  return g.toJson( tmp );
+			success = true;
+			break;
+	  	 case API_FUNCTION_FIND_BY_ID:
+			int iD = sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) );
+			if ( iD > 0 ) {
+			   voList = dao.findMedicationByPatient();
+			   for ( MedicationVO vo : voList ) {
+				  if ( iD == vo.getMedicationID() ) {
+					 ArrayList<MedicationVO> tmp = new ArrayList<>( 2 );
+					 tmp.add( vo );
+					 return g.toJson( tmp );
+				  }
 			   }
-			}
-		 } else {
+			} else {
+			   success = false;
+			}	break;
+	  	 default:
 			success = false;
-		 }
-	  } else {
-		 success = false;
+			break;
 	  }
    }
    if ( voList == null || voList.isEmpty() ) {
