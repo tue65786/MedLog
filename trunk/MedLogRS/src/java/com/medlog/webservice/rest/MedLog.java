@@ -123,7 +123,8 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		 } else if ( currentUser == null ) {//Check for saved user cred.
 			out.print( makeJSONErrorMsg( "Not logged in." ) );
 		 } else { //User is Logged in
-//		 dao = new MedLogDAO( db, currentUser );
+			
+			//Use Resource Strategy to generate 
 			strategy = new MedLogControllerStrategy( request, response, RES_ENUM.findByChar( res ), fn );
 			if ( DEBUG ) {
 			   System.out.println( "com.medlog.webservice.rest.MedLog.processRequest()\nAPI Call: \n" + new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create().toJson( strategy ) );

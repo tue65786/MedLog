@@ -24,11 +24,12 @@ public enum RES_ENUM {
  */
 API_RESOURCE_DIARY( API_ACTIONS.API_RESOURCE_DIARY, new String[]{ API_FUNCTION_FIND,
 																  API_FUNCTION_FIND_BY_KEYWORD,
+																  API_FUNCTION_FIND_BY_ID,
 																  API_FUNCTION_INSERT,
 																  API_FUNCTION_UPDATE,
 																  API_FUNCTION_DELETE
 } ),
-API_RESOURCE_DIATARY_RESTRICTION( API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION, new String[]{ "", "" } ),
+API_RESOURCE_DIATARY_RESTRICTION( API_ACTIONS.API_RESOURCE_DIATARY_RESTRICTION, new String[]{ API_FUNCTION_ASSIGN, API_FUNCTION_UNASSIGN,API_FUNCTION_FIND } ),
 /**
  * Valid {@linkplain HealthcareProviderVO Health-care Provider} API Function
  */
@@ -38,6 +39,7 @@ API_RESOURCE_HEALTHCARE_PROVIDER( API_ACTIONS.API_RESOURCE_HEALTHCARE_PROVIDER, 
 																							  API_FUNCTION_UPDATE,
 																							  API_FUNCTION_FIND,
 																							  API_FUNCTION_FIND_BY_KEYWORD,
+																							  API_FUNCTION_FIND_BY_ID,
 																							  API_FUNCTION_DELETE } ),
 /**
  * Medication API Resource Functions

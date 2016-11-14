@@ -41,6 +41,45 @@ public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 public int dietaryRestrictionID;
+
+   public static class Builder {
+
+   private int dietaryRestrictionID;
+   private String name;
+   private String restrictions;
+
+   private Builder() {
+   }
+
+   public Builder dietaryRestrictionID(final int value) {
+	  this.dietaryRestrictionID = value;
+	  return this;
+   }
+
+   public Builder name(final String value) {
+	  this.name = value;
+	  return this;
+   }
+
+   public Builder restrictions(final String value) {
+	  this.restrictions = value;
+	  return this;
+   }
+
+   public DietaryRestrictionVO build() {
+	  return new com.medlog.webservice.vo.DietaryRestrictionVO( dietaryRestrictionID, name, restrictions );
+   }
+   }
+
+   public static DietaryRestrictionVO.Builder builder() {
+	  return new DietaryRestrictionVO.Builder();
+   }
+
+   private DietaryRestrictionVO(final int dietaryRestrictionID, final String name, final String restrictions) {
+	  this.dietaryRestrictionID = dietaryRestrictionID;
+	  this.name = name;
+	  this.restrictions = restrictions;
+   }
 public String name;
 public String restrictions;
 private static final Logger LOG = Logger.getLogger( DietaryRestrictionVO.class.getName() );

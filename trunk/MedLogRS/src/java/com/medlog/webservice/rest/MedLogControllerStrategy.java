@@ -284,7 +284,25 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 			}
 
 			break;
-		 case API_RESOURCE_STATES:
+			
+			
+			
+			
+			case API_RESOURCE_DIATARY_RESTRICTION:
+			   DietaryRestrictionVO vo = loadDietaryRestrictionFromRequest();
+			   if ( StrUtl.matchOR( fn, API_FUNCTION_INSERT, API_FUNCTION_UPDATE ) ) {
+				   if ( fn.equalsIgnoreCase( API_FUNCTION_INSERT ) && vo.isValid( INSERT ) ) {
+					  
+				   }
+			   }
+			
+			   break;
+		 
+			
+			
+			
+			
+			case API_RESOURCE_STATES:
 			ArrayList<StateVO> states = new ArrayList<StateVO>( app.getStatesMap().values() );
 			Collections.sort( states );
 			responseMessage = new GsonBuilder().disableInnerClassSerialization().serializeNulls().create().toJson( states );
@@ -327,7 +345,12 @@ public DiaryVO loadDiaryFromRequest() {
    t.productivity( sh.getIntParameter( "productivity", 0 ) );
    return t.build();
 }
-
+public DietaryRestrictionVO loadDietaryRestrictionFromRequest(){
+   DietaryRestrictionVO.Builder t = DietaryRestrictionVO.builder();
+   
+   return t.build();
+   
+}
 /**
  * Translates Medication POJO
  *
