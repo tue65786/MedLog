@@ -30,8 +30,8 @@ public class WebJournalView {
             sd.title = FormatUtils.formatString(results.getObject("Title"));
             sd.notes = FormatUtils.formatString(results.getObject("Notes"));
             sd.notesActivity = FormatUtils.formatString(results.getObject("NotesActivity"));
-            sd.createdDate = FormatUtils.formatString(results.getObject("createdDate"));
-            sd.updatedDate = FormatUtils.formatString(results.getObject("updatedDate"));
+            sd.createdDate = FormatUtils.formatDate(results.getObject("createdDate"));
+            sd.updatedDate = FormatUtils.formatDate(results.getObject("updatedDate"));
             sd.mood = FormatUtils.formatInteger(results.getObject("ratingMood"));
             sd.productivity = FormatUtils.formatInteger(results.getObject("ratingProductivity"));
         } catch (Exception e) {

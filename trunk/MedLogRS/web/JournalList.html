@@ -100,6 +100,7 @@
                     newCell.innerHTML = "Date Created";
                     newCell = newRow.insertCell(2);
                     newCell.id = "th";
+                    newCell.style.textAlign = "center";
                     newCell.innerHTML = "Title";
                     newCell = newRow.insertCell(3);
                     newCell.id = "th";
@@ -123,18 +124,23 @@
                         newCell.innerHTML = obj.journalList[i].id;
 
                         newCell = newRow.insertCell(1);
+                        newCell.style.textAlign = "right";
                         newCell.innerHTML = obj.journalList[i].createdDate;
 
                         newCell = newRow.insertCell(2);
+                        newCell.style.textAlign = "center";
                         newCell.innerHTML = obj.journalList[i].title;
 
                         newCell = newRow.insertCell(3);
+                        newCell.style.textAlign = "right";
                         newCell.innerHTML = obj.journalList[i].mood;
 
                         newCell = newRow.insertCell(4);
+                        newCell.style.textAlign = "right";
                         newCell.innerHTML = obj.journalList[i].productivity;
 
                         newCell = newRow.insertCell(5);
+                        newCell.style.textAlign = "right";
                         newCell.innerHTML = obj.journalList[i].updatedDate;
                     }
                 }
