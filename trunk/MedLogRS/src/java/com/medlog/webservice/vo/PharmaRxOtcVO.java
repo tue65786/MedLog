@@ -54,6 +54,27 @@ public static PharmaRxOtcVO create(final int pharmID, final MedTypeVO medType, f
    return new PharmaRxOtcVO( pharmID, medType, rxcui, genericRxcui, tty, fullName, rxnDoseForm, fullGenericName, brandName, displayName, route, newDoseForm, strength, suppressFor, displayNameSynonym, isRetired, sxdgRxcui, sxdgTty, sxdgName, psn, medicationList );
 }
 
+   @Override
+   public boolean equals(Object obj) {
+	  if ( this == obj ) {
+		 return true;
+	  }
+	  if ( obj == null ) {
+		 return false;
+	  }
+	  if ( getClass() != obj.getClass() ) {
+		 return false;
+	  }
+	  final PharmaRxOtcVO other = (PharmaRxOtcVO) obj;
+	  if ( this.pharmID != other.pharmID ) {
+		 return false;
+	  }
+	  if ( !Objects.equals( StrUtl.toS( this.fullName), StrUtl.toS(other.fullName) ) ) {
+		 return false;
+	  }
+	  return true;
+   }
+
 /**
  * @return the brandName
  */
@@ -361,6 +382,17 @@ public String getTty() {
 public void setTty(String tty) {
    this.tty = tty;
 }
+
+   @Override
+   public int hashCode() {
+	  int hash = 3;
+	  hash = 41 * hash + Objects.hashCode( this.fullName );
+	  hash = 41 * hash + this.pharmID;
+	  hash = 41 * hash + Objects.hashCode( this.rxcui );
+	  hash = 41 * hash + Objects.hashCode( this.strength );
+	  hash = 41 * hash + Objects.hashCode( this.tty );
+	  return hash;
+   }
 
 @Override
 public boolean isValid() {

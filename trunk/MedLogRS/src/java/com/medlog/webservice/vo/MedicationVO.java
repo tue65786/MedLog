@@ -10,18 +10,50 @@ import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import org.apache.commons.lang3.builder.*;
 
 /**
  *
  * @author (c)2016 Guiding Technologies
  */
-public class MedicationVO implements Serializable, IEntityBase<MedicationVO> {
+public class MedicationVO implements Serializable, IEntityBase<MedicationVO>,Comparable<MedicationVO> {
 
 private static final long serialVersionUID = -1124169927037703504L;
 
 public static MedicationVO create(final int medicationID, final PatientVO patientID, final PharmaRxOtcVO pharmID, final HealthcareProviderVO physicianID, final String instructions, final SigVO sig, final Date startDate, final Date endDate, final String dosage, final String frequencySig, final boolean active, final List<TagVO> tagList) {
    return new MedicationVO( medicationID, patientID, pharmID, physicianID, instructions, sig, startDate, endDate, dosage, frequencySig, active, tagList );
 }
+
+   @Override
+   public int compareTo(MedicationVO that) {
+	  CompareToBuilder ctb = new CompareToBuilder();
+	  ctb.append( this.getMedicationID(), that.getMedicationID());
+	  try{
+	  ctb.append( this.getPharmID().getPharmID(), that.getPharmID().getPharmID());
+	  }catch(Exception e){
+		 
+	  }
+	  return ctb.build();
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+	  if ( this == obj ) {
+		 return true;
+	  }
+	  if ( obj == null ) {
+		 return false;
+	  }
+	  if ( getClass() != obj.getClass() ) {
+		 return false;
+	  }
+	  final MedicationVO other = (MedicationVO) obj;
+	  if ( this.medicationID != other.medicationID  && this.medicationID > 0) {
+		 return false;
+	  }
+	  
+	  return true;
+   }
 
 /**
  * @return the dosage
@@ -179,6 +211,17 @@ public List<TagVO> getTagList() {
 public void setTagList(List<TagVO> tagList) {
    this.tagList = tagList;
 }
+
+   @Override
+   public int hashCode() {
+	  int hash = 3;
+	  hash = 61 * hash + this.medicationID;
+	  hash = 61 * hash + Objects.hashCode( this.patientID );
+	  hash = 61 * hash + Objects.hashCode( this.pharmID );
+	  hash = 61 * hash + Objects.hashCode( this.sig );
+	  hash = 61 * hash + Objects.hashCode( this.dosage );
+	  return hash;
+   }
 
 /**
  * @return the active
