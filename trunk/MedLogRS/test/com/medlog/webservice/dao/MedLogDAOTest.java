@@ -813,4 +813,19 @@ public void testUpdatePharmaRxOtcVO() {
    fail( "The test case is a prototype." );
 }
 
+   /**
+    * Test of findMedicationByID method, of class MedLogDAO.
+    */
+   @Test
+   public void testFindMedicationByID() {
+	  System.out.println( "findMedicationByID" );
+	  int _id = 0;
+	  MedLogDAO instance = null;
+	  MedicationVO expResult = null;
+	  MedicationVO result = instance.findMedicationByID( _id );
+	  assertEquals( expResult, result );
+	  // TODO review the generated test code and remove the default call to fail.
+	  fail( "The test case is a prototype." );
+   }
+
 }
