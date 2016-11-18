@@ -117,7 +117,7 @@
 						<div><span class="ui-icon "></span><a href="Journal.html">Add</a></div>
 					</li>
 					<li>
-						<div><span class="ui-icon"></span>List</div>
+                                            <div><span class="ui-icon"></span><a href="JournalList.html?id=1">List</a></div>
 					</li>
 					<li>
 						<div><span class="ui-icon"></span><a href="report-journal.html">Report</a></div>

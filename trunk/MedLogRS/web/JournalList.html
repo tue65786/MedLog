@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List Journal Entries</title>
+        <!--<link rel="stylesheet" href="rstyle.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
+        <link rel="stylesheet" type="text/css" href="rstyle.css"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="scripts/jquery.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
+        <script src="scripts/utils.js" type="text/javascript"></script>
+
+    </head>
+    <body>
+        <div>
+
+            <div id="header"><a href="home.jsp">
+                    <table style='width:95%'><tr><td style="width:85%">
+                                <h1> List Journals </h1>
+
+
+                            </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+                </a></div>
+
+            <div id="searchContent">
+                <div id="itemTable"></div>
+            </div>
+
+
+        </div>
+        <script language="Javascript" type="text/javascript">
+            function $$(element) {
+                return document.getElementById(element);
+            }
+            function ajaxGetData() {
+                //alert('handling response - ajaxGetData');
+                var url = "JournalSearch_Web_API.jsp";
+                var editID = getIDParamFromRequest();
+                //var editID = 1;
+                if (editID > 0) {
+                    var currentUserFn = "./api/?res=p&fn=find";
+                    $.get(currentUserFn).done(function (currentUserData) {
+                        if (typeof currentUserData === 'undefined') {
+
+                        } else {
+                            editID = currentUserData.patientID;
+
+                            url += "?userInput=" + editID;
+                            httpReq.open("GET", url);
+                            httpReq.onreadystatechange = ajaxCallbackData;
+                            httpReq.send(null);
+                            $$("itemTable").innerHTML = "";
+                        }
+
+                    });
+                }
+            }
+            function ajaxCallbackData() {
+                //alert('handling response - ajaxCallbackData');
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+                    //alert('inside if');
+                    var response = httpReq.responseText;
+                    //alert("response text is " + response);
+
+                    // wrap the json in parentheses to avoid tripping over javascript ambiguity...
+                    response = "(" + response + ")";
+                    var obj = eval(response);
+                    if (obj.dbError == null) {
+                        //alert('unavailable');
+                        $$("itemTable").innerHTML = "Search is currently unavailable.";
+                        return;
+                    }
+
+                    if (obj.dbError.length > 0) {
+                        //alert('error');
+                        $$("itemTable").innerHTML = "Error: " + obj.dbError;
+                        return;
+                    }
+
+                    if (parseInt(obj.listSize) == 0) {
+                        //alert('no match');
+                        $$("itemTable").innerHTML = "No items match your search";
+                        return;
+                    }
+
+                    var newRow;
+                    var newCell;
+
+                    var newTable = document.createElement("table");
+                    $$("itemTable").appendChild(newTable);
+
+                    newRow = newTable.insertRow(0);
+                    newRow.id = "th";
+                    newCell = newRow.insertCell(0);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Journal ID";
+                    newCell = newRow.insertCell(1);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Date Created";
+                    newCell = newRow.insertCell(2);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Title";
+                    newCell = newRow.insertCell(3);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Mood Rating";
+                    newCell = newRow.insertCell(4);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Productivity Rating";
+                    newCell = newRow.insertCell(5);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Date Updated";
+                    newCell = newRow.insertCell(6);
+                    newCell.id = "th";
+
+                    //for (i in obj.collectionList) {
+                    for (i = 0; i < obj.listSize; i++) {
+
+                        newRow = newTable.insertRow(i + 1);
+
+                        newCell = newRow.insertCell(0);
+                        newCell.style.textAlign = "right";
+                        newCell.innerHTML = obj.journalList[i].id;
+
+                        newCell = newRow.insertCell(1);
+                        newCell.innerHTML = obj.journalList[i].createdDate;
+
+                        newCell = newRow.insertCell(2);
+                        newCell.innerHTML = obj.journalList[i].title;
+
+                        newCell = newRow.insertCell(3);
+                        newCell.innerHTML = obj.journalList[i].mood;
+
+                        newCell = newRow.insertCell(4);
+                        newCell.innerHTML = obj.journalList[i].productivity;
+
+                        newCell = newRow.insertCell(5);
+                        newCell.innerHTML = obj.journalList[i].updatedDate;
+                    }
+                }
+            }
+
+            var httpReq;
+            if (window.XMLHttpRequest) {
+                httpReq = new XMLHttpRequest();  //For Firefox, Safari, Opera
+            } else if (window.ActiveXObject) {
+                httpReq = new ActiveXObject("Microsoft.XMLHTTP");         //For IE 5+
+            } else {
+                alert('ajax not supported');
+            }
+
+            ajaxGetData();
+        </script>
+
+    </body>
+</html>
