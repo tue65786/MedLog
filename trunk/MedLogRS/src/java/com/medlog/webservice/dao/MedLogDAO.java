@@ -168,7 +168,7 @@ public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
 //@addressStreet nvarchar (512) = NULL
 //@addressCity nvarchar (128) = NULL
 //@addressStateID int = NULL
-//@addressZip varchar (10) = NULL
+//@addressZi   p varchar (10) = NULL
 //@inserted int OUTPUT
 		 cs.setString( 1, _vo.getLastName() );
 		 cs.setString( 2, _vo.getFirstName() );
@@ -179,13 +179,13 @@ public int createHealthcareProviderVO(HealthcareProviderVO _vo) {
 		 cs.setString( 7, StrUtl.truncateAtWord( _vo.getPhoneFax(), 10 ) );
 		 cs.setString( 8, _vo.getEmail() );
 		 cs.setNull( 9, java.sql.Types.NVARCHAR );
-		 cs.setString( 11, _vo.getAddressStreet() );
-		 cs.setString( 12, _vo.getAddressCity() );
-		 cs.setInt( 13, _vo.getAddressStateID().getStateID() );//CHECK FOR VALID STATE
-		 cs.setString( 11, StrUtl.truncateAtWord( _vo.getAddressZip(), 10 ) );
-		 cs.registerOutParameter( 12, java.sql.Types.INTEGER );
+		 cs.setString( 10, _vo.getAddressStreet() );
+		 cs.setString( 11, _vo.getAddressCity() );
+		 cs.setInt( 12, _vo.getAddressStateID().getStateID() );//CHECK FOR VALID STATE
+		 cs.setString( 13, StrUtl.truncateAtWord( _vo.getAddressZip(), 10 ) );
+		 cs.registerOutParameter( 14, java.sql.Types.INTEGER );
 		 int rows = cs.executeUpdate();
-		 newID = cs.getInt( 12 );
+		 newID = cs.getInt( 14 );
 	  } catch (SQLException ex) {
 		 if ( DEBUG ) {
 			System.err.println( "com.medlog.webservice.dao.MedLogDAO.createHealthcareProviderVO()\n" + DbUtl.printJDBCExceptionMsg( ex ) );

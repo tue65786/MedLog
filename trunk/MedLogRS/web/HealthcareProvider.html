@@ -93,7 +93,7 @@ and open the template in the editor.
                                 , 'stateName');
                                 if (editID > 0) {
                                     console.log(editID);
-                                    loadCurrentHealthcareProvider();
+//                                    loadCurrentHealthcareProvider();
                                 }
                         });
                         //to edit/update provider that has already been added
@@ -126,7 +126,7 @@ and open the template in the editor.
                                 
                                 /* If the user is editing, URL will be changed to updating*/
                                 if ( editID > 0 ) {
-                                        theURL = "./api/?res=h&fn=update&" + userInfo;
+                                        theURL = "./api/?res=h&fn=update&" + providerInfo;
                                         redirectPage = "home.jsp";
                                 }
                                 $.post(theURL).done(function ( data ) {
