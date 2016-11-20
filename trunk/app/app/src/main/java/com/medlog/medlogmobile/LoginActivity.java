@@ -3,6 +3,9 @@ package com.medlog.medlogmobile;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -16,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,10 +29,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.medlog.medlogmobile.vo.PatientVO;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -57,6 +74,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    SharedPreferences spf;
+    private PatientVO user;
+
+    public static Intent createIntent(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+        spf = getPreferences(MODE_PRIVATE);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -149,12 +174,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;//email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 1;
     }
 
     /**
@@ -266,9 +291,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                String tURL = "http://niftybull.com/MedLogRS/api?fn=login&username=" + mEmail + "&password=" + mPassword;
+                String usr = LoginActivity.getUrlSource(tURL);
+                try {
+                    user = PatientVO.fromJSON(usr);
+
+                    Log.i("LOGIN", user.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+//                JSONObject jo = getJSONFromUrl(tURL);
+
+                Log.i("ASYNC", "JSON RESPONSE: " + usr);
+                //  String resp = LoginActivity.getUrlSource("?fn=login&username=" + mEmail + "&password=" + mPassword);
+
+            }
+//            catch (IOException ioe){
+//                    Log.e("ASYNC","",ioe);
+//                return false;
+//
+//            }
+            catch (Exception e) {
+                Log.e("ASYNC", "", e);
                 return false;
             }
 
@@ -289,8 +333,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
+
             if (success) {
-                finish();
+                Toast.makeText(getApplicationContext(), new StringBuilder().append("Hello ").append(user.getFirstName()).append(", welcome back!").toString(),Toast.LENGTH_LONG).show();
+               Log.i("PREFS","SAVE PREFS: "+ spf.edit().putInt(getString(R.string.p_uid),user.getPatientID()).commit());
+               // finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -306,12 +353,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * Loads data from URL
+     *
      * @param url
      * @return
      * @throws IOException
      */
     private static String getUrlSource(String url) throws IOException {
+
         URL mURL = new URL(url);
+
         URLConnection urlConn = mURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 urlConn.getInputStream(), "UTF-8"));
@@ -323,5 +373,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         return a.toString();
     }
+
+
 }
 
