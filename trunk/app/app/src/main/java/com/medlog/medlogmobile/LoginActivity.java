@@ -57,13 +57,7 @@ import java.util.List;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -288,22 +282,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
-                String tURL = "http://niftybull.com/MedLogRS/api?fn=login&username=" + mEmail + "&password=" + mPassword;
+                String tURL = getString(R.string.api_prefix)+"fn=login&username=" + mEmail + "&password=" + mPassword;
                 String usr = LoginActivity.getUrlSource(tURL);
                 try {
                     user = PatientVO.fromJSON(usr);
 
+
+
                     Log.i("LOGIN", user.toString());
+                    //TODO: Retrieve Diary entries for user.
+                    return (user != null && user.getPatientID() >0);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 //                JSONObject jo = getJSONFromUrl(tURL);
 
                 Log.i("ASYNC", "JSON RESPONSE: " + usr);
-                //  String resp = LoginActivity.getUrlSource("?fn=login&username=" + mEmail + "&password=" + mPassword);
 
             }
 //            catch (IOException ioe){
@@ -316,16 +312,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -337,7 +324,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 Toast.makeText(getApplicationContext(), new StringBuilder().append("Hello ").append(user.getFirstName()).append(", welcome back!").toString(),Toast.LENGTH_LONG).show();
                Log.i("PREFS","SAVE PREFS: "+ spf.edit().putInt(getString(R.string.p_uid),user.getPatientID()).commit());
-               // finish();
+
+                // finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
