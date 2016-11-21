@@ -339,7 +339,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //Load main activity\
                 //----------------------
                 Intent mainI = new Intent(LoginActivity.this, MainActivity.class);
-                mainI.putExtra("user", (Parcelable) user);
+                mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
                 if (getString(R.string.DEBUG).equals("true")) {
                     printPrefs();
                 }
