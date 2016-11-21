@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">MedLogMobile</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Username / Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">OK</string>
+    <string name="error_invalid_email">Invalid email/user</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="p_uid">userid</string>
+    <string name="p_usr_str">userjson</string>
+    <string name="tag_store_lcl">LDATA</string>
+    <string name="tag_store_web">RDATA</string>
+    <string name="tag_async">ASYNC</string>
+    <string name="tag_network">NET</string>
+    <string name="tag_vos">POJO</string>
+    <string name="tag_debug">DEBUGGING</string>
+    <string name="api_prefix">http://niftybull.com/MedLogRS/api?</string>
+    <string name="DEBUG">true</string>
+    <string name="int_user">iuser</string>
+</resources>
