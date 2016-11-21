@@ -14,5 +14,12 @@
         completions."
     </string>
      <string name="p_uid">userid</string>
+    <string name="p_usr_str">userjson</string>
+    <string name="tag_store_lcl">LDATA</string>
+    <string name="tag_store_web">RDATA</string>
+    <string name="tag_async">ASYNC</string>
+    <string name="tag_network">NET</string>
+    <string name="tag_vos">POJO</string>
+    <string name="tag_debug">DEBUGGING</string>
     <string name="api_prefix">http://niftybull.com/MedLogRS/api?</string>
 </resources>

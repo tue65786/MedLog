@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.medlog.medlogmobile.util.NetConnStatus;
 import com.medlog.medlogmobile.vo.PatientVO;
 
 import org.apache.http.HttpEntity;
@@ -278,28 +279,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
             try {
+                boolean hasINet =  NetConnStatus.getInstance(getApplicationContext()).isOnline();
+                Log.i(getString(R.string.tag_network),"Online? + "+hasINet);
+                //TODO Make url builder.
                 String tURL = getString(R.string.api_prefix)+"fn=login&username=" + mEmail + "&password=" + mPassword;
                 String usr = LoginActivity.getUrlSource(tURL);
+
                 try {
                     user = PatientVO.fromJSON(usr);
-
-
-
-                    Log.i("LOGIN", user.toString());
+                    Log.i(getString(R.string.tag_vos), user.toString());
                     //TODO: Retrieve Diary entries for user.
-                    return (user != null && user.getPatientID() >0);
+                    boolean isValidUser =  (user != null && user.getPatientID() >0);
+                    if (isValidUser){
+                        if (!spf.edit().putString(getString(R.string.p_usr_str),usr).commit()){
+                            Log.w(getString(R.string.tag_store_lcl),"Could not commit user");
+                        }
+                    }
+                    return isValidUser;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 //                JSONObject jo = getJSONFromUrl(tURL);
 
-                Log.i("ASYNC", "JSON RESPONSE: " + usr);
+                Log.i(getString(R.string.tag_async), "JSON RESPONSE: " + usr);
 
             }
 //            catch (IOException ioe){
@@ -308,10 +316,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //
 //            }
             catch (Exception e) {
-                Log.e("ASYNC", "", e);
+                Log.i(getString(R.string.tag_async),  "", e);
                 return false;
             }
-
             return false;
         }
 
@@ -323,9 +330,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 Toast.makeText(getApplicationContext(), new StringBuilder().append("Hello ").append(user.getFirstName()).append(", welcome back!").toString(),Toast.LENGTH_LONG).show();
-               Log.i("PREFS","SAVE PREFS: "+ spf.edit().putInt(getString(R.string.p_uid),user.getPatientID()).commit());
-
+               Log.i(getString(R.string.tag_store_lcl),"SAVE PREFS: "+ spf.edit().putInt(getString(R.string.p_uid),user.getPatientID()).commit());
                 // finish();
+                printPrefs();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -361,7 +368,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         return a.toString();
     }
-
-
+    private void printPrefs(){
+      if (spf != null && spf.getAll().size() >0){  for (String key:  spf.getAll().keySet()){
+            Object o = spf.getAll().get(key);
+            try{
+                Log.i(getString(R.string.tag_debug), String.format("Key:%s = %s", key, o.toString()));
+            }
+            catch(Exception e){}
+        }
+    }else{
+          Log.w(getString(R.string.tag_debug), "NO PREFS FOUND!");
+      }
+    }
 }
 
