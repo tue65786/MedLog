@@ -13,7 +13,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-     <string name="p_uid">userid</string>
+    <string name="p_uid">userid</string>
     <string name="p_usr_str">userjson</string>
     <string name="tag_store_lcl">LDATA</string>
     <string name="tag_store_web">RDATA</string>
