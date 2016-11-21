@@ -22,4 +22,5 @@
     <string name="tag_vos">POJO</string>
     <string name="tag_debug">DEBUGGING</string>
     <string name="api_prefix">http://niftybull.com/MedLogRS/api?</string>
+    <string name="DEBUG">true</string>
 </resources>

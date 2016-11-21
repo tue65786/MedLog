@@ -6,6 +6,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Debug;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -164,6 +166,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+
         }
     }
 
@@ -285,20 +288,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                boolean hasINet =  NetConnStatus.getInstance(getApplicationContext()).isOnline();
-                Log.i(getString(R.string.tag_network),"Online? + "+hasINet);
+                boolean hasINet = NetConnStatus.getInstance(getApplicationContext()).isOnline();
+                Log.i(getString(R.string.tag_network), "Online? + " + hasINet);
                 //TODO Make url builder.
-                String tURL = getString(R.string.api_prefix)+"fn=login&username=" + mEmail + "&password=" + mPassword;
+                String tURL = getString(R.string.api_prefix) + "fn=login&username=" + mEmail + "&password=" + mPassword;
                 String usr = LoginActivity.getUrlSource(tURL);
 
                 try {
                     user = PatientVO.fromJSON(usr);
                     Log.i(getString(R.string.tag_vos), user.toString());
                     //TODO: Retrieve Diary entries for user.
-                    boolean isValidUser =  (user != null && user.getPatientID() >0);
-                    if (isValidUser){
-                        if (!spf.edit().putString(getString(R.string.p_usr_str),usr).commit()){
-                            Log.w(getString(R.string.tag_store_lcl),"Could not commit user");
+                    boolean isValidUser = (user != null && user.getPatientID() > 0);
+                    if (isValidUser) {
+                        if (!spf.edit().putString(getString(R.string.p_usr_str), usr).commit()) {
+                            Log.w(getString(R.string.tag_store_lcl), "Could not commit user");
                         }
                     }
                     return isValidUser;
@@ -316,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //
 //            }
             catch (Exception e) {
-                Log.i(getString(R.string.tag_async),  "", e);
+                Log.i(getString(R.string.tag_async), "", e);
                 return false;
             }
             return false;
@@ -329,10 +332,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
             if (success) {
-                Toast.makeText(getApplicationContext(), new StringBuilder().append("Hello ").append(user.getFirstName()).append(", welcome back!").toString(),Toast.LENGTH_LONG).show();
-               Log.i(getString(R.string.tag_store_lcl),"SAVE PREFS: "+ spf.edit().putInt(getString(R.string.p_uid),user.getPatientID()).commit());
+                Toast.makeText(getApplicationContext(), new StringBuilder().append("Hello ").append(user.getFirstName()).append(", welcome back!").toString(), Toast.LENGTH_LONG).show();
+                Log.i(getString(R.string.tag_store_lcl), "SAVE PREFS: " + spf.edit().putInt(getString(R.string.p_uid), user.getPatientID()).commit());
                 // finish();
-                printPrefs();
+
+                //Load main activity\
+                //----------------------
+                Intent mainI = new Intent(LoginActivity.this, MainActivity.class);
+                mainI.putExtra("user", (Parcelable) user);
+                if (getString(R.string.DEBUG).equals("true")) {
+                    printPrefs();
+                }
+                startActivity(mainI);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -368,17 +379,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         return a.toString();
     }
-    private void printPrefs(){
-      if (spf != null && spf.getAll().size() >0){  for (String key:  spf.getAll().keySet()){
-            Object o = spf.getAll().get(key);
-            try{
-                Log.i(getString(R.string.tag_debug), String.format("Key:%s = %s", key, o.toString()));
+
+    private void printPrefs() {
+        if (spf != null && spf.getAll().size() > 0) {
+            for (String key : spf.getAll().keySet()) {
+                Object o = spf.getAll().get(key);
+                try {
+                    Log.i(getString(R.string.tag_debug), String.format("Key:%s = %s", key, o.toString()));
+                } catch (Exception e) {
+                }
             }
-            catch(Exception e){}
+        } else {
+            Log.w(getString(R.string.tag_debug), "NO PREFS FOUND!");
         }
-    }else{
-          Log.w(getString(R.string.tag_debug), "NO PREFS FOUND!");
-      }
     }
 }
 
