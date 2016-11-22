@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         public SubmitDiaryTask(int mood, int prod, String title, int patientID) {
             this.mood = mood;
-            this.prod = prod;
+            this.prod = prod;//pasdfdsafsfsadfffsdfdsfs
             this.title = title;
             this.patientID = patientID;
         }
@@ -101,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-
+           //Reset
+            mSubmitTask = null;
         }
     }
 }
