@@ -19,8 +19,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title"
-            android:id="@+id/diaryID"
+            android:hint="@string/diary_title"
+            android:id="@+id/txtDiaryID"
             android:inputType="text"
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
@@ -47,7 +47,7 @@
             android:progress="1"
             android:id="@+id/sbProductivity"
             android:layout_weight="1"
-            style="@android:style/Widget.SeekBar"
+             style="@android:style/Widget.SeekBar"
             android:splitTrack="false"
             android:saveEnabled="false" />
 
@@ -62,18 +62,11 @@
         android:id="@+id/editText" />
 
     <Button
-        android:text="Save Entry"
+        android:text="@string/save_diary_entry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnDiaryFormSubmit" />
 
-    <RatingBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ratingBar"
-        android:stepSize="1"
-        android:numStars="9"
-        android:rating="3"
-        android:isIndicator="true" />
+
 
 </LinearLayout>
