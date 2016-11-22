@@ -131,12 +131,23 @@
 				<div><span class="ui-icon ui-icon-note"></span><a href="DietaryRestriction.html">Dietary Restrictions</a></div>
 			</li>
 			<li>
-				<div><span class="ui-icon ui-icon-cart"></span><a href="HealthcareProvider.html">Health-care Providers</a></div>
+				<div><span class="ui-icon ui-icon-cart"></span>Health-care Providers</div>
+                                <ul>
+					<li>
+						<div><span class="ui-icon "></span><a href="HealthcareProviderList.html">List</a></div>
+					</li>
+                                        <li>
+						<div><span class="ui-icon "></span><a href="HealthcareProvider.html">Add</a></div>
+					</li>
+				</ul>
 			</li>
 
 			<li>
-				<div><span class="ui-icon ui-icon-script"></span><a href="Medication.html">Medication</a></div>
+				<div><span class="ui-icon ui-icon-script"></span>Medication</div>
 				<ul>
+                                        <li>
+						<div><span class="ui-icon "></span><a href="Medication.html">Add</a></div>
+					</li>
 					<li>
 						<div><span class="ui-icon "></span><a href="PharmaRXOTC.html">Drug</a></div>
 					</li>
