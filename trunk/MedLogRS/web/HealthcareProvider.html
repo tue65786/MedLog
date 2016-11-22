@@ -15,7 +15,7 @@ and open the template in the editor.
         <script src="scripts/utils.js" type="text/javascript"></script>
     </head>
     <body>
-        <div>            	
+    <div>            	
             <div id="header"><a href="home.jsp">
                 <table style='width:95%'><tr><td style="width:85%">
                 <h1> Additional Healthcare Provider </h1>
@@ -93,6 +93,7 @@ and open the template in the editor.
                                 , 'stateName');
                                 if (editID > 0) {
                                     console.log(editID);
+//                                    loadCurrentHealthcareProvider();
                                 }
                         });
                         //to edit/update provider that has already been added
@@ -101,24 +102,18 @@ and open the template in the editor.
                             $.get(currentProviderFn).done(function ( currentProviderData ) {
                                         if ( typeof currentProviderData === 'undefined' ) {
                                         } else {
-                                            var len = currentProviderData.length;
-                                                for ( var i = 0; i < len; i++ ) {
-                                                    var iProvider = currentProviderData[i];
-                                                    
-                                                    if ( iProvider.physicianID === editID ) {
-                                                        for( var key in currentProviderData) {
-                                                           if ( key === "addressState" ) {
+                                                for ( var key in currentProviderData ) {
+                                                        if ( key === "addressState" ) {
                                                                 $("#stateID").val("" + currentProviderData.addressState.stateID);
-                                                            } else
+                                                        } else
                                                                 $('[name="' + key + '"]').val(currentProviderData[key]);
-                                                            } 
                                                         }
-                                                    }      
 						$("#btnSubmit").html("Update Provider");
                                         }
                             });
                         }
                         
+
                         $("#healthcareProviderForm").on("submit", function ( event ) {
                                 event.preventDefault();
                                 $("#loader1").show();
@@ -138,9 +133,9 @@ and open the template in the editor.
                                         
                                         if ( editID === 0 && typeof data.physicianID !== 'undefined' && data.physicianID > 0 ) {
                                                 $("#physicianID").val(data.physicianID);
-                                                confirm('Physician Added!');
-                                                redir(redirectPage);
-                                                
+                                                if (confirm('Physician Added!')){
+                                                    redir(redirectPage);
+                                                }
                                         }
                                         //console.log(JSON.stringify(data));
                                         console.log(data);

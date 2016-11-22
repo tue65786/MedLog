@@ -5,15 +5,11 @@
     padding: 1em;
     background-color: #FF5050;
 }
-form, abody{
+form{
     margin: 0 auto;
     width: 1000px;
     padding: 1em;
     background-color: #3366CC;
-}
-input{
-    margin: 0 auto;
-    width: 900px;
 }
 #searchContent{
     margin: 0 auto;
