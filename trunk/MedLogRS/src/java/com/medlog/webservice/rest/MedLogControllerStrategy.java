@@ -85,7 +85,7 @@ public IEntityBase getSingle(ArrayList<? extends IEntityBase> voList) {
  * @return JSON
  */
 public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
-   Gson g = new Gson();
+   Gson g = new GsonBuilder().serializeNulls().create();
    boolean apiCanExecute = true;
    MedLogDAO dao = new MedLogDAO( dbc, getCurrentUser() );
    ApplicationBean app = null;

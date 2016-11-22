@@ -1051,28 +1051,29 @@ private ArrayList<HealthcareProviderVO> findHealthCareProviders(int _id, String 
    ResultSet rs = null;
    try {
 	  cs = db.getConnnection().prepareCall( SP_HEALTHCAREPROVIDER_SELECT );
-	  if ( _keyword != null ) {
-		 cs.setString( 1, StrUtl.truncateAtWord( _keyword, 40 ) );
-	  } else {
-		 cs.setNull( 1, java.sql.Types.NVARCHAR );
-	  }
-	  if ( _id > 0 ) {
-		 cs.setInt( 1, _id );
-	  } else {
-		 cs.setNull( 1, java.sql.Types.INTEGER );
-	  }
-	  if ( _onlyassigned ) {
-		 cs.setInt( 2, getCurrentUser().getPatientID() );
-	  } else {
-		 cs.setNull( 2, java.sql.Types.INTEGER );
-	  }
-	  if ( StrUtl.toS( _keyword ).isEmpty() ) {
-		 cs.setNull( 3, java.sql.Types.NVARCHAR );
-	  } else {
-		 cs.setString( 3, _keyword );
-	  }
-	  cs.setBoolean( 4, false );
-	  cs.setInt( 5, getCurrentUser().getPatientID() );
+          cs.setNull( 1, java.sql.Types.INTEGER );
+          cs.setNull( 2, java.sql.Types.INTEGER );
+          cs.setNull( 3, java.sql.Types.NVARCHAR );
+//	  if ( _keyword != null ) {
+//		 cs.setString( 1, StrUtl.truncateAtWord( _keyword, 40 ) );
+//	  } else {
+//		 cs.setNull( 1, java.sql.Types.NVARCHAR );
+//	  }
+//	  if ( _id > 0 ) {
+//		 cs.setInt( 1, _id );
+//	  } else {
+//		 cs.setNull( 1, java.sql.Types.INTEGER );
+//	  }
+//	  if ( _onlyassigned ) {
+//		 cs.setInt( 2, getCurrentUser().getPatientID() );
+//	  } else {
+//		 cs.setNull( 2, java.sql.Types.INTEGER );
+//	  }
+//	  if ( StrUtl.toS( _keyword ).isEmpty() ) {
+//		 cs.setNull( 3, java.sql.Types.NVARCHAR );
+//	  } else {
+//		 cs.setString( 3, _keyword );
+//	  }
 	  rs = cs.executeQuery();
 	  while ( rs.next() ) {
 		 voList.add( HealthcareProviderVO.builder()
@@ -1085,7 +1086,7 @@ private ArrayList<HealthcareProviderVO> findHealthCareProviders(int _id, String 
 				 .email( rs.getString( 8 ) )
 				 .addressStreet( rs.getString( 7 ) )
 				 .addressCity( rs.getString( 8 ) )
-				 .addressStateID( getStatesMap().get( rs.getInt( 9 ) ) )//Add error handling for state
+				// .addressStateID( getStatesMap().get( rs.getInt( 9 ) ) )//Add error handling for state
 				 .addressZip( rs.getString( 10 ) )
 				 .build()
 		 );
