@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 
+import com.medlog.medlogmobile.util.NetConnStatus;
 import com.medlog.medlogmobile.vo.PatientVO;
 
 import java.util.ArrayList;
+
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
     PatientVO user;
@@ -19,18 +22,23 @@ public class MainActivity extends AppCompatActivity {
     SeekBar sbProd;
     EditText txtTitle;
     Button btnSubmit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Linkup form widgets
         sbMood = (SeekBar) findViewById(R.id.sbMood);
         sbProd = (SeekBar) findViewById(R.id.sbProductivity);
-        txtTitle =(EditText) findViewById(R.id.txtDiaryID);
+        txtTitle = (EditText) findViewById(R.id.txtDiaryID);
         btnSubmit = (Button) findViewById(R.id.btnDiaryFormSubmit);
+
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // attemptLogin();
+                // attemptLogin();
                 doSubmitDiary();
             }
         });
@@ -38,14 +46,30 @@ public class MainActivity extends AppCompatActivity {
         //Load user info.
         if (receivedIntent != null) {
             user = receivedIntent.getParcelableExtra(getString(R.string.int_user));
-
+            if (getString(R.string.DEBUG).equals("true")) {
+                Log.i(getString(R.string.tag_debug), "User  : " + user.toString());
+            }
         }
     }
 
     private void doSubmitDiary() {
         int prod = sbProd.getProgress();
         int mood = sbMood.getProgress();
-        String password = txtTitle.getText().toString();
+
+        String title = txtTitle.getText().toString();
+
+        if (getString(R.string.DEBUG).equals("true")) {
+            Log.i(getString(R.string.tag_debug), "Progress val : " + prod);
+            Log.i(getString(R.string.tag_debug), "Mood val : " + mood);
+        }
+        if (NetConnStatus.getInstance(this).isOnline()){
+            //TODO Submit diary
+        }else{
+            //TODO Store locally
+
+
+        }
+
     }
 
     public class SubmitDiaryTask extends AsyncTask<Void, Void, Boolean> {
@@ -65,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             return null;
         }
+
         @Override
         protected void onPostExecute(final Boolean success) {
 
