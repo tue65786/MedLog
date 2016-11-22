@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     SeekBar sbProd;
     EditText txtTitle;
     Button btnSubmit;
-
+    SubmitDiaryTask mSubmitTask=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doSubmitDiary() {
+        if (mSubmitTask != null){
+            return;//Task already running.
+        }
         int prod = sbProd.getProgress();
         int mood = sbMood.getProgress();
 
@@ -64,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
         }
         if (NetConnStatus.getInstance(this).isOnline()){
             //TODO Submit diary
+            mSubmitTask = new SubmitDiaryTask(mood,prod,title,user.getPatientID());
+
+
+
+
+            mSubmitTask.execute((Void) null);
         }else{
             //TODO Store locally
 
