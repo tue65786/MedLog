@@ -108,7 +108,18 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			} else {
 			   out.print( makeJSONErrorMsg( "Invalid login." ) );
 			}
-
+                 }else if (fn.equalsIgnoreCase("mobisync")){
+                 try{
+                     DiaryVO dVo = loadDiaryFromRequest(request, response);
+                     dao = new MedLogDAO( db, currentUser );
+                     int newID =dao.createDiary(dVo);
+                    if (newID>0) out.print(makeJSONInfoMsg("Diary created"));
+                    else{
+                        out.print(makeJSONErrorMsg("Diary not created"));
+                    }
+                 }catch(Exception e){
+                        out.print(makeJSONErrorMsg("Diary not created"));
+                 }
 			//Security Controller
 		 } else if ( fn.equalsIgnoreCase( "logout" ) ) {
 			session.removeAttribute( SESSION_BEAN_USER );
@@ -255,6 +266,17 @@ private String makeJSONInfoMsg(String msg) {
    return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.INFO], msg );
 }
 
+public DiaryVO loadDiaryFromRequest(HttpServletRequest request, HttpServletResponse response) {
+  
+   ServletHelpers sh = new ServletHelpers( request, response );
+   DiaryVO.Builder t = DiaryVO.builder();
+   t.notes( sh.getStrParameter( "notes", "" ) );
+   t.title( sh.getStrParameter( "title", "" ) );
+   t.patientID( PatientVO.builder().patientID(sh.getIntParameter("patientID",0)).userName(" ").build() );
+   t.mood( sh.getIntParameter( "mood", 0 ) );
+   t.productivity( sh.getIntParameter( "productivity", 0 ) );
+   return t.build();
+}
 private static final Logger LOG = Logger.getLogger( MedLog.class.getName() );
 
 }

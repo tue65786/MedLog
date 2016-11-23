@@ -11,10 +11,13 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.google.gson.GsonBuilder;
+import com.medlog.medlogmobile.util.Helpers;
 import com.medlog.medlogmobile.util.NetConnStatus;
 import com.medlog.medlogmobile.vo.DiaryVO;
 import com.medlog.medlogmobile.vo.PatientVO;
+import com.medlog.medlogmobile.vo.ResponseVO;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.util.Log;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     SeekBar sbMood;
     SeekBar sbProd;
     EditText txtTitle;
+    EditText txtNotes;
     Button btnSubmit;
     SubmitDiaryTask mSubmitTask = null;
     ArrayList<DiaryVO> voList;
@@ -38,15 +42,11 @@ public class MainActivity extends AppCompatActivity {
         sbProd = (SeekBar) findViewById(R.id.sbProductivity);
         txtTitle = (EditText) findViewById(R.id.txtDiaryID);
         btnSubmit = (Button) findViewById(R.id.btnDiaryFormSubmit);
-        SharedPreferences spf = getPreferences(MODE_PRIVATE);           //get old user data and place them into storage
-        boolean hasData = spf.getBoolean(getString(R.string.lcl_db_hasdata), false);
-       if (hasData){
-           String oldData = spf.getString(getString(R.string.lcl_db_data),"");
-       }
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
                 doSubmitDiary();
             }
         });
@@ -58,24 +58,33 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(getString(R.string.tag_debug), "User  : " + user.toString());
             }
         }
+        SharedPreferences spf = getPreferences(MODE_PRIVATE);           //get old user data and place them into storage
+        boolean hasData = spf.getBoolean(getString(R.string.lcl_db_hasdata), false);
+        if (hasData){
+            String oldData = spf.getString(getString(R.string.lcl_db_data),"");
+            DiaryVO.fromJSON(oldData);
+        }
+
+
     }
 
     private void doSubmitDiary() {
         if (mSubmitTask != null) {
             return;//Task already running.
         }
-        int prod = sbProd.getProgress();
-        int mood = sbMood.getProgress();
-
-        String title = txtTitle.getText().toString();
-
-        if (getString(R.string.DEBUG).equals("true")) {
-            Log.i(getString(R.string.tag_debug), "Progress val : " + prod);
-            Log.i(getString(R.string.tag_debug), "Mood val : " + mood);
+        String notes = "";
+        if (txtNotes != null){
+            notes = Helpers.toS(txtNotes.getText().toString(),"");
         }
+        if (voList == null){
+            voList=new ArrayList<DiaryVO>();
+        }
+        voList.add(DiaryVO.builder().mood(sbMood.getProgress()).productivity(sbProd.getProgress())
+                .title(Helpers.toS(txtTitle.getText().toString(),"Entry")).notes(notes).build());
+
         if (NetConnStatus.getInstance(this).isOnline()) {
             //TODO Submit diary
-            mSubmitTask = new SubmitDiaryTask(mood, prod, title, user.getPatientID());
+            mSubmitTask = new SubmitDiaryTask(voList, user.getPatientID());
 
 
             mSubmitTask.execute((Void) null);
@@ -87,26 +96,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public class SubmitDiaryTask extends AsyncTask<Void, Void, Boolean> {
-        private final int mood;
-        private final int prod;
-        private final String title;
-        private final int patientID;
+    public class SubmitDiaryTask extends AsyncTask<Void, Void, Integer> {
 
-        public SubmitDiaryTask(int mood, int prod, String title, int patientID) {
-            this.mood = mood;
-            this.prod = prod;//pasdfdsafsfsadfffsdfdsfs
-            this.title = title;
+        private final int patientID;
+        ArrayList<DiaryVO> voList;
+
+        public SubmitDiaryTask(ArrayList<DiaryVO> vList, int patientID) {
+          voList = vList;
             this.patientID = patientID;
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Integer doInBackground(Void... voids) {
+         for (DiaryVO vo : voList){
+             String tURL = getString(R.string.api_prefix) + vo.getURLString(patientID);
+             try {
+                 ResponseVO rVO = Helpers.getDiaryUrlSource(tURL);
+                 Log.i(getString(R.string.tag_async),rVO.toString());
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+         }
             return null;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Integer ct) {
             //Reset
             mSubmitTask = null;
         }

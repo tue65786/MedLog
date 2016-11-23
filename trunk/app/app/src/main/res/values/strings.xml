@@ -21,7 +21,8 @@
     <string name="tag_network">NET</string>
     <string name="tag_vos">POJO</string>
     <string name="tag_debug">DEBUGGING</string>
-    <string name="api_prefix">http://niftybull.com/MedLogRS/api?</string>
+    <string name="api_prefix">http://localhost:8084/MedLogRS/api/?</string>
+    <!--http://niftybull.com/MedLogRS/api?-->
     <string name="DEBUG">true</string>
     <string name="int_user">iuser</string>
     <string name="title_activity_settings">Settings</string>

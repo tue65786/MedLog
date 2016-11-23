@@ -90,6 +90,10 @@ public class MedLogDAO implements IMedLogDAO {
         try {
             if (_vo != null && _vo.getPatientID() == null && getCurrentUser() != null) {
                 _vo.setPatientID(getCurrentUser());
+            }else  if (getCurrentUser() == null || getCurrentUser().getPatientID() <= 0){
+                if (_vo.getPatientID()!= null){
+                    setUser(_vo.getPatientID());
+                }
             }
         } catch (Exception e) {
             if (DEBUG) {
