@@ -62,6 +62,9 @@
 //		   // Call the service and get the tone
 //		   ToneAnalysis tone = service.getTone( text, null ).execute();
 //		   System.out.println( tone );
+
+//TODO 1. Logout DONE
+//TODO 2. Update homepage data.
 %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>MedLog</title>
@@ -94,6 +97,13 @@
 
 				 $("#tabs").tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
 				 $("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
+                         $("#logout").click(function () {
+                              $.post('./api?fn=logout').done(function (  ) {
+                                  top.location.href='login.html';
+                              });
+                         });
+                         
+                         
 			 });
 		</script>
 
@@ -107,8 +117,8 @@
 				<div><span class="ui-icon ui-icon-home"></span><a href="home.jsp">Medlog</a></div>
 			</li>
 			<li>
-				<div><span class="ui-icon ui-icon-person"></span><a href="User.html?id=1">Profile</a></div>
-				<ul><li><div>	<a href="User.html">Register</a></div></li></ul>
+				<div><span class="ui-icon ui-icon-person"></span><a href="User.html?id=<%=user.getPatientID()%>">Your account</a></div>
+				<ul><li><div>	<a href="User.html">Register</a></div></li><li><div>	<a href="#" id="logout">Logout</a></div></li></ul>
 			</li>
 			<li id="diary" data-url="">
 				<div><span class="ui-icon ui-icon-contact"></span>Diary</div>

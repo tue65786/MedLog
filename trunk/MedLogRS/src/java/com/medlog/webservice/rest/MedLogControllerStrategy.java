@@ -253,7 +253,15 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 														  + " params are invalid." );
 				  }
 
-			   }
+			   }else if (fn.equalsIgnoreCase(API_FUNCTION_UPDATE) && vo.isValid(UPDATE)){
+                              if (dao.updateHealthcareProviderVO(vo)){
+                                   responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.INFO],"Sucessfully updated");
+                              }else{
+                                  responseMessage = StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR],
+														  StrUtl.toS( fn, "??" )
+														  + " failed." ); 
+                              }
+                           }
 
 			} else if ( fn.equals( API_FUNCTION_FIND ) ) {
 			   responseMessage = getHealthcareProviderResponse( dao, g );

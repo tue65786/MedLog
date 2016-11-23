@@ -78,3 +78,7 @@ body{
     opacity: .8;
     filter: Alpha(Opacity=80); /* support: IE8 */
 }
+
+tr:hover{background-color: #77d5f7;border:1px solid #77d5f7; }
+
+#header tr:hover,tr:first-of-type:hover{background-color: transparent}
