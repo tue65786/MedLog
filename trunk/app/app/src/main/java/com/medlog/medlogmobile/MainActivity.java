@@ -1,6 +1,7 @@
 package com.medlog.medlogmobile;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 
+import com.google.gson.GsonBuilder;
 import com.medlog.medlogmobile.util.NetConnStatus;
+import com.medlog.medlogmobile.vo.DiaryVO;
 import com.medlog.medlogmobile.vo.PatientVO;
 
 import java.util.ArrayList;
@@ -22,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
     SeekBar sbProd;
     EditText txtTitle;
     Button btnSubmit;
-    SubmitDiaryTask mSubmitTask=null;
+    SubmitDiaryTask mSubmitTask = null;
+    ArrayList<DiaryVO> voList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +38,15 @@ public class MainActivity extends AppCompatActivity {
         sbProd = (SeekBar) findViewById(R.id.sbProductivity);
         txtTitle = (EditText) findViewById(R.id.txtDiaryID);
         btnSubmit = (Button) findViewById(R.id.btnDiaryFormSubmit);
-
-
+        SharedPreferences spf = getPreferences(MODE_PRIVATE);           //get old user data and place them into storage
+        boolean hasData = spf.getBoolean(getString(R.string.lcl_db_hasdata), false);
+       if (hasData){
+           String oldData = spf.getString(getString(R.string.lcl_db_data),"");
+       }
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // attemptLogin();
+                
                 doSubmitDiary();
             }
         });
@@ -53,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doSubmitDiary() {
-        if (mSubmitTask != null){
+        if (mSubmitTask != null) {
             return;//Task already running.
         }
         int prod = sbProd.getProgress();
@@ -65,15 +73,13 @@ public class MainActivity extends AppCompatActivity {
             Log.i(getString(R.string.tag_debug), "Progress val : " + prod);
             Log.i(getString(R.string.tag_debug), "Mood val : " + mood);
         }
-        if (NetConnStatus.getInstance(this).isOnline()){
+        if (NetConnStatus.getInstance(this).isOnline()) {
             //TODO Submit diary
-            mSubmitTask = new SubmitDiaryTask(mood,prod,title,user.getPatientID());
-
-
+            mSubmitTask = new SubmitDiaryTask(mood, prod, title, user.getPatientID());
 
 
             mSubmitTask.execute((Void) null);
-        }else{
+        } else {
             //TODO Store locally
 
 
@@ -101,8 +107,24 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-           //Reset
+            //Reset
             mSubmitTask = null;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences prf = getPreferences(MODE_PRIVATE);           //saves all symbols of past portfolio
+        SharedPreferences.Editor e = prf.edit();
+        if (voList != null && voList.size() > 0) {
+            String json = new GsonBuilder().serializeNulls().create().toJson(voList);
+            e.putString(getString(R.string.lcl_db_data), json);
+            e.putBoolean(getString(R.string.lcl_db_hasdata), true);
+        } else {
+            e.putBoolean(getString(R.string.lcl_db_hasdata), false);
+            e.remove(getString(R.string.lcl_db_data));
+        }
+
     }
 }
