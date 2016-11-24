@@ -8,6 +8,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                doSubmitDiary();
+                doSubmitDiary(true);
             }
         });
         Intent receivedIntent = getIntent();
@@ -75,21 +78,42 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.btnSync:
+                  if (diaryVoList != null && diaryVoList.size() > 0){
+                      doSubmitDiary(false);
+                  return true;
+                  }
+                break;
 
-    private void doSubmitDiary() {
+        }
+        return false;
+    }
+
+            private void doSubmitDiary(boolean withForm) {
         if (mSubmitTask != null) {
             return;//Task already running.
         }
-        String notes = "";
-        if (txtNotes != null) {
-            notes = Helpers.toS(txtNotes.getText().toString(), "");
+        if (withForm) {
+            String notes = "";
+            if (txtNotes != null) {
+                notes = Helpers.toS(txtNotes.getText().toString(), "");
+            }
+            if (diaryVoList == null) {
+                diaryVoList = new ArrayList<DiaryVO>();
+            }
+            diaryVoList.add(DiaryVO.builder().mood(sbMood.getProgress()).productivity(sbProd.getProgress())
+                    .title(Helpers.toS(txtTitle.getText().toString(), "Entry")).notes(notes).build());
         }
-        if (diaryVoList == null) {
-            diaryVoList = new ArrayList<DiaryVO>();
-        }
-        diaryVoList.add(DiaryVO.builder().mood(sbMood.getProgress()).productivity(sbProd.getProgress())
-                .title(Helpers.toS(txtTitle.getText().toString(), "Entry")).notes(notes).build());
-
         if (NetConnStatus.getInstance(this).isOnline()) {
             //TODO Submit diary
             mSubmitTask = new SubmitDiaryTask(diaryVoList, user.getPatientID());
