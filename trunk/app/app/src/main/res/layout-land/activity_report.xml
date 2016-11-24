@@ -11,6 +11,6 @@
     tools:context="com.medlog.medlogmobile.ReportActivity">
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="match_parent"
         android:id="@+id/graph" />
 </RelativeLayout>

@@ -5,13 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -116,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
                   }
                 break;
             case R.id.rpt:
-
+                Intent mainI = new Intent( MainActivity.this,ReportActivity.class);
+//                mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
+               startActivity(mainI);
                 break;
 
         }
