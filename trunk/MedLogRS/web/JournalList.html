@@ -94,24 +94,27 @@
                     newRow.id = "th";
                     newCell = newRow.insertCell(0);
                     newCell.id = "th";
-                    newCell.innerHTML = "Journal ID";
+                    newCell.innerHTML = "Edit";
                     newCell = newRow.insertCell(1);
                     newCell.id = "th";
-                    newCell.innerHTML = "Date Created";
+                    newCell.innerHTML = "Journal ID";
                     newCell = newRow.insertCell(2);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Date Created";
+                    newCell = newRow.insertCell(3);
                     newCell.id = "th";
                     newCell.style.textAlign = "center";
                     newCell.innerHTML = "Title";
-                    newCell = newRow.insertCell(3);
-                    newCell.id = "th";
-                    newCell.innerHTML = "Mood Rating";
                     newCell = newRow.insertCell(4);
                     newCell.id = "th";
-                    newCell.innerHTML = "Productivity Rating";
+                    newCell.innerHTML = "Mood Rating";
                     newCell = newRow.insertCell(5);
                     newCell.id = "th";
-                    newCell.innerHTML = "Date Updated";
+                    newCell.innerHTML = "Productivity Rating";
                     newCell = newRow.insertCell(6);
+                    newCell.id = "th";
+                    newCell.innerHTML = "Date Updated";
+                    newCell = newRow.insertCell(7);
                     newCell.id = "th";
 
                     //for (i in obj.collectionList) {
@@ -120,32 +123,39 @@
                         newRow = newTable.insertRow(i + 1);
 
                         newCell = newRow.insertCell(0);
-                        newCell.style.textAlign = "right";
-                        newCell.innerHTML = obj.journalList[i].id;
+                        //newCell.style.textAlign = "right";
+                        newCell.innerHTML =
+                                "<td style='background-color:transparent;border:none;'><a href='JournalUpdate.jsp?journalID="
+                                + obj.journalList[i].id + "'><img src='images/update.png'></a> </td>";
 
                         newCell = newRow.insertCell(1);
                         newCell.style.textAlign = "right";
-                        newCell.innerHTML = obj.journalList[i].createdDate;
+                        newCell.innerHTML = obj.journalList[i].id;
 
                         newCell = newRow.insertCell(2);
+                        newCell.style.textAlign = "right";
+                        newCell.innerHTML = obj.journalList[i].createdDate;
+
+                        newCell = newRow.insertCell(3);
                         newCell.style.textAlign = "center";
                         newCell.innerHTML = obj.journalList[i].title;
 
-                        newCell = newRow.insertCell(3);
+                        newCell = newRow.insertCell(4);
                         newCell.style.textAlign = "right";
                         newCell.innerHTML = obj.journalList[i].mood;
 
-                        newCell = newRow.insertCell(4);
+                        newCell = newRow.insertCell(5);
                         newCell.style.textAlign = "right";
                         newCell.innerHTML = obj.journalList[i].productivity;
 
-                        newCell = newRow.insertCell(5);
+                        newCell = newRow.insertCell(6);
                         newCell.style.textAlign = "right";
                         newCell.innerHTML = obj.journalList[i].updatedDate;
                     }
                 }
             }
-
+            
+            // MAIN PROGRAM
             var httpReq;
             if (window.XMLHttpRequest) {
                 httpReq = new XMLHttpRequest();  //For Firefox, Safari, Opera
