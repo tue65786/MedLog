@@ -7,4 +7,9 @@
         android:id="@+id/btnSync"
         android:enabled="true"
         androidd:showAsAction="always" />
+    <item android:title=" "
+        android:icon="?android:attr/actionModePasteDrawable"
+        androidd:showAsAction="always"
+        android:id="@+id/rpt" />
+
 </menu>
