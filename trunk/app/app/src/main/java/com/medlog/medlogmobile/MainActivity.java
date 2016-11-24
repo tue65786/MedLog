@@ -1,9 +1,13 @@
 package com.medlog.medlogmobile;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     EditText txtTitle;
     EditText txtNotes;
     Button btnSubmit;
+    private View mProgressView;
+    private View mFormView;
     SubmitDiaryTask mSubmitTask = null;
     ArrayList<DiaryVO> diaryVoList;
 
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar ab = getSupportActionBar();
-        setActionBar(ab, "Joural Log");
+        setActionBar(ab, "Jounral Log");
 //        getActionBar().setLogo(R.drawable.ml);
         // Linkup form widgets
         sbMood = (SeekBar) findViewById(R.id.sbMood);
@@ -52,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         txtTitle = (EditText) findViewById(R.id.txtDiaryID);
         btnSubmit = (Button) findViewById(R.id.btnDiaryFormSubmit);
         txtNotes = (EditText) findViewById(R.id.txtNotes);
+        mFormView = findViewById(R.id.mainact_form);
+        mProgressView = findViewById(R.id.main_progress);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,8 +98,21 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.btnSync:
                   if (diaryVoList != null && diaryVoList.size() > 0){
-                      doSubmitDiary(false);
+                      showProgress(true);doSubmitDiary(false);
                   return true;
+                  }
+                else{
+                      showProgress(true);
+                      try {
+
+                          // Simulate network access.
+                          Thread.sleep(1500);
+                      } catch (InterruptedException e) {
+                          showProgress(false);
+                      }
+                      showProgress(false);
+                      Toast.makeText(getApplicationContext(), new StringBuilder().append( " Nothing to sync").toString(), Toast.LENGTH_LONG).show();
+
                   }
                 break;
 
@@ -116,12 +137,14 @@ public class MainActivity extends AppCompatActivity {
         }
         if (NetConnStatus.getInstance(this).isOnline()) {
             //TODO Submit diary
+            showProgress(true);
             mSubmitTask = new SubmitDiaryTask(diaryVoList, user.getPatientID());
 
 
             mSubmitTask.execute((Void) null);
         } else {
-            //TODO Store locally
+
+            Log.i(getString(R.string.tag_debug), "offline store list size:" + diaryVoList.size());
 
 
         }
@@ -141,6 +164,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Integer doInBackground(Void... voids) {
             int cts = 0;
+            try {
+                // Simulate network access.
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+
+            }
             for (DiaryVO vo : voList) {
                 String tURL = getString(R.string.api_prefix) + vo.getURLString(patientID);
                 try {
@@ -158,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(final Integer ct) {
             //Reset
             mSubmitTask = null;
+            showProgress(false);
             if (ct >= voList.size()) {
                 voList.clear();
                 Log.i(getString(R.string.tag_debug), "list size:" + diaryVoList.size());
@@ -165,6 +195,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), new StringBuilder().append(ct + " ").append(" item(s) added saved!").toString(), Toast.LENGTH_LONG).show();
 
             }
+        }
+        @Override
+        protected void onCancelled() {
+            mSubmitTask = null;
+            showProgress(false);
         }
     }
 
@@ -201,5 +236,50 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar.show();
 
+    }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+//        MenuItem item = getToolbar().getMenu().findItem(Menu.FIRST);
+//
+//        Animation animation = new RotateAnimation(0.0f, 360.0f,
+//                Animation.RELATIVE_TO_SELF, 0.5f,
+//                Animation.RELATIVE_TO_SELF, 0.5f);
+//        animation.setDuration(700);
+//        animation.setRepeatCount(Animation.INFINITE);
+//
+//        ImageView imageView = new ImageView(this);
+//        imageView.setImageDrawable(UIHelper.getIcon(this, MMEXIconFont.Icon.mmx_refresh));
+//
+//        imageView.startAnimation(animation);
+//        item.setActionView(imageView);
     }
 }
