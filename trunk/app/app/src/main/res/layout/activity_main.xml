@@ -11,6 +11,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.medlog.medlogmobile.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/main_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,12 +31,35 @@
             android:id="@+id/txtDiaryID"
             android:inputType="text"
             android:maxLines="1" />
-    </android.support.design.widget.TextInputLayout>
 
+
+
+    </android.support.design.widget.TextInputLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/laylbl">
+
+        <TextView
+            android:text="mood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="productivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvprod"
+            android:layout_weight="0.59" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="22dp">
 
         <SeekBar
 
@@ -39,6 +70,7 @@
             android:id="@+id/sbMood"
             android:layout_weight="1"
             style="@android:style/Widget.SeekBar" />
+
         <SeekBar
 
             android:layout_width="match_parent"
@@ -53,13 +85,20 @@
 
     </LinearLayout>
 
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editText" />
+        android:id="@+id/txtNotes"
+        android:hint="Notes"
+        android:minLines="4"
+        android:textAlignment="textStart"
+        tools:textAlignment="viewStart"
+        android:gravity="top|left"
+        android:paddingTop="5dp"
+        android:paddingBottom="30dp"
+        android:layout_marginBottom="22dp" />
 
     <Button
         android:text="@string/save_diary_entry"

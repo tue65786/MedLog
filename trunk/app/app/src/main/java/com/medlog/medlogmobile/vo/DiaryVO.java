@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -205,13 +207,18 @@ public class DiaryVO implements Serializable {
 
 
     }
-    public String getURLString(int patientID){
+    public String getURLString(int patientID)  {
         StringBuilder sb = new StringBuilder("");
         sb.append("fn=mobisync");
-        sb.append("&title=").append(getTitle())
-                .append("&notes=").append(getNotes()).append("&mood=")
-                .append(getMood()).append("&productivity=").append(getProductivity())
-                .append("&patientID=").append(patientID);
+
+        try {
+            sb.append("&title=").append(URLEncoder.encode(getTitle(),"utf-8"))
+                    .append("&notes=").append(URLEncoder.encode(getNotes(),"utf-8")).append("&mood=")
+                    .append(getMood()).append("&productivity=").append(getProductivity())
+                    .append("&patientID=").append(patientID);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         return sb.toString();
     }
     public static ArrayList<DiaryVO> fromJSON(String json){
