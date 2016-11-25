@@ -15,6 +15,9 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.medlog.medlogmobile.vo.DiaryVO;
 import com.medlog.medlogmobile.vo.PatientVO;
 
+/**
+ * Produces line graph
+ */
 public class ReportActivity extends AppCompatActivity {
     GraphView graphView;
     String userString;
