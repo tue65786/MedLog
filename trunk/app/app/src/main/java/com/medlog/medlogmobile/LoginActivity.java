@@ -281,7 +281,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
+        String usr= "";
         private final String mEmail;
         private final String mPassword;
 
@@ -300,7 +300,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 String tURL = getString(R.string.api_prefix) + "fn=login&username=" + mEmail + "&password=" + mPassword;
                 Log.i("KK", tURL);
 
-                String usr= "";
+
                 if (hasINet) {
 
                     usr = LoginActivity.getUrlSource(tURL);
@@ -367,7 +367,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //Load main activity\
                 //----------------------
                 Intent mainI = new Intent(LoginActivity.this, MainActivity.class);
-                mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
+                //mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
+                mainI.putExtra(getString(R.string.intent_val_user_json),usr);
                 if (getString(R.string.DEBUG).equals("true")) {
                     printPrefs();
                 }

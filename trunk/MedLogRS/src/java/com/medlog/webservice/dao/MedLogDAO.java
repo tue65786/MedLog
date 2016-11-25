@@ -439,7 +439,11 @@ public class MedLogDAO implements IMedLogDAO {
 
     @Override
     public ArrayList<DiaryVO> findDiaryByPatient() {
-        return findDiary(0, null);
+        return findDiary(0, null,true);
+    }
+    
+    public ArrayList<DiaryVO> findDiaryByPatientFull() {
+        return findDiary(0, null,false);
     }
 
     @Override
@@ -559,11 +563,24 @@ public class MedLogDAO implements IMedLogDAO {
     @Override
     public PatientVO findPatientByPatientNameAndPassword(String _username, String _password) {
         ArrayList<PatientVO> voList = findPatient(0, _username, _password);
+        PatientVO retVO;
         if (voList != null && !voList.isEmpty()) {
             if (DEBUG && voList.size() > 1) {
                 LOG.warning("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()\n---Returned Multiple VALUES -- something is wrong!");
             }
+            if (voList != null &&voList.size()==1){
+                retVO = voList.get(0);
+                setUser(retVO);
+                ArrayList<DiaryVO> d = findDiaryByPatient();
+               for (DiaryVO v :d){
+                   System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()" + v.toJSON());
+               }
+                System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()");
+                retVO.setDiaryList(findDiaryByPatient());
+           return retVO;
+            }
             return voList.get(0);
+            
         } else {
             return null;
         }
@@ -987,7 +1004,10 @@ public class MedLogDAO implements IMedLogDAO {
         }
         return newID;
     }
-
+private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
+    return findDiary(_id, _keyword, true);
+}
+    
     /**
      * Diary selection base
      *
@@ -995,7 +1015,7 @@ public class MedLogDAO implements IMedLogDAO {
      * @param _keyword
      * @return
      */
-    private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
+    private ArrayList<DiaryVO> findDiary(int _id, String _keyword,boolean patientLite) {
         ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
         _keyword = StrUtl.toS(_keyword);
         int ct = 0;
@@ -1032,7 +1052,7 @@ public class MedLogDAO implements IMedLogDAO {
                             .notesActivity(rs.getString("notesActivity"))
                             .mood(rs.getInt("ratingMood"))
                             .productivity(rs.getInt("ratingProductivity"))
-                            .patientID(getCurrentUser())
+                            .patientID(patientLite ? PatientVO.builder().patientID(getCurrentUser().getPatientID()).build(): getCurrentUser())
                             .createdDate(rs.getDate("createdDate"))
                             .build(ct++));
                 }

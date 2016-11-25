@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Diary Activity
+ */
 public class MainActivity extends AppCompatActivity {
     PatientVO user;
     SeekBar sbMood;
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private View mFormView;
     SubmitDiaryTask mSubmitTask = null;
     ArrayList<DiaryVO> diaryVoList;
-
+    String userString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,11 @@ public class MainActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         //Load user info.
         if (receivedIntent != null) {
-            user = receivedIntent.getParcelableExtra(getString(R.string.int_user));
+
+            userString = receivedIntent.getStringExtra(getString(R.string.intent_val_user_json));
+
+  user =           PatientVO.fromJSON(userString);
+//            user = receivedIntent.getParcelableExtra(getString(R.string.int_user));
             if (getString(R.string.DEBUG).equals("true")) {
                 Log.i(getString(R.string.tag_debug), "User  : " + user.toString());
             }
@@ -96,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.btnSync:
                   if (diaryVoList != null && diaryVoList.size() > 0){
-                      showProgress(true);doSubmitDiary(false);
+                      showProgress(true);
+                      doSubmitDiary(false);
                   return true;
                   }
                 else{
@@ -115,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.rpt:
                 Intent mainI = new Intent( MainActivity.this,ReportActivity.class);
-//                mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
+                mainI.putExtra(getString(R.string.intent_val_user_json),userString);
+
+// mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
                startActivity(mainI);
                 break;
 
@@ -154,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Process diary submit
+     */
     public class SubmitDiaryTask extends AsyncTask<Void, Void, Integer> {
 
         private final int patientID;
@@ -191,7 +204,12 @@ public class MainActivity extends AppCompatActivity {
             //Reset
             mSubmitTask = null;
             showProgress(false);
+            //Diary entires sent.
             if (ct >= voList.size()) {
+              if (user.getDiaryList() == null){
+                  user.setDiaryList(new ArrayList<DiaryVO>());
+                  user.getDiaryList().addAll(voList);
+              }
                 voList.clear();
                 Log.i(getString(R.string.tag_debug), "list size:" + diaryVoList.size());
                 diaryVoList.clear();

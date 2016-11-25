@@ -95,11 +95,11 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 			   if ( DEBUG ) {
 				  gson = new GsonBuilder().setPrettyPrinting().
 						  setDateFormat( DATE_FORMAT ).
-						  serializeNulls().
+						  serializeNulls().excludeFieldsWithoutExposeAnnotation().
 						  create();
 			   } else {
 				  gson = new GsonBuilder().
-						  setDateFormat( DATE_FORMAT ).
+						  setDateFormat( DATE_FORMAT ).excludeFieldsWithoutExposeAnnotation().
 						  create();
 			   }
 			   //Print current user and store it to session,

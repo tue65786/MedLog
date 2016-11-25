@@ -6,6 +6,7 @@
 package com.medlog.webservice.vo;
 
 import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
@@ -23,7 +24,8 @@ public class PatientVO implements Serializable, IEntityBase<PatientVO> {
 
 private static final long serialVersionUID = 7503965982970314783L;
 
-public static PatientVO create(final int patientID, final String userName, final String userPassword, final String userHash, final String firstName, final String lastName, final String phoneHome, final String phoneMobile, final String email, final String status, final String addressStreet, final String addressCity, final StateVO addressState, final String addressCountry, final String addressPostalcode, final String userPreferences, final Date pwdLastChanged, final String lang, final String timezoneId, final Date dateOfBirth, final Date dateJoined, final String picture, final String metaData, final int userRole, final List<DiaryVO> diaryList, final List<MedicationVO> medicationList, final HealthcareProviderVO primaryPhyssician, final List<HealthcareProviderVO> healthcareProviderList, final List<TagVO> tagList) {
+public static PatientVO create(final int patientID, final String userName, final String userPassword, final String userHash, final String firstName, final String lastName, final String phoneHome, final String phoneMobile, final String email, final String status, final String addressStreet, final String addressCity, final StateVO addressState, final String addressCountry, final String addressPostalcode, final String userPreferences, final Date pwdLastChanged, final String lang, final String timezoneId, final Date dateOfBirth
+        , final Date dateJoined, final String picture, final String metaData, final int userRole, final ArrayList<DiaryVO> diaryList, final List<MedicationVO> medicationList, final HealthcareProviderVO primaryPhyssician, final List<HealthcareProviderVO> healthcareProviderList, final List<TagVO> tagList) {
    return new PatientVO( patientID, userName, userPassword, userHash, firstName, lastName, phoneHome, phoneMobile, email, status, addressStreet, addressCity, addressState, addressCountry, addressPostalcode, userPreferences, pwdLastChanged, lang, timezoneId, dateOfBirth, dateJoined, picture, metaData, userRole, diaryList, medicationList, primaryPhyssician, healthcareProviderList, tagList );
 }
 
@@ -130,14 +132,14 @@ public void setDateOfBirth(Date dateOfBirth) {
 /**
  * @return the diaryList
  */
-public List<DiaryVO> getDiaryList() {
+public ArrayList<DiaryVO> getDiaryList() {
    return diaryList;
 }
 
 /**
  * @param diaryList the diaryList to set
  */
-public void setDiaryList(List<DiaryVO> diaryList) {
+public void setDiaryList(ArrayList<DiaryVO> diaryList) {
    this.diaryList = diaryList;
 }
 
@@ -484,7 +486,7 @@ public boolean isValid(int _ACTION) {
 
 @Override
 public String toJSON() {
-   Gson g = new GsonBuilder().serializeNulls().create();
+   Gson g = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
    return g.toJson( this );
 }
 
@@ -492,32 +494,81 @@ public String toJSON() {
 public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
+
+@Expose(deserialize = true,serialize = true)
 private int patientID;
+
+@Expose(deserialize = true,serialize = true)
 private String userName;
+
+@Expose(deserialize = true,serialize = true)
 private String userPassword;
+
+@Expose(deserialize = true,serialize = true)
 private String userHash;
+
+@Expose(deserialize = true,serialize = true)
 private String firstName;
+
+@Expose(deserialize = true,serialize = true)
 private String lastName;
+
+@Expose(deserialize = true,serialize = true)
 private String phoneHome;
+
+@Expose(deserialize = true,serialize = true)
 private String phoneMobile;
+
+@Expose(deserialize = true,serialize = true)
 private String email;
+
+@Expose(deserialize = true,serialize = true)
 private String status;
+
+@Expose(deserialize = true,serialize = true)
 private String addressStreet;
+
+@Expose(deserialize = true,serialize = true)
 private String addressCity;
+
+@Expose(deserialize = true,serialize = true)
 private StateVO addressState;
 
+@Expose(deserialize = true,serialize = true)
 private String addressCountry;
+
+@Expose(deserialize = true,serialize = true)
 private String addressPostalcode;
+
+@Expose(deserialize = true,serialize = true)
 private String userPreferences;
+
+@Expose(deserialize = true,serialize = true)
 private Date pwdLastChanged;
+
+@Expose(deserialize = true,serialize = true)
 private String lang;
+
+@Expose(deserialize = true,serialize = true)
 private String timezoneId;
+
+@Expose(deserialize = true,serialize = true)
 private Date dateOfBirth;
+
+@Expose(deserialize = true,serialize = true)
 private Date dateJoined;
+
+@Expose(deserialize = true,serialize = true)
 private String picture;
+
+@Expose(deserialize = true,serialize = true)
 private String metaData;
+
+@Expose(deserialize = true,serialize = true)
 private int userRole;
-private List<DiaryVO> diaryList;
+
+@Expose(deserialize = true,serialize = true)
+private ArrayList<DiaryVO> diaryList;
 private List<MedicationVO> medicationList;
 private HealthcareProviderVO primaryPhyssician;
 private List<HealthcareProviderVO> healthcareProviderList;
@@ -556,7 +607,7 @@ private Date dateJoined;
 private String picture;
 private String metaData;
 private int userRole;
-private List<DiaryVO> diaryList;
+private ArrayList<DiaryVO> diaryList;
 private List<MedicationVO> medicationList;
 private HealthcareProviderVO primaryPhyssician;
 private List<HealthcareProviderVO> healthcareProviderList;
@@ -701,7 +752,7 @@ public Builder userRole(final int value) {
    return this;
 }
 
-public Builder diaryList(final List<DiaryVO> value) {
+public Builder diaryList(final ArrayList<DiaryVO> value) {
    this.diaryList = value;
    return this;
 }
@@ -752,7 +803,13 @@ public static PatientVO.Builder builder() {
  * @return Instance
  */
 public static PatientVO newInstance(PatientVO vo) {
-   return PatientVO.create( vo.getPatientID(), vo.getUserName(), vo.getUserPassword(), vo.getUserHash(), vo.getFirstName(), vo.getLastName(), vo.getPhoneHome(), vo.getPhoneMobile(), vo.getEmail(), vo.getStatus(), vo.getAddressStreet(), vo.getAddressCity(), vo.getAddressState(), vo.getAddressCountry(), vo.getAddressPostalcode(), vo.getUserPreferences(), vo.getPwdLastChanged(), vo.getLang(), vo.getTimezoneId(), vo.getDateOfBirth(), vo.getDateJoined(), vo.getPicture(), vo.getMetaData(), vo.getUserRole(), vo.getDiaryList(), vo.getMedicationList(), vo.getPrimaryPhyssician(), vo.getHealthcareProviderList(), vo.getTagList() );
+   return PatientVO.create( vo.getPatientID(), vo.getUserName(), vo.getUserPassword(), vo.getUserHash()
+           , vo.getFirstName(), vo.getLastName(), vo.getPhoneHome(), vo.getPhoneMobile(), vo.getEmail(), vo.getStatus()
+           , vo.getAddressStreet(), vo.getAddressCity(), vo.getAddressState(), vo.getAddressCountry()
+           , vo.getAddressPostalcode(), vo.getUserPreferences(), vo.getPwdLastChanged(), vo.getLang()
+           , vo.getTimezoneId(), vo.getDateOfBirth(), vo.getDateJoined(), vo.getPicture(), vo.getMetaData(), vo.getUserRole()
+           , vo.getDiaryList(), vo.getMedicationList(), vo.getPrimaryPhyssician(), vo.getHealthcareProviderList()
+           , vo.getTagList() );
 }
 
 /**
@@ -788,7 +845,7 @@ public static PatientVO newInstance(PatientVO vo) {
  * @param healthcareProviderList
  * @param tagList
  */
-private PatientVO(final int patientID, final String userName, final String userPassword, final String userHash, final String firstName, final String lastName, final String phoneHome, final String phoneMobile, final String email, final String status, final String addressStreet, final String addressCity, final StateVO addressState, final String addressCountry, final String addressPostalcode, final String userPreferences, final Date pwdLastChanged, final String lang, final String timezoneId, final Date dateOfBirth, final Date dateJoined, final String picture, final String metaData, final int userRole, final List<DiaryVO> diaryList, final List<MedicationVO> medicationList, final HealthcareProviderVO primaryPhyssician, final List<HealthcareProviderVO> healthcareProviderList, final List<TagVO> tagList) {
+private PatientVO(final int patientID, final String userName, final String userPassword, final String userHash, final String firstName, final String lastName, final String phoneHome, final String phoneMobile, final String email, final String status, final String addressStreet, final String addressCity, final StateVO addressState, final String addressCountry, final String addressPostalcode, final String userPreferences, final Date pwdLastChanged, final String lang, final String timezoneId, final Date dateOfBirth, final Date dateJoined, final String picture, final String metaData, final int userRole, final ArrayList<DiaryVO> diaryList, final List<MedicationVO> medicationList, final HealthcareProviderVO primaryPhyssician, final List<HealthcareProviderVO> healthcareProviderList, final List<TagVO> tagList) {
    this.patientID = patientID;
    this.userName = userName;
    this.userPassword = userPassword;

@@ -1,5 +1,8 @@
 package com.medlog.medlogmobile.vo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,7 +17,7 @@ import java.util.List;
  * Created by Dan on 11/20/2016.
  */
 
-public class DiaryVO implements Serializable {
+public class DiaryVO implements Serializable,Parcelable{
     private int id;
     private String title;
     private String notes;
@@ -25,7 +28,34 @@ public class DiaryVO implements Serializable {
     private String attachmentPath;
     private int mood;
     private int productivity;
+    private  int row;
 
+    public DiaryVO(){
+
+    }
+    protected DiaryVO(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        notes = in.readString();
+        notesActivity = in.readString();
+        includeMedsCurrent = in.readString();
+        attachmentPath = in.readString();
+        mood = in.readInt();
+        productivity = in.readInt();
+        row = in.readInt();
+    }
+
+    public static final Creator<DiaryVO> CREATOR = new Creator<DiaryVO>() {
+        @Override
+        public DiaryVO createFromParcel(Parcel in) {
+            return new DiaryVO(in);
+        }
+
+        @Override
+        public DiaryVO[] newArray(int size) {
+            return new DiaryVO[size];
+        }
+    };
 
     public static DiaryVO create(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includeMedsCurrent, final String attachmentPath, final int mood, final int productivity) {
         return new DiaryVO( id, title, notes, notesActivity, createdDate, updatedDate, includeMedsCurrent, attachmentPath, mood, productivity);
@@ -109,6 +139,24 @@ public class DiaryVO implements Serializable {
 
     public void setProductivity(int productivity) {
         this.productivity = productivity;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(title);
+        parcel.writeString(notes);
+        parcel.writeString(notesActivity);
+        parcel.writeString(includeMedsCurrent);
+        parcel.writeString(attachmentPath);
+        parcel.writeInt(mood);
+        parcel.writeInt(productivity);
+        parcel.writeInt(row);
     }
 
     public static class Builder {

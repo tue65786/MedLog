@@ -6,6 +6,7 @@
 package com.medlog.webservice.vo;
 
 import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
@@ -13,6 +14,7 @@ import com.medlog.webservice.util.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import java.util.Date;
 import org.apache.commons.lang3.builder.*;
 
 /**
@@ -46,7 +48,7 @@ public void setAttachmentPath(String attachmentPath) {
  * @return the createdDate
  */
 public Date getCreatedDate() {
-   return createdDate != null ? createdDate : new Date();
+   return createdDate != null ? createdDate : new Date(new java.util.Date().getTime());
 }
 
 /**
@@ -260,7 +262,7 @@ public boolean isValid(int _ACTION) {
 
 @Override
 public String toJSON() {
-   return new GsonBuilder().serializeNulls().create().toJson( this );
+   return new GsonBuilder().serializeNulls().setDateFormat("yyyy-MM-dd").excludeFieldsWithoutExposeAnnotation().create().toJson( this );
 }
 
    @Override
@@ -276,19 +278,40 @@ public String toTableRow() {//(\"[, =A-Za-z\"]+)(\"[, =A-Za-z\"]+)
    
    
 }
-
+@Expose(deserialize = true,serialize = true)
 private int id;//1
+
+@Expose(deserialize = true,serialize = true)
 private String title; //2
+
+@Expose(deserialize = true,serialize = true)
 private String notes;
+
+@Expose(deserialize = true,serialize = true)
 private String notesActivity;//4
+
+@Expose(deserialize = true,serialize = true)
 private Date createdDate;
+
+@Expose(deserialize = true,serialize = true)
 private Date updatedDate;
+
+@Expose(deserialize = true,serialize = true)
 private String includeMedsCurrent;
+
+@Expose(deserialize = true,serialize = true)
 private String attachmentPath;
+
+@Expose(deserialize = true,serialize = true)
 private int mood;
+
+@Expose(deserialize = true,serialize = true)
 private int productivity;
 private List<TagVO> tagList;
+@Expose(deserialize = true,serialize = false)
 private PatientVO patientID;
+
+@Expose(deserialize = true,serialize = true)
 private int row = 0;
 private static final Logger LOG = Logger.getLogger( DiaryVO.class.getName() );
 

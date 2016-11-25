@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.rest.helpers;
 
+import com.google.gson.GsonBuilder;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.util.*;
 import java.io.*;
@@ -268,5 +269,7 @@ public ServletHelpers(HttpServletRequest request,
    }
 
 }
+
+
 private static final Logger LOG = Logger.getLogger( ServletHelpers.class.getName() );
 }
