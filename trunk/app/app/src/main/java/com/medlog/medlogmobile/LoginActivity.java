@@ -61,9 +61,9 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+        /**
+         * Keep track of the login task
+         */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     SharedPreferences spf;
     private PatientVO user, storedUser;
-
 
 
     public static Intent createIntent(Context context) {
@@ -281,13 +280,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-        String usr= "";
+        String usr = "";
         private final String mEmail;
         private final String mPassword;
 
         UserLoginTask(String email, String password) {
-            mEmail = email+"";
-            mPassword = password+"";
+            mEmail = email + "";
+            mPassword = password + "";
 
         }
 
@@ -325,7 +324,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     if (storedUser != null && storedUser.getPatientID() > 0) {
                         if (mEmail.equalsIgnoreCase(storedUser.getUserName()) || mEmail.equals(storedUser.getEmail())) {
                             if (mPassword.equals(storedUser.getUserPassword())) {
-                               user = storedUser;
+                                user = storedUser;
                                 if (spf.contains(getString(R.string.p_usr_str))) {
                                     usr = spf.getString(getString(R.string.p_usr_str), "{}");
                                 }
@@ -337,7 +336,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return false;
                 }
 //                JSONObject jo = getJSONFromUrl(tURL);
-
 
 
             }
@@ -368,7 +366,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //----------------------
                 Intent mainI = new Intent(LoginActivity.this, MainActivity.class);
                 //mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
-                mainI.putExtra(getString(R.string.intent_val_user_json),usr);
+                mainI.putExtra(getString(R.string.intent_val_user_json), usr);
                 if (getString(R.string.DEBUG).equals("true")) {
                     printPrefs();
                 }

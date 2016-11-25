@@ -25,7 +25,7 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         graphView = (GraphView) findViewById(R.id.graph);
-        getSupportActionBar().setTitle("Report");
+
         Intent receivedIntent = getIntent();
         //Load user info.
         if (receivedIntent != null) {
@@ -33,6 +33,7 @@ public class ReportActivity extends AppCompatActivity {
             userString = receivedIntent.getStringExtra(getString(R.string.intent_val_user_json));
 
             user = PatientVO.fromJSON(userString);
+            getSupportActionBar().setTitle(user.getUserName() +  " Journal Report");
 //            user = receivedIntent.getParcelableExtra(getString(R.string.int_user));
             if (getString(R.string.DEBUG).equals("true")) {
                 Log.i(getString(R.string.tag_debug), "User  : " + user.toString());

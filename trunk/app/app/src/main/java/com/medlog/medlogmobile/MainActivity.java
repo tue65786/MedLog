@@ -35,17 +35,22 @@ import android.widget.Toast;
  * Diary Activity
  */
 public class MainActivity extends AppCompatActivity {
-    PatientVO user;
-    SeekBar sbMood;
-    SeekBar sbProd;
-    EditText txtTitle;
-    EditText txtNotes;
-    Button btnSubmit;
+    private PatientVO user;
+    private SeekBar sbMood;
+    private SeekBar sbProd;
+    private EditText txtTitle;
+    private EditText txtNotes;
+    private Button btnSubmit;
     private View mProgressView;
     private View mFormView;
+
+    /**
+     * Keep track of the submit task - disallow multiple instance.
+     */
     SubmitDiaryTask mSubmitTask = null;
     ArrayList<DiaryVO> diaryVoList;
     String userString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +73,34 @@ public class MainActivity extends AppCompatActivity {
                 doSubmitDiary(true);
             }
         });
+        sbMood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                //TODO indicate seekbar value.
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        /**
+         * Pick up data sent from login
+         * @see PatientVO
+         */
         Intent receivedIntent = getIntent();
         //Load user info.
         if (receivedIntent != null) {
 
             userString = receivedIntent.getStringExtra(getString(R.string.intent_val_user_json));
 
-  user =           PatientVO.fromJSON(userString);
+            user = PatientVO.fromJSON(userString);
 //            user = receivedIntent.getParcelableExtra(getString(R.string.int_user));
             if (getString(R.string.DEBUG).equals("true")) {
                 Log.i(getString(R.string.tag_debug), "User  : " + user.toString());
@@ -84,56 +110,62 @@ public class MainActivity extends AppCompatActivity {
         boolean hasData = spf.getBoolean(getString(R.string.lcl_db_hasdata), false);
         if (hasData) {
             String oldData = spf.getString(getString(R.string.lcl_db_data), "");
-           diaryVoList= DiaryVO.fromJSON(oldData);
-            Toast.makeText(getApplicationContext(), new StringBuilder().append(diaryVoList.size()+ " previous entries found.").append(NetConnStatus.getInstance(this).isOnline() ? " You are ONLINE. Syncing...": " You are offline. Entries will be saved." ).toString(), Toast.LENGTH_LONG).show();
+            diaryVoList = DiaryVO.fromJSON(oldData);
+            Toast.makeText(getApplicationContext(), new StringBuilder().append(diaryVoList.size() + " previous entries found.").append(NetConnStatus.getInstance(this).isOnline() ? " You are ONLINE. Syncing..." : " You are offline. Entries will be saved.").toString(), Toast.LENGTH_LONG).show();
 
         }
 
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.btnSync:
-                  if (diaryVoList != null && diaryVoList.size() > 0){
-                      showProgress(true);
-                      doSubmitDiary(false);
-                  return true;
-                  }
-                else{
-                      showProgress(true);
-                      try {
+        switch (item.getItemId())
+        {
+            case R.id.btnSync://Sync clicked
+                if (diaryVoList != null && diaryVoList.size() > 0) {
+                    showProgress(true);
+                    doSubmitDiary(false);
+                    return true;
+                } else {
+                    showProgress(true);
+                    try {
 
-                          // Simulate network access.
-                          Thread.sleep(1500);
-                      } catch (InterruptedException e) {
-                          showProgress(false);
-                      }
-                      showProgress(false);
-                      Toast.makeText(getApplicationContext(), new StringBuilder().append( " Nothing to sync").toString(), Toast.LENGTH_LONG).show();
+                        // Add a fake sleep to tes loader
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                        showProgress(false);
+                    }
+                    showProgress(false);
+                    Toast.makeText(getApplicationContext(), new StringBuilder().append(" Nothing to sync").toString(), Toast.LENGTH_LONG).show();
 
-                  }
+                }
                 break;
-            case R.id.rpt:
-                Intent mainI = new Intent( MainActivity.this,ReportActivity.class);
-                mainI.putExtra(getString(R.string.intent_val_user_json),userString);
+            case R.id.rpt://Report load
+                if (user.getDiaryList() != null && user.getDiaryList().size()>0) {
+                    Intent mainI = new Intent(MainActivity.this, ReportActivity.class);
+                    mainI.putExtra(getString(R.string.intent_val_user_json), userString);
 
 // mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
-               startActivity(mainI);
-                break;
+                    startActivity(mainI);
+                    return true;
+                }else{
+                    return false;
+                }
 
         }
         return false;
     }
 
-            private void doSubmitDiary(boolean withForm) {
+    private void doSubmitDiary(boolean withForm) {
         if (mSubmitTask != null) {
             return;//Task already running.
         }
@@ -161,7 +193,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+        resetForm();
+    }
 
+    /**
+     * Clears form.
+     */
+    private void resetForm() {
+        sbProd.setProgress(0);
+        sbMood.setProgress(0);
+        txtTitle.setText("");
+        txtNotes.setText("");
     }
 
     /**
@@ -206,10 +248,10 @@ public class MainActivity extends AppCompatActivity {
             showProgress(false);
             //Diary entires sent.
             if (ct >= voList.size()) {
-              if (user.getDiaryList() == null){
-                  user.setDiaryList(new ArrayList<DiaryVO>());
-                  user.getDiaryList().addAll(voList);
-              }
+                if (user.getDiaryList() == null) {
+                    user.setDiaryList(new ArrayList<DiaryVO>());
+                    user.getDiaryList().addAll(voList);
+                }
                 voList.clear();
                 Log.i(getString(R.string.tag_debug), "list size:" + diaryVoList.size());
                 diaryVoList.clear();
@@ -217,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+
         @Override
         protected void onCancelled() {
             mSubmitTask = null;
@@ -258,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.show();
 
     }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
