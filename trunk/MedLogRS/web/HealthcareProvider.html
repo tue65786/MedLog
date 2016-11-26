@@ -105,13 +105,14 @@ and open the template in the editor.
                                             var len = currentProviderData.length;
                                                 for ( var i = 0; i < len; i++ ) {
                                                     var iProvider = currentProviderData[i];
-                                                    
+                                                 
                                                     if ( iProvider.physicianID === editID ) {
-                                                        for( var key in currentProviderData) {
+                                                        for( var key in iProvider) { //changed iProvider from currentProviderData
+                                                          
                                                            if ( key === "addressState" ) {
-                                                                $("#stateID").val("" + currentProviderData.addressState.stateID);
+                                                                $("#stateID").val("" + iProvider.addressState.stateID);//changed from currentProviderData
                                                             } else
-                                                                $('[name="' + key + '"]').val(currentProviderData[key]);
+                                                                $('[name="' + key + '"]').val(iProvider[key]); //changed iProvider from currentProviderData
                                                             } 
                                                         }
                                                     }      
