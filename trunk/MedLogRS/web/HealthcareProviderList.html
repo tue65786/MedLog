@@ -51,13 +51,13 @@ and open the template in the editor.
                     for (var i = 0; i < providerListLen; i++) {
                         var healthcareProvider = healthcareProviderList[i];
                         tableOutput = tableOutput 
-                                        + "<tr title='Click to edit' onclick='showRow(" + healthcareProvider.id + ")'><td>" 
+                                        + "<tr title='Click to edit' onclick='showRow(" + healthcareProvider.physicianID + ")'><td>" 
                                         + healthcareProvider.firstName + "</td><td>"
                                         + healthcareProvider.lastName + "</td><td>"
                                         + healthcareProvider.specialty + "</td><td>"
                                         + healthcareProvider.phoneWork + "</td></tr>";
                     }
-                    tableOutput = tableOutput + "</tr></table>";
+                    tableOutput = tableOutput + "</table>";
                     console.log(tableOutput);
                     $("#abody").html(tableOutput);
                 }
