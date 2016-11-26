@@ -23,6 +23,7 @@ import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.SentenceTone;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneAnalysis;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneScore;
 import com.medlog.webservice.CONST.SETTINGS;
+import static com.medlog.webservice.CONST.SETTINGS.DEBUG;
 import com.medlog.webservice.sql.DbConnection;
 import com.medlog.webservice.util.DbUtl;
 import static com.medlog.webservice.util.StrUtl.toS;
@@ -33,8 +34,10 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
+import static java.sql.Statement.EXECUTE_FAILED;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,29 +64,36 @@ public class ToneProcessorFactory {
         ToneAnalysis tone = null;
         Profile profile = null;
         try {
-            ToneAnalyzer service = new ToneAnalyzer(ToneAnalyzer.VERSION_DATE_2016_05_19);
-
+            ToneAnalyzer service = new ToneAnalyzer(ToneAnalyzer.VERSION_DATE_2016_05_19, SETTINGS.WATSON_USER, SETTINGS.WATSON_PASS);
             PersonalityInsights insights = new PersonalityInsights(PersonalityInsights.VERSION_DATE_2016_10_19, SETTINGS.WATSON_USER, SETTINGS.WATSON_PASS);
-            service.setUsernameAndPassword(SETTINGS.WATSON_USER, SETTINGS.WATSON_PASS);
-            String txtToProcess = new StringBuilder().append(vo.getTitle()).append(". ").append(vo.getNotes()).toString();
-            ProfileOptions options = new ProfileOptions.Builder()
-                    //    .contentItems(content.getContentItems())
-                    .consumptionPreferences(true)
-                    .rawScores(true)
-                    .text(txtToProcess)
-                    .build();
-            profile = insights.getProfile(options).execute();
+//            service.setUsernameAndPassword(SETTINGS.WATSON_USER, SETTINGS.WATSON_PASS);
+            String txtToProcess = buildTextToAnalyze(vo);
 
-            List<Behavior> b = profile.getBehavior();
-            List<ConsumptionPreferences> cp = profile.getConsumptionPreferences();
-            List<Trait> prof = profile.getNeeds();
-            List<Trait> person = profile.getPersonality();
-            List<Trait> val = profile.getValues();
-            profile.getWarnings();
-
+            profile = insights.getProfile(buildPersonalityProfileOPtions(txtToProcess)).execute();
             tone = service.getTone(txtToProcess, null).execute();
+//            List<Behavior> b = profile.getBehavior();
+//            List<ConsumptionPreferences> cp = profile.getConsumptionPreferences();
+//            List<Trait> prof = profile.getNeeds();
+//            List<Trait> person = profile.getPersonality();
+//            List<Trait> val = profile.getValues();
+//            profile.getWarnings();
+
             System.out.println("com.medlog.webservice.services.tone.ToneProcessorFactory.execute()" + tone);
-            processTone(dbc, tone, vo.getId());
+            ArrayList<Integer> counts = processTone(dbc, tone, vo.getId());
+            int successes = counts.size();
+
+            if (counts != null) {
+                Collections.sort(counts);
+                for (int count : counts) {
+                    if (count == EXECUTE_FAILED) {
+                        successes--;
+                    }
+                    if (count > 0) {
+                        break;
+                    }
+                }
+                System.out.printf("\ncom.medlog.webservice.services.tone.ToneProcessorFactory.execute() [%d / %d ] rows addded.\n+++++++++++++++++++++++++++++++++++++++++++++\n",successes,counts.size());
+            }
         } catch (UnauthorizedException | TooManyRequestsException | RequestTooLargeException | BadRequestException e) {
             e.printStackTrace();
         } catch (RuntimeException ee) {
@@ -91,10 +101,23 @@ public class ToneProcessorFactory {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return toS(new GsonBuilder().setPrettyPrinting().setLenient().create().toJson(ToneCategory.builder().profile(profile).tone(tone).build()),tone == null ? "" :tone.toString() + "\n"+ profile.toString());
-                
-        
+        return toS(new GsonBuilder().setPrettyPrinting().setLenient().create().toJson(ToneCategory.builder().profile(profile).tone(tone).build()), tone == null ? "" : tone.toString() + "\n" + profile.toString());
 
+    }
+
+    private static String buildTextToAnalyze(DiaryVO vo) {
+        String txtToProcess = new StringBuilder().append(vo.getTitle()).append(". ").append(vo.getNotes()).toString();
+        return txtToProcess;
+    }
+
+    private static ProfileOptions buildPersonalityProfileOPtions(String txtToProcess) {
+        ProfileOptions options = new ProfileOptions.Builder()
+                //    .contentItems(content.getContentItems())
+                .consumptionPreferences(true)
+                .rawScores(true)
+                .text(txtToProcess)
+                .build();
+        return options;
     }
 
     private static ArrayList<Integer> processTone(DbConnection dbc, ToneAnalysis tone, int diaryID) {
@@ -119,14 +142,16 @@ public class ToneProcessorFactory {
                     cs.setDouble(4, s.getScore());
                     cs.addBatch();
                 }
-//                int[] docRes = cs.executeBatch();
-//                List l = Arrays.asList(docRes);
-//                results.addAll(l);
 
-//                cs.clearBatch();
-//                System.out.println("com.medlog.webservice.util.ToneAnalyzerExample.processTone() result --- " + ArrayUtils.toString(docRes));
             }
             System.out.println("com.medlog.webservice.util.ToneAnalyzerExample.processTone() Process " + tone.getSentencesTone().size() + " sentances.");
+            int[] docRes = cs.executeBatch();
+            List l = Arrays.asList(docRes);
+            results.addAll(l);
+
+            cs.clearBatch();
+            System.out.println("com.medlog.webservice.util.ToneAnalyzerExample.processTone() result --- " + ArrayUtils.toString(docRes));
+            int[] sentRes = null;
             for (SentenceTone sentT : tone.getSentencesTone()) {
                 to = sentT.getTones();
                 cs.setInt(3, sentT.getId());
@@ -134,23 +159,42 @@ public class ToneProcessorFactory {
                 for (com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneCategory docTC : to) {
                     cat_id = docTC.getId();
                     cs.setString(1, cat_id);
-                    int[] sentRes = null;
+
                     try {
                         for (ToneScore s : docTC.getTones()) {
                             cs.setString(2, s.getId());
                             cs.setDouble(4, s.getScore());
                             cs.addBatch();
                         }
-                        sentRes = cs.executeBatch();
-                        List l = Arrays.asList(sentRes);
-                        results.addAll(l);
+                        if (DEBUG) {
+                            DbUtl.getWarningsFromStatement(cs);
+                        }
+//                        sentRes = cs.executeBatch();
+//                        List l = Arrays.asList(sentRes);
+//                        results.addAll(l);
                     } catch (SQLException s) {
                         System.err.println("com.medlog.webservice.services.tone.ToneProcessorFactory.processTone(loop)" + DbUtl.printJDBCExceptionMsg(s));
+                        s.printStackTrace();
+                    } catch (Exception s) {
+
                     }
-                    conn.setAutoCommit(true);
-                    cs.clearBatch();
+
                     System.out.println("com.medlog.webservice.util.ToneAnalyzerExample.processTone() result["
                             + sentT.getId() + "] " + ArrayUtils.toString(sentRes));
+                }
+            }
+            sentRes = cs.executeBatch();
+            try {
+                l = Arrays.asList(sentRes);
+                results.addAll(l);
+                conn.setAutoCommit(true);
+                cs.clearBatch();
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    conn.setAutoCommit(true);
+                } catch (Exception eeee) {
+                    eeee.printStackTrace();
                 }
             }
         } catch (BatchUpdateException ex) {
