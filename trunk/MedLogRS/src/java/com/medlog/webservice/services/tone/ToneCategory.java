@@ -10,7 +10,7 @@ import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneAnalysis;
 import java.io.Serializable;
 
 /**
- *
+ * Wrapper for analysis.
  * @author westy
  */
 public class ToneCategory implements Serializable{
