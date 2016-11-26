@@ -11,6 +11,10 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
+                    <file>${file.reference.java-sdk-3.5.1-jar-with-dependencies.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
                     <file>${libs.java-sdk.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

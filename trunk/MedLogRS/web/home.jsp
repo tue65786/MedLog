@@ -17,6 +17,7 @@
    String name  ="";
    String onload="";
    String diaryEntires="";
+   DbConnection db = new DbConnection();
    if ( user == null || user.getPatientID() <= 0 ) {
 	  try {
 		 response.sendRedirect( "login.html" );
@@ -29,17 +30,21 @@
 		name = " back " + name;
 		
 	 }
-	  DbConnection db = new DbConnection();
+//	  DbConnection db = new DbConnection();
 	  MedLogDAO dao = new MedLogDAO(db, user );
 	  ArrayList<DiaryVO> diary=  dao.findDiaryByPatient();
 	  if (diary != null && !diary.isEmpty()){
 		 diaryEntires =  diary.size() + " recent entries. Last entry was " + diary.get( diary.size()-1).getCreatedDate().toString() + ".  <ul><li>Mood is looking up!</li><li>Work on productivity.</li></ul> <br/> Don't forget to keep your journal up to date.";
 	  }
-	  db.close();
+	 
 	 }
 	 catch(Exception e){	
-	 }	  
+	 }
+         finally{
+             db.close(); 
+         }
    }
+    db.close();
 %>
 <!DOCTYPE html>
 <html>

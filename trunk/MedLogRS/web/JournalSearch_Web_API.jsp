@@ -7,19 +7,21 @@
 
 <%
     StringDataList journalList = new StringDataList(0); // Empty country list with no db error.
-    
     DbConnection dbc = new DbConnection();
     
     //journalList.dbError = dbc.getErr(); // returns "" if connection is good, else db error msg.
     
     //if (collectionList.dbError.length() == 0) { // got open connection
-        
+       try{ 
         String user = request.getParameter("userInput");
-
         System.out.println("jsp page ready to search for items with patientID " + user);
         journalList = view.WebJournalView.getJournalList(user, dbc);
     //} 
-    
+       }catch(Exception e){
+           
+       }finally{
+           dbc.close();
+       }
     // PREVENT DB connection leaks:
     dbc.close(); // EVERY code path that opens a db connection, must also close it.
 

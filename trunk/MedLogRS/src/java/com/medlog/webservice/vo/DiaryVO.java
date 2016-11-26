@@ -11,6 +11,7 @@ import com.medlog.webservice.CONST.*;
 import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.util.*;
+import static com.medlog.webservice.util.StrUtl.toS;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -188,7 +189,7 @@ public void setTagList(List<TagVO> tagList) {
  * @return the title
  */
 public String getTitle() {
-   return title;
+   return toS(title);
 }
 
 /**

@@ -10,6 +10,7 @@ import static com.medlog.webservice.CONST.DB_STRINGS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.rest.*;
 import com.medlog.webservice.rest.controller.*;
+import com.medlog.webservice.services.tone.ToneProcessorFactory;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
@@ -153,6 +154,11 @@ public class MedLogDAO implements IMedLogDAO {
             this.stateOK = false;
             this.errorMessage = "createDiary, invalid params.";
 
+        }
+        //Analysize text when approperiate.
+        if (newID > 0 &&_vo.getNotes().length()>5 && _vo.getNotes().split(" ").length > 3){
+            _vo.setId(newID);
+            ToneProcessorFactory.execute(db, _vo);
         }
         return newID;
     }
