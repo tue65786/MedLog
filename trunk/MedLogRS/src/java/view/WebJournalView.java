@@ -34,6 +34,7 @@ public class WebJournalView {
             sd.updatedDate = FormatUtils.formatDate(results.getObject("updatedDate"));
             sd.mood = FormatUtils.formatInteger(results.getObject("ratingMood"));
             sd.productivity = FormatUtils.formatInteger(results.getObject("ratingProductivity"));
+            sd.patientID = FormatUtils.formatInteger(results.getObject("PatientID"));
         } catch (Exception e) {
             sd.errorMessage = "Error in WebJournalView.dbRowToStringData: " + e.getMessage();
         }
@@ -95,5 +96,32 @@ public class WebJournalView {
             journalList.dbError = e.getMessage();
         }
         return journalList;
+    }
+    
+    public static StringData getJournal(String journalID, DbConnection dbc) {
+
+        StringData journal = new StringData();
+        System.out.println("getJournal searching for item with journalID " + journalID);
+
+        try {
+
+            // Get journal data
+            String sql = "SELECT Id, Title, Notes, NotesActivity, createdDate, updatedDate, ratingMood, ratingProductivity, PatientID FROM Diary WHERE Diary.Id = ?";
+            
+            PreparedStatement stmt = dbc.getConnnection().prepareStatement(sql);
+            
+            stmt.setString(1, journalID);
+            ResultSet results = stmt.executeQuery();
+
+            journal = null;
+            if(results.next()) {
+                journal = dbRowToStringData(results);
+            }
+            results.close();
+            stmt.close();
+        } catch (Exception e) {
+            
+        }
+        return journal;
     }
 }

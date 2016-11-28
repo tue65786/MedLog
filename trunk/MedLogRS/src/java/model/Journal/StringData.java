@@ -9,11 +9,12 @@ public class StringData {
     public String updatedDate = "";
     public String mood = "";
     public String productivity = "";
+    public String patientID = "";
     public String errorMessage = "";
     
     public int getCharacterCount() {
         String s = this.id + this.title + this.notes + this.notesActivity + this.createdDate +
-                this.updatedDate + this.mood + this.productivity;
+                this.updatedDate + this.mood + this.productivity + this. patientID;
         return s.length();
     }
     
@@ -26,6 +27,7 @@ public class StringData {
                 ", Date Updated:" + this.updatedDate+
                 ", Mood Rating:" + this.mood+
                 ", Productivity Rating:" + this.productivity+
+                ", Patient ID:" + this.patientID+
                 ", Error Message:" + this.errorMessage;
     }
 }

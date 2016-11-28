@@ -6,7 +6,7 @@
 <%@page language="java" import="view.WebJournalView" %>
 
 <%
-    StringDataList journalList = new StringDataList(0); // Empty country list with no db error.
+    StringDataList journalList = new StringDataList(0); // Empty list with no db error.
     
     DbConnection dbc = new DbConnection();
     

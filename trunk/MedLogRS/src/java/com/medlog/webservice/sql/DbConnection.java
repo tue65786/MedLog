@@ -45,7 +45,7 @@ private Connection dbconn;
  * @see SETTINGS#JDBC_DRIVE_CLASS
  */
 private String dbConnString;
-private String error;
+private String error = "";
 private static final Logger LOG = Logger.getLogger( DbConnection.class.getName() );
 public static int getOpenConnections(){
    return DbConnection.openConnections;
