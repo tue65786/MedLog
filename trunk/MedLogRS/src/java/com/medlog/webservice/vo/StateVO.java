@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.vo;
 
+import com.google.gson.annotations.Expose;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -118,9 +119,16 @@ public String toTableRow() {
    throw new UnsupportedOperationException( "Not supported yet." ); //To change body of generated methods, choose Tools | Templates.
 }
 
+@Expose(deserialize = true,serialize = true)
 private int stateID;
+
+@Expose(deserialize = true,serialize = true)
 private String stateName;
+
+@Expose(deserialize = true,serialize = true)
 private String stateAbbreviation;
+
+@Expose(deserialize = false,serialize = false)
 private List<PatientVO> patientList;
 
 /**

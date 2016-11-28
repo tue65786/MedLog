@@ -53,6 +53,19 @@ public static final String APPLICATION_SIG_BEAN = "com.medlog.webservice.vo.SigV
 public static final String APPLICATION_RX_BEAN = "com.medlog.webservice.vo.PharmaRXOtcVO";
 public static final String APPLICATION_DR_BEAN = "com.medlog.webservice.vo.HealthcareProviderVO";
 /**
+ * API  Credentials. Valud for 30 days beginning 11.25.16
+ */
+public static final String WATSON_USER = "d2f6715f-5baf-4420-bd22-a9a87854c7b1";
+/**
+ * Valid 30days + 11/26/30  
+ */
+//{
+//  "url": "https://gateway.watsonplatform.net/personality-insights/api",
+//  "password": "K8gDBEtxhIjX",
+//  "username": "850e4164-6c83-416d-b356-9ad6bac09fa1"
+//}
+public static final String WATSON_PASS = "oOxW06RaXCCE";
+/**
  * No instantiation.
  */
 private SETTINGS() {

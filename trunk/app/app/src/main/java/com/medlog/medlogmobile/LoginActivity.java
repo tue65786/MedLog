@@ -61,9 +61,9 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+        /**
+         * Keep track of the login task
+         */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -72,7 +72,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     SharedPreferences spf;
-    private PatientVO user;
+    private PatientVO user, storedUser;
+
 
     public static Intent createIntent(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -87,7 +88,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         spf = getPreferences(MODE_PRIVATE);
-
+        if (spf.contains(getString(R.string.p_usr_str))) {
+            storedUser = PatientVO.fromJSON(spf.getString(getString(R.string.p_usr_str), "{}"));
+        }
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -121,6 +124,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
+     * <p>
+     * TODO Check for offline credentials.
      */
     private void attemptLogin() {
         if (mAuthTask != null) {
@@ -275,13 +280,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
+        String usr = "";
         private final String mEmail;
         private final String mPassword;
 
         UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+            mEmail = email + "";
+            mPassword = password + "";
 
         }
 
@@ -292,25 +297,46 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Log.i(getString(R.string.tag_network), "Online? + " + hasINet);
                 //TODO Make url builder.
                 String tURL = getString(R.string.api_prefix) + "fn=login&username=" + mEmail + "&password=" + mPassword;
-                String usr = LoginActivity.getUrlSource(tURL);
+                Log.i("KK", tURL);
 
-                try {
-                    user = PatientVO.fromJSON(usr);
-                    Log.i(getString(R.string.tag_vos), user.toString());
-                    //TODO: Retrieve Diary entries for user.
-                    boolean isValidUser = (user != null && user.getPatientID() > 0);
-                    if (isValidUser) {
-                        if (!spf.edit().putString(getString(R.string.p_usr_str), usr).commit()) {
-                            Log.w(getString(R.string.tag_store_lcl), "Could not commit user");
+
+                if (hasINet) {
+
+                    usr = LoginActivity.getUrlSource(tURL);
+
+                    try {
+                        user = PatientVO.fromJSON(usr);
+                        Log.i(getString(R.string.tag_vos), user.toString());
+                        //TODO: Retrieve Diary entries for user.
+                        boolean isValidUser = (user != null && user.getPatientID() > 0);
+                        if (isValidUser) {
+                            if (!spf.edit().putString(getString(R.string.p_usr_str), usr).commit()) {
+                                Log.w(getString(R.string.tag_store_lcl), "Could not commit user");
+                            }
+
+                        }
+                        Log.i(getString(R.string.tag_async), "JSON RESPONSE: " + usr);
+                        return isValidUser;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    if (storedUser != null && storedUser.getPatientID() > 0) {
+                        if (mEmail.equalsIgnoreCase(storedUser.getUserName()) || mEmail.equals(storedUser.getEmail())) {
+                            if (mPassword.equals(storedUser.getUserPassword())) {
+                                user = storedUser;
+                                if (spf.contains(getString(R.string.p_usr_str))) {
+                                    usr = spf.getString(getString(R.string.p_usr_str), "{}");
+                                }
+                                Log.i(getString(R.string.tag_store_lcl), " Logged in from local : " + usr);
+                                return true;
+                            }
                         }
                     }
-                    return isValidUser;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    return false;
                 }
 //                JSONObject jo = getJSONFromUrl(tURL);
 
-                Log.i(getString(R.string.tag_async), "JSON RESPONSE: " + usr);
 
             }
 //            catch (IOException ioe){
@@ -339,7 +365,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //Load main activity\
                 //----------------------
                 Intent mainI = new Intent(LoginActivity.this, MainActivity.class);
-                mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
+                //mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
+                mainI.putExtra(getString(R.string.intent_val_user_json), usr);
                 if (getString(R.string.DEBUG).equals("true")) {
                     printPrefs();
                 }

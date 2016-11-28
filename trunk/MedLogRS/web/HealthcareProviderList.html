@@ -34,49 +34,35 @@ and open the template in the editor.
             $(document).ready(function() {
                 var URL = new URLBuilder();
                 var editID = getIDParamFromRequest();
-                //var redirectPage = "home.jsp";
                 var healthcareProviderList = "";
                 var currentProviderFn = "./api/?res=h&fn=find";
-                var loopURL = URL;
-                var escape = false;
                 /* Get the whole list of healthcare providers */
                 $.get(currentProviderFn).done(function (currentProviderData){
                     if ( typeof currentProviderData === 'undefined'){
                         
                     } else {
-                        editID = currentProviderData.physicianID;
-                        loopURL += "?id=" + editID;
-                        while (!escape) {
-                            $.get(loopURL).done(function (currentProviderInfo){
-                                healthcareProviderList.push(currentProviderInfo);
-                                if(currentProviderInfo === 'undefined'){
-                                    escape = true;
-                                }else {
-                                    editID++;
-                                    loopURL = URL += "?id=" + editID;
-                                }
-                            });   
-                        }
+                        createHPTable(currentProviderData);
                     }
                 });
                 /* Display the providers, edit on click */
-                var providerListLen = healthcareProviderList.length;
-                for (var i = 0; i < providerListLen; i++) {
-                    var healthcareProvider = healthcareProviderList[i];
-                    tableOutput = tableOutput 
-                                    + "<tr title='Click to edit' onclick='showRow(" + healthcareProvider.id + ")'><td>" 
-                                    + healthcareProvider.firstName + "</td><td>"
-                                    + healthcareProvider.lastName + "</td><td>"
-                                    + healthcareProvider.specialty + "</td><td>" 
-                                    + healthcareProvider.addressStreet + "</td></tr>"
-                                    + healthcareProvider.addressCity + "</td></tr>"
-                                    + healthcareProvider.addressZip + "</td></tr>"
-                                    + healthcareProvider.phoneWork + "</td></tr>";
+                function createHPTable(healthcareProviderList){
+                    var tableOutput = "<table><tr><th>First Name</th><th>Last Name</th><th>Specialty</th><th>Business Phone</th></tr>";
+                    var providerListLen = healthcareProviderList.length;
+                    for (var i = 0; i < providerListLen; i++) {
+                        var healthcareProvider = healthcareProviderList[i];
+                        tableOutput = tableOutput 
+                                        + "<tr title='Click to edit' onclick='showRow(" + healthcareProvider.physicianID + ")'><td>" 
+                                        + healthcareProvider.firstName + "</td><td>"
+                                        + healthcareProvider.lastName + "</td><td>"
+                                        + healthcareProvider.specialty + "</td><td>"
+                                        + healthcareProvider.phoneWork + "</td></tr>";
+                    }
+                    tableOutput = tableOutput + "</table>";
+                    console.log(tableOutput);
+                    $("#abody").html(tableOutput);
                 }
-                tableOutput = tableOutput + "</tr></table>";
-                $("#abody").html(tableOutput);
-
-                /* Editing a Provider */
+                /*
+                Editing a Provider
                 function loadCurrentHealthcareProvider(editID){
                     var currentProviderFn = "./api/?res=h&fn=find";
                     $.get(currentProviderFn).done(function ( currentProviderData ) {
@@ -99,17 +85,18 @@ and open the template in the editor.
                                 }
                     });
                 }
+                */
                 /**
                  * Function to load editor form (the page you made already)
                  */
-                /*
-                function showRow(editID) {
-                    loadCurrentHealthcareProvider();
-                  //you would change this to load page..
-                  //window.location.href = "FormName.html?id=" + editId;
-                }
-                */
+                
+                
+                
             });
+            function showRow(editID) {
+                  //you would change this to load page..
+                  window.location.href = "HealthcareProvider.html?id=" + editID;
+                }
         </script>
     </body>
 </html>

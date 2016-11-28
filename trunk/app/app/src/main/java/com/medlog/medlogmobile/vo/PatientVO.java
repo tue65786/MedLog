@@ -354,7 +354,7 @@ public class PatientVO  implements Serializable, Parcelable {
         this.metaData = in.readString();
         this.userRole = in.readInt();
         this.diaryList = new ArrayList<DiaryVO>();
-        in.readList(this.diaryList, List.class.getClassLoader());
+        in.readList(this.diaryList, ArrayList.class.getClassLoader());
     }
 
     public static final Creator<PatientVO> CREATOR = new Creator<PatientVO>() {

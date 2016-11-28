@@ -43,6 +43,8 @@ public class NetConnStatus {
             NetworkInfo networkInfo = getConnectivityManager().getActiveNetworkInfo();
             setConnFound(networkInfo != null && networkInfo.isAvailable() &&
                     networkInfo.isConnected());
+
+            Log.w("NET", "Connection: " + isConnFound());
             return isConnFound();
         } catch (Exception e) {
             Log.w("NET", e.toString(), e);

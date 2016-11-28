@@ -10,6 +10,7 @@ import static com.medlog.webservice.CONST.DB_STRINGS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.rest.*;
 import com.medlog.webservice.rest.controller.*;
+import com.medlog.webservice.services.tone.ToneProcessorFactory;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
@@ -90,6 +91,10 @@ public class MedLogDAO implements IMedLogDAO {
         try {
             if (_vo != null && _vo.getPatientID() == null && getCurrentUser() != null) {
                 _vo.setPatientID(getCurrentUser());
+            }else  if (getCurrentUser() == null || getCurrentUser().getPatientID() <= 0){
+                if (_vo.getPatientID()!= null){
+                    setUser(_vo.getPatientID());
+                }
             }
         } catch (Exception e) {
             if (DEBUG) {
@@ -149,6 +154,11 @@ public class MedLogDAO implements IMedLogDAO {
             this.stateOK = false;
             this.errorMessage = "createDiary, invalid params.";
 
+        }
+        //Analysize text when approperiate.
+        if (newID > 0 &&_vo.getNotes().length()>5 && _vo.getNotes().split(" ").length > 3){
+            _vo.setId(newID);
+            ToneProcessorFactory.execute(db, _vo);
         }
         return newID;
     }
@@ -435,7 +445,11 @@ public class MedLogDAO implements IMedLogDAO {
 
     @Override
     public ArrayList<DiaryVO> findDiaryByPatient() {
-        return findDiary(0, null);
+        return findDiary(0, null,true);
+    }
+    
+    public ArrayList<DiaryVO> findDiaryByPatientFull() {
+        return findDiary(0, null,false);
     }
 
     @Override
@@ -555,11 +569,24 @@ public class MedLogDAO implements IMedLogDAO {
     @Override
     public PatientVO findPatientByPatientNameAndPassword(String _username, String _password) {
         ArrayList<PatientVO> voList = findPatient(0, _username, _password);
+        PatientVO retVO;
         if (voList != null && !voList.isEmpty()) {
             if (DEBUG && voList.size() > 1) {
                 LOG.warning("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()\n---Returned Multiple VALUES -- something is wrong!");
             }
+            if (voList != null &&voList.size()==1){
+                retVO = voList.get(0);
+                setUser(retVO);
+                ArrayList<DiaryVO> d = findDiaryByPatient();
+               for (DiaryVO v :d){
+                   System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()" + v.toJSON());
+               }
+                System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()");
+                retVO.setDiaryList(findDiaryByPatient());
+           return retVO;
+            }
             return voList.get(0);
+            
         } else {
             return null;
         }
@@ -983,7 +1010,10 @@ public class MedLogDAO implements IMedLogDAO {
         }
         return newID;
     }
-
+private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
+    return findDiary(_id, _keyword, true);
+}
+    
     /**
      * Diary selection base
      *
@@ -991,7 +1021,7 @@ public class MedLogDAO implements IMedLogDAO {
      * @param _keyword
      * @return
      */
-    private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
+    private ArrayList<DiaryVO> findDiary(int _id, String _keyword,boolean patientLite) {
         ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
         _keyword = StrUtl.toS(_keyword);
         int ct = 0;
@@ -1028,7 +1058,7 @@ public class MedLogDAO implements IMedLogDAO {
                             .notesActivity(rs.getString("notesActivity"))
                             .mood(rs.getInt("ratingMood"))
                             .productivity(rs.getInt("ratingProductivity"))
-                            .patientID(getCurrentUser())
+                            .patientID(patientLite ? PatientVO.builder().patientID(getCurrentUser().getPatientID()).build(): getCurrentUser())
                             .createdDate(rs.getDate("createdDate"))
                             .build(ct++));
                 }

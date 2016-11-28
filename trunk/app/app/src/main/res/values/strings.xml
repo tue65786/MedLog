@@ -99,4 +99,7 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="save_diary_entry">Save Entry</string>
     <string name="diary_title">Title</string>
+    <string name="lcl_db_data">unsynced_data</string>
+    <string name="lcl_db_hasdata">dataToSync</string>
+    <string name="intent_val_user_json">userString</string>
 </resources>
