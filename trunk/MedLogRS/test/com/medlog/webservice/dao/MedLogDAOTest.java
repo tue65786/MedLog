@@ -222,7 +222,7 @@ public void testFindPatientByPatientNameAndPassword() {
 public void testFindStatesByKeyword() {
    System.out.println( "findStatesByKeyword" );
    String _keyword = "";
-   MedLogDAO instance = null;
+   MedLogDAO instance = null;               
    ArrayList<StateVO> expResult = null;
    ArrayList<StateVO> result = instance.findStatesByKeyword( _keyword );
    assertEquals( expResult, result );

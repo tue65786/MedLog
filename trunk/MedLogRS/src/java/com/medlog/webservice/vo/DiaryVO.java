@@ -12,6 +12,7 @@ import static com.medlog.webservice.CONST.API_ACTIONS.*;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import com.medlog.webservice.util.*;
 import static com.medlog.webservice.util.StrUtl.toS;
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
@@ -105,7 +106,7 @@ public void setMood(int mood) {
  * @return the notes
  */
 public String getNotes() {
-   return StrUtl.toS( notes );
+   return StrUtl.removeHtmlMarkups(notes);
 }
 
 /**
@@ -119,7 +120,7 @@ public void setNotes(String notes) {
  * @return the notesActivity
  */
 public String getNotesActivity() {
-   return StrUtl.toS( notesActivity );
+   return StrUtl.removeHtmlMarkups(notesActivity );
 }
 
 /**
@@ -189,7 +190,7 @@ public void setTagList(List<TagVO> tagList) {
  * @return the title
  */
 public String getTitle() {
-   return toS(title);
+   return StrUtl.removeHtmlMarkups(title);
 }
 
 /**
@@ -340,17 +341,17 @@ public Builder id(final int value) {
 }
 
 public Builder title(final String value) {
-   this.title = value;
+   this.title = StrUtl.removeHtmlMarkups(value);
    return this;
 }
 
 public Builder notes(final String value) {
-   this.notes = value;
+   this.notes = StrUtl.removeHtmlMarkups(value).replace("   ", " ");
    return this;
 }
 
 public Builder notesActivity(final String value) {
-   this.notesActivity = value;
+   this.notesActivity = StrUtl.removeHtmlMarkups(value);
    return this;
 }
 
@@ -410,9 +411,9 @@ public static DiaryVO.Builder builder() {
 
 private DiaryVO(final int id, final String title, final String notes, final String notesActivity, final Date createdDate, final Date updatedDate, final String includeMedsCurrent, final String attachmentPath, final int mood, final int productivity, final List<TagVO> tagList, final PatientVO patientID) {
    this.id = id;
-   this.title = title;
-   this.notes = notes;
-   this.notesActivity = notesActivity;
+   this.title = StringUtils.capitalize(StrUtl.removeHtmlMarkups(title));
+   this.notes = StrUtl.removeHtmlMarkups(notes);
+   this.notesActivity = StrUtl.removeHtmlMarkups(notesActivity);
    this.createdDate = createdDate;
    this.updatedDate = updatedDate;
    this.includeMedsCurrent = includeMedsCurrent;

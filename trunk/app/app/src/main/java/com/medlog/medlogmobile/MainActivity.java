@@ -3,13 +3,17 @@ package com.medlog.medlogmobile;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +39,9 @@ import android.widget.Toast;
  * Diary Activity
  */
 public class MainActivity extends AppCompatActivity {
+    //Current user
     private PatientVO user;
+    // UI references.
     private SeekBar sbMood;
     private SeekBar sbProd;
     private EditText txtTitle;
@@ -43,7 +49,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSubmit;
     private View mProgressView;
     private View mFormView;
+    CountDownTimer countDownTimer;
 
+    private static final int MY_NOTIFICATION_ID = 1;
+    private NotificationManager notificationManager;
+    private NotificationCompat.Builder myNotification;
     /**
      * Keep track of the submit task - disallow multiple instance.
      */
@@ -66,14 +76,10 @@ public class MainActivity extends AppCompatActivity {
         txtNotes = (EditText) findViewById(R.id.txtNotes);
         mFormView = findViewById(R.id.mainact_form);
         mProgressView = findViewById(R.id.main_progress);
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        showNotice(1, "okkkkkkkkkkk");
 
-                doSubmitDiary(true);
-            }
-        });
-        sbMood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+        SeekBar.OnSeekBarChangeListener sbl = new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 //TODO indicate seekbar value.
@@ -86,10 +92,26 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                String s = "productivity";
 
+                if (seekBar.getId() == R.id.sbMood) {
+                    s = "mood";
+                }
+                Toast.makeText(getApplicationContext(), new StringBuilder(s + " value  ")
+                        .append(seekBar.getProgress()).toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        //Handle form events
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                doSubmitDiary(true);
             }
         });
 
+        sbMood.setOnSeekBarChangeListener(sbl);
+        sbProd.setOnSeekBarChangeListener(sbl);
         /**
          * Pick up data sent from login
          * @see PatientVO
@@ -115,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
     }
 
     @Override
@@ -126,10 +147,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * Handle menu button events
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.btnSync://Sync clicked
                 if (diaryVoList != null && diaryVoList.size() > 0) {
                     showProgress(true);
@@ -140,24 +163,25 @@ public class MainActivity extends AppCompatActivity {
                     try {
 
                         // Add a fake sleep to tes loader
-                        Thread.sleep(1500);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         showProgress(false);
                     }
                     showProgress(false);
-                    Toast.makeText(getApplicationContext(), new StringBuilder().append(" Nothing to sync").toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), new StringBuilder()
+                            .append(getString(R.string.nothing_to_sync)).toString(), Toast.LENGTH_LONG).show();
 
                 }
                 break;
             case R.id.rpt://Report load
-                if (user.getDiaryList() != null && user.getDiaryList().size()>0) {
+                if (user.getDiaryList() != null && user.getDiaryList().size() > 0) {
                     Intent mainI = new Intent(MainActivity.this, ReportActivity.class);
                     mainI.putExtra(getString(R.string.intent_val_user_json), userString);
 
 // mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
                     startActivity(mainI);
                     return true;
-                }else{
+                } else {
                     return false;
                 }
 
@@ -180,16 +204,27 @@ public class MainActivity extends AppCompatActivity {
             diaryVoList.add(DiaryVO.builder().mood(sbMood.getProgress()).productivity(sbProd.getProgress())
                     .title(Helpers.toS(txtTitle.getText().toString(), "Entry")).notes(notes).build());
         }
-        if (NetConnStatus.getInstance(this).isOnline()) {
+        boolean amIOnline = NetConnStatus.getInstance(this).isOnline();
+        if (amIOnline) {
             //TODO Submit diary
             showProgress(true);
-            mSubmitTask = new SubmitDiaryTask(diaryVoList, user.getPatientID());
+            mSubmitTask = new SubmitDiaryTask(diaryVoList, user.getPatientID(), amIOnline);
 
 
             mSubmitTask.execute((Void) null);
         } else {
+            countDownTimer = new CountDownTimer(3000, 500) {
 
-            Log.i(getString(R.string.tag_debug), "offline store list size:" + diaryVoList.size());
+                public void onTick(long millisUntilFinished) {
+                    Log.d(getString(R.string.tag_debug), "tick....");
+                }
+
+                public void onFinish() {
+                    showProgress(false);
+                }
+            }.start();
+
+            Log.d(getString(R.string.tag_debug), "offline store list size:" + diaryVoList.size());
 
 
         }
@@ -204,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
         sbMood.setProgress(0);
         txtTitle.setText("");
         txtNotes.setText("");
+
     }
 
     /**
@@ -214,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         private final int patientID;
         ArrayList<DiaryVO> voList;
 
-        public SubmitDiaryTask(ArrayList<DiaryVO> vList, int patientID) {
+        public SubmitDiaryTask(ArrayList<DiaryVO> vList, int patientID, boolean online) {
             voList = vList;
             this.patientID = patientID;
         }
@@ -248,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
             showProgress(false);
             //Diary entires sent.
             if (ct >= voList.size()) {
+                showNotice(ct, getString(R.string.items_saved));
                 if (user.getDiaryList() == null) {
                     user.setDiaryList(new ArrayList<DiaryVO>());
                     user.getDiaryList().addAll(voList);
@@ -255,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 voList.clear();
                 Log.i(getString(R.string.tag_debug), "list size:" + diaryVoList.size());
                 diaryVoList.clear();
-                Toast.makeText(getApplicationContext(), new StringBuilder().append(ct + " ").append(" item(s) added saved!").toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), new StringBuilder().append(ct + " ").append(getString(R.string.items_saved)).toString(), Toast.LENGTH_LONG).show();
 
             }
         }
@@ -268,22 +305,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        savePrefs();
+
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        SharedPreferences prf = getPreferences(MODE_PRIVATE);           //saves all symbols of past portfolio
-        SharedPreferences.Editor e = prf.edit();
-        if (diaryVoList != null && diaryVoList.size() > 0) {
-            String json = new GsonBuilder().serializeNulls().create().toJson(diaryVoList);
-            e.putString(getString(R.string.lcl_db_data), json);
-            e.putBoolean(getString(R.string.lcl_db_hasdata), true);
-        } else {
-            e.putBoolean(getString(R.string.lcl_db_hasdata), false);
-            e.remove(getString(R.string.lcl_db_data));
-        }
 
 
     }
 
+    /**
+     * Set action bar interface
+     *
+     * @param actionBar
+     * @param heading
+     */
     public void setActionBar(ActionBar actionBar, String heading) {
         // TODO Auto-generated method stub
 
@@ -302,6 +342,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void savePrefs() {
+        SharedPreferences prf = getPreferences(MODE_PRIVATE);           //saves all symbols of past portfolio
+        SharedPreferences.Editor e = prf.edit();
+        if (diaryVoList != null && diaryVoList.size() > 0) {
+            String json = new GsonBuilder().serializeNulls().create().toJson(diaryVoList);
+            e.putString(getString(R.string.lcl_db_data), json);
+            e.putBoolean(getString(R.string.lcl_db_hasdata), true);
+        } else {
+            e.putBoolean(getString(R.string.lcl_db_hasdata), false);
+            e.remove(getString(R.string.lcl_db_data));
+        }
+    }
+
+    //TODO make the sync spin!
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -330,6 +384,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
+
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
@@ -347,4 +402,25 @@ public class MainActivity extends AppCompatActivity {
 //        imageView.startAnimation(animation);
 //        item.setActionView(imageView);
     }
+
+    private void showNotice(int rows, String action) {
+        NewMessageNotification.notify(getApplicationContext(), action, rows);
+//    notificationManager = NewMessageNotification.
+//            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//    myNotification = new NotificationCompat.Builder(getApplicationContext());
+//    int x = result.split("http").length - 1;
+//    myNotification.setContentTitle("Files updated").setContentText(x + " file"+ (x>1?"s":"")+" updated");
+//    myNotification.setSmallIcon(R.drawable.ml);
+//    Context context = getApplicationContext();
+//    //Push to notify activity
+//    Intent myIntent = new Intent(context, MyNotificationActivity.class);
+//    myIntent.putExtra(Helpers.IPARAM_NOTIFY_MSG, result.replace("http", "\r\nhttp") + "\r\n\r\nChecking every : " + intervalMin + " minute" + (intervalMin > 1 ? "s.":"."));
+//    PendingIntent pendingIntent
+//            = PendingIntent.getActivity(getBaseContext(),
+//            0, myIntent,
+//            PendingIntent.FLAG_UPDATE_CURRENT);
+//    myNotification.setContentIntent(pendingIntent);
+//    notificationManager.notify(MY_NOTIFICATION_ID, myNotification.build());
+    }
+
 }

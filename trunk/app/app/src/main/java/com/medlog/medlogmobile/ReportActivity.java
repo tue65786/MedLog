@@ -28,16 +28,11 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         graphView = (GraphView) findViewById(R.id.graph);
-
         Intent receivedIntent = getIntent();
         //Load user info.
         if (receivedIntent != null) {
-
-            userString = receivedIntent.getStringExtra(getString(R.string.intent_val_user_json));
-
-            user = PatientVO.fromJSON(userString);
+            user = getUserFromIntent(receivedIntent);
             getSupportActionBar().setTitle(user.getUserName() +  " Journal Report");
-//            user = receivedIntent.getParcelableExtra(getString(R.string.int_user));
             if (getString(R.string.DEBUG).equals("true")) {
                 Log.i(getString(R.string.tag_debug), "User  : " + user.toString());
             }
@@ -45,10 +40,14 @@ public class ReportActivity extends AppCompatActivity {
         initGraph(graphView, user);
     }
 
+    private PatientVO getUserFromIntent(Intent receivedIntent) {
+        userString = receivedIntent.getStringExtra(getString(R.string.intent_val_user_json));
+        return  PatientVO.fromJSON(userString);
+    }
+
     public void initGraph(GraphView graph, PatientVO user) {
 
         DataPoint[] moods = new DataPoint[user.getDiaryList().size()];
-
         DataPoint[] prods = new DataPoint[user.getDiaryList().size()];
 
         for (int i = 0; i < user.getDiaryList().size(); i++) {
@@ -59,7 +58,6 @@ public class ReportActivity extends AppCompatActivity {
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(moods);
         graph.addSeries(series);
-
         LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(prods);
         graph.addSeries(series2);
         series.setTitle("Mood");

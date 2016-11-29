@@ -15,12 +15,12 @@
     </string>
     <string name="p_uid">userid</string>
     <string name="p_usr_str">userjson</string>
-    <string name="tag_store_lcl">LDATA</string>
-    <string name="tag_store_web">RDATA</string>
-    <string name="tag_async">ASYNC</string>
-    <string name="tag_network">NET</string>
-    <string name="tag_vos">POJO</string>
-    <string name="tag_debug">DEBUGGING</string>
+    <string name="tag_store_lcl">userLDATA</string>
+    <string name="tag_store_web">userRDATA</string>
+    <string name="tag_async">userASYNC</string>
+    <string name="tag_network">userNET</string>
+    <string name="tag_vos">userPOJO</string>
+    <string name="tag_debug">userDEBUGGING</string>
     <string name="api_prefix">http://niftybull.com/MedLogRS/api?</string>
     <string name="DEBUG">true</string>
     <string name="int_user">iuser</string>
@@ -102,4 +102,21 @@
     <string name="lcl_db_data">unsynced_data</string>
     <string name="lcl_db_hasdata">dataToSync</string>
     <string name="intent_val_user_json">userString</string>
+    <string name="nothing_to_sync">" Nothing to sync"</string>
+    <string name="items_saved">" item(s) added saved. Sync complete."</string>
+
+    <string name="new_message_notification_title_template">Updates: %1$s</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="new_message_notification_placeholder_text_template">%1$s and lorem ipsum
+        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
+        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor.
+    </string>
+
+    <string name="action_share">Share w/ HcP</string>
+    <string name="action_reply">Visit Webapp</string>
 </resources>

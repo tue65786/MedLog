@@ -61,9 +61,9 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 
-        /**
-         * Keep track of the login task
-         */
+    /**
+     * Keep track of the login task
+     */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -71,6 +71,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    //Local instances.
     SharedPreferences spf;
     private PatientVO user, storedUser;
 
@@ -307,7 +309,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     try {
                         user = PatientVO.fromJSON(usr);
                         Log.i(getString(R.string.tag_vos), user.toString());
-                        //TODO: Retrieve Diary entries for user.
+
+                        //Store credentials in local db
                         boolean isValidUser = (user != null && user.getPatientID() > 0);
                         if (isValidUser) {
                             if (!spf.edit().putString(getString(R.string.p_usr_str), usr).commit()) {
@@ -335,16 +338,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                     return false;
                 }
-//                JSONObject jo = getJSONFromUrl(tURL);
-
-
-            }
-//            catch (IOException ioe){
-//                    Log.e("ASYNC","",ioe);
-//                return false;
-//
-//            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.i(getString(R.string.tag_async), "", e);
                 return false;
             }
@@ -356,13 +350,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-
+            //Logged in?
             if (success) {
                 Toast.makeText(getApplicationContext(), new StringBuilder().append("Hello ").append(user.getFirstName()).append(", welcome back!").toString(), Toast.LENGTH_LONG).show();
                 Log.i(getString(R.string.tag_store_lcl), "SAVE PREFS: " + spf.edit().putInt(getString(R.string.p_uid), user.getPatientID()).commit());
                 // finish();
 
-                //Load main activity\
+                //Load main activity
                 //----------------------
                 Intent mainI = new Intent(LoginActivity.this, MainActivity.class);
                 //mainI.putExtra(getString(R.string.int_user), (Parcelable) user);
