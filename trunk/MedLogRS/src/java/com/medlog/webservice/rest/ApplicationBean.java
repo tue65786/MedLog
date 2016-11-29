@@ -182,6 +182,9 @@ public void setSigSet(boolean sigSet) {
  * @return the stateSet
  */
 public boolean isStateSet() {
+    if (statesMap == null || statesMap.isEmpty()){
+        setStateSet(false);
+    }
    return stateSet;
 }
 

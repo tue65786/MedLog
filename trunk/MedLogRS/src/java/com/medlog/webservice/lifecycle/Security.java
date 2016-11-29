@@ -179,11 +179,14 @@ public class Security implements Filter {
         String fn = "";
         if (req.getParameter(API_PARAM_FUNCTION) != null) {
             fn = req.getParameter(API_PARAM_FUNCTION);
+            System.out.println("com.medlog.webservice.lifecycle.Security.isAPIRequest() true");
             return true;
 
         }
         if (req.getParameter(API_PARAM_RESOURCE) != null) {
+             System.out.println("com.medlog.webservice.lifecycle.Security.isAPIRequest() true");
             return true;
+            
         }
 
 //        if (!StrUtl.matchOR(res, API_RESOURCE_STATES,API_RESOURCE_SIG,API_RESOURCE_PHARM)){
@@ -219,7 +222,7 @@ public class Security implements Filter {
     }
 
     private boolean hasAccess(String uri, String file, HttpServletRequest httprequest) {
-        boolean hasAccess = isLoggedIn(httprequest) || StrUtl.regexTest(REG_EX_isNonSecurePages, StrUtl.toS(uri), true) || (!StringUtils.endsWith(uri, "html") && !StringUtils.endsWith(uri, "jsp"));
+        boolean hasAccess = isLoggedIn(httprequest)|| isAPIRequest(httprequest)|| StrUtl.regexTest(REG_EX_isNonSecurePages, StrUtl.toS(uri), true) || (!StringUtils.endsWith(uri, "html") && !StringUtils.endsWith(uri, "jsp"));
         if (DEBUG) {
             log(String.format("User %s access to %s.", hasAccess ? "HAS" : "DOES HOT HAVE", StrUtl.toS(uri)));
         }
@@ -231,7 +234,7 @@ public class Security implements Filter {
         ret[0] = StrUtl.toS(httprequest.getRequestURI());
         try {
             String file = ret[0];
-            if (file.contains("/")) {
+            if (file.contains("/")) { 
                 file = file.substring(file.lastIndexOf("/") + 1, file.length());
             }
             if (file.contains("?")) {
