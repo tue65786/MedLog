@@ -60,9 +60,9 @@ public class MedLogDAO implements IMedLogDAO {
             if (app.isSigSet()) {
                 sigMap = app.getSigMap();
             }
-            if (app.isStateSet()) {
-                statesMap = app.getStatesMap();
-            }
+//            if (app.isStateSet()) {
+                statesMap = findAllStates(true);
+//            }
         } catch (Exception e) {
 
         }

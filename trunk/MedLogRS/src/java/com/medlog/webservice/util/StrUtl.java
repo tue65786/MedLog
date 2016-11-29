@@ -109,9 +109,9 @@ public class StrUtl {
             try {
                 clean = matcher.replaceAll("");
             } catch (IllegalArgumentException ex) {
-            } catch (IndexOutOfBoundsException ex) {
+            } catch (Exception ex) {
             }
-        } catch (PatternSyntaxException ex) {
+        } catch (Exception ex) {
         }//
         return toS(clean);
     }
