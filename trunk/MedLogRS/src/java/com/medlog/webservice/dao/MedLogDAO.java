@@ -1077,7 +1077,44 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
         }
         return voList;
     }
-
+public ArrayList<DiaryAnalysisVO> findDiaryCrossTab(int patientid){
+    ArrayList<DiaryAnalysisVO> voList = new ArrayList<>();
+    PreparedStatement ps  = null;
+    ResultSet rs = null;
+    try {
+             ps = db.getConnnection().prepareStatement(PS_DIARY_DATA);
+            ps.setInt(1, patientid);
+            rs = ps.executeQuery();
+            int i=0;
+            while (rs.next()){
+             voList.add(  DiaryAnalysisVO.builder()
+                       .agreeablenessBig5(rs.getDouble("agreeableness_Big5"))
+                       .analytical(rs.getDouble("analytical"))
+                       .anger(rs.getDouble("anger"))
+                       .confident(rs.getDouble("confident"))
+                       .conscientiousnessBig5(rs.getDouble("conscientiousness_Big5"))
+                       .diaryID(rs.getInt("diaryID"))
+                       .disgust(rs.getDouble("disgust"))
+                       .emotionalRangeBig5(rs.getDouble("emotionalRange_Big5"))
+                       .extraversionBig5(rs.getDouble(""))
+                       .fear(rs.getDouble("fear"))
+                       .joy(rs.getDouble("joy"))
+                       .mood(rs.getInt("mood"))
+                       .opennessBig5(rs.getDouble("openness_Big5"))
+                       .producivtiy(rs.getInt("productivity"))
+                       .sadness(rs.getDouble("sadness"))
+                       .tentative(rs.getDouble("tentative"))
+                       .build(i++));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MedLogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    finally{
+    DbUtl.close(rs);
+    DbUtl.close(ps);
+    }
+    return  voList;
+}
     /**
      * Search doctors
      *

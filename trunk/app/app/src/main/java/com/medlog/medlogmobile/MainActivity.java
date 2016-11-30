@@ -269,8 +269,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     ResponseVO rVO = Helpers.getDiaryUrlSource(tURL);
                     cts++;
-                    Log.i(getString(R.string.tag_async), rVO.toString());
-                } catch (IOException e) {
+//                    Log.i(getString(R.string.tag_async), rVO.toString());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
