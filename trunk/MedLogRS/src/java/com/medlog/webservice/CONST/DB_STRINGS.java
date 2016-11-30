@@ -291,7 +291,7 @@ public static final String SP_SIGS_SELECT = "{call [spSigSelect](?)}";
  * Returns in order: ID, Name, Abbr.
  */
 public static final String SP_STATE_SELECT = "{call spStateSelect()}";
-
+public static final String PS_DIARY_DATA ="EXEC [dbo].[CrossTab] @RowFieldNames = 'diaryID,mood,productivity',@SourceFilter= 'patientid= ?',@OrderBy = 'diaryID,mood,productivity'";
 /**
  * Do not allow instantiation.
  *
