@@ -112,9 +112,10 @@ function generateLookupList(drownDownListID, jsonData, nameOfValueField, nameOfD
     var dropDownTagSelector = "#" + drownDownListID;
 
     var optionTags = "";
-    if (typeof jsonData === 'undefined' || jsonData === null || jsonData.length == 0 || !jsonData) {
+    if (typeof jsonData === 'undefined' || jsonData === null || jsonData.length <5 || !jsonData || typeof jsonData[0].stateName === 'undefined') {
         jsonData = states;
     }
+    
     $(jsonData).each(function (i, vo) { //for loop
         optionTags += makeOptionTag(vo[nameOfValueField], vo[nameOfDisplayField]);
     }); //function
