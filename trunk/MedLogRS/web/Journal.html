@@ -105,7 +105,7 @@
                     $("#loader1").show();
                     event.preventDefault();
                     var journalInfo = $("#insertJournalForm").serialize();
-                    var theURL = "./api?res=d&fn=add&" + journalInfo;
+                    var theURL = "./api?res=d&fn=add&" + journalInfo.replace(/[\n\r]/g, '');
                     //                    $("#formVisual").val("userInfo");
                     $.post(theURL)
                             .done(function (data) {

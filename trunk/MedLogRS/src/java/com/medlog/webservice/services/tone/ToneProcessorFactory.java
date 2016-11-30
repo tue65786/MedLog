@@ -26,6 +26,7 @@ import com.medlog.webservice.CONST.SETTINGS;
 import static com.medlog.webservice.CONST.SETTINGS.DEBUG;
 import com.medlog.webservice.sql.DbConnection;
 import com.medlog.webservice.util.DbUtl;
+import com.medlog.webservice.util.StrUtl;
 import static com.medlog.webservice.util.StrUtl.toS;
 import com.medlog.webservice.util.ToneAnalyzerExample;
 import com.medlog.webservice.vo.DiaryVO;
@@ -69,7 +70,7 @@ public class ToneProcessorFactory {
 //            service.setUsernameAndPassword(SETTINGS.WATSON_USER, SETTINGS.WATSON_PASS);
             String txtToProcess = buildTextToAnalyze(vo);
 
-            profile = insights.getProfile(buildPersonalityProfileOPtions(txtToProcess)).execute();
+//            profile = insights.getProfile(buildPersonalityProfileOPtions(txtToProcess)).execute();
             tone = service.getTone(txtToProcess, null).execute();
 //            List<Behavior> b = profile.getBehavior();
 //            List<ConsumptionPreferences> cp = profile.getConsumptionPreferences();
@@ -82,7 +83,7 @@ public class ToneProcessorFactory {
             ArrayList<Integer> counts = processTone(dbc, tone, vo.getId());
             int successes = counts.size();
 
-            if (counts != null) {
+            if (false && counts != null) {
                 Collections.sort(counts);
                 for (int count : counts) {
                     if (count == EXECUTE_FAILED) {
@@ -107,7 +108,7 @@ public class ToneProcessorFactory {
 
     private static String buildTextToAnalyze(DiaryVO vo) {
         String txtToProcess = new StringBuilder().append(vo.getTitle()).append(". ").append(vo.getNotes()).toString();
-        return txtToProcess;
+        return StrUtl.truncateAtWord(txtToProcess, 2048);
     }
 
     private static ProfileOptions buildPersonalityProfileOPtions(String txtToProcess) {

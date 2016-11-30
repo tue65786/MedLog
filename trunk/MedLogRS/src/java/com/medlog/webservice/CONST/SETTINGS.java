@@ -24,7 +24,7 @@ public static final String DATE_FORMAT = "yyyy-MM-dd";
  * Standard Err result code
  */
 public static final int DB_ERROR_CODE  = -1;
-
+public static final int LENGTH_OF_JOURNAL = 2048;
 /**
  * Global debugging state.. Verbose logging (etc)...
  */
