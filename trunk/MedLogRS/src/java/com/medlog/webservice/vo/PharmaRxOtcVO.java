@@ -139,7 +139,7 @@ public void setFullGenericName(String fullGenericName) {
  * @return the fullName
  */
 public String getFullName() {
-   return StrUtl.toS( fullName );
+   return StrUtl.truncateAtWord(fullName,40 );
 }
 
 /**
@@ -545,7 +545,7 @@ public Builder tty(final String value) {
 }
 
 public Builder fullName(final String value) {
-   this.fullName = value;
+   this.fullName =  StrUtl.truncateAtWord(value,60 );
    return this;
 }
 

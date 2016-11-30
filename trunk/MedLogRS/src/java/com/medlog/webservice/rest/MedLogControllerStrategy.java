@@ -289,7 +289,9 @@ public String handleUserResourceFn(DbConnection dbc, boolean isUserFunction) {
 				  responseMessage = StrUtl.getJSONMsg( "ERR", String.format( "Invalid [%s] pharm params", fn ) );
 			   }
 
-			}
+			}else if (fn.equalsIgnoreCase(API_FUNCTION_FIND)){
+                            responseMessage =  getPharmResponse(dao, g);
+                        }
 
 			break;
 			
@@ -584,6 +586,26 @@ private String getMedicationResponse(MedLogDAO dao, Gson g) {
    if ( voList == null || voList.isEmpty() ) {
 	  success = false;
 	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No matching entries." );
+   } else {
+	  return g.toJson( voList );
+   }
+
+}
+
+private String getPharmResponse(MedLogDAO dao, Gson g) {
+   ServletHelpers sh = new ServletHelpers( request, response );
+   ArrayList<PharmaRxOtcVO> voList = null;
+   String key = sh.getStrParameter( "keyword", "" );
+   if ( fn.equals( API_FUNCTION_FIND_BY_KEYWORD ) && !key.isEmpty() ) {
+	  voList = dao.findPharmaRxOtcVOByKeword(key, 1, 500, false);
+   } else if ( fn.equals( API_FUNCTION_FIND ) ) {
+	   voList = dao.findPharmaRxOtcVOByKeword(null, 1, 500, false);
+   } else {
+	  success = false;
+   }
+
+   if ( voList == null || voList.isEmpty() ) {
+	  return StrUtl.getJSONMsg( STATE_STATUS[API_ACTIONS.ERROR], "No entries." );
    } else {
 	  return g.toJson( voList );
    }

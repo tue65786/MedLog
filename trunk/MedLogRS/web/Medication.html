@@ -11,14 +11,13 @@
     </head>
     <body>
         <div>
-
-			<div id="header"><a href="home.jsp">
-					<table style='width:95%'><tr><td style="width:85%">
-								<h1> Additional Medication </h1>
-								<p> Are you taking another medication? </p>
-								<p> Let's add it to the list. </p>
-							</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
-				</a></div>
+            <div id="header"><a href="home.jsp">
+                    <table style='width:95%'><tr><td style="width:85%">
+                                <h1> Additional Medication </h1>
+                                <p> Are you taking another medication? </p>
+                                <p> Let's add it to the list. </p>
+                            </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+                </a></div>
 
             <div>
                 <form method="post" name="medicationForm" id="medicationForm">
@@ -29,7 +28,7 @@
                         <legend> Medication Information </legend>
                         <!-- Information on the medication that is being or will be taken -->
                         <label for="medicationName"> Medication Name:<br/></label>
-						<select id="pharmID" name='pharmID'>
+                        <select id="pharmID" name='pharmID'>
                         </select><br/>
                         <label for="physicianName"> Physician Name:<br/></label>
                         <select id="physicianID" name='physicianID'>
@@ -50,7 +49,7 @@
                         <label for="frequencySig"> Frequency: <br/></label>
                         <input name="frequencySig" type="text" id="frequencySig" placeholder="How often do you take the dosage? (ex. daily, twice a day, etc.)" required/><br>
                         <label for="active"> Check box if you are currently on this medication. </label><br/>
-						<input name="active" type="checkbox" id="active"/><br/>
+                        <input name="active" type="checkbox" id="active"/><br/>
                     </fieldset>
 
                     <!-- Submit & reset buttons-->
@@ -61,73 +60,124 @@
                     <textarea id="formVisual" style="height:300px;width:70%" cols="80" rows="5">.</textarea>
                     <div id='errorMessage'></div> 
                 </form>
+            </div>  <div id="loader1" style="display:none;">
+            <div class="ui-widget-overlay ui-front"></div>
+            <div id="InnerTableCellOverlay">
+                <img alt="(loading)" src="images/loader.gif"/>
+                <br/>
+                <b style="color:black;font-size:1em;border-radius: 5px;border:1px solid lightblue;padding:1px;">Loading, please wait...</b>
+            </div>
+            <div id="redirect" class="message messageSuccess" style="display:none;">
+                Created! Redirecting to login page.
             </div>
         </div>
+        </div>
         <script>
-                    $(document).ready(function () {
-                            var submitURL = new URLBuilder();
-                            var editID = getIDParamFromRequest();
-                            var theMedicationListURL = "./api/?res=ph&fn=find";
-                            var theProviderListURL = "./api/?res=h&fn=find";
-                            $.get(theProviderListURL).done(function ( medicationListDataLoadedFromServer, providerListDataLoadedFromServer ) {
-                                    generateLookupList("pharmID"
-                                            , medicationListDataLoadedFromServer
-                                            , 'pharmID'
-                                            , 'fullName');
-                                
-                                    generateLookupList("physicianID"
-                                            , providerListDataLoadedFromServer
-                                            , 'physicianID'
-                                            , 'lastName');
-                                            
-                                    if ( editID > 0 ) {
-                                            console.log(editID);
-                                            loadCurrentMedication();
-                                    }
-                            });
-                            
-                            function loadCurrentUser() {
-                                    var currentMedicationFn = "./api/?res=ph&fn=find";
-                                    $.get(currentMedicationFn).done(function ( currentMedicationData ) {
-                                            if ( typeof currentMedicationData === 'undefined' ) {
-                                            } else {
-                                                    $("#btnSubmit").html("Update Medication");
-                                            }
-                                    });
-                            }
+            $(document).ready(function () {
+                $("#loader1").show();
+                var submitURL = new URLBuilder();
+                var editID = getIDParamFromRequest();
+                var theMedicationListURL = "./api/?res=ph&fn=find";
+                var theProviderListURL = "./api/?res=h&fn=find";
+                /**
+                 * Load drigs
+                 * @param {type} xhr
+                 * @param {type} error
+                 * @param {type} status
+                 * @returns {undefined}
+                 */
+                $.get(theMedicationListURL).done(function (medicationListDataLoadedFromServer/*, providerListDataLoadedFromServer */) {
+                    var optionTags = "";
+                    $(medicationListDataLoadedFromServer).each(function (i, vo) { //for loop
+                        optionTags += makeOptionTag(vo.pharmID, vo.fullName);
+                    }); //function
 
-                            $("#medicationForm").on("submit", function ( event ) {
-                                    event.preventDefault();
-                                    $("#loader1").show();
-                                    $("#errorMessage").hide();
-                                    var userInfo = $("#medicationForm").serialize();
-                                    var theURL = "./api/?res=ph&fn=add&" + userInfo;
-                                    var redirectPage = "login.html";			
-                                    if ( editID > 0 ) {
-                                            theURL = "./api?res=pH&fn=update&" + userInfo;
-                                            redirectPage = "home.jsp";
-                                    }
-                                    
-                                    $.post(theURL).done(function ( data ) {
-                                            console.log(JSON.stringify(data));
-                                            $("#loader1").hide();
-                                            redir(redirectPage);
-                                            if ( editID === 0 && typeof data.pharmID !== 'undefined' && data.patientID > 0 ) {
-                                                    $("#pharmID").val(data.pharmID);
-                                            } else if ( typeof data.message !== 'undefined' ) {
-                                                    $("#errorMessage").empty().html(data.message);
-                                            }
-                                    }).fail(function ( xhr, error, status ) {//IF AJAX CALL FAILS!
-                                            console.log(xhr);
-                                            console.log(error);
-                                            $("#loader1").hide();
-                                            $("#errorMessage").empty().html(error);
-                                            $("#errorMessage").show();
-                                    }).always(function () {
-                                            $("#loader1").hide();
-                                    });
-                            });
+                    $("#pharmID").empty().html(optionTags);
+                    $("#loader1").hide();
+                    if (editID > 0) {
+                        console.log(editID);
+                        loadCurrentMedication();
+                    }
+                }).fail().always(function(){
+                    $("#loader1").hide();
+                });
+                /**
+                 * Load providers
+                 * @param {type} xhr
+                 * @param {type} error
+                 * @param {type} status
+                 * @returns {undefined}
+                 */
+                $.get(theProviderListURL).done(function (providerListDataLoadedFromServer/*, providerListDataLoadedFromServer */) {
+                    var optionTags = "";
+                    $(providerListDataLoadedFromServer).each(function (i, vo) { //for loop
+                        optionTags += makeOptionTag(vo.physicianID, vo.lastName + ", " + vo.firstName);
+                    }); //function
+
+                    $("#physicianID").empty().html(optionTags);
+//        generateLookupList("pharmID"
+//                                            , medicationListDataLoadedFromServer
+//                                            , 'pharmID'
+//                                            , 'fullName');
+//                                
+//                                    generateLookupList("physicianID"
+//                                            , providerListDataLoadedFromServer
+//                                            , 'physicianID'
+//                                            , 'lastName');
+//                                            
+                    if (editID > 0) {
+                        console.log(editID);
+//                        loadCurrentMedication();
+                    }
+                });
+                function loadCurrentUser() {
+                    var currentMedicationFn = "./api/?res=ph&fn=find";
+                    $.get(currentMedicationFn).done(function (currentMedicationData) {
+                        if (typeof currentMedicationData === 'undefined') {
+                        } else {
+                            $("#btnSubmit").html("Update Medication");
+                        }
                     });
+                }
+
+                $("#medicationForm").on("submit", function (event) {
+                    event.preventDefault();
+                    $("#loader1").show();
+                    $("#errorMessage").hide();
+                    var userInfo = $("#medicationForm").serialize();
+                    var theURL = "./api/?res=ph&fn=add&" + userInfo;
+                    var redirectPage = "login.html";
+                    if (editID > 0) {
+                        theURL = "./api?res=ph&fn=update&" + userInfo;
+                        redirectPage = "home.jsp";
+                    }
+
+                    $.post(theURL).done(function (data) {
+                        console.log(JSON.stringify(data));
+                        $("#loader1").hide();
+                        redir(redirectPage);
+                        if (editID === 0 && typeof data.pharmID !== 'undefined' && data.patientID > 0) {
+                            $("#pharmID").val(data.pharmID);
+                        } else if (typeof data.message !== 'undefined') {
+                            $("#errorMessage").empty().html(data.message);
+                        }
+                    }).fail(function (xhr, error, status) {//IF AJAX CALL FAILS!
+                        console.log(xhr);
+                        console.log(error);
+                        $("#loader1").hide();
+                        $("#errorMessage").empty().html(error);
+                        $("#errorMessage").show();
+                    }).always(function () {
+                        $("#loader1").hide();
+                    });
+                });
+     $('input').focus(function () {
+    $(this).css('background-color', '#FFFFCC')
+  });
+  $('input').blur(function () {
+    $(this).css('background-color', '#FFF')
+  })       
+    });
         </script>
     </body>
 </html>
