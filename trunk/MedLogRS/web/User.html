@@ -97,7 +97,7 @@
                 var submitURL = new URLBuilder();
 
                 var editID = getIDParamFromRequest();
-                var theStateListURL = "./api?res=s&fn=find";
+                var theStateListURL = "./api?res=s&fn=find";//
                 $.get(theStateListURL).done(function (stateListDataLoadedFromServer) {
                     generateLookupList("stateID"
                             , stateListDataLoadedFromServer
