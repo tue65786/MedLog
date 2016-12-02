@@ -9,7 +9,7 @@ public class MakeSelectTag {
             selected = "0";
         }
         String out = "<select name = \"" + tagName + "\">\n";
-        out += "<option value=\"0\"></option>\n";
+        //out += "<option value=\"0\"></option>\n";
         int i = 0;
         while (i < options.length) {
             out += "<option value=\"" + (i + 1) + "\"";

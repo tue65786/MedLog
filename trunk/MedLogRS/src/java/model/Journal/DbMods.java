@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import com.medlog.webservice.sql.DbConnection;
 import com.medlog.webservice.util.PrepStatement;
 import com.medlog.webservice.util.ValidationUtils;
+import view.WebJournalView;
 
 public class DbMods {
 
@@ -74,7 +75,28 @@ public class DbMods {
                 errorMessages.errorMessage = numRows + " records were inserted when exactly 1 was expected.";
             }
         }*/
-
         //return errorMessages;
+    }
+
+    public static boolean secure(String user, String journal) {
+        if((user == null) || (user == "") || (journal == null) || (journal == "")){
+            System.out.println("problem retrieving user/journal ID - either null or empty string");
+            return false;
+        }
+        
+        StringData journalData = new StringData();
+        DbConnection dbc = new DbConnection();
+
+        System.out.println("jsp page ready to search for item with journalID " + journal);
+        journalData = view.WebJournalView.getJournal(journal, dbc);
+        System.out.println("logged in user ID = " + journalData.patientID);
+        if (journalData.patientID.compareTo(user) == 0) {
+            dbc.close();
+            return true;
+        } else {
+            dbc.close();
+            System.out.println("user and journal do not match - this journal belongs to another user");
+            return false;
+        }
     }
 }
