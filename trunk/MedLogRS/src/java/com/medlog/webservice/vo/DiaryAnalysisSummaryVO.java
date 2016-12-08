@@ -6,6 +6,10 @@
 package com.medlog.webservice.vo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 
 /**
@@ -13,7 +17,8 @@ import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
  * @author westy
  */
 public class DiaryAnalysisSummaryVO {
-
+private HashMap<String,Integer> toneMap;
+    private double sum = 0;
     private double[] agreeablenessBig5;
     private double[] analytical;
     private double[] anger;
@@ -43,22 +48,29 @@ public class DiaryAnalysisSummaryVO {
     public static final int IDX_SADNESS = 12;
     public static final int IDX_TENTATIVE = 13;
     private double[] corr;
-public static final String[] CORR_STR = {"[IDX_MOOD]",
-"IDX_AGREEABLENESS_BIG5",
-"IDX_ANALYTICAL",
-"IDX_ANGER",
-"IDX_CONFIDENT",
-"IDX_CONSCIENTIOUSNESS_BIG5",
-"IDX_DISGUST",
-"IDX_EMOTIONALRANGE_BIG5",
-"IDX_EXTRAVERSION_BIG5",
-"IDX_FEAR",
-"IDX_JOY",
-"IDX_OPENNESS_BIG5",
-"IDX_SADNESS",
-"IDX_TENTATIVE"};
+    private double[] corrRanked;
+    private double[] rSquared;
+    public static final String[] CORR_STR = {
+        "IDX_MOOD ...................",
+        "IDX_AGREEABLENESS_BIG5 .....",
+        "IDX_ANALYTICAL ............",
+        "IDX_ANGER .................",
+        "IDX_CONFIDENT .............",
+        "IDX_CONSCIENTIOUSNESS_BIG5 .",
+        "IDX_DISGUST ................",
+        "IDX_EMOTIONALRANGE_BIG5 ....",
+        "IDX_EXTRAVERSION_BIG5 ......",
+        "IDX_FEAR ...................",
+        "IDX_JOY ....................",
+        "IDX_OPENNESS_BIG5 ..........",
+        "IDX_SADNESS ................",
+        "IDX_TENTATIVE .............."};
+
     private void doBefore(int size) {
+        toneMap = new HashMap<String, Integer>();
         corr = new double[14];
+        rSquared = new double[14];
+        corrRanked = new double[14];
         agreeablenessBig5 = new double[size];
         analytical = new double[size];
         anger = new double[size];
@@ -105,7 +117,7 @@ public static final String[] CORR_STR = {"[IDX_MOOD]",
 
     private void populateCorrelation() {
         SpearmansCorrelation c = new SpearmansCorrelation();
-        
+
         corr[IDX_MOOD] = c.correlation(mood, mood);
         corr[IDX_AGREEABLENESS_BIG5] = c.correlation(mood, agreeablenessBig5);
         corr[IDX_MOOD] = c.correlation(mood, mood);
@@ -122,17 +134,60 @@ public static final String[] CORR_STR = {"[IDX_MOOD]",
         corr[IDX_OPENNESS_BIG5] = c.correlation(mood, opennessBig5);
         corr[IDX_SADNESS] = c.correlation(mood, sadness);
         corr[IDX_TENTATIVE] = c.correlation(mood, tentative);
+        for (int k=0;k<corr.length;k++){
+            rSquared[k] = Math.pow(corr[k], 2);
+        }
+        double q3 = org.apache.commons.math3.stat.StatUtils.percentile(rSquared, .75);
+
+        double q1 = org.apache.commons.math3.stat.StatUtils.percentile(rSquared, .25);
+        double var = StatUtils.variance(rSquared);
+        System.out.println("q1" + q1);
+        System.out.println("q3" + q3);
+        System.out.println("var" + var);
+        double max = StatUtils.max(rSquared);
+
+        double min = StatUtils.max(rSquared);
+
+        sum = StatUtils.sum(rSquared) - 1.0;
+           System.out.println("sum" + sum);
+        for (int j = 1; j < 14; j++) {
+            corrRanked[j] = rSquared[j] / sum;
+        }
+         double[] cRCopy = ArrayUtils.clone(corrRanked);
+        Arrays.sort(cRCopy);
+        ArrayUtils.reverse(cRCopy);
+       ArrayList<ToneKeyValuePair> toneList = new ArrayList<>();
+         for (int j = 1; j < 14; j++) {
+             ArrayUtils.indexOf(cRCopy, corrRanked[j]);
+             ToneKeyValuePair t =ToneKeyValuePair.builder().key(CORR_STR[j]).value(rSquared[j]).weightedValue(corrRanked[j]).rank(ArrayUtils.indexOf(cRCopy, corrRanked[j])).build();
+             toneList.add(ToneKeyValuePair.builder().key(CORR_STR[j]).value(rSquared[j]).weightedValue(corrRanked[j]).rank(ArrayUtils.indexOf(cRCopy, corrRanked[j])+1).build());
+//            corrRanked[j] = rSquared[j] / sum;
+        }
+         for (ToneKeyValuePair t: toneList){
+             System.out.println(t.toString());
+         }
+       
+       
+      
         
+        
+
     }
-    
-    private void printCorr(){
-       for (int i=0;i<corr.length;i++){
-           System.out.print(CORR_STR[i] + "\t=\t");
+
+    private void printCorr() {
+        System.out.println("ID..............\t\tR^2\tRank");
+        for (int i = 0; i < corr.length; i++) {
+          
+                System.out.print(CORR_STR[i] + "\t=\t");
+            
 //           System.out.print(corr[i]);
-           System.out.println(corr[i]*corr[i]);
-           System.out.println("-----------------");
-           
-       }
+            System.out.print(corr[i] * corr[i]);
+              if (i>0) {
+                  System.out.print("\t"+corrRanked[i]);
+            }
+            System.out.println("-----------------");
+
+        }
     }
 
 }
