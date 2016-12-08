@@ -61,7 +61,7 @@ public class MedLogDAO implements IMedLogDAO {
                 sigMap = app.getSigMap();
             }
 //            if (app.isStateSet()) {
-                statesMap = findAllStates(true);
+            statesMap = findAllStates(true);
 //            }
         } catch (Exception e) {
 
@@ -91,8 +91,8 @@ public class MedLogDAO implements IMedLogDAO {
         try {
             if (_vo != null && _vo.getPatientID() == null && getCurrentUser() != null) {
                 _vo.setPatientID(getCurrentUser());
-            }else  if (getCurrentUser() == null || getCurrentUser().getPatientID() <= 0){
-                if (_vo.getPatientID()!= null){
+            } else if (getCurrentUser() == null || getCurrentUser().getPatientID() <= 0) {
+                if (_vo.getPatientID() != null) {
                     setUser(_vo.getPatientID());
                 }
             }
@@ -156,7 +156,7 @@ public class MedLogDAO implements IMedLogDAO {
 
         }
         //Analysize text when approperiate.
-        if (newID > 0 &&_vo.getNotes().length()>5 && _vo.getNotes().split(" ").length > 3){
+        if (newID > 0 && _vo.getNotes().length() > 5 && _vo.getNotes().split(" ").length > 3) {
             _vo.setId(newID);
             ToneProcessorFactory.execute(db, _vo);
         }
@@ -445,11 +445,11 @@ public class MedLogDAO implements IMedLogDAO {
 
     @Override
     public ArrayList<DiaryVO> findDiaryByPatient() {
-        return findDiary(0, null,true);
+        return findDiary(0, null, true);
     }
-    
+
     public ArrayList<DiaryVO> findDiaryByPatientFull() {
-        return findDiary(0, null,false);
+        return findDiary(0, null, false);
     }
 
     @Override
@@ -574,19 +574,19 @@ public class MedLogDAO implements IMedLogDAO {
             if (DEBUG && voList.size() > 1) {
                 LOG.warning("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()\n---Returned Multiple VALUES -- something is wrong!");
             }
-            if (voList != null &&voList.size()==1){
+            if (voList != null && voList.size() == 1) {
                 retVO = voList.get(0);
                 setUser(retVO);
                 ArrayList<DiaryVO> d = findDiaryByPatient();
-               for (DiaryVO v :d){
-                   System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()" + v.toJSON());
-               }
+                for (DiaryVO v : d) {
+                    System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()" + v.toJSON());
+                }
                 System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()");
                 retVO.setDiaryList(findDiaryByPatient());
-           return retVO;
+                return retVO;
             }
             return voList.get(0);
-            
+
         } else {
             return null;
         }
@@ -1010,10 +1010,11 @@ public class MedLogDAO implements IMedLogDAO {
         }
         return newID;
     }
-private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
-    return findDiary(_id, _keyword, true);
-}
-    
+
+    private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
+        return findDiary(_id, _keyword, true);
+    }
+
     /**
      * Diary selection base
      *
@@ -1021,7 +1022,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
      * @param _keyword
      * @return
      */
-    private ArrayList<DiaryVO> findDiary(int _id, String _keyword,boolean patientLite) {
+    private ArrayList<DiaryVO> findDiary(int _id, String _keyword, boolean patientLite) {
         ArrayList<DiaryVO> voList = new ArrayList<DiaryVO>();
         _keyword = StrUtl.toS(_keyword);
         int ct = 0;
@@ -1058,7 +1059,7 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
                             .notesActivity(rs.getString("notesActivity"))
                             .mood(rs.getInt("ratingMood"))
                             .productivity(rs.getInt("ratingProductivity"))
-                            .patientID(patientLite ? PatientVO.builder().patientID(getCurrentUser().getPatientID()).build(): getCurrentUser())
+                            .patientID(patientLite ? PatientVO.builder().patientID(getCurrentUser().getPatientID()).build() : getCurrentUser())
                             .createdDate(rs.getDate("createdDate"))
                             .build(ct++));
                 }
@@ -1077,44 +1078,45 @@ private ArrayList<DiaryVO> findDiary(int _id, String _keyword) {
         }
         return voList;
     }
-public ArrayList<DiaryAnalysisVO> findDiaryCrossTab(int patientid){
-    ArrayList<DiaryAnalysisVO> voList = new ArrayList<>();
-    PreparedStatement ps  = null;
-    ResultSet rs = null;
-    try {
-             ps = db.getConnnection().prepareStatement(PS_DIARY_DATA);
-            ps.setInt(1, patientid);
-            rs = ps.executeQuery();
-            int i=0;
-            while (rs.next()){
-             voList.add(  DiaryAnalysisVO.builder()
-                       .agreeablenessBig5(rs.getDouble("agreeableness_Big5"))
-                       .analytical(rs.getDouble("analytical"))
-                       .anger(rs.getDouble("anger"))
-                       .confident(rs.getDouble("confident"))
-                       .conscientiousnessBig5(rs.getDouble("conscientiousness_Big5"))
-                       .diaryID(rs.getInt("diaryID"))
-                       .disgust(rs.getDouble("disgust"))
-                       .emotionalRangeBig5(rs.getDouble("emotionalRange_Big5"))
-                       .extraversionBig5(rs.getDouble(""))
-                       .fear(rs.getDouble("fear"))
-                       .joy(rs.getDouble("joy"))
-                       .mood(rs.getInt("mood"))
-                       .opennessBig5(rs.getDouble("openness_Big5"))
-                       .producivtiy(rs.getInt("productivity"))
-                       .sadness(rs.getDouble("sadness"))
-                       .tentative(rs.getDouble("tentative"))
-                       .build(i++));
+
+    public ArrayList<DiaryAnalysisVO> findDiaryCrossTab(int patientid) {
+        ArrayList<DiaryAnalysisVO> voList = new ArrayList<>();
+        Statement ps = null;
+        ResultSet rs = null;
+        try {
+            String SQL = ST_DIARY_DATA.replace("[[[ID]]]", patientid + "");
+            ps = db.getConnnection().createStatement();
+            rs = ps.executeQuery(SQL);
+            int i = 0;
+            while (rs.next()) {
+                voList.add(DiaryAnalysisVO.builder()
+                        .agreeablenessBig5(rs.getDouble("agreeableness_Big5"))
+                        .analytical(rs.getDouble("analytical"))
+                        .anger(rs.getDouble("anger"))
+                        .confident(rs.getDouble("confident"))
+                        .conscientiousnessBig5(rs.getDouble("conscientiousness_Big5"))
+                        .diaryID(rs.getInt("diaryID"))
+                        .disgust(rs.getDouble("disgust"))
+                        .emotionalRangeBig5(rs.getDouble("emotional_range_Big5"))
+                        .extraversionBig5(rs.getDouble("extraversion_Big5"))
+                        .fear(rs.getDouble("fear"))
+                        .joy(rs.getDouble("joy"))
+                        .mood(rs.getInt("mood"))
+                        .opennessBig5(rs.getDouble("openness_Big5"))
+                        .producivtiy(rs.getInt("productivity"))
+                        .sadness(rs.getDouble("sadness"))
+                        .tentative(rs.getDouble("tentative"))
+                        .build(i++));
             }
         } catch (SQLException ex) {
             Logger.getLogger(MedLogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtl.close(rs);
+            DbUtl.close(ps);
         }
-    finally{
-    DbUtl.close(rs);
-    DbUtl.close(ps);
+        return voList;
     }
-    return  voList;
-}
+
     /**
      * Search doctors
      *

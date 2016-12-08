@@ -37,13 +37,22 @@ public class DbUtl {
         }
 
     }
+     public static void close(PreparedStatement st) {
+        try {
+            st.close();
+        } catch (Exception e) {
+            //quiet
+
+        }
+
+    }
 
     /**
      * Safe Close Compiled SQL
      *
      * @param st
      */
-    public static void close(PreparedStatement st) {
+    public static void close(Statement st) {
         try {
             st.close();
         } catch (Exception e) {

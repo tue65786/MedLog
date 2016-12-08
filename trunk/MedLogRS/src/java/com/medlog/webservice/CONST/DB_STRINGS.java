@@ -292,7 +292,9 @@ public static final String SP_SIGS_SELECT = "{call [spSigSelect](?)}";
  */
 public static final String SP_STATE_SELECT = "{call spStateSelect()}";
 public static final String PS_DIARY_DATA ="EXEC [dbo].[CrossTab] @RowFieldNames = 'diaryID,mood,productivity',@SourceFilter= 'patientid= ?',@OrderBy = 'diaryID,mood,productivity'";
-/**
+public static final String ST_DIARY_DATA ="EXEC [dbo].[CrossTab] @RowFieldNames = 'diaryID,mood,productivity',@SourceFilter= 'patientid= [[[ID]]]',@OrderBy = 'diaryID,mood,productivity'";
+
+/** 
  * Do not allow instantiation.
  *
  */
