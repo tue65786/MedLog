@@ -49,6 +49,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
 		<%
 //		   ToneAnalyzer service = new ToneAnalyzer( ToneAnalyzer.VERSION_DATE_2016_05_19 );
 //		   service.setEndPoint( "https://gateway.watsonplatform.net/tone-analyzer/api");
