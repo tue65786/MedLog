@@ -209,9 +209,11 @@ public class DiaryAnalysisVO implements Serializable {
         private double tentative;
         private double rowTotal;
         private int mood;
+        
         private int producivtiy;
 
         private Builder() {
+            
         }
 
         public Builder diaryID(final int value) {
@@ -301,6 +303,9 @@ public class DiaryAnalysisVO implements Serializable {
 
         private double updateVal(double value) {
             return value * 100.0;
+        }
+          private int updateVal(int value) {
+            return value * 10;
         }
 
         public DiaryAnalysisVO build(int row) {

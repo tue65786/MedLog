@@ -31,6 +31,11 @@ public boolean hasError();
  * Close connection wrapper
  */
 public void close();
+/**
+ * Retrieve open connections
+ * @return number of open connections to SQL.
+ */
+
 //
 ///**
 // * (Overloaded) Close Statement

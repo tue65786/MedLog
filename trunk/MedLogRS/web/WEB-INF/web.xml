@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <display-name>MEDLog Webservice</display-name>
+    <description>Web Application and Web Service</description>
+    <display-name>MedLog Web Application (v1.0)</display-name>
+    <distributable/>
     <listener>
         <description>ServletContextListener, ServletContextAttributeListener, HttpSessionListener</description>
         <listener-class>com.medlog.webservice.lifecycle.NewServletListener</listener-class>

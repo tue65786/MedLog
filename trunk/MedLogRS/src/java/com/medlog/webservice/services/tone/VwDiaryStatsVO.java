@@ -18,36 +18,19 @@ import javax.persistence.Table;
  *
  * @author westy
  */
-@Entity
-@Table(name = "vwDiaryStats")
-@NamedQueries({
-    @NamedQuery(name = "VwDiaryStatsVO.findAll", query = "SELECT v FROM VwDiaryStatsVO v")})
 public class VwDiaryStatsVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @Column(name = "DiaryID")
+ 
     private int diaryID;
-    @Column(name = "patientID")
     private Integer patientID;
-    @Basic(optional = false)
-    @Column(name = "category_id")
     private String categoryId;
-    @Basic(optional = false)
-    @Column(name = "tone_id")
     private String toneId;
-    @Basic(optional = false)
-    @Column(name = "sentence_id")
     private int sentenceId;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @Column(name = "score")
+
     private BigDecimal score;
-    @Column(name = "text")
     private String text;
-    @Column(name = "productivity")
     private Integer productivity;
-    @Column(name = "mood")
     private Integer mood;
 
     public VwDiaryStatsVO() {

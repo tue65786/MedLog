@@ -60,6 +60,7 @@ public void tearDown() {
    public void testClose_0args() {
 	  System.out.println( "close" );
 	  DbConnection instance = new DbConnection();
+          
 	  instance.close();
 	  // TODO review the generated test code and remove the default call to fail.
 	  fail( "The test case is a prototype." );
