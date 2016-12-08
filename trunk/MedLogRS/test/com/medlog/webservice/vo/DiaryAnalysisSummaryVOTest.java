@@ -54,6 +54,8 @@ public class DiaryAnalysisSummaryVOTest {
         ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(2);
         DiaryAnalysisSummaryVO instance = new DiaryAnalysisSummaryVO();
         instance.runIt(vl);
+        
+        
         // TODO review the generated test code and remove the default call to fail.
     
     }

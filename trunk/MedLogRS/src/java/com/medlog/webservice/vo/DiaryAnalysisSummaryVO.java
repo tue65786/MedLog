@@ -153,6 +153,7 @@ private HashMap<String,Integer> toneMap;
         for (int j = 1; j < 14; j++) {
             corrRanked[j] = rSquared[j] / sum;
         }
+          System.out.println("pmf sum" + StatUtils.sum(corrRanked));
          double[] cRCopy = ArrayUtils.clone(corrRanked);
         Arrays.sort(cRCopy);
         ArrayUtils.reverse(cRCopy);
@@ -175,7 +176,7 @@ private HashMap<String,Integer> toneMap;
     }
 
     private void printCorr() {
-        System.out.println("ID..............\t\tR^2\tRank");
+        System.out.println("ID.........................\t\tR^2\t\t\tRank");
         for (int i = 0; i < corr.length; i++) {
           
                 System.out.print(CORR_STR[i] + "\t=\t");
@@ -183,10 +184,9 @@ private HashMap<String,Integer> toneMap;
 //           System.out.print(corr[i]);
             System.out.print(corr[i] * corr[i]);
               if (i>0) {
-                  System.out.print("\t"+corrRanked[i]);
-            }
-            System.out.println("-----------------");
-
+                  System.out.print("\t"+corrRanked[i]+"\n");
+            }else
+            System.out.println();
         }
     }
 

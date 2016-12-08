@@ -62,7 +62,6 @@ public class DiaryAnalysisVO implements Serializable {
     private double cat_emotion;
     private double cat_social;
     private double cat_language;
-    
 
     public DiaryAnalysisVO() {
     }
@@ -209,11 +208,62 @@ public class DiaryAnalysisVO implements Serializable {
         private double tentative;
         private double rowTotal;
         private int mood;
-        
+
         private int producivtiy;
 
         private Builder() {
-            
+
+        }
+
+        public Builder keyValue(String key, final double value) {
+
+            switch (key) {
+                case "anger":
+                    this.anger(value);
+                    break;
+                case "disgust":
+                    this.disgust(value);
+                    break;
+                case "fear":
+                    this.fear(value);
+                    break;
+                case "joy":
+                    this.joy(value);
+                    break;
+                case "sadness":
+                    this.sadness(value);
+                    break;
+                case "analytical":
+                    this.analytical(value);
+                    break;
+                case "confident":
+                    this.confident(value);
+                    break;
+                case "tentative":
+                    this.tentative(value);
+                    break;
+                case "agreeableness_big5":
+                    this.agreeablenessBig5(value);
+                    break;
+                case "conscientiousness_big5":
+                    this.conscientiousnessBig5(value);
+                    break;
+                case "emotional_range_big5":
+                    this.emotionalRangeBig5(value);
+                    break;
+                case "extraversion_big5":
+                    this.extraversionBig5(value);
+                    break;
+                case "openness_big5":
+                    this.opennessBig5(value);
+                    break;
+                case "mood":
+                    this.mood((int)value);
+                    break;
+                default:
+                    break;
+            }
+            return this;
         }
 
         public Builder diaryID(final int value) {
@@ -304,12 +354,13 @@ public class DiaryAnalysisVO implements Serializable {
         private double updateVal(double value) {
             return value * 100.0;
         }
-          private int updateVal(int value) {
+
+        private int updateVal(int value) {
             return value * 10;
         }
 
         public DiaryAnalysisVO build(int row) {
-            return new com.medlog.webservice.vo.DiaryAnalysisVO(diaryID, agreeablenessBig5, analytical, anger, confident, conscientiousnessBig5, disgust, emotionalRangeBig5, extraversionBig5, fear, joy, opennessBig5, sadness, tentative, rowTotal, mood, producivtiy,row);
+            return new com.medlog.webservice.vo.DiaryAnalysisVO(diaryID, agreeablenessBig5, analytical, anger, confident, conscientiousnessBig5, disgust, emotionalRangeBig5, extraversionBig5, fear, joy, opennessBig5, sadness, tentative, rowTotal, mood, producivtiy, row);
         }
     }
 
@@ -317,7 +368,7 @@ public class DiaryAnalysisVO implements Serializable {
         return new DiaryAnalysisVO.Builder();
     }
 
-    private DiaryAnalysisVO(final int diaryID, final double agreeablenessBig5, final double analytical, final double anger, final double confident, final double conscientiousnessBig5, final double disgust, final double emotionalRangeBig5, final double extraversionBig5, final double fear, final double joy, final double opennessBig5, final double sadness, final double tentative, final double rowTotal, final int mood, final int producivtiy,int row) {
+    private DiaryAnalysisVO(final int diaryID, final double agreeablenessBig5, final double analytical, final double anger, final double confident, final double conscientiousnessBig5, final double disgust, final double emotionalRangeBig5, final double extraversionBig5, final double fear, final double joy, final double opennessBig5, final double sadness, final double tentative, final double rowTotal, final int mood, final int producivtiy, int row) {
         this.diaryID = diaryID;
         this.agreeablenessBig5 = agreeablenessBig5;
         this.analytical = analytical;
