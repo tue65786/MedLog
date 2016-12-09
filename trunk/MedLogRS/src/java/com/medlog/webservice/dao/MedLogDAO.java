@@ -14,6 +14,7 @@ import com.medlog.webservice.services.tone.ToneProcessorFactory;
 import com.medlog.webservice.sql.*;
 import com.medlog.webservice.util.*;
 import com.medlog.webservice.vo.*;
+import com.medlog.webservice.vo.pairs.DiaryMoodToneXYPair;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -1079,6 +1080,12 @@ public class MedLogDAO implements IMedLogDAO {
         return voList;
     }
 
+    /**
+     * Retrieve diary transposed crosstab
+     *
+     * @param patientid the
+     * @return
+     */
     public ArrayList<DiaryAnalysisVO> findDiaryCrossTab(int patientid) {
         ArrayList<DiaryAnalysisVO> voList = new ArrayList<>();
         Statement ps = null;
@@ -1109,12 +1116,48 @@ public class MedLogDAO implements IMedLogDAO {
                         .build(i++));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MedLogDAO.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         } finally {
             DbUtl.close(rs);
             DbUtl.close(ps);
         }
         return voList;
+    }
+
+    /**
+     * Retrieves Data Line Data
+     *
+     * @param patientid the {@linkplain PatientVO#patientID}
+     * @param a top ranked score
+     * @param b 2nd ranked score
+     * @param c 3rd ranked score
+     * @return XY
+     */
+    public DiaryMoodToneXYPair getDiaryLineData(int patientid, String a, String b, String c) {
+        ArrayList<Double[]> retList = new ArrayList<>();
+        DiaryMoodToneXYPair xy = new DiaryMoodToneXYPair();
+        Statement ps = null;
+        ResultSet rs = null;
+        try {
+            String SQL = ST_XY_DIARY.replace("[[[ID]]]", patientid + "")
+                    .replace("[[[1ST]]]", a).replace("[[[2ND]]]", b)
+                    .replace("[[[3RD]]]", c);
+            ps = db.getConnnection().createStatement();
+            rs = ps.executeQuery(SQL);
+            while (rs.next()) {
+                xy.addPoint(rs.getDouble(2), (double) rs.getInt(3));
+                //TODO finish!
+            }
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        } finally {
+            DbUtl.close(rs);
+            DbUtl.close(ps);
+        }
+        if (!xy.process()) {
+            LOG.warning("Unable to create line");
+        }
+        return xy;
     }
 
     /**

@@ -285,15 +285,15 @@ public class DB_STRINGS {
     public static final String SP_STATE_SELECT = "{call spStateSelect()}";
     public static final String PS_DIARY_DATA = "EXEC [dbo].[CrossTab] @RowFieldNames = 'diaryID,mood,productivity',@SourceFilter= 'patientid= ?',@OrderBy = 'diaryID,mood,productivity'";
     public static final String ST_DIARY_DATA = "EXEC [dbo].[CrossTab] @RowFieldNames = 'diaryID,mood,productivity',@SourceFilter= 'patientid= [[[ID]]]',@OrderBy = 'diaryID,mood,productivity'";
-    String ST_XY_DIARY = "\n"
+    public static final String ST_XY_DIARY = "\n"
             + "SELECT [DiaryID]\n"
             + ",	   AVG([score]) score\n"
             + ",	   AVG([mood])  mood\n"
             + "	   FROM [dbo].[vwDiaryStats]\n"
-            + "	   WHERE patientID = 2\n"
-            + "		 AND ((tone_id = 'fear' AND score > .13) \n"
-            + "		   OR (tone_id = 'tentative' AND score > .2) \n"
-            + "		   OR (tone_id = 'joy' AND score > .4) \n"
+            + "	   WHERE patientID = [[[ID]]]\n"
+            + "		 AND ((tone_id = '[[[1ST]]]' AND score > .13) \n"
+            + "		   OR (tone_id = '[[[2ND]' AND score > .2) \n"
+            + "		   OR (tone_id = '[[[3RD]]]' AND score > .4) \n"
             + "			 ) \n"
             + "	   GROUP BY DiaryID";
 

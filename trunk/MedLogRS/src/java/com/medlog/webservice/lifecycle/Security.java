@@ -12,6 +12,7 @@ import static com.medlog.webservice.CONST.API_ACTIONS.API_PARAM_RESOURCE;
 import static com.medlog.webservice.CONST.API_ACTIONS.API_RESOURCE_PHARM;
 import static com.medlog.webservice.CONST.API_ACTIONS.API_RESOURCE_SIG;
 import static com.medlog.webservice.CONST.API_ACTIONS.API_RESOURCE_STATES;
+import com.medlog.webservice.CONST.SETTINGS;
 import static com.medlog.webservice.CONST.SETTINGS.*;
 import static com.medlog.webservice.CONST.STRINGS.*;
 import com.medlog.webservice.util.*;
@@ -141,12 +142,13 @@ public class Security implements Filter {
         String[] urlParts = getUriParts(httprequest);
         uri = urlParts[0];
         file = urlParts[1];
+        if (!httprequest.getRequestURI().contains(SETTINGS.FLDR_APIDOC)){
         if (!hasAccess(uri, file, httprequest)) {
             if (DEBUG) {
                 log("Not logged in! Redirect");
             }
             httpresponse.sendRedirect("/MedLogRS/login.html?d=1");
-        }
+        }}
         Throwable problem = null;
         try {
             chain.doFilter(request, response);

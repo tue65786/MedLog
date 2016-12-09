@@ -5,6 +5,7 @@
  */
 package com.medlog.webservice.vo;
 
+import com.medlog.webservice.vo.pairs.ToneKeyValuePair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

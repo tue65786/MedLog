@@ -65,6 +65,7 @@ public static final String WATSON_USER = "d2f6715f-5baf-4420-bd22-a9a87854c7b1";
 //  "username": "850e4164-6c83-416d-b356-9ad6bac09fa1"
 //}
 public static final String WATSON_PASS = "oOxW06RaXCCE";
+    public static final String FLDR_APIDOC = "apidoc";
 /**
  * No instantiation.
  */
