@@ -3,6 +3,7 @@
     Created on : Nov 3, 2016, 8:56:21 AM
     Author     : (c)2016 Guiding Technologies
 --%>
+<%@page import="java.util.Arrays"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.medlog.webservice.vo.DiaryAnalysisWeightedChartVO"%>
 <%@page import="com.google.gson.GsonBuilder"%>
@@ -51,7 +52,8 @@
                 for (DiaryAnalysisVO dv : vl){
                     areaData.add(DiaryAnalysisWeightedChartVO.normalInstance(dv));
                 }
-                
+                session.setAttribute("fiveNumber", Arrays.toString(instance.fiveSummary));
+                session.setAttribute("diaryEq", "y = "+String.format("%.2f",instance.lineEq[0]) +"x" + " + " + instance.lineEq[1] + " R²= "+ instance.lineEq[2]+.001);
                 Gson g = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
                 String gson = g.toJson(vl);
                 String areaDataString = g.toJson(areaData);

@@ -76,6 +76,13 @@ public class DiaryAnalysisSummaryVO {
     private double[] xAxisGuess;
     private String html = "";
     private double toneCurrentAvgX;
+    public double[] lineEq = new double[3];
+    public double[] fiveSummary = new double[5];
+    private final int SLOPE = 0;
+    private final int YINT = 1;
+    private final int R = 0;
+
+    private int[] LINE_EQ_PART = {SLOPE, YINT, R};
 
     public DiaryAnalysisSummaryVO() {
         toneCurrentAvgX = .399;
@@ -196,6 +203,18 @@ public class DiaryAnalysisSummaryVO {
         System.out.printf("Weighted (history) Guess ------> %.3f%n", (guess));
         System.out.printf("Best fit line Guess -----------> %.3f%n", sg.predict(toneCurrentAvgX));
         System.out.println("-------------------------------------------\n");
+        lineEq[SLOPE] = sg.getSlope();
+        lineEq[YINT] = sg.getIntercept();
+        lineEq[R] = sg.getRSquare();
+        double[] norm = StatUtils.normalize(corrRanked);
+        fiveSummary[0] = StatUtils.min(norm);
+        fiveSummary[1] = StatUtils.percentile(norm, 25);
+
+        fiveSummary[2] = StatUtils.percentile(norm, 50);
+
+        fiveSummary[3] = StatUtils.percentile(norm, 75);
+
+        fiveSummary[4] = StatUtils.max(norm);
 
     }
 // <editor-fold defaultstate="collapsed" desc="Helpers.">
@@ -240,8 +259,8 @@ public class DiaryAnalysisSummaryVO {
                 System.out.println();
             }
         }
-        setHtml(getHtml() + "<tr><td colspan='4'><b>Total Weight: 0.9999994</b><br/>IQR:.0041</td></tr></table><h3>Guesses</h3><ol><li><b>Sample</b> : " + String.format("%.2f%%",guesses[0]) + "</li><li><b>Model</b> : "+String.format("%.2f%%",guesses[1]) +"</li></ol><a href='report-journal-tone_raw.jsp' title='Report'>Learn more...</a>");
-        
+        setHtml(getHtml() + "<tr><td colspan='4'><b>Total Weight: 0.9999994</b><br/>IQR:.0041</td></tr></table><h3>Guesses</h3><ol><li><b>Sample</b> : " + String.format("%.2f%%", guesses[0]) + "</li><li><b>Model</b> : " + String.format("%.2f%%", guesses[1]) + "</li></ol><a href='report-journal-tone_raw.jsp' title='Report'>Learn more...</a>");
+
         System.out.println("\n\n" + html + "\n\n");
     }
 
