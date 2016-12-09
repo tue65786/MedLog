@@ -171,5 +171,9 @@ public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializab
     public String toString() {
         return "ToneKeyValuePair{" + "value=" + value + ", rank=" + rank + ", weightedValue=" + weightedValue + ", key=" + key + '}';
     }
-    
+    public String toHTML() {
+        final String css = " style=\""+ (rank % 2 ==0 ? "background-color: #EEE\" ": "background-color:#FFF\" ");
+        return "<tr>" + "<td" +css +">" + key  + "</td> <td" +css +">" + rank + "</td><td" 
+                +css +">"+ weightedValue + "</td><td" +css +">" + value + "</td></tr>";
+    }
 }
