@@ -5,7 +5,9 @@
  */
 package com.medlog.webservice.CONST;
 
+import com.medlog.webservice.lifecycle.Security;
 import com.medlog.webservice.rest.*;
+import com.medlog.webservice.rest.helpers.ServletHelpers;
 import com.medlog.webservice.vo.*;
 import java.util.logging.*;
 
@@ -34,34 +36,76 @@ public static final int INSERT = 2;
  * HTTP Method Code: PUSH/UPDATE.
  */
 public static final int UPDATE = 3;
-public static final int DELETE = 4;
+
+    /**
+     *API Action Delete
+     */
+    public static final int DELETE = 4;
 /**
  * Valid {@linkplain PatientVO} API Functions
  */
 public static final String[] STATE_STATUS = { "error", "info" };
-public static final int ERROR = 0;
-public static final int INFO = 1;
+
+    /**
+     * API status error
+     */
+    public static final int ERROR = 0;
+
+    /**
+     * APi status INFO
+     */
+    public static final int INFO = 1;
 /**
  * Valid {@linkplain DiaryVO} API functions
  */
 
 public static final String API_PARAM_RESOURCE = "res";
-public static final String API_RESOURCE_DIARY = "d";
-public static final String API_RESOURCE_HEALTHCARE_PROVIDER = "h";
-public static final String API_RESOURCE_MEDICATION = "m";
-public static final String API_RESOURCE_PATIENT = "p";
+
+    /**
+     *Diary Resource
+     * @see DiaryVO
+     * @see DiaryAnalysisVO
+     * 
+     * @see RES_ENUM#API_RESOURCE_DIARY
+     */
+    public static final String API_RESOURCE_DIARY = "d";
+
+    /**
+     * Health Provider Resource Key
+     * @see  HealthcareProviderVO
+     * @see RES_ENUM#API_RESOURCE_HEALTHCARE_PROVIDER
+     */
+    public static final String API_RESOURCE_HEALTHCARE_PROVIDER = "h";
+
+    /**
+     * Medication Resource
+     * @see MedicationVO
+     * @see MedTypeVO
+     * @see RES_ENUM#API_RESOURCE_MEDICATION
+     */
+    public static final String API_RESOURCE_MEDICATION = "m";
+
+    /**
+     *Patient Resource
+     * @see PatientVO
+     * @see Security
+     * @see RES_ENUM#API_RESOURCE_PATIENT
+     */
+    public static final String API_RESOURCE_PATIENT = "p";
 /**
- * @see RES_ENUM
+ * PharmRX Resource
+ * @see RES_ENUM#API_RESOURCE_PHARM
  */
 public static final String API_RESOURCE_PHARM = "ph";
 /**
+ * Dietary Resource
  * @see RES_ENUM
  */
 public static final String API_RESOURCE_DIATARY_RESTRICTION = "f";
 /**
  * 
  * SHARED LIST OF STATES
- * @see RES_ENUM
+ * @see RES_ENUM#API_RESOURCE_STATES
  */
 public static final String API_RESOURCE_STATES = "s";
 /**
@@ -70,17 +114,61 @@ public static final String API_RESOURCE_STATES = "s";
  */
 public static final String API_RESOURCE_SIG = "g";
 
-public static final String API_PARAM_FUNCTION = "fn";
-public static final String API_FUNCTION_FIND = "find";
-public static final String API_FUNCTION_FIND_BY_KEYWORD = "findByKeyword";
-public static final String API_FUNCTION_FIND_BY_ID = "findByID";
-public static final String API_FUNCTION_INSERT = "add";
-public static final String API_FUNCTION_UPDATE = "update";
-public static final String API_FUNCTION_ASSIGN = "assign";
-public static final String API_FUNCTION_UNASSIGN = "unassign";
-public static final String API_FUNCTION_DELETE = "delete";
-public static final String API_FUNCTION_LOGIN = "login";
-public static final String API_FUNCTION_LOGOUT = "logout";
+    /**
+     * Resource Function Param
+     * @see ServletHelpers
+     */
+    public static final String API_PARAM_FUNCTION = "fn";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_FIND = "find";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_FIND_BY_KEYWORD = "findByKeyword";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_FIND_BY_ID = "findByID";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_INSERT = "add";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_UPDATE = "update";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_ASSIGN = "assign";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_UNASSIGN = "unassign";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_DELETE = "delete";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_LOGIN = "login";
+
+    /**
+     *
+     */
+    public static final String API_FUNCTION_LOGOUT = "logout";
 
 /**
  * No instantiation

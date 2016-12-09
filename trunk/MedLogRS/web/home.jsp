@@ -3,6 +3,7 @@
     Created on : Nov 3, 2016, 8:56:21 AM
     Author     : (c)2016 Guiding Technologies
 --%>
+<%@page import="com.google.gson.GsonBuilder"%>
 <%@page import="com.medlog.webservice.vo.DiaryAnalysisSummaryVO"%>
 <%@page import="com.medlog.webservice.vo.DiaryAnalysisVO"%>
 <%@page import="java.util.ArrayList"%>
@@ -39,10 +40,12 @@
             ArrayList<DiaryVO> diary = dao.findDiaryByPatient();
             if (diary != null && !diary.isEmpty()) {
                 diaryEntires = diary.size() + " recent entries. Last entry was " + diary.get(diary.size() - 1).getCreatedDate().toString() + ".  <ul><li>Mood is looking up!</li><li>Work on productivity.</li></ul> <br/> Don't forget to keep your journal up to date.";
-                ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(2);
+                ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(user.getPatientID());
                 DiaryAnalysisSummaryVO instance = new DiaryAnalysisSummaryVO();
                 instance.runIt(vl);
                 diaryStat = instance.getHtml();
+                String gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(vl);
+                session.setAttribute("diaryReportData", vl);
             }
 
         } catch (Exception e) {
