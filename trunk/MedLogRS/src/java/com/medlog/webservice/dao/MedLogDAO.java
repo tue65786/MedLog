@@ -1113,6 +1113,7 @@ public class MedLogDAO implements IMedLogDAO {
                         .producivtiy(rs.getInt("productivity"))
                         .sadness(rs.getDouble("sadness"))
                         .tentative(rs.getDouble("tentative"))
+                        .rowTotal(rs.getDouble("rowTotal"))
                         .build(i++));
             }
         } catch (SQLException ex) {

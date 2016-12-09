@@ -276,15 +276,40 @@ public class DB_STRINGS {
     public static final String SP_PHARM_SELECT_SHORT = "{call [spPharma_RX_OTCSelectShort](?,?)}";
     /**
      * SigID
+     * @see SigVO
      */
     public static final String SP_SIGS_SELECT = "{call [spSigSelect](?)}";
     /**
      * Retrieves all {@linkplain StateVO} objects. Returns in order: ID, Name,
      * Abbr.
+     * @see StateVO
      */
     public static final String SP_STATE_SELECT = "{call spStateSelect()}";
+
+    /**
+     * @see DiaryAnalysisSummaryVO
+     * @see DiaryAnalysisWeightedChartVO
+     * @see DiaryVO
+     *
+     */
     public static final String PS_DIARY_DATA = "EXEC [dbo].[CrossTab] @RowFieldNames = 'diaryID,mood,productivity',@SourceFilter= 'patientid= ?',@OrderBy = 'diaryID,mood,productivity'";
+
+    /**
+     * @see DiaryAnalysisSummaryVO
+     * @see DiaryAnalysisWeightedChartVO
+     * @see DiaryVO
+     */
     public static final String ST_DIARY_DATA = "EXEC [dbo].[CrossTab] @RowFieldNames = 'diaryID,mood,productivity',@SourceFilter= 'patientid= [[[ID]]]',@OrderBy = 'diaryID,mood,productivity'";
+
+    /**
+     * Lookup linear regression data.<p>
+     * Returns id, score, mood </p>
+     *
+     * @see DiaryAnalysisSummaryVO
+     * @see DiaryAnalysisWeightedChartVO
+     * @see DiaryVO
+     *
+     */
     public static final String ST_XY_DIARY = "\n"
             + "SELECT [DiaryID]\n"
             + ",	   AVG([score]) score\n"

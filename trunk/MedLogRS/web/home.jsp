@@ -3,6 +3,8 @@
     Created on : Nov 3, 2016, 8:56:21 AM
     Author     : (c)2016 Guiding Technologies
 --%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="com.medlog.webservice.vo.DiaryAnalysisWeightedChartVO"%>
 <%@page import="com.google.gson.GsonBuilder"%>
 <%@page import="com.medlog.webservice.vo.DiaryAnalysisSummaryVO"%>
 <%@page import="com.medlog.webservice.vo.DiaryAnalysisVO"%>
@@ -40,12 +42,27 @@
             ArrayList<DiaryVO> diary = dao.findDiaryByPatient();
             if (diary != null && !diary.isEmpty()) {
                 diaryEntires = diary.size() + " recent entries. Last entry was " + diary.get(diary.size() - 1).getCreatedDate().toString() + ".  <ul><li>Mood is looking up!</li><li>Work on productivity.</li></ul> <br/> Don't forget to keep your journal up to date.";
+                try{
                 ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(user.getPatientID());
                 DiaryAnalysisSummaryVO instance = new DiaryAnalysisSummaryVO();
                 instance.runIt(vl);
+                ArrayList<DiaryAnalysisWeightedChartVO> areaData = new ArrayList<>(); 
                 diaryStat = instance.getHtml();
-                String gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(vl);
-                session.setAttribute("diaryReportData", vl);
+                for (DiaryAnalysisVO dv : vl){
+                    areaData.add(DiaryAnalysisWeightedChartVO.normalInstance(dv));
+                }
+                
+                Gson g = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+                String gson = g.toJson(vl);
+                String areaDataString = g.toJson(areaData);
+                System.out.println(gson); 
+                session.setAttribute("diaryReportData", gson);
+                session.setAttribute("diaryAreaData", areaDataString);
+                System.out.println("home.jsp() " + areaDataString);
+                session.setAttribute("diaryTbl", diaryStat);
+                }catch(Exception e){
+                    
+                }
             }
 
         } catch (Exception e) {
