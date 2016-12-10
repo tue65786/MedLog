@@ -5,6 +5,8 @@
  */
 package com.medlog.webservice.vo;
 
+import static com.medlog.webservice.CONST.SETTINGS.DEBUG;
+import com.medlog.webservice.util.StrUtl;
 import com.medlog.webservice.vo.pairs.ToneKeyValuePair;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ public class DiaryAnalysisSummaryVO {
     public static final int IDX_AGREEABLENESS_BIG5 = 1;
     public static final int IDX_ANALYTICAL = 2;
     public static final int IDX_ANGER = 3;
+
     public static final int IDX_CONFIDENT = 4;
     public static final int IDX_CONSCIENTIOUSNESS_BIG5 = 5;
     public static final int IDX_DISGUST = 6;
@@ -52,7 +55,7 @@ public class DiaryAnalysisSummaryVO {
         "IDX_SADNESS ................",
         "IDX_TENTATIVE .............."};
     public double[] guesses = new double[2];
-
+    private DiaryAnalysisVO currentDiary;
     private HashMap<String, Integer> toneMap;
     ArrayList<ToneKeyValuePair> toneList;
     private double sum = 0;
@@ -113,6 +116,7 @@ public class DiaryAnalysisSummaryVO {
     public void runIt(ArrayList<DiaryAnalysisVO> vl) {
         doBefore(vl.size());
         populateScores(vl);
+
         populateCorrelation();
         printCorr();
 
@@ -121,6 +125,9 @@ public class DiaryAnalysisSummaryVO {
     private void populateScores(ArrayList<DiaryAnalysisVO> vl) {
         for (int i = 0; i < vl.size(); i++) {
             DiaryAnalysisVO vo = vl.get(i);
+            if (i == 0 || currentDiary == null || vo.getDiaryID() > currentDiary.getDiaryID()) {
+                currentDiary = vo;
+            }
             agreeablenessBig5[i] = vo.getAgreeablenessBig5();
             analytical[i] = vo.getAnalytical();
             anger[i] = vo.getAnger();
@@ -157,8 +164,13 @@ public class DiaryAnalysisSummaryVO {
         corr[IDX_OPENNESS_BIG5] = c.correlation(mood, opennessBig5);
         corr[IDX_SADNESS] = c.correlation(mood, sadness);
         corr[IDX_TENTATIVE] = c.correlation(mood, tentative);
+        double corrTemp;
         for (int k = 0; k < corr.length; k++) {
-            rSquared[k] = Math.pow(corr[k], 2);
+            corrTemp = Math.pow(corr[k], 2);
+            if (StrUtl.matchOR(k, IDX_ANGER, IDX_DISGUST, IDX_FEAR, IDX_SADNESS)) {
+                corrTemp = .99 - corrTemp;
+            }
+            rSquared[k] = corrTemp;
         }
         double q3 = org.apache.commons.math3.stat.StatUtils.percentile(rSquared, .75);
 
@@ -191,18 +203,24 @@ public class DiaryAnalysisSummaryVO {
         double guess = 0;
 
         for (ToneKeyValuePair t : toneList) {
-            guess += (t.getWeightedValue() * 10 / t.getRank());
+            guess += (t.getWeightedValue() * 10 * getValFromKeyPct(t.getKey()));//t.getWeightedValue());
+
             System.out.println(t.toString());
+            System.out.println("com.medlog.webservice.vo.DiaryAnalysisSummaryVO.populateCorrelation() Guess with " + t.getRank() + "== " + guess);
         }
         SimpleRegression sg = new SimpleRegression(false);
         populateLineGuessPoints(sg);
-        guesses[0] = guess;
+
         guesses[1] = sg.predict(toneCurrentAvgX);
         System.out.println("\n\n\ncom.medlog.webservice.vo.DiaryAnalysisSummaryVO.populateCorrelation() GUESS === >");
 
         System.out.printf("Weighted (history) Guess ------> %.3f%n", (guess));
         System.out.printf("Best fit line Guess -----------> %.3f%n", sg.predict(toneCurrentAvgX));
+        guess /= 10;
+        guess = Math.round(guess);
+        System.out.printf("Weighted (history) Guess adj.-----> %.3f%n", (guess));
         System.out.println("-------------------------------------------\n");
+        guesses[0] = guess;
         lineEq[SLOPE] = sg.getSlope();
         lineEq[YINT] = sg.getIntercept();
         lineEq[R] = sg.getRSquare();
@@ -278,4 +296,82 @@ public class DiaryAnalysisSummaryVO {
         this.html = html;
     }
 
+    /**
+     * Retrieve current diary value by KEY as Percent
+     *
+     * @param key
+     * @return
+     * @see #getValFromKey(java.lang.String)
+     */
+    private double getValFromKeyPct(String key) {
+        double val = getValFromKey(key);
+        if (DEBUG) {
+            System.out.println("com.medlog.webservice.vo.DiaryAnalysisSummaryVO.getValFromKeyPct()" + val + " / " + currentDiary.rowTotal);
+        }
+        return val / currentDiary.getRowTotal();
+    }
+
+    /**
+     * Retrieve current diary value by KEY
+     *
+     * @param key ref {@linkplain #CORR_STR}
+     * @return
+     */
+    private double getValFromKey(String key) {
+        key = StrUtl.toS(key).replace("IDX_", "").replace(("."), "").replace("BIG5", "").replace("_", "").replace(" ", "").toLowerCase();
+        if (DEBUG) {
+            System.out.println("com.medlog.webservice.vo.DiaryAnalysisSummaryVO.getIDXFromName(KEY)" + key);
+        }
+        switch (key) {
+            case "anger":
+                return currentDiary.anger;
+
+            case "disgust":
+                return currentDiary.disgust;
+//                break;
+            case "fear":
+                return currentDiary.fear;
+//                break;
+            case "joy":
+                return currentDiary.joy;
+
+            case "sadness":
+                return currentDiary.sadness;
+//                break;
+            case "analytical":
+                return currentDiary.analytical;
+//                break;
+            case "confident":
+                return currentDiary.confident;
+//                break;
+            case "tentative":
+                return currentDiary.tentative;
+//                break;
+            case "agreeableness_big5":
+            case "agreeableness":
+                return currentDiary.agreeablenessBig5;
+//                break;
+            case "conscientiousness_big5":
+            case "conscientiousness":
+                return currentDiary.conscientiousnessBig5;
+//                break;
+            case "emotional_range_big5":
+            case "emotionalrange":
+                return currentDiary.emotionalRangeBig5;
+//                break;
+            case "extraversion_big5":
+            case "extraversion":
+                return currentDiary.extraversionBig5;
+//                break;
+            case "openness_big5":
+            case "openness":
+                return currentDiary.opennessBig5;
+//                break;
+            case "mood":
+                return (int) currentDiary.getMood();
+//                break;
+            default:
+                return Double.MIN_VALUE;
+        }
+    }
 }

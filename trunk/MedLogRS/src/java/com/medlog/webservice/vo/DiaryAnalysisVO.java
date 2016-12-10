@@ -5,13 +5,29 @@
  */
 package com.medlog.webservice.vo;
 
+import com.medlog.webservice.util.ObjUtl;
 import java.io.Serializable;
 
 /**
  *
  * @author westy
  */
-public class DiaryAnalysisVO implements Serializable {
+public class DiaryAnalysisVO implements Serializable, Cloneable {
+
+    @Override
+    public Object clone() {
+
+        try {
+            Object copy = super.clone();
+            if (copy != null && copy != this) {
+                return copy;
+            }
+        } catch (CloneNotSupportedException e) {
+            // this should never happen
+            throw new InternalError(e.toString());
+        }
+        return ObjUtl.cloneObjectDeepInstance(this);
+    }
 
     /**
      * @return the mood
@@ -42,20 +58,20 @@ public class DiaryAnalysisVO implements Serializable {
     }
     private static final long serialVersionUID = 1L;
     private int diaryID;
-    private double agreeablenessBig5;
-    private double analytical;
-    private double anger;
-    private double confident;
-    private double conscientiousnessBig5;
-    private double disgust;
-    private double emotionalRangeBig5;
-    private double extraversionBig5;
-    private double fear;
-    private double joy;
-    private double opennessBig5;
-    private double sadness;
-    private double tentative;
-    private double rowTotal;
+    public double agreeablenessBig5;
+    public double analytical;
+    public double anger;
+    public double confident;
+    public double conscientiousnessBig5;
+    public double disgust;
+    public double emotionalRangeBig5;
+    public double extraversionBig5;
+    public double fear;
+    public double joy;
+    public double opennessBig5;
+    public double sadness;
+    public double tentative;
+    public double rowTotal;
     private int mood;
     private int producivtiy;
     private int row;
@@ -258,7 +274,7 @@ public class DiaryAnalysisVO implements Serializable {
                     this.opennessBig5(value);
                     break;
                 case "mood":
-                    this.mood((int)value);
+                    this.mood((int) value);
                     break;
                 default:
                     break;
