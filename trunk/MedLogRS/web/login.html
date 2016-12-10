@@ -11,10 +11,12 @@ and open the template in the editor.
         <link rel="icon" href="favicon.ico" type="image/x-icon" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="rstyle.css"/>
+        <link rel="stylesheet" type="text/css" href="scripts/login.min.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
         <script src="scripts/utils.js" type="text/javascript"></script>
+     
     </head>
     <body>
 
@@ -28,13 +30,13 @@ and open the template in the editor.
         <form method="post" name="loginForm" id="loginForm" autocomplete="on">
             <fieldset>
                 <legend>Login Credentials</legend>
-                <label for="username">Username [SET TO dan]:</label><br/>
-                <input name="username" type="text" id="username" placeholder="" required/><br/>
-                <label for="password"> Password [SET TO asdf]:</label><br/>
-                <input name="password" type="password" id="password" placeholder="" required/><br/>
+                <label for="username">Username</label>
+                <input accesskey="u" name="username" type="text" id="username" placeholder="" required/><br/>
+                <label for="password"> Password</label>
+                <input accesskey="p" name="password" type="password" id="password" placeholder="" required/><br/>
             </fieldset>
             <input type="submit" value="LOGIN" id="btnSubmit" />
-            <a href="User.html">Register</a>
+            <a class="register" href="User.html">Register</a>
             <div id="message" ></div>
         </form>
         <!--Logged in View-->
@@ -43,7 +45,7 @@ and open the template in the editor.
             <form id="userInfos">
                 <label for="firstName">First name:<br/></label>
                 <input name="firstName" type="text" readonly id="firstname" placeholder="Enter your first name"  />
-                <br/>
+             
                 <label for="lastname">Last name:<br/></label>
                 <input name="lastname" type="text" readonly id="lastname" placeholder="Enter your last name" /><br/>
                 <label>Street</label><input type="text" readonly id="street" />

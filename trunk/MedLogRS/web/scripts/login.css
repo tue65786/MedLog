@@ -1,0 +1,116 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 9, 2016, 11:56:25 PM
+    Author     : westy
+*/
+
+form fieldset legend {
+                font-size:1.1em; /* bump up legend font size, not too large or it'll overwrite border on left */
+                /* be careful with padding, it'll shift the nice offset on top of border  */
+            }
+
+            form fieldset label:first-letter { /* use first-letter pseudo-class to underline accesskey, note that */
+                text-decoration:underline;    /* Firefox 1.07 WIN and Explorer 5.2 Mac don't support first-letter */
+                /* pseudo-class on legend elements, but do support it on label elements */
+                /* we instead underline first letter on each label element and accesskey */
+                /* each input. doing only legends would lessen cognitive load */
+            }form fieldset {
+                /* clear: both; note that this clear causes inputs to break to left in ie5.x mac, commented out */
+                border-color: #000;
+                border-width: 1px;
+                border-style: solid;
+                padding: 10px;        /* padding in fieldset support spotty in IE */
+                margin: 0;
+            }
+
+            form fieldset legend {
+                font-size:1.1em;color:darkgrey; 
+            }
+
+            form label { 
+                /*display: block;            float: left;*/ 
+                font-size:1.6em;
+                
+                /*width: 150px;*/ 
+                padding: 0 0 5px 0; 
+                margin: 21px 1px 2px 0; 
+                text-align: right; width:140px;
+            }
+
+            form fieldset label:first-letter { /* use first-letter pseudo-class to underline accesskey, note that */
+                text-decoration:underline;    /* Firefox 1.07 WIN and Explorer 5.2 Mac don't support first-letter */
+                /* pseudo-class on legend elements, but do support it on label elements */
+                /* we instead underline first letter on each label element and accesskey */
+                /* each input. doing only legends would  lessens cognitive load */
+                /* opera breaks after first letter underlined legends but not labels */
+            }
+            input[type="text"],input[type="password"] {
+                padding: 10px;
+                border: solid 1px #dcdcdc;
+                transition: box-shadow 0.3s, border 0.3s;  display: block;
+                margin: 0;
+                width: 350px;
+                font-family: sans-serif;
+                font-size: 18px;
+                appearance: none;
+                box-shadow: none;
+                border-radius: none;
+            }
+            .register{color:white;text-decoration: none;font-size:1.5em;font-weight:bolder;}
+            .register:hover{color:#FFC;  -webkit-text-stroke: 1px yellow;
+                            /*color: white;*/
+                            text-shadow:
+                                0px 1px 0 #FFC,
+                                -1px 0px 0 yellow,  
+                                /*1px -1px 0 yellow,*/
+                                0px 1px 0 yellow,
+                                0px -1px #FFC; }
+
+            input[type="text"]:focus,
+            input[type="password"]:focus,
+            input[type="password"].focus,
+            input[type="text"].focus {
+                border: solid 1px #707070;
+                box-shadow: 0 0 5px 1px #969696;
+            }
+            select{
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                border:1px solid #BEBEBE;
+                padding: 7px;
+                margin:0px;width: 350px;
+                -webkit-transition: all 0.30s ease-in-out;
+                -moz-transition: all 0.30s ease-in-out;
+                -ms-transition: all 0.30s ease-in-out;
+                -o-transition: all 0.30s ease-in-out;
+                outline: none; 
+            }select:focus{
+                -moz-box-shadow: 0 0 8px #88D5E9;
+                -webkit-box-shadow: 0 0 8px #88D5E9;
+                box-shadow: 0 0 8px #88D5E9;
+                border: 1px solid #88D5E9;
+            }
+            input[type="button"],
+            input[type="submit"] {
+                -moz-box-shadow: inset 0px 1px 0px 0px #3985B1;
+                -webkit-box-shadow: inset 0px 1px 0px 0px #3985B1;
+                box-shadow: inset 0px 1px 0px 0px #3985B1;
+                background-color: #216288;
+                border: 1px solid #17445E;
+                display: inline-block;
+                cursor: pointer; 
+                color: #FFFFFF;
+                padding: 12px 18px; 
+                text-decoration: none;
+                font: 14px Arial, Helvetica, sans-serif;
+            }
+            input[type="button"]:hover,
+            input[type="submit"]:hover {
+                background: linear-gradient(to bottom, #2D77A2 5%, #337DA8 100%);
+                background-color: #28739E;
+            }
