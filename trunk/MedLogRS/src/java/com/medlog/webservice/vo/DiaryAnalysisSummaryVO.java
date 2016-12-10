@@ -277,7 +277,7 @@ public class DiaryAnalysisSummaryVO {
                 System.out.println();
             }
         }
-        setHtml(getHtml() + "<tr><td colspan='4'><b>Total Weight: 0.9999994</b><br/>IQR:.0041</td></tr></table><h3>Guesses</h3><ol><li><b>Sample</b> : " + String.format("%.2f%%", guesses[0]) + "</li><li><b>Model</b> : " + String.format("%.2f%%", guesses[1]) + "</li></ol><a href='report-journal-tone_raw.jsp' title='Report'>Learn more...</a>");
+        setHtml(getHtml() + "<tr><td colspan='4'><b>Total Weight: 0.9999994</b><br/>IQR:____</td></tr></table><h3>Guesses</h3><ol><li><b>Sample</b> : " + String.format("%.2f", guesses[0]) + "</li><li><b>Model</b> : " + String.format("%.2f", guesses[1]) + "</li></ol><a href='report-journal-tone_raw.jsp' title='Report'>Learn more...</a>");
 
         System.out.println("\n\n" + html + "\n\n");
     }

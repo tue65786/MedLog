@@ -65,7 +65,7 @@ public void contextDestroyed(ServletContextEvent _sce) {
 public void contextInitialized(ServletContextEvent _sce) {
    LOG.log( Level.INFO, String.format( "$$$$$$$$ com.medlog.webservice.lifecycle.NewServletListener# %s ", _sce.getServletContext().getContextPath() ) );
    System.out.println( "\ncom.medlog.webservice.lifecycle.NewServletListener.contextInitialized() ---> " + _sce.getServletContext().getServerInfo());
-   _sce.getServletContext().setAttribute( "activeLogins", 0 );
+   _sce.getServletContext().setAttribute( "activeLogins", 1 );
 
 }
 

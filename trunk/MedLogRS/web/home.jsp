@@ -24,6 +24,12 @@
     String onload = "";
     String diaryEntires = "";
     String diaryStat = "";
+    int logins = 0;
+    try {
+        logins = (int) application.getAttribute("activeLogins");
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     DbConnection db = new DbConnection();
     if (user == null || user.getPatientID() <= 0) {
         try {
@@ -43,27 +49,27 @@
             ArrayList<DiaryVO> diary = dao.findDiaryByPatient();
             if (diary != null && !diary.isEmpty()) {
                 diaryEntires = diary.size() + " recent entries. Last entry was " + diary.get(diary.size() - 1).getCreatedDate().toString() + ".  <ul><li>Mood is looking up!</li><li>Work on productivity.</li></ul> <br/> Don't forget to keep your journal up to date.";
-                try{
-                ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(user.getPatientID());
-                DiaryAnalysisSummaryVO instance = new DiaryAnalysisSummaryVO();
-                instance.runIt(vl);
-                ArrayList<DiaryAnalysisWeightedChartVO> areaData = new ArrayList<>(); 
-                diaryStat = instance.getHtml();
-                for (DiaryAnalysisVO dv : vl){
-                    areaData.add(DiaryAnalysisWeightedChartVO.normalInstance(dv));
-                }
-                session.setAttribute("fiveNumber", Arrays.toString(instance.fiveSummary));
-                session.setAttribute("diaryEq", "y = "+String.format("%.2f",instance.lineEq[0]) +"x" + " + " + instance.lineEq[1] + " R²= "+ instance.lineEq[2]+.001);
-                Gson g = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-                String gson = g.toJson(vl);
-                String areaDataString = g.toJson(areaData);
-                System.out.println(gson); 
-                session.setAttribute("diaryReportData", gson);
-                session.setAttribute("diaryAreaData", areaDataString);
-                System.out.println("home.jsp() " + areaDataString);
-                session.setAttribute("diaryTbl", diaryStat);
-                }catch(Exception e){
-                    
+                try {
+                    ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(user.getPatientID());
+                    DiaryAnalysisSummaryVO instance = new DiaryAnalysisSummaryVO();
+                    instance.runIt(vl);
+                    ArrayList<DiaryAnalysisWeightedChartVO> areaData = new ArrayList<>();
+                    diaryStat = instance.getHtml();
+                    for (DiaryAnalysisVO dv : vl) {
+                        areaData.add(DiaryAnalysisWeightedChartVO.normalInstance(dv));
+                    }
+                    session.setAttribute("fiveNumber", Arrays.toString(instance.fiveSummary));
+                    session.setAttribute("diaryEq", "y = " + String.format("%.2f", instance.lineEq[0]) + "x" + " + " + instance.lineEq[1] + " R²= " + instance.lineEq[2] + .001);
+                    Gson g = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+                    String gson = g.toJson(vl);
+                    String areaDataString = g.toJson(areaData);
+                    System.out.println(gson);
+                    session.setAttribute("diaryReportData", gson);
+                    session.setAttribute("diaryAreaData", areaDataString);
+                    System.out.println("home.jsp() " + areaDataString);
+                    session.setAttribute("diaryTbl", diaryStat);
+                } catch (Exception e) {
+
                 }
             }
 
@@ -98,7 +104,7 @@
 //		   System.out.println( tone );
 //TODO 1. Logout DONE
 //TODO 2. Update homepage data.
-        %>
+%>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>MedLog</title>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -109,22 +115,29 @@
         <style>
             .ui-menu { width: 150px; }
             #menu a {text-decoration: none;}
-            .ui-tabs-vertical { width: 55em; margin-left: 200px; }
+            .ui-tabs-vertical { width: 80%; margin-left: 200px; }
             .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
-            .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+            .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important;
+                                                border-right-width: 0 !important; margin: 0 -1px .2em 0;border-radius: 3px; }
             .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
             .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
-            .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
+            .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right;
+                                               width: 66%;}
             #menu a {font-weight: bold;}
+            footer {text-align: center; margin:0 auto;border-top:2px #0074c7 solid;}
         </style>
         <script type="text/javascript">
             $(function () {
                 $("#menu").menu();
                 $("#menu").menu({
                     select: function (event, ui) {
-
-                        console.log(event);
-                        console.log(ui);
+                      
+                        try {
+                            top.location.href = ui.item[0].children[0].children[0].href;
+                        } catch (e) {
+                            console.log(e);
+                            return false;
+                        }
                     }
                 });
 
@@ -157,13 +170,13 @@
                 <div><span class="ui-icon ui-icon-contact"></span>Diary</div>
                 <ul>
                     <li>
-                        <div><span class="ui-icon "></span><a href="Journal.html">Add</a></div>
+                        <div><a  href="Journal.html"><span class="ui-icon "></span>Add</a></div>
                     </li>
                     <li>
                         <div><span class="ui-icon"></span><a href="JournalList.html?id=1">List</a></div>
                     </li>
                     <li>
-                        <div><span class="ui-icon"></span><a href="report-journal.html">Report</a></div>
+                        <div><a href="report-journal.html"><span class="ui-icon"></span>Report</a></div>
                     </li>
                     <li>
                         <div><span class="ui-icon"></span>Send</div>
@@ -217,9 +230,9 @@
             </div>
             <div id="tabs-3">
                 <h2>Last Entry Data</h2>
-                <div style="margin:10px;padding:5px;"> <%=diaryStat%></div>
+                <div style="margin:10px;padding:5px;">
+                    todo: addd last entry!!
+                    <%=diaryStat%></div>
             </div>
-        </div>
-
-    </body>
-</html>
+        </div><footer>Users online (<%=logins%>)</footer>
+    </body></html>
