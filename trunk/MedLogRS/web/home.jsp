@@ -63,10 +63,10 @@
                     Gson g = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
                     String gson = g.toJson(vl);
                     String areaDataString = g.toJson(areaData);
-                    System.out.println(gson);
+//                    System.out.println(gson);
                     session.setAttribute("diaryReportData", gson);
                     session.setAttribute("diaryAreaData", areaDataString);
-                    System.out.println("home.jsp() " + areaDataString);
+//                    System.out.println("home.jsp() " + areaDataString);
                     session.setAttribute("diaryTbl", diaryStat);
                 } catch (Exception e) {
 

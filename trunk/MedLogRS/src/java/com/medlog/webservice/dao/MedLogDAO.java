@@ -31,7 +31,7 @@ public class MedLogDAO implements IMedLogDAO {
 //private static Map<Integer, StateVO> statesList;
 
     /**
-     *
+     * Constructs DAO
      * @param db
      * @param u
      */
@@ -41,14 +41,16 @@ public class MedLogDAO implements IMedLogDAO {
         stateOK = true;
         errorMessage = "";
         try {
-            //  if ( u != null && u.getPatientID() != -2 ) {
-//	  findAllStates();
-            //  }
         } catch (Exception eeee) {
             eeee.printStackTrace();
         }
     }
-
+/**
+ * Overload Constructor
+ * @param db
+ * @param u
+ * @param app 
+ */
     public MedLogDAO(DbConnection db, PatientVO u, ApplicationBean app) {
         this.db = db;
         this.user = u;
@@ -173,14 +175,6 @@ public class MedLogDAO implements IMedLogDAO {
         if (_vo.isValid(INSERT)) {
             try {
                 cs = db.getConnnection().prepareCall(SP_HEALTHCARE_INSERT);
-//@phoneFax nchar (10) = NULL
-//@email nvarchar (256) = NULL
-//@pathient_log_communication_preference varchar (20) = NULL
-//@addressStreet nvarchar (512) = NULL
-//@addressCity nvarchar (128) = NULL
-//@addressStateID int = NULL
-//@addressZi   p varchar (10) = NULL
-//@inserted int OUTPUT
                 cs.setString(1, _vo.getLastName());
                 cs.setString(2, _vo.getFirstName());
                 cs.setNull(3, java.sql.Types.NVARCHAR);
@@ -194,9 +188,10 @@ public class MedLogDAO implements IMedLogDAO {
                 cs.setString(11, _vo.getAddressCity());
                 cs.setInt(12, _vo.getAddressStateID().getStateID());//CHECK FOR VALID STATE
                 cs.setString(13, StrUtl.truncateAtWord(_vo.getAddressZip(), 10));
-                cs.registerOutParameter(14, java.sql.Types.INTEGER);
+                cs.setInt(14,getCurrentUser().getPatientID());
+                cs.registerOutParameter(15, java.sql.Types.INTEGER);
                 int rows = cs.executeUpdate();
-                newID = cs.getInt(14);
+                newID = cs.getInt(15);
             } catch (SQLException ex) {
                 if (DEBUG) {
                     System.err.println("com.medlog.webservice.dao.MedLogDAO.createHealthcareProviderVO()\n" + DbUtl.printJDBCExceptionMsg(ex));
@@ -1365,6 +1360,9 @@ public class MedLogDAO implements IMedLogDAO {
         return null;
 
     }
+    /**
+     * Connection to DB
+     */
     private final DbConnection db;
     private String errorMessage;
     private boolean loggedIn;
@@ -1373,7 +1371,13 @@ public class MedLogDAO implements IMedLogDAO {
     private boolean stateOK;
     private boolean statesLoaded = false;
     private boolean statesLoading = false;
+    /**
+     * State list
+     */
     private Map<Integer, StateVO> statesMap;
+    /**
+     * Current user
+     */
     private PatientVO user;
 
 }
