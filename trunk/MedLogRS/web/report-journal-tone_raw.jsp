@@ -208,10 +208,9 @@
 
             var areaData = <%=area%>;
             var initTab2 = function () {
-
                 var settingsArea = {
-                    title: "Weighted Tone Analysis",
-                    description: "",
+                    title: "Tone Sampling (multi-linear regression)",
+                    description: " x̄ over time",
                     enableAnimations: true,
                     showLegend: true,
                     padding: {left: 10, top: 5, right: 10, bottom: 5},
@@ -219,9 +218,6 @@
                     source: areaData,
                     xAxis:
                             {
-//                    type: 'date',
-//                    baseUnit: 'day',
-//                    dataField: 'Date',
                                 valuesOnTicks: true,
                                 dataField: 'row',
                                 labels: {
