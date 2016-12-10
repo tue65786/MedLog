@@ -56,7 +56,7 @@ import java.util.List;
 
 
 /**
- * A login screen that offers login via email/password.
+ * edlog Sign in
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 

@@ -13,6 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Helper class for showing and canceling new message
  * notifications.
@@ -43,18 +46,25 @@ public class NewMessageNotification {
      */
     public static void notify(final Context context,
                               final String exampleString, final int number) {
+        notify(context, new String[]{exampleString}, number);
+    }
+
+    public static void notify(final Context context,
+                              final String exampleString[], final int number) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ml);
 
-
-        final String ticker = exampleString;
+        final int stringLen = exampleString.length;
+        final String ticker = exampleString[0];
+        final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+        final String sync = "";
         final String title = res.getString(
                 R.string.new_message_notification_title_template, exampleString);
         final String text = res.getString(
-                R.string.new_message_notification_placeholder_text_template, exampleString);
+                R.string.new_message_notification_placeholder_text_template, exampleString, "", "");
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -123,7 +133,7 @@ public class NewMessageNotification {
                                 0,
                                 Intent.createChooser(new Intent(Intent.ACTION_SEND)
                                         .setType("text/plain")
-                                        .putExtra(Intent.EXTRA_TEXT, "Dummy text"), "Dummy title"),
+                                        .putExtra(Intent.EXTRA_TEXT, exampleString), context.getString(R.string.msg_jrv)),
                                 PendingIntent.FLAG_UPDATE_CURRENT))
                 .addAction(
                         R.drawable.ic_action_stat_reply,
