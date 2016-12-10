@@ -45,10 +45,13 @@
         <script type="text/javascript" src="scripts/jqx/jqxchart.rangeselector.js"></script>-->
     <script type="text/javascript" src="scripts/jqx/jqx-all.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            function loadDataFromTable(id) {
-         var rows = $("#"+id+" tbody tr");        
-        var columns = $("#" + id +" thead th");
+        var predGuess = 0.0;
+        var totalPossible = 0.0;
+         function loadDataFromTable(id) {
+                predGuess = 0.000;
+                var currentData = $("#pieContainer").jqxChart('getInstance').source.records;
+                var rows = $("#" + id + " tbody tr");
+                var columns = $("#" + id + " thead th");
                 var data = [];
                 for (var i = 0; i < rows.length; i++) {
                     var row = rows[i];
@@ -60,10 +63,25 @@
                         var cell = $(row).find('td:eq(' + j + ')');
                         datarow[columnName] = $.trim(cell.text());
                     }
+                    for (var c = 0; c < currentData.length; c++) {
+                        var cur = currentData[c];
+                        if (cur.Metric === datarow.Name) {
+                            var tmpV = parseFloat(cur.Score) / 10 * (parseFloat(datarow.Weight) + 0.0001);
+                            console.log(tmpV);
+                            console.log('cur'); 
+                            console.log(parseFloat(cur.Score));
+                            predGuess = predGuess + tmpV;
+                            console.log(predGuess);
+                            datarow.GuessedScoreContrib = tmpV;
+                            break;
+                        }
+                    }
                     data[data.length] = datarow;
                 }
                 return data;
             }
+        $(document).ready(function () {
+           
             function getTextFrom(t) {
                 var i = 0;
                 var length = tonePhraseEx.length;
@@ -295,7 +313,7 @@
                 var dataAdapter = new $.jqx.dataAdapter(source, {autoBind: true});
                 var settings = {
                     title: "Latest Diary Adjusted Scores",
-                    description: "Guessed Mood: 5 vs Actual Mood: 7",
+                    description: "Guessed Mood:  vs Actual Mood: ",
                     enableAnimations: true,
                     showLegend: true,
 //                showBorderLine: true,
@@ -332,6 +350,7 @@
                 // setup the chart
                 $('#pieContainer').jqxChart(settings);
             };
+           
             var initWidgets = function (tab) {
                 console.log("tab");
                 console.log(tab);
@@ -344,8 +363,13 @@
                         break;
                     case 2:
                         initPie();
-                        console.log(loadDataFromTable("tblWeightedData"));
+                        var theData = loadDataFromTable("tblWeightedData");
+                        console.log(theData);
+                        $('#pieContainer').jqxChart({description: 'Guessed Mood: ' + predGuess});
 
+                        // refresh the chart element
+                        $('#pieContainer').jqxChart('refresh');
+                        break;
                 }
             };
             var x = "";
