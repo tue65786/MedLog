@@ -12,27 +12,31 @@
     String data = "";
     String area = "";
     String tbl = "";
-    String fiveNum ="";
+    String fiveNum = "";
     String eq = "";
+    String currentDiary = "";
+    String currentDiaryCSV = "";
     ServletHelpers sh = new ServletHelpers(request, response);
     data = sh.getStrAttribute("diaryReportData", "[]");
     tbl = sh.getStrAttribute("diaryTbl", "");
     area = sh.getStrAttribute("diaryAreaData", "[]");
     fiveNum = sh.getStrAttribute("fiveNumber", "");
     eq = sh.getStrAttribute("diaryEq", "");
+    currentDiary = sh.getStrAttribute("CURRENTDIARY", "");
+    currentDiaryCSV = sh.getStrAttribute("CURRENTDIARYCSV", "");
 
 %>
 <!DOCTYPE html>
 <head>
     <title id='Description'>Chart2</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <style>#tblContainer a{display:none;}</style>
-    <meta name="description" content="" />
+    <!--<style>#tblContainer a{display:none;}</style>-->
+
 
     <link rel="stylesheet" href="scripts/jqx/styles/jqx.base.css" type="text/css" />
     <link href="rstyle.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="scripts/jqx/styles/jqx.darkblue.css" type="text/css" />
-    
+
     <script type="text/javascript" src="scripts/jquery.min.js"></script>
     <!--    <script type="text/javascript" src="scripts/jqx/jqxcore.js"></script>
         <script type="text/javascript" src="scripts/jqx/jqxdata.js"></script>
@@ -42,22 +46,40 @@
     <script type="text/javascript" src="scripts/jqx/jqx-all.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-function getTextFrom(t){
-   var i = 0;
-   var length = tonePhraseEx.length;
-   for (i = 0;i < length;i++){
-     if (tonePhraseEx[i].tone === t){
-         return tonePhraseEx[i].text;
-     }  
-   }
-   return "";
-}
+            function loadDataFromTable(id) {
+         var rows = $("#"+id+" tbody tr");        
+        var columns = $("#" + id +" thead th");
+                var data = [];
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    var datarow = {};
+                    for (var j = 0; j < columns.length; j++) {
+                        // get column's title.
+                        var columnName = $.trim($(columns[j]).text());
+                        // select cell.
+                        var cell = $(row).find('td:eq(' + j + ')');
+                        datarow[columnName] = $.trim(cell.text());
+                    }
+                    data[data.length] = datarow;
+                }
+                return data;
+            }
+            function getTextFrom(t) {
+                var i = 0;
+                var length = tonePhraseEx.length;
+                for (i = 0; i < length; i++) {
+                    if (tonePhraseEx[i].tone === t) {
+                        return tonePhraseEx[i].text;
+                    }
+                }
+                return "";
+            }
             var tonePhraseEx = [
-                
-              {tone: 'agreeablenessBig5', text: 'That guy knew how to party.'},
-            {tone: 'sadness', text: 'The Curse of Keen Eyes - 08.19.04 Why I am cursed with being the guy that always sees the saddest and most pathetic little snippets of other peoples & quot; lives?'},
+
+                {tone: 'agreeablenessBig5', text: 'That guy knew how to party.'},
+                {tone: 'sadness', text: 'The Curse of Keen Eyes - 08.19.04 Why I am cursed with being the guy that always sees the saddest and most pathetic little snippets of other peoples & quot; lives?'},
                 {tone: 'tentative', text: 'Songs like, um, &quot;Yankee Doodle&quot; or maybe &quot;Skip to my Lu.&quot; I&quot;m not sure if those were around then, though.'},
-              
+
                 {tone: 'anger', text: 'What an idiot I am!'},
                 {tone: 'disgust', text: 'THE passenger train is just starting from Bologoe, the junction on the Petersburg-Moscow line.'},
                 {tone: 'confident', text: 'I got it, of course.'},
@@ -153,35 +175,35 @@ function getTextFrom(t){
                                         {dataField: 'mood', lineWidth: 4}
 //                                    {dataField: 'producivtiy', lineWidth: 1}
                                     ]
-                                
-           ,
-                             annotations: [
-                                {
-                                    type: 'rect',
-                                    yValue: 90,
-                                    xValue: 6,
-                                    offset: { x: -45, y: -25},
-                                    width: 220,
-                                    height: 20,                                    
-                                    fillColor: '#EFEFEF',
-                                    lineColor: 'red',
-                                    text: {
-                                        value: '<%=eq%>',
-                                        offset: {
-                                            x: 2,
-                                            y: 2
-                                        },
-                                        'class': 'redLabel',
-                                       angle: 0
-                                    }
+
+                                    ,
+                                    annotations: [
+                                        {
+                                            type: 'rect',
+                                            yValue: 90,
+                                            xValue: 6,
+                                            offset: {x: -45, y: -25},
+                                            width: 220,
+                                            height: 20,
+                                            fillColor: '#EFEFEF',
+                                            lineColor: 'red',
+                                            text: {
+                                                value: '<%=eq%>',
+                                                offset: {
+                                                    x: 2,
+                                                    y: 2
+                                                },
+                                                'class': 'redLabel',
+                                                angle: 0
+                                            }
+                                        }
+                                    ]
+
                                 }
-                            ]
-        
-        }
                             ]
                 };
                 $('#chartContainer').jqxChart(settings);
-            }
+            };
 
 
             var areaData = <%=area%>;
@@ -246,20 +268,73 @@ function getTextFrom(t){
                                                     }},
                                         {dataField: 'tentative', displayText: 'tentative', lineWidth: 1}
                                     ]
-                            
-                        }
-                                
-                                
-                                
+
+                                }
+
+
+
                             ]
-                            
-                            
-                            
+
+
+
                 };
                 // setup the chart
                 $('#areaContainer').jqxChart(settingsArea);
             };
+            var initPie = function () {
+                var source =
+                        {
+                            datatype: "csv",
+                            rowDelimiter: '|',
+                            datafields: [
+                                {name: 'Metric'},
+                                {name: 'Score'}
+                            ],
+                            localdata: "<%=currentDiaryCSV%>"
+                        };
+                var dataAdapter = new $.jqx.dataAdapter(source, {autoBind: true});
+                var settings = {
+                    title: "Latest Diary Adjusted Scores",
+                    description: "Guessed Mood: 5 vs Actual Mood: 7",
+                    enableAnimations: true,
+                    showLegend: true,
+//                showBorderLine: true,
+                    legendLayout: {left: 700, top: 120, width: 300, height: 400, flow: 'vertical'},
+                    padding: {left: 5, top: 5, right: 5, bottom: 5},
+                    titlePadding: {left: 0, top: 0, right: 0, bottom: 10},
+                    source: dataAdapter,
+                    colorScheme: 'scheme03',
+                    seriesGroups:
+                            [
+                                {
+                                    type: 'pie',
+                                    showLabels: true,
+                                    series:
+                                            [
+                                                {
+                                                    dataField: 'Score',
+                                                    displayText: 'Metric',
+                                                    labelRadius: 170,
+                                                    initialAngle: 15,
+                                                    radius: 145,
+                                                    centerOffset: 0,
+                                                    formatFunction: function (value) {
+                                                        if (isNaN(value))
+                                                            return value;
+                                                        return parseInt(value) + '%';
+//        return parseFloat(Math.round(value * 100) / 100).toFixed(1) + '%';
+                                                    }
+                                                }
+                                            ]
+                                }
+                            ]
+                };
+                // setup the chart
+                $('#pieContainer').jqxChart(settings);
+            };
             var initWidgets = function (tab) {
+                console.log("tab");
+                console.log(tab);
                 switch (tab) {
                     case 0:
                         initTab1();
@@ -268,14 +343,27 @@ function getTextFrom(t){
                         initTab2();
                         break;
                     case 2:
-                        break;
-                    
+                        initPie();
+                        console.log(loadDataFromTable("tblWeightedData"));
+
                 }
-            }
+            };
+            var x = "";
+            var index = $.jqx.cookie.cookie("jqxTabs_jqxWidget");
+            if (typeof index === 'undefined')
+                index = 0;
+            // on to the select event.
             $('#jqxTabs').jqxTabs({width: '90%', height: 660
-                , initTabContent: initWidgets 
+                , selectedItem: index
+                , initTabContent: initWidgets
                 , selectionTracker: true
-                ,theme:'darkblue'
+                , theme: 'darkblue'
+            });
+            $("#jqxTabs").on('selected', function (event) {
+                // save the index in cookie.
+
+                $.jqx.cookie.cookie("jqxTabs_jqxWidget", event.args.item);
+                initWidgets(event.args.item);
             });
         });
     </script>
@@ -285,10 +373,10 @@ function getTextFrom(t){
                         <h1> Tone Report </h1>
                         <p> Welcome to MedLog. </p>
                     </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;">
-                        
+
                     </td></tr></table>
         </div></a>
-    
+
     <!--    <div style="margin: 0 auto; width:97%;">
        
             
@@ -299,12 +387,12 @@ function getTextFrom(t){
     <!--<p>
     
     </p>-->
-<!--    <div class="example-description">
-        <br />
-        <h2>Description</h2>
-        <br />
-        This is an example of JavaScript Chart Range Selector with Zooming.
-    </div>-->
+    <!--    <div class="example-description">
+            <br />
+            <h2>Description</h2>
+            <br />
+            This is an example of JavaScript Chart Range Selector with Zooming.
+        </div>-->
 
     <div id='jqxTabs'>
         <ul>
@@ -344,12 +432,14 @@ function getTextFrom(t){
             </div>
         </div>
         <div style="overflow: hidden;">
-             <div id='tblContainer' style="width:100%; height:600px;">
-            <%=tbl%>
-            <div style="border:2px solid lawngreen; border-radius:4px; background-color: limegreen;color:white;"></div>
-            <b>Five # Summary >>></b>
-            <%=fiveNum%>
-             </div>
+            <div id='tblContainer' style="width:100%; height:600px;">
+                <div id='pieContainer' style="width: 850px; height: 500px;float: left;">
+                </div>
+                <div style="float: left;"><table><tr><td></td><td><%=tbl%></td><td><%=currentDiary%></td></tr></table> </div>
+                <div style="border:2px solid lawngreen; border-radius:4px; background-color: limegreen;color:white;"></div>
+                <b>Five # Summary >>></b>
+                <%=fiveNum%>
+            </div>
         </div>
     </div>
 </body>

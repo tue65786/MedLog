@@ -58,8 +58,14 @@
                     for (DiaryAnalysisVO dv : vl) {
                         areaData.add(DiaryAnalysisWeightedChartVO.normalInstance(dv));
                     }
-                    session.setAttribute("fiveNumber", Arrays.toString(instance.fiveSummary));
-                    session.setAttribute("diaryEq", "y = " + String.format("%.2f", instance.lineEq[0]) + "x" + " + " + instance.lineEq[1] + " R²= " + instance.lineEq[2] + .001);
+                    session.setAttribute("CURRENTDIARY", instance.getCurrentDiary().toHTML());
+                    session.setAttribute("CURRENTDIARYCSV", instance.getCurrentDiary().toCSV());
+//                    instance.getCurrentDiary().setRowTotal(instance.getCurrentDiary().getRowTotal() * 10);
+                    DiaryAnalysisWeightedChartVO thisChart = DiaryAnalysisWeightedChartVO.normalInstance(instance.getCurrentDiary());
+                    
+                    session.setAttribute("CURRENTDIARYCSV", thisChart.toCSV());
+                    session.setAttribute("fiveNumber", Arrays.toString(instance.getFiveSummary()));
+                    session.setAttribute("diaryEq", "y = " + String.format("%.2f", instance.getLineEq()[0]) + "x" + " + " + instance.getLineEq()[1] + " R²= " + instance.getLineEq()[2] + .001);
                     Gson g = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
                     String gson = g.toJson(vl);
                     String areaDataString = g.toJson(areaData);
