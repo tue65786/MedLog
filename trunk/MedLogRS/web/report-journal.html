@@ -1,112 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title id='Description'>Chart</title>
-		<link rel="stylesheet" href="scripts/jqx/styles/jqx.base.css" type="text/css" />
-		<link href="rstyle.css" rel="stylesheet" type="text/css"/>
-		<script type="text/javascript" src="scripts/jquery.min.js"></script>
-		<script type="text/javascript" src="scripts/jqx/jqxcore.js"></script>
-		<script type="text/javascript" src="scripts/jqx/jqxdata.js"></script>
-		<script type="text/javascript" src="scripts/jqx/jqxdraw.js"></script>
-		<script type="text/javascript" src="scripts/jqx/jqxchart.core.js"></script>
-		<script type="text/javascript">
-			 $(document).ready(function () {
-				 // prepare the data
-				 var source =  
-					 {
-						 datatype : "json",
-						 datafields : [
-							 {name : 'id'}, {name : 'row'},
-							 {name : 'createdDate'},
-							 {name : 'title'},
-							 {name : 'mood'}
-							 , {name : 'productivity'}
-						 ],
-						 url : './api?res=d&fn=find'
-					 };
-				 var dataAdapter = new $.jqx.dataAdapter(source, {async : false, autoBind : true, loadError : function ( xhr, status, error ) {
-						 alert('Error loading "' + source.url + '" : ' + error);
-					 }});
-				 console.log("dataAdapter");
-				 console.log(dataAdapter);
-				 var months = [
-					 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-				 ];
-				 // prepare jqxChart settings
-				 var settings = {
-					 title : "Journal Tracker",
-					 description : "Mood and Prdocutivity ",
-					 enableAnimations : true,
-					 showLegend : true,
-					 padding : {left : 10, top : 5, right : 10, bottom : 5},
-					 titlePadding : {left : 50, top : 0, right : 0, bottom : 10},
-					 source : dataAdapter,
-					 xAxis :
-						 {
-							 dataField : 'createdDate',
-							 formatFunction : function ( value ) {
-								 return value.getDate() + '-' + months[value.getMonth()] + '-' + value.getFullYear();
-							 },
-							 type : 'date',
-							 baseUnit : 'day',
-							 valuesOnTicks : true,
-							 minValue : '21-10-2016',
-							 maxValue : '09-11-2016',
-							 tickMarks : {
-								 visible : true,
-								 interval : 1,
-								 color : '#BCBCBC'
-							 },
-							 unitInterval : 1,
-							 gridLines : {
-								 visible : true,
-								 interval : 3,
-								 color : '#BCBCBC'
-							 },
-							 labels : {
-								 angle : -45,
-								 rotationPoint : 'topright',
-								 offset : {x : 0, y : -25}
-							 }
-						 },
-					 valueAxis :
-						 {
-							 visible : true,
-							 title : {text : 'Daily Closing Price<br>'},
-							 tickMarks : {color : '#BCBCBC'}
-						 },
-					 colorScheme : 'scheme04',
-					 seriesGroups :
-						 [
-							 {
-								 type : 'line',
-								 series : [
-									 {dataField : 'mood', displayText : 'mood'},
-									 {dataField : 'productivity', displayText : 'productivity'}
-								 ]
-							 }
-						 ]
-				 };
-				 // setup the chart
-				 $('#chartContainer').jqxChart(settings);
-			 });
-		</script>
-	</head>
-	
-	<body class='default'>
-	
-	
-	<div id="header"><a href="home.jsp">
-			<table style='width:95%'><tr><td style="width:85%">
-			<h1> Journal Report </h1>
-					</td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
-		</a></div>
+    <head>
+        <title id='Description'>Chart</title>
+        <link rel="stylesheet" href="scripts/jqx/styles/jqx.base.css" type="text/css" />
+        <link href="rstyle.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="scripts/jquery.min.js"></script>
+        <script type="text/javascript" src="scripts/jqx/jqxcore.js"></script>
+        <script type="text/javascript" src="scripts/jqx/jqxdata.js"></script>
+        <script type="text/javascript" src="scripts/jqx/jqxdraw.js"></script>
+        <script type="text/javascript" src="scripts/jqx/jqxchart.core.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // prepare the data
+                var source =
+                        {
+                            datatype: "json",
+                            datafields: [
+                                {name: 'id'}, {name: 'row'},
+                                {name: 'createdDate'},
+                                {name: 'title'},
+                                {name: 'mood'}
+                                , {name: 'productivity'}
+                            ],
+                            url: './api?res=d&fn=find'
+                        };
+                var dataAdapter = new $.jqx.dataAdapter(source, {async: false, autoBind: true, loadError: function (xhr, status, error) {
+                        alert('Error loading "' + source.url + '" : ' + error);
+                    }});
+                console.log("dataAdapter");
+                console.log(dataAdapter);
+                var months = [
+                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                ];
+                // prepare jqxChart settings
+                var settings = {
+                    title: "Journal Tracker",
+                    description: "Mood and Prdocutivity ",
+                    enableAnimations: true,
+                    showLegend: true,
+                    padding: {left: 10, top: 5, right: 10, bottom: 5},
+                    titlePadding: {left: 50, top: 0, right: 0, bottom: 10},
+                    source: dataAdapter,
+                    xAxis:
+                            {
+                                dataField: 'row',
+//							 formatFunction : function ( value ) {
+//                                                             
+//								 return value.getDate() + '-' + months[value.getMonth()] + '-' + value.getFullYear();
+//							 },
+//							 type : 'date',
+//							 baseUnit : 'day',
+                                valuesOnTicks: true,
+//							 minValue : '21-10-2016',
+//							 maxValue : '09-11-2016',
+                                tickMarks: {
+                                    visible: true,
+                                    interval: 1,
+                                    color: '#BCBCBC'
+                                },
+                                unitInterval: 1,
+                                gridLines: {
+                                    visible: true,
+                                    interval: 3,
+                                    color: '#BCBCBC'
+                                },
+                                labels: {
+                                    angle: -45,
+                                    visible: false,
+                                    rotationPoint: 'topright',
+                                    offset: {x: 0, y: -25}
+                                }
+                            },
+                    valueAxis:
+                            {
+                                visible: true,
+                                title: {text: 'Patient Survey Response<br>'},
+                                tickMarks: {color: '#BCBCBC'}
+                            },
+                    colorScheme: 'scheme04',
+                    seriesGroups:
+                            [
+                                {
+                                    type: 'line',
+                                    labels: {
+
+                                        visible: true
+                                        , backgroundColor: '#FEFEFE',
+                                        backgroundOpacity: 0.2,
+                                        borderColor: '#7FC4EF',
+                                        borderOpacity: 0.7,
+                                        padding: {left: 5, right: 5, top: 0, bottom: 0}
+                                    },
+                                    series: [
+                                        {dataField: 'mood', displayText: 'mood'},
+                                        {dataField: 'productivity', displayText: 'productivity'}
+                                    ]
+                                }
+                            ]
+                };
+                // setup the chart
+                $('#chartContainer').jqxChart(settings);
+            });
+        </script>
+    </head>
+
+    <body class='default'>
 
 
-		<div id='chartContainer' style="width:850px; height:500px">
+        <div id="header"><a href="home.jsp">
+                <table style='width:95%'><tr><td style="width:85%">
+                            <h1> Journal Report </h1>
+                        </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
+            </a></div>
 
 
-		</div>
-		Compare against <a href="https://tone-analyzer-demo.mybluemix.net/?cm_mc_uid=14564794552114777656449&cm_mc_sid_50200000=1478376661&text=hello+world">watson</a>
-	</body>
+        <div id='chartContainer' style="width:95%; height:500px;margin:0 auto;">
+
+
+        </div>
+        <!--Compare against <a href="https://tone-analyzer-demo.mybluemix.net/?cm_mc_uid=14564794552114777656449&cm_mc_sid_50200000=1478376661&text=hello+world">watson</a>-->
+    </body>
 </html>

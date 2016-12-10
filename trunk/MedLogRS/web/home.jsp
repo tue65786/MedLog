@@ -62,7 +62,7 @@
                     session.setAttribute("CURRENTDIARYCSV", instance.getCurrentDiary().toCSV());
 //                    instance.getCurrentDiary().setRowTotal(instance.getCurrentDiary().getRowTotal() * 10);
                     DiaryAnalysisWeightedChartVO thisChart = DiaryAnalysisWeightedChartVO.normalInstance(instance.getCurrentDiary());
-                    
+                    session.setAttribute("observedData"," Actual: " + instance.getCurrentDiary().getMood() + "  (RefID #"+(int)instance.getCurrentDiary().getDiaryID()+")");
                     session.setAttribute("CURRENTDIARYCSV", thisChart.toCSV());
                     session.setAttribute("fiveNumber", Arrays.toString(instance.getFiveSummary()));
                     session.setAttribute("diaryEq", "y = " + String.format("%.2f", instance.getLineEq()[0]) + "x" + " + " + instance.getLineEq()[1] + " R²= " + instance.getLineEq()[2] + .001);

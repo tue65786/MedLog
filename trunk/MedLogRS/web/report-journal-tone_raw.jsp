@@ -16,6 +16,7 @@
     String eq = "";
     String currentDiary = "";
     String currentDiaryCSV = "";
+    String descSuff = "";
     ServletHelpers sh = new ServletHelpers(request, response);
     data = sh.getStrAttribute("diaryReportData", "[]");
     tbl = sh.getStrAttribute("diaryTbl", "");
@@ -23,6 +24,7 @@
     fiveNum = sh.getStrAttribute("fiveNumber", "");
     eq = sh.getStrAttribute("diaryEq", "");
     currentDiary = sh.getStrAttribute("CURRENTDIARY", "");
+    descSuff = sh.getStrAttribute("observedData", "");
     currentDiaryCSV = sh.getStrAttribute("CURRENTDIARYCSV", "");
 
 %>
@@ -47,41 +49,40 @@
     <script type="text/javascript">
         var predGuess = 0.0;
         var totalPossible = 0.0;
-         function loadDataFromTable(id) {
-                predGuess = 0.000;
-                var currentData = $("#pieContainer").jqxChart('getInstance').source.records;
-                var rows = $("#" + id + " tbody tr");
-                var columns = $("#" + id + " thead th");
-                var data = [];
-                for (var i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    var datarow = {};
-                    for (var j = 0; j < columns.length; j++) {
-                        // get column's title.
-                        var columnName = $.trim($(columns[j]).text());
-                        // select cell.
-                        var cell = $(row).find('td:eq(' + j + ')');
-                        datarow[columnName] = $.trim(cell.text());
-                    }
-                    for (var c = 0; c < currentData.length; c++) {
-                        var cur = currentData[c];
-                        if (cur.Metric === datarow.Name) {
-                            var tmpV = parseFloat(cur.Score) / 10 * (parseFloat(datarow.Weight) + 0.0001);
-                            console.log(tmpV);
-                            console.log('cur'); 
-                            console.log(parseFloat(cur.Score));
-                            predGuess = predGuess + tmpV;
-                            console.log(predGuess);
-                            datarow.GuessedScoreContrib = tmpV;
-                            break;
-                        }
-                    }
-                    data[data.length] = datarow;
+        function loadDataFromTable(id) {
+            predGuess = 0.000;
+            var currentData = $("#pieContainer").jqxChart('getInstance').source.records;
+            var rows = $("#" + id + " tbody tr");
+            var columns = $("#" + id + " thead th");
+            var data = [];
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var datarow = {};
+                for (var j = 0; j < columns.length; j++) {
+                    // get column's title.
+                    var columnName = $.trim($(columns[j]).text());
+                    // select cell.
+                    var cell = $(row).find('td:eq(' + j + ')');
+                    datarow[columnName] = $.trim(cell.text());
                 }
-                return data;
+                for (var c = 0; c < currentData.length; c++) {
+                    var cur = currentData[c];
+                    if (cur.Metric === datarow.Name) {
+                        var tmpV = parseFloat(cur.Score) / 10 * (parseFloat(datarow.Weight) + 0.0001);
+                        console.log(tmpV);
+                        console.log('cur');
+                        console.log(parseFloat(cur.Score) / 10);
+                        predGuess = predGuess + tmpV;
+                        console.log(predGuess);
+                        datarow.GuessedScoreContrib = tmpV;
+                        break;
+                    }
+                }
+                data[data.length] = datarow;
             }
+            return data;
+        }
         $(document).ready(function () {
-           
             function getTextFrom(t) {
                 var i = 0;
                 var length = tonePhraseEx.length;
@@ -110,25 +111,6 @@
                 {tone: 'opennessBig5', text: 'And then something happens in your head and your heart, finer than you can read of in a fairy tale.'},
                 {tone: 'joy', text: 'revoltingly happy,&quot; he says.'},
                 {tone: 'opennessBig5', text: 'And then something happens in your head and your heart, finer than you can read of in a fairy tale.'}];
-            // prepare the data
-//            var source =
-//                    {
-//                        datatype: "json",
-//                        datafields: [
-//                            {name: 'Date'},
-//                            {name: 'Open'},
-//                            {name: 'High'},
-//                            {name: 'Low'},
-//                            {name: 'Close'},
-//                            {name: 'Volume'},
-//                            {name: 'AdjClose'}
-//                        ],
-//                        url: '../sampledata/TSLA_stockprice.csv'
-//                    };
-//            var dataAdapter = new $.jqx.dataAdapter(source, {async: false, autoBind: true, loadError: function (xhr, status, error) {
-//                    alert('Error loading "' + source.url + '" : ' + error);
-//                }});
-//            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             var initTab1 = function () {
                 var toolTipCustomFormatFn = function (value, itemIndex, serie, group, categoryValue, categoryAxis) {
                     console.log(serie);
@@ -350,7 +332,7 @@
                 // setup the chart
                 $('#pieContainer').jqxChart(settings);
             };
-           
+
             var initWidgets = function (tab) {
                 console.log("tab");
                 console.log(tab);
@@ -365,7 +347,8 @@
                         initPie();
                         var theData = loadDataFromTable("tblWeightedData");
                         console.log(theData);
-                        $('#pieContainer').jqxChart({description: 'Guessed Mood: ' + predGuess});
+                        var desc = "Mood - Prediction: " + Math.round(predGuess * 10) + "<%=descSuff%>";
+                        $('#pieContainer').jqxChart({description: desc});
 
                         // refresh the chart element
                         $('#pieContainer').jqxChart('refresh');
@@ -378,8 +361,9 @@
                 index = 0;
             // on to the select event.
             $('#jqxTabs').jqxTabs({width: '90%', height: 660
-                , selectedItem: index
+
                 , initTabContent: initWidgets
+                , selectedItem: index
                 , selectionTracker: true
                 , theme: 'darkblue'
             });
@@ -400,23 +384,6 @@
 
                     </td></tr></table>
         </div></a>
-
-    <!--    <div style="margin: 0 auto; width:97%;">
-       
-            
-            <div style="margin: 10px 0;clear:both;"></div>
-            <p></p>
-           
-        </div>-->
-    <!--<p>
-    
-    </p>-->
-    <!--    <div class="example-description">
-            <br />
-            <h2>Description</h2>
-            <br />
-            This is an example of JavaScript Chart Range Selector with Zooming.
-        </div>-->
 
     <div id='jqxTabs'>
         <ul>
