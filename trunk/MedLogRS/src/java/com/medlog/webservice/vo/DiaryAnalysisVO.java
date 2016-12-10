@@ -7,6 +7,9 @@ package com.medlog.webservice.vo;
 
 import com.medlog.webservice.util.ObjUtl;
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  *
@@ -417,6 +420,29 @@ public class DiaryAnalysisVO implements Serializable, Cloneable {
      */
     public void setRow(int row) {
         this.row = row;
+    }
+    
+    
+    public String toHTML(){
+        ReflectionToStringBuilder tsb = new ReflectionToStringBuilder(this,ToStringStyle.SHORT_PREFIX_STYLE);
+        tsb.setAppendStatics(false);
+        String r =  tsb.build();//.replace(",", "</li><li>");
+        r = r.substring(r.indexOf("["));
+        r = r.replace(",", "</li><li>");
+       return "<ol><li>" + r.replace("]", "")+"</li></ol>";
+    }
+    
+    public String toCSV(){
+        ReflectionToStringBuilder tsb = new ReflectionToStringBuilder(this,ToStringStyle.SHORT_PREFIX_STYLE);
+        tsb.setAppendStatics(false);
+        
+        tsb.setExcludeFieldNames("mood","productivity","row","diaryID","rowTotal");
+        String r =  tsb.build();//.replace(",", "</li><li>");
+        r = r.substring(r.indexOf("[")+1);
+        r = r.replace(",", "|");
+        r = r.replace("=", ",");
+        
+       return r.replace("]", "|");
     }
 
 }

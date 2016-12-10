@@ -6,6 +6,8 @@
 package com.medlog.webservice.vo;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  *
@@ -273,7 +275,8 @@ public class DiaryAnalysisWeightedChartVO implements Serializable {
 
     public static DiaryAnalysisWeightedChartVO normalInstance(DiaryAnalysisVO in) {
         Builder b = DiaryAnalysisWeightedChartVO.builder();
-        b.row(in.getRow()).rowTotal(in.getRowTotal());
+        b.row(in.getRow())
+                .rowTotal(in.getRowTotal());
         b.agreeablenessBig5(setVal(in.getAgreeablenessBig5(), in.getRowTotal()));
         b.analytical( setVal(in.getAnalytical(), in.getRowTotal()));
         b.anger(setVal(in.getAnger(), in.getRowTotal()));
@@ -430,5 +433,16 @@ public class DiaryAnalysisWeightedChartVO implements Serializable {
         this.producivtiy = producivtiy;
         this.row = row;
     }
-
+ public String toCSV(){
+        ReflectionToStringBuilder tsb = new ReflectionToStringBuilder(this,ToStringStyle.SHORT_PREFIX_STYLE);
+        tsb.setAppendStatics(false);
+        
+        tsb.setExcludeFieldNames("mood","producivtiy","row","diaryID","rowTotal");
+        String r =  tsb.build();//.replace(",", "</li><li>");
+        r = r.substring(r.indexOf("[")+1);
+        r = r.replace(",", "|");
+        r = r.replace("=", ",");
+        
+       return r.replace("]", "").replace("Big5", "");
+    }
 }

@@ -5,8 +5,11 @@
  */
 package com.medlog.webservice.vo.pairs;
 
+import static com.medlog.webservice.vo.DiaryAnalysisSummaryVO.sanitizeKey;
 import java.io.Serializable;
 import java.util.Objects;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  *
@@ -173,7 +176,24 @@ public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializab
     }
     public String toHTML() {
         final String css = " style=\""+ (rank % 2 ==0 ? "background-color: #EEE\" ": "background-color:#FFF\" ");
-        return "<tr>" + "<td" +css +">" + key  + "</td> <td" +css +">" + rank + "</td><td" 
-                +css +">"+ String.format("%.4f%%",weightedValue)  + "</td><td" +css +">" + String.format("%.4f",value)  + "</td></tr>";
+        return "<tr>" + "<td" +css +">" + sanitizeKey(key)  + "</td> <td" +css +">" + rank + "</td><td" 
+                +css +">"+ String.format("%.2f",weightedValue)  + "</td><td" +css +">" + String.format("%.4f",value)  + "</td></tr>";
+        
+    } 
+    
+    
+    public String toCSV(){
+      
+        ReflectionToStringBuilder tsb = new ReflectionToStringBuilder(this,ToStringStyle.SHORT_PREFIX_STYLE);
+        tsb.setAppendStatics(false);
+        
+        
+        tsb.setExcludeFieldNames("mood","producivtiy","row","diaryID","rowTotal");
+        String r =  tsb.build();//.replace(",", "</li><li>");
+        r = r.substring(r.indexOf("[")+1);
+        r = r.replace(",", "|");
+        r = r.replace("=", ",");
+        
+       return r.replace("]", "").replace("Big5", "");
     }
 }
