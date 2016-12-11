@@ -3,6 +3,7 @@
     Created on : Nov 3, 2016, 8:56:21 AM
     Author     : (c)2016 Guiding Technologies
 --%>
+<%@page import="com.medlog.webservice.vo.MedicationVO"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.medlog.webservice.vo.DiaryAnalysisWeightedChartVO"%>
@@ -24,6 +25,8 @@
     String onload = "";
     String diaryEntires = "";
     String diaryStat = "";
+    ArrayList<MedicationVO> meds = null;
+    String medString = "";
     int logins = 0;
     try {
         if (application != null && application.getAttribute("activeLogins") != null) {
@@ -80,7 +83,16 @@
 
                 }
             }
-
+            meds = dao.findMedicationByPatient();
+            if (meds != null && !meds.isEmpty()) {
+                medString = "<table>";
+                for (MedicationVO med : meds) {
+                    medString += "<tr style='border:1px solid blue;'><td style='border:1px solid blue;'>" + med.getPharmID().getFullName() + "</td><td style='border:1px solid blue;'>"
+                            + StrUtl.toS(med.getPhysicianID().getLastName() + ", " + med.getPhysicianID().getFirstName(), "Dr. Evil")
+                            + "</td></tr>";
+                }
+                medString += "</table>";
+            }
         } catch (Exception e) {
         } finally {
             db.close();
@@ -116,21 +128,21 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>MedLog</title>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" href="/resources/demos/style.css">
+        <link rel="stylesheet" href="style.css">
         <script src="scripts/jquery.min.js" type="text/javascript"></script>
         <script src="scripts/jqueryu.min.js" type="text/javascript"></script>
-
+        <script src="scripts/jqx/jqxgauge-all.min.js" type="text/javascript"></script>
         <style>
             .ui-menu { width: 150px; }
             #menu a {text-decoration: none;}
-            .ui-tabs-vertical { width: 80%; margin-left: 200px; }
-            .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
-            .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important;
-                                                border-right-width: 0 !important; margin: 0 -1px .2em 0;border-radius: 3px; }
-            .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
-            .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
-            .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right;
-                                               width: 66%;}
+            /*            .ui-tabs-vertical { width: 80%; margin-left: 200px; }
+                        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
+                        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important;
+                                                            border-right-width: 0 !important; margin: 0 -1px .2em 0;border-radius: 3px; }
+                        .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+                        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+                        .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right;
+                                                           width: 66%;}*/
             #menu a {font-weight: bold;}
             footer {text-align: center; margin:0 auto;border-top:2px #0074c7 solid;}
         </style>
@@ -149,123 +161,149 @@
                     }
                 });
 
-                $("#tabs").tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
-                $("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
+                $("#tabs").tabs({heightStyle: "auto"});//.addClass("ui-tabs-vertical ui-helper-clearfix");
+//                $("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
                 $("#logout").click(function () {
                     $.post('./api?fn=logout').done(function (  ) {
                         top.location.href = 'login.html';
                     });
                 });
-
-
+                $('#gaugeContainer').jqxGauge({ranges: gr,
+                    ticksMinor: ticks[0], ticksMajor: ticks[1],
+                    value: 60,
+                    max: 100,
+                    radius: 135,
+                    animationDuration: 1200, labels: lbl
+                });
+          function getToneTexts(id,score){
+              
+          }      
+< .5 = not likely present
+≥ .5 = likely present
+> .75 = very likely present 
             });
         </script>
 
     </head>
 
     <body <%=onload%>>
-        <div style="width:95%; float:left;height: 125px;"><div style="float:left;margin-left:165px;padding:80px 0 45px 40px;font-size:24pt;vertical-align: bottom;font-weight: bolder;font-family: verdana;">Welcome <%=name%></div><div style="float:right;margin-right:30%;"><img src="Logo.png" style="height:75%;width:75%;" alt="log"></div></div>	
+
+        <div style="width:39%; float:left;height: 105px;">
+            <div style="float:left;pading-left:5px;margin-left:17px;margin-right:0%;">
+                <img src="Logo.png" style="height:60%;width:60%;" alt="log">
+            </div><div style="margin-left:125px;padding:38px 0px 0px 3px;font-size:24pt;vertical-align: middle;font-weight: bolder;font-family: verdana;">
+                Welcome <%=name%></div></div>
+
+
+        <!--        <div style="width:95%; float:left;height: 125px;">
+                    <div style="float:left;margin-left:165px;padding:80px 0 45px 40px;font-size:24pt;vertical-align: bottom;font-weight: bolder;font-family: verdana;">
+                        Welcome </div><div style="float:right;margin-right:30%;">
+                        <img src="Logo.png" style="height:75%;width:75%;" alt="log">
+                    </div></div>	-->
         <div style="clear:both;"></div>
-        <ul id="menu" style="float:left;">
-            <li>
-                <div><span class="ui-icon ui-icon-home"></span><a href="home.jsp">Medlog</a></div>
-            </li>
-            <li>
-                <div><span class="ui-icon ui-icon-person"></span><a href="User.html?id=<%=user.getPatientID()%>">Your account</a></div>
-                <ul><li><div>	<a href="User.html">Register</a></div></li><li><div>	<a href="#" id="logout">Logout</a></div></li></ul>
-            </li>
-            <li id="diary" data-url="">
-                <div><span class="ui-icon ui-icon-contact"></span>Diary</div>
-                <ul>
-                    <li>
-                        <div><a  href="Journal.html"><span class="ui-icon "></span>Add</a></div>
-                    </li>
-                    <li>
-                        <div><span class="ui-icon"></span><a href="JournalList.html?id=1">List</a></div>
-                    </li>
-                    <li>
-                        <div><a href="report-journal.html"><span class="ui-icon"></span>Report</a></div>
-                    </li>
-                    <li>
-                        <div><span class="ui-icon"></span>Send</div>
-                    </li>
-                </ul>
-            </li>
-            <li >
-                <div><span class="ui-icon ui-icon-note"></span><a href="DietaryRestriction.html">Dietary Restrictions</a></div>
-            </li>
-            <li>
-                <div><span class="ui-icon ui-icon-cart"></span>Health-care Providers</div>
-                <ul>
-                    <li>
-                        <div><span class="ui-icon "></span><a href="HealthcareProviderList.html">List</a></div>
-                    </li>
-                    <li>
-                        <div><span class="ui-icon "></span><a href="HealthcareProvider.html">Add</a></div>
-                    </li>
-                </ul>
-            </li>
+        <table style="width:99%;"><tr><td style="width:165px;vertical-align: top;">
+                    <ul id="menu" style="">
+                        <li>
+                            <div><span class="ui-icon ui-icon-home"></span><a href="home.jsp">Medlog</a></div>
+                        </li>
+                        <li>
+                            <div><span class="ui-icon ui-icon-person"></span><a href="User.html?id=<%=user.getPatientID()%>">Your account</a></div>
+                            <ul><li><div>	<a href="User.html">Register</a></div></li><li><div>	<a href="#" id="logout">Logout</a></div></li></ul>
+                        </li>
+                        <li id="diary" data-url="">
+                            <div><span class="ui-icon ui-icon-contact"></span>Diary</div>
+                            <ul>
+                                <li>
+                                    <div><a  href="Journal.html"><span class="ui-icon "></span>Add</a></div>
+                                </li>
+                                <li>
+                                    <div><span class="ui-icon"></span><a href="JournalList.html?id=1">List</a></div>
+                                </li>
+                                <li>
+                                    <div><a href="report-journal.html"><span class="ui-icon"></span>Report</a></div>
+                                </li>
+                                <li>
+                                    <div><span class="ui-icon"></span>Send</div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li >
+                            <div><span class="ui-icon ui-icon-note"></span><a href="DietaryRestriction.html">Dietary Restrictions</a></div>
+                        </li>
+                        <li>
+                            <div><span class="ui-icon ui-icon-cart"></span>Health-care Providers</div>
+                            <ul>
+                                <li>
+                                    <div><span class="ui-icon "></span><a href="HealthcareProviderList.html">List</a></div>
+                                </li>
+                                <li>
+                                    <div><span class="ui-icon "></span><a href="HealthcareProvider.html">Add</a></div>
+                                </li>
+                            </ul>
+                        </li>
 
-            <li>
-                <div><span class="ui-icon ui-icon-script"></span>Medication</div>
-                <ul>
-                    <li>
-                        <div><span class="ui-icon "></span><a href="Medication.html">Add</a></div>
-                    </li>
-                    <li>
-                        <div><span class="ui-icon "></span><a href="PharmaRXOTC.html">Drug</a></div>
-                    </li>
-                </ul>
-            </li>
+                        <li>
+                            <div><span class="ui-icon ui-icon-script"></span>Medication</div>
+                            <ul>
+                                <li>
+                                    <div><span class="ui-icon "></span><a href="Medication.html">Add</a></div>
+                                </li>
+                                <li>
+                                    <div><span class="ui-icon "></span><a href="PharmaRXOTC.html">Drug</a></div>
+                                </li>
+                            </ul>
+                        </li>
 
-        </ul>
+                    </ul>
+                </td><td style="vertical-align: top;">
+                    <div id="tabs">
+                        <ul>
+                            <li><a href="#tabs-1">Recently logged</a></li>
+                            <li><a href="#tabs-2">Current Meds</a></li>
+                            <li><a href="#tabs-3">Generate Reports</a></li>
+                        </ul>
+                        <div id="tabs-1">
+                            <h2>You logged .....</h2>
 
-        <div id="tabs">
-            <ul>
-                <li><a href="#tabs-1">Recently logged</a></li>
-                <li><a href="#tabs-2">Current Meds</a></li>
-                <li><a href="#tabs-3">Generate Reports</a></li>
-            </ul>
-            <div id="tabs-1">
-                <h2>You logged .....</h2>
+                            <p><%=diaryEntires%></p> 
+                            <h2>Approach to tone analysis</h2>
+                            <p><span title='© 2016 IBM'>The Tone Analyzer service</span> computes language tones with linguistic analysis 
+                                that studies the correlation between various tones and linguistic features in 
+                                written text. The following list describes the service's approach to computing a 
+                                scorecard of language tones:</p>
+                            <ul>
+                                <li><strong>Emotional tone</strong> is derived from our work on Emotion 
+                                    Analysis, which is an ensemble framework to infer emotions from a given 
+                                    text. To derive emotion scores from text, we use a stacked 
+                                    generalization-based ensemble framework. Stacked generalization is a general 
+                                    method of using a high-level model to combine lower-level models to achieve 
+                                    greater predictive accuracy. Features such as n-grams (unigrams, bigrams and 
+                                    trigrams), punctuation, emoticons, curse words, greeting words (such as 
+                                    hello, hi, and thanks), and sentiment polarity are fed into state-of-the 
+                                    machine learning algorithms to classify emotion categories.</li>
+                                <li><strong>Social tone</strong> consists of the Big Five personality 
+                                    characteristics of openness, agreeableness, and conscientiousness. For more 
+                                    information about these Big Five characteristics, see the description of the
+                                    <a target="_blank" href="http://www.ibm.com/watson/developercloud/doc/personality-insights/models.shtml">
+                                        personality models</a> from the Personality Insights service.</li>
+                                <li><strong>Language tone</strong> is calculated from the linguistic 
+                                    analysis based on learned features.</li>
+                            </ul>
+                            <sub>Tone Analysis / Watson are IP of IBM (Fair Use / <a href="http://www.ibm.com/ibm/licensing/">Legal</a>)</sub>
 
-                <p><%=diaryEntires%></p> 
-                <h2>Approach to tone analysis</h2>
-                <p><span title='© 2016 IBM'>The Tone Analyzer service</span> computes language tones with linguistic analysis 
-that studies the correlation between various tones and linguistic features in 
-written text. The following list describes the service's approach to computing a 
-scorecard of language tones:</p>
-<ul>
-	<li><strong>Emotional tone</strong> is derived from our work on Emotion 
-	Analysis, which is an ensemble framework to infer emotions from a given 
-	text. To derive emotion scores from text, we use a stacked 
-	generalization-based ensemble framework. Stacked generalization is a general 
-	method of using a high-level model to combine lower-level models to achieve 
-	greater predictive accuracy. Features such as n-grams (unigrams, bigrams and 
-	trigrams), punctuation, emoticons, curse words, greeting words (such as 
-	hello, hi, and thanks), and sentiment polarity are fed into state-of-the 
-	machine learning algorithms to classify emotion categories.</li>
-	<li><strong>Social tone</strong> consists of the Big Five personality 
-	characteristics of openness, agreeableness, and conscientiousness. For more 
-	information about these Big Five characteristics, see the description of the
-	<a target="_blank" href="http://www.ibm.com/watson/developercloud/doc/personality-insights/models.shtml">
-	personality models</a> from the Personality Insights service.</li>
-	<li><strong>Language tone</strong> is calculated from the linguistic 
-	analysis based on learned features.</li>
-</ul>
-                <sub>Tone Analysis / Watson are IP of IBM (Fair Use / <a href="http://www.ibm.com/ibm/licensing/">Legal</a>)</sub>
+                            <div style="float: left;" id="gaugeContainer"></div>
+                            <div id="gaugeValue" style="position: absolute; top: 235px; left: 132px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
 
-
-            </div>
-            <div id="tabs-2">
-                <h2>You have septum on file</h2>
-                <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-            </div>
-            <div id="tabs-3">
-                <h2>Last Entry Data</h2>
-                <div style="margin:10px;padding:5px;">
-                    todo: addd last entry!!
-                    <%=diaryStat%></div>
-            </div>
-        </div><footer>Users online (<%=logins%>)</footer>
+                        </div>
+                        <div id="tabs-2">
+                            <h2>You have septum on file</h2>
+                            <%=medString%>
+                        </div>
+                        <div id="tabs-3">
+                            <h2>Last Entry Data</h2>
+                            <div style="margin:10px;padding:5px;">
+                                todo: addd last entry!!
+                                <%=diaryStat%></div>
+                        </div>
+                    </div></td><td style="width:100px;vertical-align: top;"></td></tr></table><footer>Users online (<%=logins%>)</footer>
     </body></html>

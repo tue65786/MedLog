@@ -443,6 +443,6 @@ public class DiaryAnalysisVO implements Serializable, Cloneable {
         r = r.replace("=", ",");
         
        return r.replace("]", "|");
-    }
+    } 
 
 }

@@ -337,13 +337,13 @@ public class MedLogDAOTest {
      */
     @Test
     public void testFindMedicationByPatient() {
-        System.out.println("$$$$findMedicationByPatient");
+        System.out.println("$$$$tunning findMedicationByPatient");
         MedLogDAO instance = new MedLogDAO(db,testPatient);
 //        ArrayList<MedicationVO> expResult = null;
         ArrayList<MedicationVO> result = instance.findMedicationByPatient();
         assertTrue(result != null);
         System.out.println("com.medlog.webservice.dao.MedLogDAOTest.testFindMedicationByPatient() Medications: " + new GsonBuilder()
-                .serializeNulls().setPrettyPrinting().create().toJson(result) + "\n\n\n");
+                .disableInnerClassSerialization().create().toJson(result) + "\n\n\nTotal RX for Patient("+testPatient.getUserName()+")= " +  result.size()+"\n--------------------------------------------");
 //        assertEquals(1, result.get(0).getMedicationID());
         // TODO review the generated test code and remove the default call to fail.
 
@@ -453,21 +453,28 @@ public class MedLogDAOTest {
     @Test
     public void testAssignMedication() {
         System.out.println("assignMedication");
-        int id = new Random().nextInt(12) + 1;
-        
-        System.out.println("com.medlog.webservice.dao.MedLogDAOTest.testAssignMedication() rand pharmID " + id );
+        int id = new Random().nextInt(15000) + 1;
+        int phyID = (int)(Math.random() * 6+1);
+        System.out.println("com.medlog.webservice.dao.MedLogDAOTest.testAssignMedication() Genrerating random values... \npharmID=" + id + "\ndoctorID="+phyID + "\nSig= "
+                +(id % 2 == 0 ? "p.r.n.":"b.i.d."));
         PharmaRxOtcVO rx = PharmaRxOtcVO.builder().pharmID(id).fullName("").build();
-        HealthcareProviderVO dr = HealthcareProviderVO.builder().physicianID((int)(Math.random() * 6+1)).lastName("Allison").firstName("John").build();
+        HealthcareProviderVO dr = HealthcareProviderVO.builder().physicianID(phyID).lastName("").firstName("John").build();
 
         MedicationVO _vo = MedicationVO.builder().patientID(testPatient).pharmID(rx).physicianID(dr).sig(SigVO.builder()
-                .sigAbbrID("p.r.n.").build()).dosage((id % 20 + 1) +"ML").instructions("take it ").active(true).build();
+                .sigAbbrID(id % 2 == 0 ? "p.r.n.":"b.i.d.").build()).dosage((id % 20 + 1) +"ML").instructions("take it ").active(true).build();
         
-        System.out.println("com.medlog.webservice.dao.MedLogDAOTest.testAssignMedication()" + _vo.toJSON());
+        System.out.print("testAssignMedication() : Inserted ");
         MedLogDAO instance = new MedLogDAO(db, testPatient);
 //        int expResult = 0;
         int result = instance.assignMedication(_vo);
+        System.out.println(result+" record");
 
         assertTrue("HAS NEW ID", result > 0);
+        assertEquals("Good User", id, _vo.getPharmID().getPharmID() );
+        
+        
+        System.out.println("--------------------------------");
+         testFindMedicationByPatient();
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
     }
