@@ -8,6 +8,7 @@ package com.medlog.webservice;
 import com.medlog.webservice.dao.MedLogDAOTest;
 import com.medlog.webservice.services.tone.ToneProcessorFactoryTest;
 import com.medlog.webservice.sql.DbConnectionTest;
+import com.medlog.webservice.vo.DiaryAnalysisSummaryVOTest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,13 +17,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- *
+ * Test Suite
  * @author westy
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({MedLogDAOTest.class,
-     ToneProcessorFactoryTest.class,
-     DbConnectionTest.class})
+    ToneProcessorFactoryTest.class,
+    DbConnectionTest.class,
+     DiaryAnalysisSummaryVOTest.class})
 public class MedLogUnitTestSuite {
 
     @BeforeClass
