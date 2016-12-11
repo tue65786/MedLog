@@ -26,7 +26,9 @@
     String diaryStat = "";
     int logins = 0;
     try {
-        logins = (int) application.getAttribute("activeLogins");
+        if (application != null && application.getAttribute("activeLogins") != null) {
+            logins = (Integer) application.getAttribute("activeLogins");
+        }
     } catch (Exception e) {
         e.printStackTrace();
     }
@@ -53,7 +55,7 @@
                     ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(user.getPatientID());
                     DiaryAnalysisSummaryVO instance = new DiaryAnalysisSummaryVO();
                     instance.runIt(vl);
-                    ArrayList<DiaryAnalysisWeightedChartVO> areaData = new ArrayList<>();
+                    ArrayList<DiaryAnalysisWeightedChartVO> areaData = new ArrayList<DiaryAnalysisWeightedChartVO>();
                     diaryStat = instance.getHtml();
                     for (DiaryAnalysisVO dv : vl) {
                         areaData.add(DiaryAnalysisWeightedChartVO.normalInstance(dv));
@@ -62,7 +64,7 @@
                     session.setAttribute("CURRENTDIARYCSV", instance.getCurrentDiary().toCSV());
 //                    instance.getCurrentDiary().setRowTotal(instance.getCurrentDiary().getRowTotal() * 10);
                     DiaryAnalysisWeightedChartVO thisChart = DiaryAnalysisWeightedChartVO.normalInstance(instance.getCurrentDiary());
-                    session.setAttribute("observedData"," Actual: " + instance.getCurrentDiary().getMood() + "  (RefID #"+(int)instance.getCurrentDiary().getDiaryID()+")");
+                    session.setAttribute("observedData", " Actual: " + instance.getCurrentDiary().getMood() + "  (RefID #" + (int) instance.getCurrentDiary().getDiaryID() + ")");
                     session.setAttribute("CURRENTDIARYCSV", thisChart.toCSV());
                     session.setAttribute("fiveNumber", Arrays.toString(instance.getFiveSummary()));
                     session.setAttribute("diaryEq", "y = " + String.format("%.2f", instance.getLineEq()[0]) + "x" + " + " + instance.getLineEq()[1] + " R²= " + instance.getLineEq()[2] + .001);
@@ -110,7 +112,7 @@
 //		   System.out.println( tone );
 //TODO 1. Logout DONE
 //TODO 2. Update homepage data.
-%>
+        %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>MedLog</title>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -137,7 +139,7 @@
                 $("#menu").menu();
                 $("#menu").menu({
                     select: function (event, ui) {
-                      
+
                         try {
                             top.location.href = ui.item[0].children[0].children[0].href;
                         } catch (e) {
@@ -228,7 +230,32 @@
                 <h2>You logged .....</h2>
 
                 <p><%=diaryEntires%></p> 
-                <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+                <h2>Approach to tone analysis</h2>
+                <p><span title='© 2016 IBM'>The Tone Analyzer service</span> computes language tones with linguistic analysis 
+that studies the correlation between various tones and linguistic features in 
+written text. The following list describes the service's approach to computing a 
+scorecard of language tones:</p>
+<ul>
+	<li><strong>Emotional tone</strong> is derived from our work on Emotion 
+	Analysis, which is an ensemble framework to infer emotions from a given 
+	text. To derive emotion scores from text, we use a stacked 
+	generalization-based ensemble framework. Stacked generalization is a general 
+	method of using a high-level model to combine lower-level models to achieve 
+	greater predictive accuracy. Features such as n-grams (unigrams, bigrams and 
+	trigrams), punctuation, emoticons, curse words, greeting words (such as 
+	hello, hi, and thanks), and sentiment polarity are fed into state-of-the 
+	machine learning algorithms to classify emotion categories.</li>
+	<li><strong>Social tone</strong> consists of the Big Five personality 
+	characteristics of openness, agreeableness, and conscientiousness. For more 
+	information about these Big Five characteristics, see the description of the
+	<a target="_blank" href="http://www.ibm.com/watson/developercloud/doc/personality-insights/models.shtml">
+	personality models</a> from the Personality Insights service.</li>
+	<li><strong>Language tone</strong> is calculated from the linguistic 
+	analysis based on learned features.</li>
+</ul>
+                <sub>Tone Analysis / Watson are IP of IBM (Fair Use / <a href="http://www.ibm.com/ibm/licensing/">Legal</a>)</sub>
+
+
             </div>
             <div id="tabs-2">
                 <h2>You have septum on file</h2>

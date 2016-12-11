@@ -46,8 +46,24 @@
                         <input name="endDate" type="text" id="endDate" placeholder="ex. 2016-11-01"/><br/>
                         <label for="dosage"> Dosage: <br/></label> <!-- mg, capsules, tablets, drops, mL, teaspoons? -->
                         <input name="dosage" type="text" id="dosage" placeholder="How much are you actually taking? (ex. mg, mL, etc.)" required/><br/>
-                        <label for="frequencySig"> Frequency: <br/></label>
-                        <input name="frequencySig" type="text" id="frequencySig" placeholder="How often do you take the dosage? (ex. daily, twice a day, etc.)" required/><br>
+                        <label for="sig"> Frequency: <br/></label>
+                        <select name="sig" id="sig">  
+                            <option value="a.c.">Before food, before meals</option>
+                            <option value="b.i.d.">Twice a day</option>
+                            <option value="h.s.">At bedtime</option>
+                            <option value="p.r.n.">As needed</option>
+                            <option value="q.h.">Every hour</option>
+                            <option value="q.i.d.">Four times a day</option>
+                            <option value="q.o.d.">Every other day</option>
+                            <option value="Stat">Immediately</option>
+                            <option value="a.m.">Morning</option>
+                            <option value="p.c.">After food, after meals</option>
+                            <option value="p.m.">Afternoon, evening"</option>
+                            <option value="q.d.">Every day</option>
+                            <option value="qhs">Before bedtime</option>
+                            <option value="tid">Three times a day</option></select> 
+                        <!--<input placeholder="How often do you take the dosage? (ex. daily, twice a day, etc.)" required/>-->
+                        <br>
                         <label for="active"> Check box if you are currently on this medication. </label><br/>
                         <input name="active" type="checkbox" id="active"/><br/>
                     </fieldset>
@@ -61,16 +77,16 @@
                     <div id='errorMessage'></div> 
                 </form>
             </div>  <div id="loader1" style="display:none;">
-            <div class="ui-widget-overlay ui-front"></div>
-            <div id="InnerTableCellOverlay">
-                <img alt="(loading)" src="images/loader.gif"/>
-                <br/>
-                <b style="color:black;font-size:1em;border-radius: 5px;border:1px solid lightblue;padding:1px;">Loading, please wait...</b>
+                <div class="ui-widget-overlay ui-front"></div>
+                <div id="InnerTableCellOverlay">
+                    <img alt="(loading)" src="images/loader.gif"/>
+                    <br/>
+                    <b style="color:black;font-size:1em;border-radius: 5px;border:1px solid lightblue;padding:1px;">Loading, please wait...</b>
+                </div>
+                <div id="redirect" class="message messageSuccess" style="display:none;">
+                    Created! Redirecting to login page.
+                </div>
             </div>
-            <div id="redirect" class="message messageSuccess" style="display:none;">
-                Created! Redirecting to login page.
-            </div>
-        </div>
         </div>
         <script>
             $(document).ready(function () {
@@ -98,7 +114,7 @@
                         console.log(editID);
                         loadCurrentMedication();
                     }
-                }).fail().always(function(){
+                }).fail().always(function () {
                     $("#loader1").hide();
                 });
                 /**
@@ -171,13 +187,13 @@
                         $("#loader1").hide();
                     });
                 });
-     $('input').focus(function () {
-    $(this).css('background-color', '#FFFFCC')
-  });
-  $('input').blur(function () {
-    $(this).css('background-color', '#FFF')
-  })       
-    });
+                $('input').focus(function () {
+                    $(this).css('background-color', '#FFFFCC')
+                });
+                $('input').blur(function () {
+                    $(this).css('background-color', '#FFF')
+                })
+            });
         </script>
     </body>
 </html>

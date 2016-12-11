@@ -26,6 +26,8 @@ import static org.junit.Assert.*;
 public class MedLogDAOTest {
 
     DbConnection db;
+    MedLogDAO dao;
+    PatientVO testPatient;
     int testNum = 0;
     int USER_ID = 2;
 
@@ -47,6 +49,9 @@ public class MedLogDAOTest {
     @Before
     public void setUp() {
         db = new DbConnection();
+        PatientVO tmpPatient = PatientVO.builder().patientID(2).userName("dan").userPassword("asdf").build();
+        dao = new MedLogDAO(db, tmpPatient);
+        testPatient = dao.findPatientByPatientNameAndPassword("dan", "asdf");
 
     }
 
@@ -68,7 +73,7 @@ public class MedLogDAOTest {
     public void testGetDB() {
         System.out.println("getDB");
         MedLogDAO instance = null;
-        DbConnection expResult =  this.db;
+        DbConnection expResult = this.db;
 //        DbConnection result = instance.getDB();
         assertNotNull(expResult);
     }
@@ -332,13 +337,13 @@ public class MedLogDAOTest {
      */
     @Test
     public void testFindMedicationByPatient() {
-        System.out.println("findMedicationByPatient");
-        MedLogDAO instance = new MedLogDAO(db, PatientVO.builder().patientID(2)
-                .userName("dan")
-                .userPassword("asdf")
-                .build());
+        System.out.println("$$$$findMedicationByPatient");
+        MedLogDAO instance = new MedLogDAO(db,testPatient);
 //        ArrayList<MedicationVO> expResult = null;
         ArrayList<MedicationVO> result = instance.findMedicationByPatient();
+        assertTrue(result != null);
+        System.out.println("com.medlog.webservice.dao.MedLogDAOTest.testFindMedicationByPatient() Medications: " + new GsonBuilder()
+                .serializeNulls().setPrettyPrinting().create().toJson(result) + "\n\n\n");
 //        assertEquals(1, result.get(0).getMedicationID());
         // TODO review the generated test code and remove the default call to fail.
 
@@ -370,8 +375,8 @@ public class MedLogDAOTest {
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
     }
-    
-    public void testPredictTone(){
+
+    public void testPredictTone() {
         fail("this is a fail");
     }
 
@@ -448,11 +453,21 @@ public class MedLogDAOTest {
     @Test
     public void testAssignMedication() {
         System.out.println("assignMedication");
-//        MedicationVO _vo = null;
-//        MedLogDAO instance = null;
+        int id = new Random().nextInt(12) + 1;
+        
+        System.out.println("com.medlog.webservice.dao.MedLogDAOTest.testAssignMedication() rand pharmID " + id );
+        PharmaRxOtcVO rx = PharmaRxOtcVO.builder().pharmID(id).fullName("").build();
+        HealthcareProviderVO dr = HealthcareProviderVO.builder().physicianID((int)(Math.random() * 6+1)).lastName("Allison").firstName("John").build();
+
+        MedicationVO _vo = MedicationVO.builder().patientID(testPatient).pharmID(rx).physicianID(dr).sig(SigVO.builder()
+                .sigAbbrID("p.r.n.").build()).dosage((id % 20 + 1) +"ML").instructions("take it ").active(true).build();
+        
+        System.out.println("com.medlog.webservice.dao.MedLogDAOTest.testAssignMedication()" + _vo.toJSON());
+        MedLogDAO instance = new MedLogDAO(db, testPatient);
 //        int expResult = 0;
-//        int result = instance.assignMedication(_vo);
-//        assertEquals(expResult, result);
+        int result = instance.assignMedication(_vo);
+
+        assertTrue("HAS NEW ID", result > 0);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
     }

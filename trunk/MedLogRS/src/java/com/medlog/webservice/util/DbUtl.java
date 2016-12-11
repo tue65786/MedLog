@@ -31,6 +31,7 @@ public class DbUtl {
     public static void close(CallableStatement st) {
         try {
             st.close();
+            st = null;
         } catch (Exception e) {
             //quiet
 

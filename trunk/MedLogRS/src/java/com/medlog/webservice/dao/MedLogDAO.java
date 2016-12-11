@@ -32,6 +32,7 @@ public class MedLogDAO implements IMedLogDAO {
 
     /**
      * Constructs DAO
+     *
      * @param db
      * @param u
      */
@@ -45,12 +46,14 @@ public class MedLogDAO implements IMedLogDAO {
             eeee.printStackTrace();
         }
     }
-/**
- * Overload Constructor
- * @param db
- * @param u
- * @param app 
- */
+
+    /**
+     * Overload Constructor
+     *
+     * @param db
+     * @param u
+     * @param app
+     */
     public MedLogDAO(DbConnection db, PatientVO u, ApplicationBean app) {
         this.db = db;
         this.user = u;
@@ -83,6 +86,7 @@ public class MedLogDAO implements IMedLogDAO {
         if (_vo.isValid(INSERT)) {
             return changeMedicationBinding(_vo);
         } else {
+
             return DB_ERROR_CODE;
         }
     }
@@ -188,7 +192,7 @@ public class MedLogDAO implements IMedLogDAO {
                 cs.setString(11, _vo.getAddressCity());
                 cs.setInt(12, _vo.getAddressStateID().getStateID());//CHECK FOR VALID STATE
                 cs.setString(13, StrUtl.truncateAtWord(_vo.getAddressZip(), 10));
-                cs.setInt(14,getCurrentUser().getPatientID());
+                cs.setInt(14, getCurrentUser().getPatientID());
                 cs.registerOutParameter(15, java.sql.Types.INTEGER);
                 int rows = cs.executeUpdate();
                 newID = cs.getInt(15);
@@ -511,22 +515,32 @@ public class MedLogDAO implements IMedLogDAO {
         try {
             cs = db.getConnnection().prepareCall(SP_MEDICATION_SELECT);
             cs.setNull(1, java.sql.Types.INTEGER);
-            cs.setInt(1, getCurrentUser().getPatientID());
+            cs.setInt(2, getCurrentUser().getPatientID());
             rs = cs.executeQuery();
             while (rs.next()) {
+                PharmaRxOtcVO rx = null;
+                int rxid = rs.getInt("pharmID");
+                try {
+                    rx = getRxMap().get(rs.getInt("pharmID"));
+                } catch (Exception e) {
+                    rx = PharmaRxOtcVO.builder().fullName(rs.getString("Full_Name")).pharmID(rxid).build();
+                }
                 voList.add(MedicationVO.builder()
                         .medicationID(rs.getInt("MedicationID"))
-                        .pharmID(getRxMap().get(rs.getInt("pharmID")))
-                        .patientID(getCurrentUser())
+                        .pharmID(rx)
+                        .patientID(PatientVO.builder().patientID(getCurrentUser().getPatientID()).build())
                         .startDate(rs.getDate("startDate"))
                         .endDate(rs.getDate("endDate"))
-                        .sig(getSigMap().getOrDefault(rs.getString("sig"), getSigMap().get("p.r.n.")))
+                        .sig(SigVO.builder().sigAbbrID(rs.getString("sig")).build())
                         .instructions(rs.getString("instructions"))
+                        .physicianID(HealthcareProviderVO.builder()
+                                .physicianID(rs.getInt("PhysicianID")).firstName(rs.getString("firstname"))
+                                .lastName(rs.getString("lastname")).build())
                         .build());
 
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             DbUtl.close(rs);
             DbUtl.close(cs);
@@ -574,9 +588,10 @@ public class MedLogDAO implements IMedLogDAO {
                 retVO = voList.get(0);
                 setUser(retVO);
                 ArrayList<DiaryVO> d = findDiaryByPatient();
-                for (DiaryVO v : d) {
-                    System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()" + v.toJSON());
-                }
+//                if (DEBUG)
+//                for (DiaryVO v : d) {
+//                    System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()" + v.toJSON());
+//                }
                 System.out.println("com.medlog.webservice.dao.MedLogDAO.findPatientByPatientNameAndPassword()");
                 retVO.setDiaryList(findDiaryByPatient());
                 return retVO;
@@ -974,7 +989,7 @@ public class MedLogDAO implements IMedLogDAO {
     }
 
     private int changeMedicationBinding(MedicationVO _vo) {
-
+        System.out.println("com.medlog.webservice.dao.MedLogDAO.changeMedicationBinding() 1");
         CallableStatement cs = null;
         int newID = DB_ERROR_CODE;
         try {
@@ -994,14 +1009,18 @@ public class MedLogDAO implements IMedLogDAO {
                 cs.setInt(1, getCurrentUser().getPatientID());
                 cs.setInt(2, _vo.getPharmID().getPharmID());
                 cs.setInt(3, _vo.getPhysicianID().getPhysicianID());
-                cs.setString(4, _vo.getInstructions());
-                cs.setString(4, _vo.getSig().getSigAbbrID());
-                cs.setDate(5, (java.sql.Date) _vo.getStartDate());
-                cs.setNull(6, java.sql.Types.BIT);
-                cs.executeUpdate();
+                cs.setString(4, StrUtl.toS(_vo.getInstructions()));
+                cs.setString(5, _vo.getSig().getSigAbbrID());
+//                cs.setDate(5, (java.sql.Date) _vo.getStartDate());
+                cs.setNull(6, java.sql.Types.DATE);
+                cs.setNull(7, java.sql.Types.DATE);
+                cs.setBoolean(8, _vo.isActive());
+                newID = cs.executeUpdate();
 
             } catch (Exception e) {
-
+                e.printStackTrace();
+            } finally {
+                DbUtl.close(cs);
             }
         }
         return newID;

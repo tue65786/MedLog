@@ -116,10 +116,18 @@
                     console.log(serie);
                     console.log(group);
                     console.log(categoryValue);
+                    if (serie.dataField !== 'mood')
                     return 'Example: ' + getTextFrom(serie.dataField) + ",<br>  " + serie.displayText + ": " + value;
+                else{
+                    return "Mood:" + value;
+                }
                 };
                 // prepare jqxChart settings
                 var source = <%=data%>;
+                var sl=source.length;
+                for (var s=0;s<sl;s++){
+                    source[s].mood =  source[s].mood * 10;
+                }
                 var settings = {
                     title: "<%=user.getFirstName()%> Journal Log",
                     description: "Using Tone Analysis",
@@ -172,7 +180,7 @@
                                         {dataField: 'sadness', displayText: 'sad', lineWidth: 1},
                                         {dataField: 'tentative', displayText: 'tentative', lineWidth: 1},
 //                                    {dataField: 'rowTotal', lineWidth: 1},
-                                        {dataField: 'mood', lineWidth: 4}
+                                        {dataField: 'mood', lineWidth: 4,displayText:'Mood'}
 //                                    {dataField: 'producivtiy', lineWidth: 1}
                                     ]
 
@@ -359,7 +367,7 @@
             $('#jqxTabs').jqxTabs({width: '90%', height: 660
 
                 , initTabContent: initWidgets
-                , selectedItem: index
+//                , selectedItem: index
                 , selectionTracker: true
                 , theme: 'darkblue'
             });
@@ -422,7 +430,7 @@
             <div id='tblContainer' style="width:100%; height:600px;">
                 <div id='pieContainer' style="width: 850px; height: 500px;float: left;">
                 </div>
-                <div style="float: left;"><table><tr><td></td><td><%=tbl%></td><td><%=currentDiary%></td></tr></table> </div>
+                <div style="float: left;"><table><tr><td></td><td><h4>PMF Scores Cross Journal Entry</h4><%=tbl%></td><td><%=currentDiary%></td></tr></table> </div>
                 <div style="border:2px solid lawngreen; border-radius:4px; background-color: limegreen;color:white;"></div>
                 <b>Five # Summary >>></b>
                 <%=fiveNum%>
