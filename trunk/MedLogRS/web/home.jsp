@@ -27,6 +27,7 @@
     String diaryStat = "";
     ArrayList<MedicationVO> meds = null;
     String medString = "";
+    String tonePair = "";
     int logins = 0;
     try {
         if (application != null && application.getAttribute("activeLogins") != null) {
@@ -73,6 +74,7 @@
                     session.setAttribute("diaryEq", "y = " + String.format("%.2f", instance.getLineEq()[0]) + "x" + " + " + instance.getLineEq()[1] + " R²= " + instance.getLineEq()[2] + .001);
                     Gson g = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
                     String gson = g.toJson(vl);
+                    tonePair = g.toJson(instance.getToneList());
                     String areaDataString = g.toJson(areaData);
 //                    System.out.println(gson);
                     session.setAttribute("diaryReportData", gson);
@@ -128,11 +130,36 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>MedLog</title>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" href="style.css">
+        <!--<link rel="stylesheet" href="style.css">-->
+        <link href="scripts/jqx/styles/jqx.base.css" rel="stylesheet" type="text/css"/>
+        <link href="scripts/jqx/styles/jqx.fresh.css" rel="stylesheet" type="text/css"/>
         <script src="scripts/jquery.min.js" type="text/javascript"></script>
         <script src="scripts/jqueryu.min.js" type="text/javascript"></script>
-        <script src="scripts/jqx/jqxgauge-all.min.js" type="text/javascript"></script>
+        <script src="scripts/jqx/jqxcore.js" type="text/javascript"></script>
+        <script src="scripts/jqx/jqxscrollbar.js" type="text/javascript"></script>
+        <script src="scripts/jqx/jqxlistbox.js" type="text/javascript"></script>
+        <script src="scripts/jqx/jqxbuttons.js" type="text/javascript"></script>
+        <script src="scripts/jqx/jqxdropdownlist.js" type="text/javascript"></script>
+        <script src="scripts/jqx/jqxgauge-all.js" type="text/javascript"></script>
         <style>
+            #gaugeValue {
+                background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #f3f3f3));
+                background-image: -webkit-linear-gradient(#fafafa, #f3f3f3);
+                background-image: -moz-linear-gradient(#fafafa, #f3f3f3);
+                background-image: -o-linear-gradient(#fafafa, #f3f3f3);
+                background-image: -ms-linear-gradient(#fafafa, #f3f3f3);
+                background-image: linear-gradient(#fafafa, #f3f3f3);
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                -ms-border-radius: 3px;
+                -o-border-radius: 3px;
+                border-radius: 3px;
+                -webkit-box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+                -moz-box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+                padding: 10px;
+               
+            }
             .ui-menu { width: 150px; }
             #menu a {text-decoration: none;}
             /*            .ui-tabs-vertical { width: 80%; margin-left: 200px; }
@@ -168,19 +195,48 @@
                         top.location.href = 'login.html';
                     });
                 });
+
+                var ddlData = <%=tonePair%>;
+                var dropdownSource = _.pluck(ddlData, 'shortKey');
+                $("#jqxDropDownList").jqxDropDownList({source: dropdownSource
+                    , selectedIndex: 0, width: '300px', height: '45px'});
+                try {
+                    console.log(dropdownSource);
+                } catch (e) {
+                    console.log(e);
+                }
                 $('#gaugeContainer').jqxGauge({ranges: gr,
                     ticksMinor: ticks[0], ticksMajor: ticks[1],
                     value: 60,
                     max: 100,
-                    radius: 135,
+                    radius: 125,
+                    border:{visible:false},
                     animationDuration: 1200, labels: lbl
                 });
-          function getToneTexts(id,score){
-              
-          }      
-< .5 = not likely present
-≥ .5 = likely present
-> .75 = very likely present 
+                $('#jqxDropDownList').on('select', function (event) {
+                    var args = event.args;
+                    var item = $('#jqxDropDownList').jqxDropDownList('getItem', args.index);
+                    if (item != null) {
+
+                        var tO = new ToneClass(ddlData[args.index]);
+                        $('#gaugeContainer').val(tO.gaugeValue);
+//                        $('#Events').jqxPanel('prepend', '<div style="margin-top: 5px;">Selected: ' + item.label + '</div>');
+                    }
+                });
+
+                $('#gaugeContainer').on('valueChanging', function (e) {
+                    $('#gaugeValue').text(Math.round(e.args.value) + ' %');
+                });
+                function getToneTexts(id, score) {
+                    if (score < .5) {
+
+                    } else if (score < .75) {
+
+                    } else {
+
+                    }
+                }
+
             });
         </script>
 
@@ -290,9 +346,20 @@
                                     analysis based on learned features.</li>
                             </ul>
                             <sub>Tone Analysis / Watson are IP of IBM (Fair Use / <a href="http://www.ibm.com/ibm/licensing/">Legal</a>)</sub>
-
-                            <div style="float: left;" id="gaugeContainer"></div>
-                            <div id="gaugeValue" style="position: absolute; top: 235px; left: 132px; font-family: Sans-Serif; text-align: center; font-size: 17px; width: 70px;"></div>
+                            <div id="jqxDropDownList"  style="float: right;
+margin-top: -400px;
+margin-left: 600px;
+width: 300px;
+height: 45px;"></div>
+                            <div style="float: left;width: 340px; height: 340px;margin-top: -548px;margin-left: 424px;" id="gaugeContainer"></div>
+                            <div id="gaugeValue" style=" position: absolute;
+                                 margin-top: -378px;
+margin-left: 503px;
+                               
+                                 font-family: Sans-Serif;
+                                 text-align: center;
+                                 font-size: 17px;
+                                 width: 70px;"></div>
 
                         </div>
                         <div id="tabs-2">

@@ -162,10 +162,10 @@
                     $("#loader1").show();
                     $("#errorMessage").hide();
                     var userInfo = $("#medicationForm").serialize();
-                    var theURL = "./api/?res=ph&fn=add&" + userInfo;
+                    var theURL = "./api/?res=m&fn=add&" + userInfo;
                     var redirectPage = "login.html";
                     if (editID > 0) {
-                        theURL = "./api?res=ph&fn=update&" + userInfo;
+                        theURL = "./api?res=m&fn=update&" + userInfo;
                         redirectPage = "home.jsp";
                     }
 

@@ -8,6 +8,7 @@ package com.medlog.webservice.vo;
 import static com.medlog.webservice.CONST.SETTINGS.DEBUG;
 import com.medlog.webservice.util.StrUtl;
 import com.medlog.webservice.vo.pairs.ToneKeyValuePair;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,7 +23,7 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
  *
  * @author westy
  */
-public class DiaryAnalysisSummaryVO {
+public class DiaryAnalysisSummaryVO implements Serializable{
 
     public static final int IDX_MOOD = 0;
     public static final int IDX_AGREEABLENESS_BIG5 = 1;
@@ -54,6 +55,7 @@ public class DiaryAnalysisSummaryVO {
         "IDX_OPENNESS_BIG5 ..........",
         "IDX_SADNESS ................",
         "IDX_TENTATIVE .............."};
+    public  String[] names;
     private double[] guesses = new double[2];
     private DiaryAnalysisVO currentDiary;
     private HashMap<String, Integer> toneMap;
@@ -76,6 +78,7 @@ public class DiaryAnalysisSummaryVO {
     private double[] corr;
     private double[] corrRanked;
     private double[] rSquared;
+    private double[] averageScores;
     private double[] xAxisGuess;
     private String html = "";
     private double toneCurrentAvgX;
@@ -94,7 +97,9 @@ public class DiaryAnalysisSummaryVO {
     private void doBefore(int size) {
         setToneMap(new HashMap<String, Integer>());
         setCorr(new double[14]);
+        names = new String[14];
         setxAxisGuess(new double[size]);
+        setAverageScores(new double[14]);
         setrSquared(new double[14]);
         setCorrRanked(new double[14]);
         setAgreeablenessBig5(new double[size]);
@@ -143,6 +148,24 @@ public class DiaryAnalysisSummaryVO {
             getTentative()[i] = vo.getTentative();
             getMood()[i] = vo.getMood();
         }
+        
+               getAverageScores()[IDX_MOOD] = StatUtils.mean(getMood());
+            getAverageScores()[IDX_AGREEABLENESS_BIG5] =StatUtils.mean(getAgreeablenessBig5());
+            getAverageScores()[IDX_MOOD] =StatUtils.mean(getMood());
+            getAverageScores()[IDX_AGREEABLENESS_BIG5] =StatUtils.mean(getAgreeablenessBig5());
+            getAverageScores()[IDX_ANALYTICAL] =StatUtils.mean(getAnalytical());
+            getAverageScores()[IDX_ANGER] =StatUtils.mean(getAnger());
+            getAverageScores()[IDX_CONFIDENT] =StatUtils.mean(getConfident());
+            getAverageScores()[IDX_CONSCIENTIOUSNESS_BIG5] =StatUtils.mean(getConscientiousnessBig5());
+            getAverageScores()[IDX_DISGUST] =StatUtils.mean(getDisgust());
+            getAverageScores()[IDX_EMOTIONALRANGE_BIG5] =StatUtils.mean(getEmotionalRangeBig5());
+            getAverageScores()[IDX_EXTRAVERSION_BIG5] =StatUtils.mean(getExtraversionBig5());
+            getAverageScores()[IDX_FEAR] =StatUtils.mean(getFear());
+            getAverageScores()[IDX_JOY] =StatUtils.mean(getJoy());
+            getAverageScores()[IDX_OPENNESS_BIG5] =StatUtils.mean(getOpennessBig5());
+            getAverageScores()[IDX_SADNESS] =StatUtils.mean(getSadness());
+            getAverageScores()[IDX_TENTATIVE]  = StatUtils.mean(getTentative());
+        
     }
 
     private void populateCorrelation() {
@@ -195,8 +218,8 @@ public class DiaryAnalysisSummaryVO {
         setToneList(new ArrayList<ToneKeyValuePair>());
         for (int j = 1; j < 14; j++) {
             ArrayUtils.indexOf(cRCopy, getCorrRanked()[j]);
-            ToneKeyValuePair t = ToneKeyValuePair.builder().key(CORR_STR[j]).value(getrSquared()[j]).weightedValue(getCorrRanked()[j]).rank(ArrayUtils.indexOf(cRCopy, getCorrRanked()[j])).build();
-            getToneList().add(ToneKeyValuePair.builder().key(CORR_STR[j]).value(getrSquared()[j]).weightedValue(getCorrRanked()[j]).rank(ArrayUtils.indexOf(cRCopy, getCorrRanked()[j]) + 1).build());
+            //ToneKeyValuePair t = ToneKeyValuePair.builder().key(CORR_STR[j]).value(getrSquared()[j]).weightedValue(getCorrRanked()[j]).rank(ArrayUtils.indexOf(cRCopy, getCorrRanked()[j])).build();
+            getToneList().add(ToneKeyValuePair.builder().key(CORR_STR[j]).value(getrSquared()[j]).weightedValue(getCorrRanked()[j]).rank(ArrayUtils.indexOf(cRCopy, getCorrRanked()[j]) + 1).historicalRawAvg(getAverageScores()[j]).build());
 //            corrRanked[j] = rSquared[j] / sum;
         }
 
@@ -261,7 +284,9 @@ public class DiaryAnalysisSummaryVO {
         });
     }
 // </editor-fold>
-
+/**
+ * Prints correlation to console.
+ */
     private void printCorr() {
         setHtml("<table id='tblWeightedData'><thead><tr><th>Name</th><th>Rank</th><th>Weight</th><th>Value</th></tr></thead><tbody>");
         System.out.println("ID.........................\t\tR^2\t\t\tRank");
@@ -380,8 +405,13 @@ public class DiaryAnalysisSummaryVO {
     }
 
     public static String sanitizeKey(String key) {
+      try{
         key = StrUtl.toS(key).replace("IDX_", "").replace(("."), "").replace("BIG5", "").replace("_", "").replace(" ", "").toLowerCase();
         return key;
+      }catch(Exception e){
+          return StrUtl.toS(key);
+      }
+      
     }
 
     /**
@@ -746,5 +776,19 @@ public class DiaryAnalysisSummaryVO {
      */
     public void setFiveSummary(double[] fiveSummary) {
         this.fiveSummary = fiveSummary;
+    }
+
+    /**
+     * @return the averageScores
+     */
+    public double[] getAverageScores() {
+        return averageScores;
+    }
+
+    /**
+     * @param averageScores the averageScores to set
+     */
+    public void setAverageScores(double[] averageScores) {
+        this.averageScores = averageScores;
     }
 }
