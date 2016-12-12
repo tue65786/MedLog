@@ -57,15 +57,15 @@
 
                         <!-- Contact Information optional-->
                         <label for="phoneHome">Home Phone:<br/></label>
-                        <input name="phoneHome" type="text" id="phoneHome" placeholder="ex. 2152047000"/><br/>
+                        <input name="phoneHome" type="tel" id="phoneHome" placeholder="ex. 2152047000"/><br/>
                         <label for="phoneMobile">Mobile Phone:<br></label>
                         <input name="phoneMobile" type="text" id="phoneMobile" placeholder="ex. 2152047000"/><br/>
                         <label for="email">Primary Email:<br/></label>
-                        <input name="email" type="text" id="email" placeholder="ex.youremail@email.com"/><br/>
+                        <input name="email" type="email" id="email" placeholder="ex.youremail@email.com"/><br/>
 
                         <!-- Additional Information optional-->
                         <label for="dateOfBirth">Date of Birth:<br/></label>
-                        <input name="dateOfBirth" type="text" id="dateOfBirth" placeholder="Enter your date of birth"/><br/>
+                        <input name="dateOfBirth" type="text" pattern="^(20)[0-1][0-9]-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$" id="dateOfBirth" placeholder="Enter your date of birth"/><br/>
                         <!--
                         <label for="gender">Gender:<br></label>
                         <input name="gender" type="radio" id="gender" value="male">Male<br>
