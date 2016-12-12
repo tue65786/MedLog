@@ -46,12 +46,12 @@ and open the template in the editor.
                 });
                 /* Display the providers, edit on click */
                 function createHPTable(healthcareProviderList){
-                    var tableOutput = "<table><tr><th>First Name</th><th>Last Name</th><th>Specialty</th><th>Business Phone</th></tr>";
+                    var tableOutput = "<table style='width:75%;margin:0 auto;'><tr><th>First Name</th><th>Last Name</th><th>Specialty</th><th>Business Phone</th></tr>";
                     var providerListLen = healthcareProviderList.length;
                     for (var i = 0; i < providerListLen; i++) {
                         var healthcareProvider = healthcareProviderList[i];
                         tableOutput = tableOutput 
-                                        + "<tr title='Click to edit' onclick='showRow(" + healthcareProvider.physicianID + ")'><td>" 
+                                        + "<tr style='cursor:pointer;' title='Click to edit' onclick='showRow(" + healthcareProvider.physicianID + ")'><td><img src='images/update.png'>" 
                                         + healthcareProvider.firstName + "</td><td>"
                                         + healthcareProvider.lastName + "</td><td>"
                                         + healthcareProvider.specialty + "</td><td>"
