@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'medlog'
+            keyPassword 'medlog'
+            storeFile file('E:/OneDrive/NetBeansProjects/MedLog/medlogapk.jks')
+            storePassword 'medlog'
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "com.medlog.medlogmobile"
         minSdkVersion 19
@@ -22,8 +29,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
-
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.google.code.gson:gson:2.8.0'

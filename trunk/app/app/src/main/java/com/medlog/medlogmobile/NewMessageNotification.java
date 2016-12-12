@@ -75,7 +75,9 @@ public class NewMessageNotification {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Close the activity as they have declined the EULA
-                        mActivity.finish();
+
+                        mActivity.finishAffinity();
+                        System.exit(0);
                     }
 
                 });

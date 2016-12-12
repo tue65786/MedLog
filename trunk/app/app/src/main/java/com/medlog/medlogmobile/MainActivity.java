@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user.getDiaryList() != null){
                     totalSize = user.getDiaryList().size() + voList.size() +"";
                 }
-                showNotice(1,user.getUserName(),totalSize, voList.get(0).getTitle()," body" );
+                showNotice(1,user.getUserName(),totalSize, voList.get(0).getTitle(),voList.get(0).getNotes() );
                 if (user.getDiaryList() == null) {
                     user.setDiaryList(new ArrayList<DiaryVO>());
                     user.getDiaryList().addAll(voList);

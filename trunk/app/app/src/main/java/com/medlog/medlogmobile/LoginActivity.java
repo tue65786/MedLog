@@ -85,21 +85,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try
-        {
-            NewMessageNotification.eulaAlert( this).show();
-        }
-        catch ( Exception e )
-        {
+
+        // Get local prefs
+        spf = getPreferences(MODE_PRIVATE);
+        try {
+            if (!spf.getBoolean(getString(R.string.PREF_EULA), false))
+                NewMessageNotification.eulaAlert(this).show();
+        } catch (Exception e) {
             // TODO Auto-generated catch block
-            Log.e("eula",null,e);
+            Log.e("eula", null, e);
             e.printStackTrace();
         }
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-        spf = getPreferences(MODE_PRIVATE);
+        //load user
         if (spf.contains(getString(R.string.p_usr_str))) {
             storedUser = PatientVO.fromJSON(spf.getString(getString(R.string.p_usr_str), "{}"));
         }
@@ -424,5 +425,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Log.w(getString(R.string.tag_debug), "NO PREFS FOUND!");
         }
     }
+
 }
 
