@@ -234,7 +234,7 @@
    <div><span class="ui-icon "></span><a href="Medication.html">Add</a></div>
                                 </li>
                                 <li>
-   <div><span class="ui-icon "></span><a href="PharmaRXOTC.html">Drug</a></div>
+   <div><span class="ui-icon "></span><a href="MedicationList.html?id=1">List</a></div>
                                 </li>
                             </ul>
                         </li>
