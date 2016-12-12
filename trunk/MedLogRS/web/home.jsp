@@ -23,11 +23,13 @@
 <%
     String name = "";
     String onload = "";
-    String diaryEntires = "";
+    String diaryEntires = " not created your first journal. Start today.";
     String diaryStat = "";
     ArrayList<MedicationVO> meds = null;
     String medString = "";
-    String tonePair = "";
+    String tonePair = "[]";
+    boolean hasDiaryData = true;
+    boolean hasMedData = true;
     int logins = 0;
     try {
         if (application != null && application.getAttribute("activeLogins") != null) {
@@ -48,7 +50,6 @@
             name = StrUtl.coalesce(user.getFirstName(), user.getLastName(), user.getUserName(), "");
             if (!name.isEmpty()) {
                 name = " back " + name;
-
             }
 //	  DbConnection db = new DbConnection();
             MedLogDAO dao = new MedLogDAO(db, user);
@@ -82,8 +83,11 @@
 //                    System.out.println("home.jsp() " + areaDataString);
                     session.setAttribute("diaryTbl", diaryStat);
                 } catch (Exception e) {
-
+                                session.setAttribute("hasDiaryData", false);
+                                hasDiaryData = false;
                 }
+            }else{
+                hasDiaryData = false;
             }
             meds = dao.findMedicationByPatient();
             if (meds != null && !meds.isEmpty()) {
@@ -92,8 +96,11 @@
                     medString += med.toTableRow();
                 }
                 medString += "</table>";
+            }else{
+                hasMedData =false;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             db.close();
         }
@@ -130,6 +137,7 @@
                 $("#menu").menu({
                     select: function (event, ui) {
                         try {
+                            
                             var hr = ui.item[0].children[0].children[1].href;
                             if (typeof hr !== 'undefined') {
                                 top.location.href = hr;
@@ -147,7 +155,8 @@
                         top.location.href = 'login.html';
                     });
                 });
-                var ddlData = <%=tonePair%>;
+               if (<%=hasDiaryData%>){
+                 var ddlData = <%=tonePair%>;
                 var dropdownSource = _.pluck(ddlData, 'shortKey');
                 $("#jqxDropDownList").jqxDropDownList({source: dropdownSource
                     , selectedIndex: 0, width: '300px', height: '45px'});
@@ -176,6 +185,7 @@
                 $('#gaugeContainer').on('valueChanging', function (e) {
                     $('#gaugeValue').text(Math.round(e.args.value) + ' %');
                 });
+            }
             });
         </script>
     </head>
@@ -193,7 +203,8 @@
                         </li>
                         <li>
                             <div><span class="ui-icon ui-icon-person"></span><a href="User.html?id=<%=user.getPatientID()%>">Your account</a></div>
-                            <ul><li><div>	<a href="User.html">Register</a></div></li><li><div><a href="#" id="logout">Logout</a></div></li></ul>
+                            <ul><li><div>	<span></span><a href="User.html">Register</a></div></li>
+                                <li><div><span></span><a href="#" id="logout">Logout</a></div></li></ul>
                         </li>
                         <li id="diary" data-url="">
                             <div><span class="ui-icon ui-icon-contact"></span>Diary</div>
@@ -204,12 +215,13 @@
                                 <li>
    <div><span class="ui-icon"></span><a href="JournalList.html?id=1">List</a></div>
                                 </li>
-                                <li>
+                              <% if (hasDiaryData){ %> <li>
    <div><a href="report-journal.html"><span class="ui-icon"></span>Report</a></div>
                                 </li>
-                                <li>
-   <div onclick='javascript:alert("Available through mobile application only.") return false;'><span class="ui-icon"></span>Send</div>
-                                </li>
+                                <%}%>
+<!--                                <li>
+   <div><span class="ui-icon"></span>Send</div>
+                                </li>-->
                             </ul>
                         </li>
                         <li >
@@ -274,19 +286,24 @@
    analysis based on learned features.</li>
                             </ul>
                             <sub>Tone Analysis / Watson are IP of IBM (Fair Use / <a href="http://www.ibm.com/ibm/licensing/">Legal</a>)</sub>
+                         <% if (hasDiaryData) {%>
                             <div id="jqxDropDownList"  style="float: right;
 margin-top: -400px;margin-left: 600px;width: 300px;height: 45px;"></div>
                             <div style="float: left;width: 340px; height: 340px;margin-top: -505px;margin-left: 548px;" id="gaugeContainer"></div>
-                            <div id="gaugeValue" style=" position: absolute;margin-top: -356px;margin-left: 628px;font-family: Sans-Serif;text-align: center;font-size: 17px;width: 70px;"></div>                     </div>
+                            <div id="gaugeValue" style=" position: absolute;margin-top: -356px;margin-left: 628px;font-family: Sans-Serif;text-align: center;font-size: 17px;width: 70px;"></div>                     
+                       <%}%>
+                        </div>
                         <div id="tabs-2">
                             <h2>You have septum on file</h2>
                             <%=medString%>
                         </div>
                         <div id="tabs-3">
                             <h2>Last Entry Data</h2>
+                           <% if (hasDiaryData) {%>
                             <div style="margin:10px;padding:5px;">
-                                todo: addd last entry!!
-                                <%=diaryStat%></div>
+                                <!--todo: addd last entry!!-->
+                                <%=diaryStat%></div><%}else {%>
+                                No data yet!<%}%>
                         </div>
                     </div></td><td style="width:100px;vertical-align: top;"></td></tr></table><footer>Users online (<%=logins%>)</footer>
     </body></html>

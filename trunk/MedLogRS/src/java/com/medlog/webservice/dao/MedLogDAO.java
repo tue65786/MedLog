@@ -1137,7 +1137,11 @@ public class MedLogDAO implements IMedLogDAO {
             }
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, null, ex);
-        } finally {
+        }
+         catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        finally {
             DbUtl.close(rs);
             DbUtl.close(ps);
         }
