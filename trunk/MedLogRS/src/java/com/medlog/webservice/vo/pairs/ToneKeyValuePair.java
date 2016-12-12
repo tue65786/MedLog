@@ -17,6 +17,40 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializable {
 
+    private static final long serialVersionUID = -6091550715909989280L;
+
+    /**
+     * @return the historicalRawAvg
+     */
+    public double getHistoricalRawAvg() {
+        return historicalRawAvg;
+    }
+
+    /**
+     * @param historicalRawAvg the historicalRawAvg to set
+     */
+    public void setHistoricalRawAvg(double historicalRawAvg) {
+        this.historicalRawAvg = historicalRawAvg;
+    }
+
+    /**
+     * @return the shortKey
+     */
+    public String getShortKey() {
+        return shortKey;
+    }
+
+    /**
+     * @param shortKey the shortKey to set
+     */
+    public void setShortKey(String shortKey) {
+        this.shortKey = shortKey;
+    }
+
+    public static ToneKeyValuePair create(final double value, final int rank, final double weightedValue, final String key, final double historicalRawAvg) {
+        return new ToneKeyValuePair(value, rank, weightedValue, key, historicalRawAvg);
+    }
+
     /**
      * @return the value
      */
@@ -73,23 +107,12 @@ public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializab
         this.key = key;
     }
 
-    public static ToneKeyValuePair create(final double value, final int rank, final double weightedValue, final String key) {
-        return new ToneKeyValuePair(value, rank, weightedValue, key);
-    }
     private double value;
     private int rank;
     private double weightedValue;
     private String key;
-
-    public ToneKeyValuePair() {
-    }
-
-    @Override
-    public int compareTo(ToneKeyValuePair that) {
-    if (this.getWeightedValue()>that.getWeightedValue())return -1;
-    if (this.getWeightedValue()<that.getWeightedValue())return 1;
-    return 0;
-    }
+    private double historicalRawAvg;
+    private String shortKey;
 
     public static class Builder {
 
@@ -97,6 +120,7 @@ public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializab
         private int rank;
         private double weightedValue;
         private String key;
+        private double historicalRawAvg;
 
         private Builder() {
         }
@@ -121,8 +145,13 @@ public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializab
             return this;
         }
 
+        public Builder historicalRawAvg(final double value) {
+            this.historicalRawAvg = value;
+            return this;
+        }
+
         public ToneKeyValuePair build() {
-            return ToneKeyValuePair.create(value, rank, weightedValue, key);
+            return ToneKeyValuePair.create(value, rank, weightedValue, key, historicalRawAvg);
         }
     }
 
@@ -130,12 +159,25 @@ public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializab
         return new ToneKeyValuePair.Builder();
     }
 
-    private ToneKeyValuePair(final double value, final int rank, final double weightedValue, final String key) {
+    private ToneKeyValuePair(final double value, final int rank, final double weightedValue, final String key, final double historicalRawAvg) {
         this.value = value;
         this.rank = rank;
         this.weightedValue = weightedValue;
-        this.key = key;
+        this.key = key; 
+        this.shortKey=sanitizeKey(key);
+        this.historicalRawAvg = historicalRawAvg;
     }
+
+    public ToneKeyValuePair() {
+    }
+
+    @Override
+    public int compareTo(ToneKeyValuePair that) {
+    if (this.getWeightedValue()>that.getWeightedValue())return -1;
+    if (this.getWeightedValue()<that.getWeightedValue())return 1;
+    return 0;
+    }
+
 
     @Override
     public int hashCode() {
@@ -188,7 +230,7 @@ public class ToneKeyValuePair implements Comparable<ToneKeyValuePair>,Serializab
         tsb.setAppendStatics(false);
         
         
-        tsb.setExcludeFieldNames("mood","producivtiy","row","diaryID","rowTotal");
+        tsb.setExcludeFieldNames("mood","producivtiy","row","diaryID","rowTotal,shortKey,historicalRawAvg");
         String r =  tsb.build();//.replace(",", "</li><li>");
         r = r.substring(r.indexOf("[")+1);
         r = r.replace(",", "|");
