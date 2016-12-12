@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         try
         {
-             NewMessageNotification.eulaAlert( this,"EULA",getString(R.string.eulatext)).show();
+            NewMessageNotification.eulaAlert( this).show();
         }
         catch ( Exception e )
         {

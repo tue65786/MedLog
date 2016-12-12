@@ -83,10 +83,10 @@
 //                    System.out.println("home.jsp() " + areaDataString);
                     session.setAttribute("diaryTbl", diaryStat);
                 } catch (Exception e) {
-                                session.setAttribute("hasDiaryData", false);
-                                hasDiaryData = false;
+                    session.setAttribute("hasDiaryData", false);
+                    hasDiaryData = false;
                 }
-            }else{
+            } else {
                 hasDiaryData = false;
             }
             meds = dao.findMedicationByPatient();
@@ -96,8 +96,8 @@
                     medString += med.toTableRow();
                 }
                 medString += "</table>";
-            }else{
-                hasMedData =false;
+            } else {
+                hasMedData = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +137,7 @@
                 $("#menu").menu({
                     select: function (event, ui) {
                         try {
-                            
+
                             var hr = ui.item[0].children[0].children[1].href;
                             if (typeof hr !== 'undefined') {
                                 top.location.href = hr;
@@ -155,37 +155,37 @@
                         top.location.href = 'login.html';
                     });
                 });
-               if (<%=hasDiaryData%>){
-                 var ddlData = <%=tonePair%>;
-                var dropdownSource = _.pluck(ddlData, 'shortKey');
-                $("#jqxDropDownList").jqxDropDownList({source: dropdownSource
-                    , selectedIndex: 0, width: '300px', height: '45px'});
-                $('#gaugeContainer').jqxGauge({ranges: gr,
-                    ticksMinor: ticks[0], ticksMajor: ticks[1],
-                    value: 60,
-                    max: 100,
-                    radius: 125,
-                    border: {visible: false},
-                    animationDuration: 1200, labels: lbl
-                });
-                $('#jqxDropDownList').on('select', function (event) {
-                    var args = event.args;
-                    var item = $('#jqxDropDownList').jqxDropDownList('getItem', args.index);
-                    if (item != null) {
-                        var tO = new ToneClass(ddlData[args.index]);
-                        console.log(tO);
-                        $("li").removeClass("ui-state-highlight");
-                        $("#" + tO.category() + "").addClass("ui-state-highlight");
-                        $("#liA").empty().html("<b>Rank</b>: <span style='background-color:yellow'>" + tO.tone.rank + "</span> (" + tO.scoredText() + ")");
-                        $("#liB").empty().html("<b/>Desciption</b>: " + tO.toneTexts.desc);
-                        $('#gaugeContainer').val(tO.gaugeValue);
-                    }
-                });
+                if (<%=hasDiaryData%>) {
+                    var ddlData = <%=tonePair%>;
+                    var dropdownSource = _.pluck(ddlData, 'shortKey');
+                    $("#jqxDropDownList").jqxDropDownList({source: dropdownSource
+                        , selectedIndex: 0, width: '300px', height: '45px'});
+                    $('#gaugeContainer').jqxGauge({ranges: gr,
+                        ticksMinor: ticks[0], ticksMajor: ticks[1],
+                        value: 60,
+                        max: 100,
+                        radius: 125,
+                        border: {visible: false},
+                        animationDuration: 1200, labels: lbl
+                    });
+                    $('#jqxDropDownList').on('select', function (event) {
+                        var args = event.args;
+                        var item = $('#jqxDropDownList').jqxDropDownList('getItem', args.index);
+                        if (item != null) {
+                            var tO = new ToneClass(ddlData[args.index]);
+                            console.log(tO);
+                            $("li").removeClass("ui-state-highlight");
+                            $("#" + tO.category() + "").addClass("ui-state-highlight");
+                            $("#liA").empty().html("<b>Rank</b>: <span style='background-color:yellow'>" + tO.tone.rank + "</span> (" + tO.scoredText() + ")");
+                            $("#liB").empty().html("<b/>Desciption</b>: " + tO.toneTexts.desc);
+                            $('#gaugeContainer').val(tO.gaugeValue);
+                        }
+                    });
 
-                $('#gaugeContainer').on('valueChanging', function (e) {
-                    $('#gaugeValue').text(Math.round(e.args.value) + ' %');
-                });
-            }
+                    $('#gaugeContainer').on('valueChanging', function (e) {
+                        $('#gaugeValue').text(Math.round(e.args.value) + ' %');
+                    });
+                }
             });
         </script>
     </head>
@@ -210,18 +210,18 @@
                             <div><span class="ui-icon ui-icon-contact"></span>Diary</div>
                             <ul>
                                 <li>
-   <div><a  href="Journal.html"><span class="ui-icon "></span>Add</a></div>
+                                    <div><a  href="Journal.html"><span class="ui-icon "></span>Add</a></div>
                                 </li>
                                 <li>
-   <div><span class="ui-icon"></span><a href="JournalList.html?id=1">List</a></div>
+                                    <div><span class="ui-icon"></span><a href="JournalList.html?id=1">List</a></div>
                                 </li>
-                              <% if (hasDiaryData){ %> <li>
-   <div><a href="report-journal.html"><span class="ui-icon"></span>Report</a></div>
+                                <% if (hasDiaryData) { %> <li>
+                                    <div><a href="report-journal.html"><span class="ui-icon"></span>Report</a></div>
                                 </li>
                                 <%}%>
-<!--                                <li>
-   <div><span class="ui-icon"></span>Send</div>
-                                </li>-->
+                                <!--                                <li>
+                                   <div><span class="ui-icon"></span>Send</div>
+                                                                </li>-->
                             </ul>
                         </li>
                         <li >
@@ -231,10 +231,10 @@
                             <div><span class="ui-icon ui-icon-cart"></span>Health-care Providers</div>
                             <ul>
                                 <li>
-   <div><span class="ui-icon "></span><a href="HealthcareProviderList.html">List</a></div>
+                                    <div><span class="ui-icon "></span><a href="HealthcareProviderList.html">List</a></div>
                                 </li>
                                 <li>
-   <div><span class="ui-icon "></span><a href="HealthcareProvider.html">Add</a></div>
+                                    <div><span class="ui-icon "></span><a href="HealthcareProvider.html">Add</a></div>
                                 </li>
                             </ul>
                         </li>
@@ -243,10 +243,10 @@
                             <div><span class="ui-icon ui-icon-script"></span>Medication</div>
                             <ul>
                                 <li>
-   <div><span class="ui-icon "></span><a href="Medication.html">Add</a></div>
+                                    <div><span class="ui-icon "></span><a href="Medication.html">Add</a></div>
                                 </li>
                                 <li>
-   <div><span class="ui-icon "></span><a href="MedicationList.html?id=1">List</a></div>
+                                    <div><span class="ui-icon "></span><a href="MedicationList.html?id=1">List</a></div>
                                 </li>
                             </ul>
                         </li>
@@ -283,15 +283,15 @@
                                     <a target="_blank" href="http://www.ibm.com/watson/developercloud/doc/personality-insights/models.shtml">
                                         personality models</a> from the Personality Insights service.</li>
                                 <li id="language"><strong>Language tone</strong> is calculated from the linguistic 
-   analysis based on learned features.</li>
+                                    analysis based on learned features.</li>
                             </ul>
                             <sub>Tone Analysis / Watson are IP of IBM (Fair Use / <a href="http://www.ibm.com/ibm/licensing/">Legal</a>)</sub>
-                         <% if (hasDiaryData) {%>
+                            <% if (hasDiaryData) {%>
                             <div id="jqxDropDownList"  style="float: right;
-margin-top: -400px;margin-left: 600px;width: 300px;height: 45px;"></div>
+                                 margin-top: -400px;margin-left: 600px;width: 300px;height: 45px;"></div>
                             <div style="float: left;width: 340px; height: 340px;margin-top: -505px;margin-left: 548px;" id="gaugeContainer"></div>
                             <div id="gaugeValue" style=" position: absolute;margin-top: -356px;margin-left: 628px;font-family: Sans-Serif;text-align: center;font-size: 17px;width: 70px;"></div>                     
-                       <%}%>
+                            <%}%>
                         </div>
                         <div id="tabs-2">
                             <h2>You have septum on file</h2>
@@ -299,11 +299,11 @@ margin-top: -400px;margin-left: 600px;width: 300px;height: 45px;"></div>
                         </div>
                         <div id="tabs-3">
                             <h2>Last Entry Data</h2>
-                           <% if (hasDiaryData) {%>
+                            <% if (hasDiaryData) {%>
                             <div style="margin:10px;padding:5px;">
                                 <!--todo: addd last entry!!-->
-                                <%=diaryStat%></div><%}else {%>
-                                No data yet!<%}%>
+                                <%=diaryStat%></div><%} else {%>
+                            No data yet!<%}%>
                         </div>
                     </div></td><td style="width:100px;vertical-align: top;"></td></tr></table><footer>Users online (<%=logins%>)</footer>
     </body></html>

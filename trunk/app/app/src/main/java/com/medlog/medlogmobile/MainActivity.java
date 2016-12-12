@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         txtNotes = (EditText) findViewById(R.id.txtNotes);
         mFormView = findViewById(R.id.mainact_form);
         mProgressView = findViewById(R.id.main_progress);
-        showNotice(1,user.getUserName(),"num","title"," body" );
+//        showNotice(1,user.getUserName(),"num","title"," body" );
 
 
         SeekBar.OnSeekBarChangeListener sbl = new SeekBar.OnSeekBarChangeListener() {
@@ -286,11 +286,11 @@ public class MainActivity extends AppCompatActivity {
             //Diary entires sent.
             if (ct >= voList.size()) {
 //                showNotice(ct, getString(R.string.items_saved));
-               String totalSize = voList.size() +"";
+                String totalSize = voList.size() +"";
                 if (user.getDiaryList() != null){
                     totalSize = user.getDiaryList().size() + voList.size() +"";
                 }
-                showNotice(1,user.getUserName(),totalSize, voList.get(0).getTitle(),voList.get(0).getNotes() );
+                showNotice(1,user.getUserName(),totalSize, voList.get(0).getTitle()," body" );
                 if (user.getDiaryList() == null) {
                     user.setDiaryList(new ArrayList<DiaryVO>());
                     user.getDiaryList().addAll(voList);
@@ -421,8 +421,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showNotice(int rows,String... strings){
 
-    NewMessageNotification.notify(getApplicationContext(),strings, rows);
-}
+        NewMessageNotification.notify(getApplicationContext(),strings, rows);
+    }
     private void showNotice(int rows, String action) {
         NewMessageNotification.notify(getApplicationContext(), action, rows);
 //    notificationManager = NbewMessageNotification.
