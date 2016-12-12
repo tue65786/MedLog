@@ -174,12 +174,12 @@
                         $("#loader1").hide();
 
 //                        redir(redirectPage);
-                        if (editID === 0 && typeof data.pharmID !== 'undefined' && data.patientID > 0) {
+                        if (typeof data.medicationID !== 'undefined' && data.medicationID > 0) {
                             $("#redirect").fadeIn(300);
                             window.setTimeout(function () {
                                 top.location.href = "home.jsp";
                             }, 1500);
-                            $("#pharmID").val(data.pharmID);
+//                            $("#pharmID").val(data.pharmID);
                         } else if (typeof data.message !== 'undefined') {
                             $("#errorMessage").empty().html(data.message);
                         }
