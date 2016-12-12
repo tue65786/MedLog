@@ -352,7 +352,6 @@ public DiaryVO loadDiaryFromRequest() {
    t.title( sh.getStrParameter( "title", "" ) );
    t.patientID( getCurrentUser() );
    t.mood( sh.getIntParameter( "mood", 0 ) );
-   t.notesActivity(sh.getStrParameter("notesActivity", ""));
    t.productivity( sh.getIntParameter( "productivity", 0 ) );
    return t.build();
 }

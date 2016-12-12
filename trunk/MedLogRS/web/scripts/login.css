@@ -48,10 +48,7 @@ form fieldset legend {
                 /* each input. doing only legends would  lessens cognitive load */
                 /* opera breaks after first letter underlined legends but not labels */
             }
-            input[type="text"],input[type="password"],textarea,input[type="chekbox"]
-          ,   input[type="email"]:focus,
-            /*input[type="password"]:focus,*/
-            input[type="tel"]:focus{
+            input[type="text"],input[type="password"],textarea,input[type="chekbox"] {
                 padding: 10px;
                 border: solid 1px #dcdcdc;
                 transition: box-shadow 0.3s, border 0.3s;  display: block;
@@ -75,10 +72,6 @@ form fieldset legend {
 
             input[type="text"]:focus,
             input[type="password"]:focus,
-            
-            input[type="email"]:focus,
-            /*input[type="password"]:focus,*/
-            input[type="tel"]:focus,
             input[type="password"].focus,textarea:focus,input[type="chekbox"]:focus,
             input[type="text"].focus {
                 border: solid 1px #707070;
@@ -103,7 +96,7 @@ form fieldset legend {
                 border: 1px solid #88D5E9;
             }
             input[type="button"],
-            input[type="submit"],button {
+            input[type="submit"] {
                 -moz-box-shadow: inset 0px 1px 0px 0px #3985B1;
                 -webkit-box-shadow: inset 0px 1px 0px 0px #3985B1;
                 box-shadow: inset 0px 1px 0px 0px #3985B1;
@@ -117,7 +110,7 @@ form fieldset legend {
                 font: 14px Arial, Helvetica, sans-serif;
             }
             input[type="button"]:hover,
-            input[type="submit"]:hover,button:hover {
+            input[type="submit"]:hover {
                 background: linear-gradient(to bottom, #2D77A2 5%, #337DA8 100%);
                 background-color: #28739E;
             }
