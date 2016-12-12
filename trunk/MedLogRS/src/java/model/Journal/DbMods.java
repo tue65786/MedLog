@@ -79,17 +79,19 @@ public class DbMods {
     }
 
     public static boolean secure(String user, String journal) {
-        if((user == null) || (user == "") || (journal == null) || (journal == "")){
+        if ((user == null) || (user.compareTo("") == 0) || (journal == null) || (journal.compareTo("") == 0)) {
             System.out.println("problem retrieving user/journal ID - either null or empty string");
             return false;
         }
-        
+
         StringData journalData = new StringData();
         DbConnection dbc = new DbConnection();
 
         System.out.println("jsp page ready to search for item with journalID " + journal);
         journalData = view.WebJournalView.getJournal(journal, dbc);
-        System.out.println("logged in user ID = " + journalData.patientID);
+        if (journalData.patientID != null) {
+            System.out.println("logged in user ID = " + journalData.patientID);
+        }
         if (journalData.patientID.compareTo(user) == 0) {
             dbc.close();
             return true;
