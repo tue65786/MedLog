@@ -93,7 +93,7 @@ function makeOptionTag(value, text, selected) {
         var optionMarkup = "<option value='" + value
                 + (selected ? " selected " : "")
                 + "'>" + text + "</option>";
-        console.log(optionMarkup);
+//        console.log(optionMarkup);
         return optionMarkup;
 
     }

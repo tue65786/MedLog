@@ -384,7 +384,7 @@ public MedicationVO loadMedicationFromRequest() {
    t.medicationID( sh.getIntParameter( "id", sh.getIntParameter( "medicationID", 0 ) ) );
    t.patientID( getCurrentUser() );
    t.pharmID( PharmaRxOtcVO.builder().pharmID( sh.getIntParameter( "pharmid", sh.getIntParameter( "pharmID", 0 ) ) ).build() );
-   t.physicianID( HealthcareProviderVO.builder().physicianID( sh.getIntParameter( "healthcareProviderID", 0 ) ).build() );
+   t.physicianID( HealthcareProviderVO.builder().physicianID( sh.getIntParameter( "physicianID", 0 ) ).build() );
    t.instructions( sh.getStrParameter( "instructions", "" ) );
    t.sig( SigVO.builder().sigAbbrID( sh.getStrParameter( "sig", "p.r.n" ) ).build() );
    t.startDate( sh.getDateParameter( "startDate", new Date() ) );

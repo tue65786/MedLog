@@ -54,7 +54,7 @@
             MedLogDAO dao = new MedLogDAO(db, user);
             ArrayList<DiaryVO> diary = dao.findDiaryByPatient();
             if (diary != null && !diary.isEmpty()) {
-                diaryEntires = diary.size() + " recent entries. Last entry was " + diary.get(diary.size() - 1).getCreatedDate().toString() + ".  <ul><li>Mood is looking up!</li><li>Work on productivity.</li></ul> <br/> Don't forget to keep your journal up to date.";
+                diaryEntires = diary.size() + " recent entries. Last entry was " + diary.get(diary.size() - 1).getCreatedDate().toString() + ".  <ul style='width: 30%;font-size: 90%;border: 2px solid;border-radius: 4px;padding-right: 4px;line-height: 1.2em;'><li id='liA'></li><br/><li id='liB'></li></ul> <br/> Don't forget to keep your journal up to date.";
                 try {
                     ArrayList<DiaryAnalysisVO> vl = dao.findDiaryCrossTab(user.getPatientID());
                     DiaryAnalysisSummaryVO instance = new DiaryAnalysisSummaryVO();
@@ -131,6 +131,7 @@
         <title>MedLog</title>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <!--<link rel="stylesheet" href="style.css">-->
+        <!--<link href="scripts/jqui/jquery-ui.css" rel="stylesheet" type="text/css"/>-->
         <link href="scripts/jqx/styles/jqx.base.css" rel="stylesheet" type="text/css"/>
         <link href="scripts/jqx/styles/jqx.fresh.css" rel="stylesheet" type="text/css"/>
         <script src="scripts/jquery.min.js" type="text/javascript"></script>
@@ -140,7 +141,7 @@
         <script src="scripts/jqx/jqxlistbox.js" type="text/javascript"></script>
         <script src="scripts/jqx/jqxbuttons.js" type="text/javascript"></script>
         <script src="scripts/jqx/jqxdropdownlist.js" type="text/javascript"></script>
-        <script src="scripts/jqx/jqxgauge-all.js" type="text/javascript"></script>
+        <script src="scripts/jqx/jqxgauge-all.js?v1=1" type="text/javascript"></script>
         <style>
             #gaugeValue {
                 background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #f3f3f3));
@@ -158,7 +159,7 @@
                 -moz-box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
                 box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
                 padding: 10px;
-               
+
             }
             .ui-menu { width: 150px; }
             #menu a {text-decoration: none;}
@@ -180,7 +181,12 @@
                     select: function (event, ui) {
 
                         try {
-                            top.location.href = ui.item[0].children[0].children[0].href;
+                            var hr = ui.item[0].children[0].children[1].href;
+                            if (typeof hr !== 'undefined') {
+                                top.location.href = hr;
+
+                            }
+                            console.log(ui);
                         } catch (e) {
                             console.log(e);
                             return false;
@@ -197,6 +203,7 @@
                 });
 
                 var ddlData = <%=tonePair%>;
+                console.log(ddlData);console.log("ddlData");
                 var dropdownSource = _.pluck(ddlData, 'shortKey');
                 $("#jqxDropDownList").jqxDropDownList({source: dropdownSource
                     , selectedIndex: 0, width: '300px', height: '45px'});
@@ -210,15 +217,19 @@
                     value: 60,
                     max: 100,
                     radius: 125,
-                    border:{visible:false},
+                    border: {visible: false},
                     animationDuration: 1200, labels: lbl
                 });
                 $('#jqxDropDownList').on('select', function (event) {
                     var args = event.args;
                     var item = $('#jqxDropDownList').jqxDropDownList('getItem', args.index);
                     if (item != null) {
-
                         var tO = new ToneClass(ddlData[args.index]);
+                        console.log(tO);
+                        $("li").removeClass("ui-state-highlight");
+                        $("#"+tO.category()+"").addClass("ui-state-highlight");
+                        $("#liA").empty().html("<b>Rank</b>: <span style='background-color:yellow'>"+tO.tone.rank + "</span> ("+tO.scoredText()+")");
+                        $("#liB").empty().html("<b/>Desciption</b>: " + tO.toneTexts.desc);
                         $('#gaugeContainer').val(tO.gaugeValue);
 //                        $('#Events').jqxPanel('prepend', '<div style="margin-top: 5px;">Selected: ' + item.label + '</div>');
                     }
@@ -328,7 +339,7 @@
                                 written text. The following list describes the service's approach to computing a 
                                 scorecard of language tones:</p>
                             <ul>
-                                <li><strong>Emotional tone</strong> is derived from our work on Emotion 
+                                <li id="emotional"><strong>Emotional tone</strong> is derived from our work on Emotion 
                                     Analysis, which is an ensemble framework to infer emotions from a given 
                                     text. To derive emotion scores from text, we use a stacked 
                                     generalization-based ensemble framework. Stacked generalization is a general 
@@ -337,25 +348,25 @@
                                     trigrams), punctuation, emoticons, curse words, greeting words (such as 
                                     hello, hi, and thanks), and sentiment polarity are fed into state-of-the 
                                     machine learning algorithms to classify emotion categories.</li>
-                                <li><strong>Social tone</strong> consists of the Big Five personality 
+                                <li id="social"><strong>Social tone</strong> consists of the Big Five personality 
                                     characteristics of openness, agreeableness, and conscientiousness. For more 
                                     information about these Big Five characteristics, see the description of the
                                     <a target="_blank" href="http://www.ibm.com/watson/developercloud/doc/personality-insights/models.shtml">
                                         personality models</a> from the Personality Insights service.</li>
-                                <li><strong>Language tone</strong> is calculated from the linguistic 
+                                <li id="language"><strong>Language tone</strong> is calculated from the linguistic 
                                     analysis based on learned features.</li>
                             </ul>
                             <sub>Tone Analysis / Watson are IP of IBM (Fair Use / <a href="http://www.ibm.com/ibm/licensing/">Legal</a>)</sub>
                             <div id="jqxDropDownList"  style="float: right;
-margin-top: -400px;
-margin-left: 600px;
-width: 300px;
-height: 45px;"></div>
+                                 margin-top: -400px;
+                                 margin-left: 600px;
+                                 width: 300px;
+                                 height: 45px;"></div>
                             <div style="float: left;width: 340px; height: 340px;margin-top: -548px;margin-left: 424px;" id="gaugeContainer"></div>
                             <div id="gaugeValue" style=" position: absolute;
                                  margin-top: -378px;
-margin-left: 503px;
-                               
+                                 margin-left: 503px;
+
                                  font-family: Sans-Serif;
                                  text-align: center;
                                  font-size: 17px;

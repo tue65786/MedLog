@@ -101,9 +101,13 @@ public class ToneProcessorFactory {
             ee.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        }try{
+        return toS(new GsonBuilder().setPrettyPrinting().create().toJson(ToneCategory.builder().profile(profile).tone(tone).build()), tone == null ? "" : tone.toString() + "\n" + profile.toString());
         }
-        return toS(new GsonBuilder().setPrettyPrinting().setLenient().create().toJson(ToneCategory.builder().profile(profile).tone(tone).build()), tone == null ? "" : tone.toString() + "\n" + profile.toString());
-
+        catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private static String buildTextToAnalyze(DiaryVO vo) {

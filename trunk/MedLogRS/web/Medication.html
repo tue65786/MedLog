@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
-              <link rel="stylesheet" type="text/css" href="scripts/login.min.css"/>
+        <link rel="stylesheet" type="text/css" href="scripts/login.min.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js" type="text/javascript"></script>
         <script src="scripts/utils.js" type="text/javascript"></script>
     </head>
@@ -74,7 +74,7 @@
                     <button type="reset">Clear</button> <br/>
 
                     <!-- Visual area for generated url -->
-                    <textarea id="formVisual" style="height:300px;width:70%" cols="80" rows="5">.</textarea>
+                    <textarea id="formVisual"  style="display:none;height:300px;width:70%" cols="80" rows="5">.</textarea>
                     <div id='errorMessage'></div> 
                 </form>
             </div>  <div id="loader1" style="display:none;">
@@ -163,7 +163,7 @@
                     $("#errorMessage").hide();
                     var userInfo = $("#medicationForm").serialize();
                     var theURL = "./api/?res=m&fn=add&" + userInfo;
-                    var redirectPage = "login.html";
+                    var redirectPage = "home.jsp";
                     if (editID > 0) {
                         theURL = "./api?res=m&fn=update&" + userInfo;
                         redirectPage = "home.jsp";
@@ -172,8 +172,13 @@
                     $.post(theURL).done(function (data) {
                         console.log(JSON.stringify(data));
                         $("#loader1").hide();
-                        redir(redirectPage);
+
+//                        redir(redirectPage);
                         if (editID === 0 && typeof data.pharmID !== 'undefined' && data.patientID > 0) {
+                            $("#redirect").fadeIn(300);
+                            window.setTimeout(function () {
+                                top.location.href = "home.jsp";
+                            }, 1500);
                             $("#pharmID").val(data.pharmID);
                         } else if (typeof data.message !== 'undefined') {
                             $("#errorMessage").empty().html(data.message);
@@ -193,7 +198,7 @@
                 });
                 $('input').blur(function () {
                     $(this).css('background-color', '#FFF')
-                })
+                });
             });
         </script>
     </body>

@@ -165,7 +165,12 @@ public class MedLogDAO implements IMedLogDAO {
         //Analysize text when approperiate.
         if (newID > 0 && _vo.getNotes().length() > 5 && _vo.getNotes().split(" ").length > 3) {
             _vo.setId(newID);
-            ToneProcessorFactory.execute(db, _vo);
+          try{  ToneProcessorFactory.execute(db, _vo);
+          }
+          catch(Exception e){
+              if (DEBUG)
+              e.printStackTrace();
+          }
         }
         return newID;
     }
