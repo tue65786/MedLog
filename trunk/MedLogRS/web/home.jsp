@@ -362,10 +362,10 @@
                                  margin-left: 600px;
                                  width: 300px;
                                  height: 45px;"></div>
-                            <div style="float: left;width: 340px; height: 340px;margin-top: -548px;margin-left: 424px;" id="gaugeContainer"></div>
+                            <div style="float: left;width: 340px; height: 340px;margin-top: -505px;margin-left: 548px;" id="gaugeContainer"></div>
                             <div id="gaugeValue" style=" position: absolute;
-                                 margin-top: -378px;
-                                 margin-left: 503px;
+                                 margin-top: -356px;
+                                 margin-left: 628px;
 
                                  font-family: Sans-Serif;
                                  text-align: center;
