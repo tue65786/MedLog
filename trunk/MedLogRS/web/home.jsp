@@ -67,7 +67,6 @@
                     }
                     session.setAttribute("CURRENTDIARY", instance.getCurrentDiary().toHTML());
                     session.setAttribute("CURRENTDIARYCSV", instance.getCurrentDiary().toCSV());
-//                    instance.getCurrentDiary().setRowTotal(instance.getCurrentDiary().getRowTotal() * 10);
                     DiaryAnalysisWeightedChartVO thisChart = DiaryAnalysisWeightedChartVO.normalInstance(instance.getCurrentDiary());
                     session.setAttribute("observedData", " Actual: " + instance.getCurrentDiary().getMood() + "  (RefID #" + (int) instance.getCurrentDiary().getDiaryID() + ")");
                     session.setAttribute("CURRENTDIARYCSV", thisChart.toCSV());
@@ -88,11 +87,9 @@
             }
             meds = dao.findMedicationByPatient();
             if (meds != null && !meds.isEmpty()) {
-                medString = "<table>";
+                medString = "<table><tr style=\"border-bottom:1px solid blue;border-top:1px solid blue;border-radius:3px;\"><th style=\"color: #FFFFFF; border-style: solid; border-width: 1px; background-color: #0000FF\" bordercolorlight=\"#C0C0C0\" bordercolordark=\"#000000\">Medication</th><th style=\"color: #FFFFFF; border-style: solid; border-width: 1px; background-color: #0000FF\" bordercolorlight=\"#C0C0C0\" bordercolordark=\"#000000\">Since </th><th style=\"color: #FFFFFF; border-style: solid; border-width: 1px; background-color: #0000FF\" bordercolorlight=\"#C0C0C0\" bordercolordark=\"#000000\">Sig.</th><th style=\"color: #FFFFFF; border-style: solid; border-width: 1px; background-color: #0000FF\" bordercolorlight=\"#C0C0C0\" bordercolordark=\"#000000\">Dose and&nbsp; Notes</th><th style=\"color: #FFFFFF; border-style: solid; border-width: 1px; background-color: #0000FF\" bordercolorlight=\"#C0C0C0\" bordercolordark=\"#000000\">Prescriber</th></tr>";
                 for (MedicationVO med : meds) {
-                    medString += "<tr style='border:1px solid blue;'><td style='border:1px solid blue;'>" + med.getPharmID().getFullName() + "</td><td style='border:1px solid blue;'>"
-                            + StrUtl.toS(med.getPhysicianID().getLastName() + ", " + med.getPhysicianID().getFirstName(), "Dr. Evil")
-                            + "</td></tr>";
+                    medString += med.toTableRow();
                 }
                 medString += "</table>";
             }

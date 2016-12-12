@@ -3,6 +3,7 @@
     <head>
         <title>Log Journal Entry</title>
         <link rel="stylesheet" type="text/css" href="rstyle.css"/>
+        <link href="scripts/login.min.css" rel="stylesheet" type="text/css"/>
         <meta charset="UTF-8">
           <link rel="icon" href="favicon.ico" type="image/x-icon" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,8 +18,6 @@
                     <table style='width:95%'><tr><td style="width:85%">
                                 <h1> Journal </h1>
                                 <p> This is the page to insert a journal entry </p>
-                                <p> Eventually, site menu may go here </p>
-
                             </td><td style="background-image: url(Logo.png); background-repeat: no-repeat;text-align: left;background-position-x: left;"></td></tr></table>
                 </a></div>
 
@@ -85,7 +84,7 @@
                     <button type="reset">Clear</button><br/><br/><br/><br/>
 
                     <!-- Visual area for generated url -->
-                    <textarea id="formVisual" style="height:300px;width:70%" cols="80" rows="5">. 
+                    <textarea id="formVisual" style="height:300px;width:70%;display:none;" cols="80" rows="5">. 
                     </textarea>
                     <div id='errorMessage'>
                     </div>
@@ -97,7 +96,7 @@
             <div id="InnerTableCellOverlay">
                 <img alt="(loading)" src="images/loader.gif"/>
                 <br/>
-                <b style="color:black;font-size:2em;">&nbsp;&nbsp;Working, please wait...</b>
+                <b style="color:black;font-size:1em;">Pease wait...</b>
             </div>
         </div>
         <script>
@@ -107,17 +106,17 @@
                     event.preventDefault();
                     var journalInfo = $("#insertJournalForm").serialize();
                     var theURL = "./api?res=d&fn=add&" + journalInfo;//.replace(/[\n\r]/g, '');
-                    //                    $("#formVisual").val("userInfo");
                     $.post(theURL)
                             .done(function (data) {
+                                console.log(data);
                                 if (typeof data.id !== 'undefined' && data.id > 0) {
-                                    $("#id").val(data.id);
+//                                    $("#id").val(data.id);
 
                                     if (confirm('Journal Added!')) {
                                         redir('home.jsp?d='+data.id);
                                     }
                                 }
-                                console.log(data);
+//                                console.log(data);
                                 $("#loader1").hide();
 
 
