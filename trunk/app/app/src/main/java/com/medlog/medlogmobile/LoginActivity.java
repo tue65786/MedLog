@@ -85,6 +85,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try
+        {
+             NewMessageNotification.eulaAlert( this,"EULA",getString(R.string.eulatext)).show();
+        }
+        catch ( Exception e )
+        {
+            // TODO Auto-generated catch block
+            Log.e("eula",null,e);
+            e.printStackTrace();
+        }
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -140,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -382,7 +392,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Loads data from URL
      *
      * @param url
-     * @return
+     * @return Contents of http response
      * @throws IOException
      */
     private static String getUrlSource(String url) throws IOException {

@@ -105,13 +105,41 @@
     <string name="nothing_to_sync">" Nothing to sync"</string>
     <string name="items_saved">" item(s) added saved. Sync complete."</string>
 
-    <string name="new_message_notification_title_template">Updates: %1$s</string>
+    <string name="new_message_notification_title_template">Journal added: %1$s</string>
 
-    <!-- TODO: remove this placeholder text -->
-    <string name="new_message_notification_placeholder_text_template">%1$s %2$s %3$s
+    <string name="new_message_notification_placeholder_text_template">
+        %1$s
+        Hello %2$s,
+        This is your %3$s entry. Great job!  As you know, using a mood app as a daily journal can help us all to have an ongoing
+        insight into our physical and mental health.
+        MedLog offers you the option to share your mood journal with the HealthCareProvider of your choice.
+        Providing your doctor with a mood chart can help the health care provider understand your mental health more completely,
+        instead of just evaluating a snapshot of you as you appear on the day of your appointment.
+        This information can help you and your health care provider collaborate to come up with best course of treatment.
     </string>
+<string name="eulatext">
+    End-User License Agreement
+    PLEASE READ THIS END-USER LICENSE AGREEMENT ("AGREEMENT") BEFORE SELECTING "I ACCEPT" TO OBTAIN ACCESS TO THE SOFTWARE. BY SELECTING "I ACCEPT" YOU INDICATE YOUR ACCEPTANCE OF THESE LICENSE TERMS. IF YOU DO NOT AGREE WITH THESE TERMS, YOU SHOULD NOT SELECT "I ACCEPT."
 
+    1. No Representations or Warranties.
+    (i) YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT USE OF THE LICENSED APPLICATION AND THE SERVICES IS AT YOUR SOLE RISK. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSED APPLICATION AND ANY SERVICES ARE PROVIDED EXCLUSIVELY "AS IS" AND “AS AVAILABLE”, WITH ALL FAULTS AND WITHOUT ANY REPRESENTATION OR WARRANTY OF ANY KIND. APPLICATION PROVIDER HEREBY DISCLAIMS ALL REPRESENTATIONS, WARRANTIES AND CONDITIONS WITH RESPECT TO THE LICENSED APPLICATION AND THE SERVICES, EITHER EXPRESS, IMPLIED OR STATUTORY INCLUDING, BUT NOT LIMITED TO, ANY IMPLIED WARRANTIES AND/OR CONDITIONS OF MERCHANTABILITY, QUALITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, CONTINUOUS OPERATION, AND NON-INFRINGEMENT. APPLICATION PROVIDER HEREBY DISCLAIMS ALL LIABILITY AND RESPONSIBILITY ARISING FROM ANY RELIANCE PLACED ON THE LICENSED APPLICATION AND SERVICES BY YOU. APPLICATION PROVIDER ACCEPTS NO RESPONSIBILITY FOR KEEPING THE LICENSED APPLICATION OR SERVICES UP TO DATE OR COMPLETE OR LIABILITY FOR ANY FAILURE TO DO SO. APPLICATION PROVIDER DOES NOT WARRANT THAT ANY DEFECTS IN THE LICENSED APPLICATION OR SERVICES WILL BE CORRECTED. NO ORAL OR WRITTEN INFORMATION OR ADVICE GIVEN BY APPLICATION PROVIDER OR ITS AUTHORIZED REPRESENTATIVES SHALL CREATE ANY WARRANTY. SHOULD THE LICENSED APPLICATION OR SERVICES PROVE DEFECTIVE, YOU ASSUME THE ENTIRE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+    (ii)	You agree that the fees charged by Application Provider and paid by You are based on and reflective of the allocation of risk contemplated by this section and that the limitations in this section are an essential element of the agreement between You and Application Provider.
+    (iii)	Some jurisdictions do not allow the exclusion of implied warranties or limitations on applicable statutory rights of a consumer, so the above exclusion and limitations may not apply to You.
+    2. Use of Licensed Application and Services.
+    Use of Licensed Application and Services. You agree that the Licensed Application and Services are designed to be used solely by consumers under medical, physiotherapy or other appropriate medical professional supervision as part of a treatment plan prescribed by a qualified and licensed medical, physiotherapist or other appropriate medical practitioner. You warrant that You will not use, nor shall You permit, the Licensed Application or Services to be used except under such supervision and only as prescribed. The Licensed Application and Services do not constitute the practice of medicine and are neither professional medical nor physiotherapy advice. Moreover, Licensed Application and Services are not designed to be used as a substitute for professional medical or physiotherapy advice or judgment. Due to the large variety of potential applications for the Licensed Application and Services, neither the Services nor the Licensed Application have been tested for all conditions.
+    3. Limitation of Liability.
+    IN NO EVENT SHALL APPLICATION PROVIDER BE LIABLE FOR ANY PERSONAL INJURY, DEATH OR FOR ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE, EXEMPLARY OR CONSEQUENTIAL DAMAGES WHATSOEVER INCLUDING, WITHOUT LIMITATION, ANY LOST PROFITS, LOSS OF DATA, BUSINESS INTERRUPTION OR ANY OTHER DAMAGES OR LOSSES, ARISING OUT OF OR RELATED TO YOUR USE OR INABILITY TO USE THE LICENSED APPLICATION OR THE SERVICES HOWEVER CAUSED, REGARDLESS OF THE THEORY OF LIABILITY (CONTRACT, TORT OR OTHERWISE) AND EVEN IF APPLICATION PROVIDER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. SOME JURISDICTIONS DO NOT ALLOW OR RESTRICT THE LIMITATION OF LIABILITY FOR PERSONAL INJURY, DEATH, OR OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THIS LIMITATION MAY NOT APPLY TO YOU. In no event shall Application Provider’s total liability to you for all damages (other than as may be required by applicable law in cases involving personal injury or death) exceed the amount of two hundred dollars (US$200.00). The foregoing limitations will apply even if the above stated remedy fails of its essential purpose.
+    4. The Licensed Application together with all intellectual property rights associated therewith or incorporated therein shall at all times remain the exclusive property of Application Provider and its licensors. The Licensed Application is protected by copyright under both United States and foreign laws.
+
+Copyrights
+© 2015 THE GANG THAT COULDNT SHOOT STRAIGHT PC.  All rights reserved.
+This documentation and the corresponding Software are the property of GTCSS and are licensed to Users under the terms of the End-User License Agreement. Unauthorized use or copying of the Software, documentation, or any other associated materials is a violation of state and federal laws. These materials must be returned to GTCSS if so demanded.
+
+[ADDRESS]
+1810 Broad Street, Philadelphia, PA 19104-2614
+</string>
     <string name="action_share">Share w/ HcP</string>
     <string name="action_reply">Visit WebApp</string>
     <string name="msg_jrv">Journal Review</string>
+    <string name="PREF_EULA">ACCEPT_EULA</string>
 </resources>

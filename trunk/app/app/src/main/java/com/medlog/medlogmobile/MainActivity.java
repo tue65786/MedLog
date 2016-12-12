@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.widget.Toast;
 
+import static com.medlog.medlogmobile.util.NetConnStatus.*;
+
 /**
  * Diary Activity
  */
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar sbProd;
     private EditText txtTitle;
     private EditText txtNotes;
-    private Button btnSubmit;
     private View mProgressView;
     private View mFormView;
     CountDownTimer countDownTimer;
@@ -72,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
         sbMood = (SeekBar) findViewById(R.id.sbMood);
         sbProd = (SeekBar) findViewById(R.id.sbProductivity);
         txtTitle = (EditText) findViewById(R.id.txtDiaryID);
-        btnSubmit = (Button) findViewById(R.id.btnDiaryFormSubmit);
+        Button btnSubmit = (Button) findViewById(R.id.btnDiaryFormSubmit);
         txtNotes = (EditText) findViewById(R.id.txtNotes);
         mFormView = findViewById(R.id.mainact_form);
         mProgressView = findViewById(R.id.main_progress);
-        showNotice(1, "okkkkkkkkkkk");
+        showNotice(1,user.getUserName(),"num","title"," body" );
 
 
         SeekBar.OnSeekBarChangeListener sbl = new SeekBar.OnSeekBarChangeListener() {
@@ -97,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 if (seekBar.getId() == R.id.sbMood) {
                     s = "mood";
                 }
-                Toast.makeText(getApplicationContext(), new StringBuilder(s + " value  ")
-                        .append(seekBar.getProgress()).toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), s + " value  " +
+                        seekBar.getProgress(), Toast.LENGTH_SHORT).show();
             }
         };
         //Handle form events
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         if (hasData) {
             String oldData = spf.getString(getString(R.string.lcl_db_data), "");
             diaryVoList = DiaryVO.fromJSON(oldData);
-            Toast.makeText(getApplicationContext(), new StringBuilder().append(diaryVoList.size() + " previous entries found.").append(NetConnStatus.getInstance(this).isOnline() ? " You are ONLINE. Syncing..." : " You are offline. Entries will be saved.").toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), new StringBuilder().append(diaryVoList.size() + " previous entries found.").append(getInstance(this).isOnline() ? " You are ONLINE. Syncing..." : " You are offline. Entries will be saved.").toString(), Toast.LENGTH_LONG).show();
 
         }
 
@@ -204,11 +205,11 @@ public class MainActivity extends AppCompatActivity {
             diaryVoList.add(DiaryVO.builder().mood(sbMood.getProgress()).productivity(sbProd.getProgress())
                     .title(Helpers.toS(txtTitle.getText().toString(), "Entry")).notes(notes).build());
         }
-        boolean amIOnline = NetConnStatus.getInstance(this).isOnline();
+        boolean amIOnline = getInstance(this).isOnline();
         if (amIOnline) {
             //TODO Submit diary
             showProgress(true);
-            mSubmitTask = new SubmitDiaryTask(diaryVoList, user.getPatientID(), amIOnline);
+            mSubmitTask = new SubmitDiaryTask(diaryVoList, user.getPatientID(), true);
 
 
             mSubmitTask.execute((Void) null);
@@ -284,7 +285,12 @@ public class MainActivity extends AppCompatActivity {
             showProgress(false);
             //Diary entires sent.
             if (ct >= voList.size()) {
-                showNotice(ct, getString(R.string.items_saved));
+//                showNotice(ct, getString(R.string.items_saved));
+               String totalSize = voList.size() +"";
+                if (user.getDiaryList() != null){
+                    totalSize = user.getDiaryList().size() + voList.size() +"";
+                }
+                showNotice(1,user.getUserName(),totalSize, voList.get(0).getTitle(),voList.get(0).getNotes() );
                 if (user.getDiaryList() == null) {
                     user.setDiaryList(new ArrayList<DiaryVO>());
                     user.getDiaryList().addAll(voList);
@@ -403,9 +409,23 @@ public class MainActivity extends AppCompatActivity {
 //        item.setActionView(imageView);
     }
 
+    /**
+     *
+     * @param rows
+     * @param strings <ol><li>username</li>
+     *                <li>num entries
+     *                </li>
+     *                <li>title</li>
+     *                <li>body</li>
+     *                </ol>
+     */
+    private void showNotice(int rows,String... strings){
+
+    NewMessageNotification.notify(getApplicationContext(),strings, rows);
+}
     private void showNotice(int rows, String action) {
         NewMessageNotification.notify(getApplicationContext(), action, rows);
-//    notificationManager = NewMessageNotification.
+//    notificationManager = NbewMessageNotification.
 //            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //    myNotification = new NotificationCompat.Builder(getApplicationContext());
 //    int x = result.split("http").length - 1;

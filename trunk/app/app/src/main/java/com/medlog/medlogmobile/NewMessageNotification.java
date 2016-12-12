@@ -1,11 +1,16 @@
 package com.medlog.medlogmobile;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,7 +33,35 @@ public class NewMessageNotification {
      * The unique identifier for this type of notification.
      */
     private static final String TAG = "NewMessage";
+   public static AlertDialog.Builder  eulaAlert(final Activity mActivity, String title, String message) {
+       AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
+               .setTitle(title)
+               .setMessage(message)
+               .setPositiveButton(android.R.string.ok, new Dialog.OnClickListener() {
 
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       // Mark this version as read.
+                       SharedPreferences sp = mActivity.getPreferences(Context.MODE_PRIVATE);
+
+
+                       SharedPreferences.Editor editor = sp.edit();
+                       editor.putBoolean(mActivity.getString(R.string.PREF_EULA), true);
+                       editor.commit();
+                       dialogInterface.dismiss();
+                   }
+               })
+               .setNegativeButton(android.R.string.cancel, new Dialog.OnClickListener() {
+
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       // Close the activity as they have declined the EULA
+                       mActivity.finish();
+                   }
+
+               });
+       return builder;
+   }
     /**
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
@@ -45,8 +78,8 @@ public class NewMessageNotification {
      * @see #cancel(Context)
      */
     public static void notify(final Context context,
-                              final String exampleString, final int number) {
-        notify(context, new String[]{exampleString}, number);
+                              final String userName, final int number) {
+        notify(context, new String[]{userName}, number);
     }
 
     public static void notify(final Context context,
@@ -58,13 +91,16 @@ public class NewMessageNotification {
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ml);
 
         final int stringLen = exampleString.length;
-        final String ticker = exampleString[0];
+        final String userName = exampleString[0];
+        final String entries = exampleString[1];
+        final String entryTitle = exampleString[2];
+        final String entryBody = exampleString[3];
         final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
         final String sync = "";
         final String title = res.getString(
-                R.string.new_message_notification_title_template, exampleString);
+                R.string.new_message_notification_title_template, entryTitle);
         final String text = res.getString(
-                R.string.new_message_notification_placeholder_text_template, exampleString, "", "");
+                R.string.new_message_notification_placeholder_text_template, date,userName , entries);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -89,7 +125,7 @@ public class NewMessageNotification {
                 .setLargeIcon(picture)
 
                 // Set ticker text (preview) information for this notification.
-                .setTicker(ticker)
+                .setTicker(title)
 
                 // Show a number. This is useful when stacking notifications of
                 // a single type.
@@ -118,7 +154,7 @@ public class NewMessageNotification {
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(text)
                         .setBigContentTitle(title)
-                        .setSummaryText("Dummy summary text"))
+                        .setSummaryText(entryTitle))
 
                 // Example additional actions for this notification. These will
                 // only show on devices running Android 4.1 or later, so you
@@ -133,7 +169,8 @@ public class NewMessageNotification {
                                 0,
                                 Intent.createChooser(new Intent(Intent.ACTION_SEND)
                                         .setType("text/plain")
-                                        .putExtra(Intent.EXTRA_TEXT, exampleString), context.getString(R.string.msg_jrv)),
+.putExtra(Intent.EXTRA_SUBJECT,title)
+                                        .putExtra(Intent.EXTRA_TEXT, date+" : "+entryBody), context.getString(R.string.msg_jrv)),
                                 PendingIntent.FLAG_UPDATE_CURRENT))
                 .addAction(
                         R.drawable.ic_action_stat_reply,

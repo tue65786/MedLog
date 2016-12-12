@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_sync_black_24dp"
         android:id="@+id/btnSync"
         android:enabled="true"
-        androidd:showAsAction="always" />
+        androidd:showAsAction="ifRoom" />
     <item android:title=" "
         android:icon="?android:attr/actionModePasteDrawable"
         androidd:showAsAction="always"

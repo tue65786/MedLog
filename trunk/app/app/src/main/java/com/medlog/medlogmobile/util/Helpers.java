@@ -1,4 +1,8 @@
-package com.medlog.medlogmobile.util;
+ package com.medlog.medlogmobile.util;
+
+import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,9 +20,24 @@ import java.net.URLConnection;
  */
 
 public class Helpers {
+
+
+    public static  PackageInfo getPackageInfo(final Activity mActivity)
+    {
+        PackageInfo pi = null;
+        try
+        {
+            pi = mActivity.getPackageManager().getPackageInfo( mActivity.getPackageName(), PackageManager.GET_ACTIVITIES );
+        }
+        catch ( PackageManager.NameNotFoundException e )
+        {
+            e.printStackTrace();
+        }
+        return pi;
+    }
     public static String toS(Object value, final String defaultV) {
         try {
-            String ret = "";
+//            String ret = "";
             if (value == null) return defaultV;
             try {
                 if (value.getClass().equals("".getClass())){
