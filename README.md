@@ -28,12 +28,15 @@ APIs and SDKs that use cognitive computing to solve complex problems.
 
 ## Table of Contents
   * [Installation](#Installation)
-    * [RUNNING](release)
-	    * [Android](android)
-	    * [WAR](war)
-    * [SOURCE](#src)
+    * [RUNNING](#RUNNING)
+	    * [Android](MedLog/release/MedLog_release.apk)
+	    * [WAR](MedLog/release/MedLogWebApplication.war)
+	    	* Via MAnager GUI  @  [http://{host}:{port}/manager/html](https://tomcat.apache.org/tomcat-6.0-doc/html-manager-howto.html)
+		_Deverloper Note: WAR files extend JAR /\ implement ZIP_  
+		
+    * [SOURCE](#Source)
 	    * [REST](trunk/MedLogRS/com/medlog/rest)
-	    * [Insights/Reporting]()
+	    * [Insights/Reporting](trunk/MedLogRS/src/java/com/medlog/webservice/services/tone)
   * [Usage](#usage)
   * [Source](#features)
     * [Web Application](trunk/MedLogRS)
@@ -43,7 +46,7 @@ APIs and SDKs that use cognitive computing to solve complex problems.
   * [License](LICENSE)
   * [3RD Party Lic.](#ThirdParty)
   
-## Installation
+## Source
 ### Clone:
 	https://github.com/tue65786/MedLog.git
 ### Download:
@@ -54,7 +57,7 @@ APIs and SDKs that use cognitive computing to solve complex problems.
 Review [documentatation](documents) instructions to enable installing of APK files from unknown sources.
 
 
-#### SQL [GenerageMedLog.sql]()
+#### SQL [GenerageMedLog.sql](MedLog/CreateMedlogSQL.sql)
 	1. Open a command prompt window.
 
      	2. In the Command Prompt window, type: sqlcmd -S myServer\instanceName -i C:\[GenerageMedLog.sql -o C:\Output.txt
@@ -88,6 +91,7 @@ Now, you are ready to see THE  [DEMO](http://niftybull.com/MedLogRS).
 		(Educational Fair Use)
 
 ## Usage
+### RUNNING
 [QuickStart](https://github.com/tue65786/MedLog/blob/master/documents/USER_MANUAL_en.pdf)
 [Tech Support](https://github.com/tue65786/MedLog/blob/master/documents/USER_MANUAL_en.pdf)
 
