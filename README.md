@@ -1,5 +1,17 @@
 ![Med](http://niftybull.com/MedLogRS/Logo.png)()
 
+# README
+    
+     __  __          _ _
+    |  \/  | ___  __| | |    ___   __ _ 
+    | |\/| |/ _ \/ _` | |   / _ \ / _` |
+    | |  | |  __/ (_| | |__| (_) | (_| |
+    |_|  |_|\___|\__,_|_____\___/ \__, |
+                                  |___/ 
+     
+
+
+
 # MEDLog Projects #
 - [/trunk/MedLogRS](https://github.com/tue65786/MedLog/tree/master/trunk/MedLogRS "webservice")
 - [/trunk/app](https://github.com/tue65786/MedLog/tree/master/trunk/app "webapp")
@@ -15,7 +27,7 @@ The Java SDK uses the [Watson Developer Cloud][wdc] services, a collection of RE
 APIs and SDKs that use cognitive computing to solve complex problems.
 
 ## Table of Contents
-  * [Installation](#installation)
+  * [Installation](#Installation)
     * [RUNNING](release)
 	    * [Android](android)
 	    * [WAR](war)
@@ -29,10 +41,11 @@ APIs and SDKs that use cognitive computing to solve complex problems.
     * [SQL Scripts](trunk/db)
   * [Documents](documents)
   * [License](LICENSE)
+  * [3RD Party Lic.](#ThirdParty)
   
 ## Installation
 ### Clone:
-[MedLog.git](medlog.git)
+	https://github.com/tue65786/MedLog.git
 ### Download:
 [Release](https://github.com/tue65786/MedLog/releases) history.
 
@@ -55,5 +68,23 @@ Download the jar with dependencies [here][jar].
 
 Now, you are ready to see THE  [DEMO](http://niftybull.com/MedLogRS).
 
+#### ThirdParty
+
+	JQuery 			
+		(MIT license)
+	Underscore		
+		(MIT license)
+	Google-Gson
+		(Apache License, V2.0)
+	Apache Commons: Lang, IO, Collections, Math
+		(Apache License)
+	JAX-RS (JSR)
+		(MIT)
+	SQL JDBC
+		(Microsoft Corp.)
+	jQWidgets framework
+		(Non commercial)
+	IBM Watson/BlueMix
+		(Educational Fair Use)
 
 ## Usage
