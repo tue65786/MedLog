@@ -88,3 +88,8 @@ Now, you are ready to see THE  [DEMO](http://niftybull.com/MedLogRS).
 		(Educational Fair Use)
 
 ## Usage
+[QuickStart](https://github.com/tue65786/MedLog/blob/master/documents/USER_MANUAL_en.pdf)
+[Tech Support](https://github.com/tue65786/MedLog/blob/master/documents/USER_MANUAL_en.pdf)
+
+## Contribute
+[(https://cla-assistant.io/readme/badge/tue65786/MedLog)](https://cla-assistant.io/tue65786/MedLog) 
