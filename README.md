@@ -1,4 +1,4 @@
-![logo](http://image.jpg)
+![Med](http://niftybull.com/MedLogRS/Logo.png)()
 
 # MEDLog Projects #
 - [/trunk/MedLogRS](https://github.com/tue65786/MedLog/tree/master/trunk/MedLogRS "webservice")
