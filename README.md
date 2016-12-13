@@ -29,19 +29,11 @@ APIs and SDKs that use cognitive computing to solve complex problems.
     * [SQL Scripts](trunk/db)
   * [Documents](documents)
   * [License](LICENSE)
-  * 
   
 ## Installation
-
-##### WAR
-
-All the services:
-```deploy WAR
-```
-
-Clone:
-C[MedLog.git](medlog.git)
-Download:
+### Clone:
+[MedLog.git](medlog.git)
+### Download:
 [Release](https://github.com/tue65786/MedLog/releases) history.
 
 ##### ANDROID
@@ -50,13 +42,11 @@ Review [documentatation](documents) instructions to enable installing of APK fil
 
 
 #### SQL [GenerageMedLog.sql]()
+	1. Open a command prompt window.
 
+     	2. In the Command Prompt window, type: sqlcmd -S myServer\instanceName -i C:\[GenerageMedLog.sql -o C:\Output.txt
 
-	 1. Open a command prompt window.
-
-     2. In the Command Prompt window, type: sqlcmd -S myServer\instanceName -i C:\[GenerageMedLog.sql -o C:\Output.txt
-
-     3. Press ENTER.
+     	3. Press ENTER.
  
 
 ##### JAR
